@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "public": true,
+  "scope": "aragon",
+  "build": {
+    "env": {
+      "CHAIN_ID": "1",
+      "FORTMATIC_API_KEY": "@aragon-client-fortmatic-api-key",
+      "PORTIS_DAPP_ID": "@aragon-client-portis-dapp-id",
+      "SENTRY_DSN": "@aragon-client-sentry-dsn"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+node_modules/
+
+# testing
+coverage/
+
+# production
+public/
+
+# Vercel now configuration
+.now
+
+# misc
+.cache
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ignore package-lock files (only use yarn.lock)
+package-lock.json
