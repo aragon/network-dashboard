@@ -4,7 +4,7 @@
       "@babel/preset-env",
       {
         "modules": false,
-        "useBuiltIns": "entry",
+        "useBuiltIns": "usage",
         "corejs": 3,
         "shippedProposals": true
       }
