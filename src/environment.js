@@ -25,19 +25,19 @@ const ENV_VARS = {
 }
 
 // Error on invalid accesses to ENV_VARS
-const PROECTED_ENV_VARS = new Proxy(ENV_VARS, {
+const PROTECTED_ENV_VARS = new Proxy(ENV_VARS, {
   get(target, property) {
     if (property in target) {
       return target[property]
     } else {
       throw new Error(
-        `Environment variable '${property}' is not defined! ensure it exists in environment.js`
+        `Environment variable '${property}' is not defined! Ensure it exists in environment.js`
       )
     }
   },
 })
 
 export default function env(name) {
-  const envVar = PROECTED_ENV_VARS[name]
+  const envVar = PROTECTED_ENV_VARS[name]
   return typeof envVar === 'function' ? envVar() : null
 }
