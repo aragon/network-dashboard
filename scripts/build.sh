@@ -1,8 +1,6 @@
 #!/usr/bin/env sh
 set -e
 
-enable_sentry='0'
-
 # Current branch
 if [ -n "$NOW_GITHUB_COMMIT_REF" ]; then
   # Vercel Now (no .git but an env var)
@@ -13,10 +11,6 @@ elif [ -n "$GITHUB_REF" ]; then
 else
   # Other environments
   branch=$(git symbolic-ref --short -q HEAD)
-fi
-
-if [ "$branch" = 'master' ]; then
-  enable_sentry='1'
 fi
 
 # Build number from the short hash
@@ -30,7 +24,6 @@ fi
 
 echo "Branch: $branch"
 echo "Build: $build"
-echo "Enable Sentry: $enable_sentry"
 echo ""
 
 echo "Syncing assets…"
@@ -39,4 +32,4 @@ npm run sync-assets
 
 echo "Building app…"
 echo ""
-cross-env ENABLE_SENTRY=$enable_sentry BUILD=$build parcel build src/index.html --out-dir ./public --public-url ./ --no-cache
+cross-env BUILD=$build parcel build src/index.html --out-dir ./public --public-url ./ --no-cache

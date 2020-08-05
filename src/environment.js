@@ -1,16 +1,13 @@
-// Fallback to rinkeby
-const FALLBACK_CHAIN_ID = 4
+// Rinkeby
+const DEFAULT_CHAIN_ID = 4
 
 const ENV_VARS = {
   BUILD() {
     return process.env.BUILD || 'undefined'
   },
-  DEFAULT_CHAIN_ID() {
+  CHAIN_ID() {
     const chainId = parseInt(process.env.CHAIN_ID)
-    return isNaN(chainId) ? FALLBACK_CHAIN_ID : chainId
-  },
-  ENABLE_SENTRY() {
-    return process.env.ENABLE_SENTRY === '1'
+    return isNaN(chainId) ? DEFAULT_CHAIN_ID : chainId
   },
   FORTMATIC_API_KEY() {
     return process.env.FORTMATIC_API_KEY || ''

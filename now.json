@@ -7,8 +7,7 @@
   },
   "build": {
     "env": {
-      "CHAIN_ID": "4",
-      "SENTRY_DSN": "@aragon-client-sentry-dsn"
+      "CHAIN_ID": "4"
     }
   }
 }
