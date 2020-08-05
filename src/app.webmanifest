@@ -1,0 +1,12 @@
+{
+  "name": "Aragon Network",
+  "description": "Aragon Network Dashboard",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "."
+}

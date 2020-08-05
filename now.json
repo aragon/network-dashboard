@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "public": true,
+  "scope": "aragon",
+  "github": {
+    "silent": true
+  },
+  "build": {
+    "env": {
+      "CHAIN_ID": "4",
+      "SENTRY_DSN": "@aragon-client-sentry-dsn"
+    }
+  }
+}
