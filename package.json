@@ -28,7 +28,7 @@
     "files": [
       {
         "path": "public/*.js",
-        "maxSize": "1600kb",
+        "maxSize": "800kb",
         "compression": "gzip"
       }
     ]
@@ -36,12 +36,10 @@
   "dependencies": {
     "@aragon/ui": "^1.5.0",
     "core-js": "^3.3.2",
-    "dotenv": "^8.2.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-spring": "^8.0.1",
-    "rimraf": "^3.0.2",
     "styled-components": "^5.1.1"
   },
   "devDependencies": {
@@ -53,6 +51,7 @@
     "babel-plugin-styled-components": "^1.11.1",
     "bundlewatch": "^0.2.7",
     "cross-env": "^7.0.2",
+    "dotenv": "^8.2.0",
     "eslint": "^7.6.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-config-standard": "^14.1.1",
@@ -70,7 +69,8 @@
     "lint-staged": "^10.2.11",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-bundle-visualiser": "^1.2.0",
-    "prettier": "^2.0.5"
+    "prettier": "^2.0.5",
+    "rimraf": "^3.0.2"
   },
   "scripts": {
     "bundlewatch": "bundlewatch",
@@ -89,7 +89,7 @@
     ">2%",
     "last 1 edge versions",
     "not ie > 0",
-    "not op_mini all",
+    "not op_mini all"
   ],
   "husky": {
     "hooks": {
