@@ -1,33 +1,40 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Connect } from '@aragon/connect-react'
 import Header from './Header/Header'
 
 function MainView({ children }) {
   return (
-    <div
-      css={`
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-      `}
+    <Connect
+      location="agreement3.aragonid.eth"
+      connector="thegraph"
+      options={{ network: 4 }}
     >
       <div
         css={`
-          flex-shrink: 0;
+          display: flex;
+          flex-direction: column;
+          height: 100vh;
         `}
       >
-        <Header />
+        <div
+          css={`
+            flex-shrink: 0;
+          `}
+        >
+          <Header />
+        </div>
+        <main
+          css={`
+            flex-grow: 1;
+            flex-shrink: 1;
+            height: 0;
+          `}
+        >
+          {children}
+        </main>
       </div>
-      <main
-        css={`
-          flex-grow: 1;
-          flex-shrink: 1;
-          height: 0;
-        `}
-      >
-        {children}
-      </main>
-    </div>
+    </Connect>
   )
 }
 
