@@ -9,10 +9,6 @@ function ProposalCard({ vote, onProposalClick }) {
     <Card
       onClick={() => onProposalClick(voteId)}
       css={`
-        display: grid;
-        grid-template-columns: 100%;
-        grid-template-rows: auto 1fr auto auto;
-        grid-gap: ${1 * GU}px;
         padding: ${3 * GU}px;
       `}
     >
