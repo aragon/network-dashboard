@@ -1,13 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Connect } from '@aragon/connect-react'
-import env from '../environment'
-import { getNetworkEnvironment, orgLocation } from '../networks'
+import { networkEnvironment } from '../current-environment'
 
 function ConnectProvider({ children }) {
-  const { legacyNetworkType, chainId, ensAddress } = getNetworkEnvironment(
-    env('NETWORK_ENVIRONMENT')
-  )
+  const { legacyNetworkType, chainId, orgLocation } = networkEnvironment
 
   return (
     <Connect
@@ -16,7 +13,6 @@ function ConnectProvider({ children }) {
       options={{
         name: legacyNetworkType,
         network: chainId,
-        ensAddress,
       }}
     >
       {children}

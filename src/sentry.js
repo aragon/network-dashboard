@@ -1,11 +1,11 @@
 import { init as initSentry } from '@sentry/browser'
 import env from './environment'
 import { getNetworkName } from './lib/web3-utils'
-import { getNetworkEnvironment } from './networks'
+import { networkEnvironment } from './current-environment'
 
 const dsn = env('SENTRY_DSN')
 const sentryEnabled = Boolean(dsn)
-const chainId = getNetworkEnvironment(env('NETWORK_ENVIRONMENT')).chainId
+const { chainId } = networkEnvironment
 const environment = getNetworkName(chainId)
 
 export default function initializeSentry() {

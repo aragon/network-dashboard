@@ -8,14 +8,14 @@ const ENV_VARS = {
   NETWORK_ENVIRONMENT() {
     return process.env.NETWORK_ENVIRONMENT || DEFAULT_NETWORK_ENVIRONMENT
   },
-  DEFAULT_IPFS_GATEWAY() {
-    return process.env.DEFAULT_IPFS_GATEWAY || ''
-  },
-  FORTMATIC_API_KEY() {
-    return process.env.FORTMATIC_API_KEY || ''
+  IPFS_GATEWAY() {
+    return process.env.IPFS_GATEWAY || ''
   },
   ORG_LOCATION() {
     return process.env.ORG_LOCATION || ''
+  },
+  FORTMATIC_API_KEY() {
+    return process.env.FORTMATIC_API_KEY || ''
   },
   PORTIS_DAPP_ID() {
     return process.env.PORTIS_DAPP_ID || ''
