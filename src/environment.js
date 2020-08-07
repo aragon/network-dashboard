@@ -1,13 +1,18 @@
 // Rinkeby
-const DEFAULT_CHAIN_ID = 4
+const DEFAULT_NETWORK_ENVIRONMENT = 'rinkeby'
 
 const ENV_VARS = {
   BUILD() {
     return process.env.BUILD || 'undefined'
   },
-  CHAIN_ID() {
-    const chainId = parseInt(process.env.CHAIN_ID)
-    return isNaN(chainId) ? DEFAULT_CHAIN_ID : chainId
+  NETWORK_ENVIRONMENT() {
+    return process.env.NETWORK_ENVIRONMENT || DEFAULT_NETWORK_ENVIRONMENT
+  },
+  IPFS_GATEWAY() {
+    return process.env.IPFS_GATEWAY || ''
+  },
+  ORG_LOCATION() {
+    return process.env.ORG_LOCATION || ''
   },
   FORTMATIC_API_KEY() {
     return process.env.FORTMATIC_API_KEY || ''

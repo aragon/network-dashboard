@@ -7,7 +7,7 @@
   },
   "build": {
     "env": {
-      "CHAIN_ID": "4"
+      "NETWORK_ENVIRONMENT": "rinkeby"
     }
   }
 }
