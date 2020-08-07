@@ -1,18 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Connect } from '@aragon/connect-react'
-import { getOrgLocation } from '../networks'
-import useChainId from '../hooks/useChainId'
+import env from '../environment'
+import { getNetworkEnvironment, orgLocation } from '../networks'
 
 function ConnectProvider({ children }) {
-  const chainId = useChainId()
-  const orgLocation = getOrgLocation(chainId)
+  const { legacyNetworkType, chainId, ensAddress } = getNetworkEnvironment(
+    env('NETWORK_ENVIRONMENT')
+  )
 
   return (
     <Connect
       location={orgLocation}
       connector="thegraph"
-      options={{ network: chainId }}
+      options={{
+        name: legacyNetworkType,
+        network: chainId,
+        ensAddress,
+      }}
     >
       {children}
     </Connect>

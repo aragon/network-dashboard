@@ -1,16 +1,12 @@
 // Rinkeby
-const DEFAULT_CHAIN_ID = 4
+const DEFAULT_NETWORK_ENVIRONMENT = 'rinkeby'
 
 const ENV_VARS = {
   BUILD() {
     return process.env.BUILD || 'undefined'
   },
-  CHAIN_ID() {
-    const chainId = parseInt(process.env.CHAIN_ID)
-    return isNaN(chainId) ? DEFAULT_CHAIN_ID : chainId
-  },
-  DEFAULT_ETH_NODE() {
-    return process.env.DEFAULT_ETH_NODE || ''
+  NETWORK_ENVIRONMENT() {
+    return process.env.NETWORK_ENVIRONMENT || DEFAULT_NETWORK_ENVIRONMENT
   },
   DEFAULT_IPFS_GATEWAY() {
     return process.env.DEFAULT_IPFS_GATEWAY || ''
