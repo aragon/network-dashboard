@@ -35,6 +35,8 @@
   },
   "dependencies": {
     "@aragon/ui": "^1.5.0",
+    "@aragon/connect": "*",
+    "@aragon/connect-react": "^0.5.2",
     "@sentry/browser": "^5.20.1",
     "core-js": "^3.3.2",
     "prop-types": "^15.7.2",

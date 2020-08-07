@@ -1,17 +1,42 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
+import { CardLayout, GU } from '@aragon/ui'
+import ProposalCard from './ProposalCard'
+import { useDisputableVotingLogic } from '../../hooks/disputable-voting-logic'
 
-function Proposals() {
+const Proposals = React.memo(function Proposals() {
+  const history = useHistory()
+  const { votes } = useDisputableVotingLogic()
+
+  const handleProposalClick = (proposalId) => {
+    history.push(`/proposals/${proposalId}`)
+  }
+
   return (
     <>
-      Proposals view
-      <div>
-        <Link to="/proposals/1">Proposal 1</Link>
-        <Link to="/proposals/2">Proposal 2</Link>
-        <Link to="/proposals/3">Proposal 3</Link>
-      </div>
+      <section
+        css={`
+          // TODO: remove it later, when MainView has a limited layout
+          width: 80vw;
+          margin: auto;
+        `}
+      >
+        {votes ? (
+          <CardLayout columnWidthMin={30 * GU} rowHeight={294}>
+            {votes.map((vote, index) => (
+              <ProposalCard
+                key={vote.voteId}
+                vote={vote}
+                onProposalClick={handleProposalClick}
+              />
+            ))}
+          </CardLayout>
+        ) : (
+          <div>Loading...</div>
+        )}
+      </section>
     </>
   )
-}
+})
 
 export default Proposals
