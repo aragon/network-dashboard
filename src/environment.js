@@ -9,8 +9,17 @@ const ENV_VARS = {
     const chainId = parseInt(process.env.CHAIN_ID)
     return isNaN(chainId) ? DEFAULT_CHAIN_ID : chainId
   },
+  DEFAULT_ETH_NODE() {
+    return process.env.DEFAULT_ETH_NODE || ''
+  },
+  DEFAULT_IPFS_GATEWAY() {
+    return process.env.DEFAULT_IPFS_GATEWAY || ''
+  },
   FORTMATIC_API_KEY() {
     return process.env.FORTMATIC_API_KEY || ''
+  },
+  ORG_LOCATION() {
+    return process.env.ORG_LOCATION || ''
   },
   PORTIS_DAPP_ID() {
     return process.env.PORTIS_DAPP_ID || ''
