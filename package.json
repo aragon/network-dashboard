@@ -79,7 +79,7 @@
   },
   "scripts": {
     "bundlewatch": "bundlewatch",
-    "start": "dotenv rimraf ./public && npm run sync-assets && parcel serve src/index.html --port 3000 --out-dir ./public",
+    "start": "dotenv rimraf ./public && npm run sync-assets && parcel serve src/index.html --port 3000 --out-dir ./public --no-cache",
     "start:ethereum": "cross-env NETWORK_ENVIRONMENT=ethereum npm start",
     "start:rinkeby": "cross-env NETWORK_ENVIRONMENT=rinkeby npm start",
     "start:rinkeby-staging": "cross-env NETWORK_ENVIRONMENT=rinkeby-staging npm start",
