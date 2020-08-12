@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { RADIUS, useTheme } from '@aragon/ui'
 import { animated } from 'react-spring'
 import styled from 'styled-components'
@@ -99,5 +100,11 @@ const RequiredSeparatorClip = styled.div`
 const RequiredSeparatorWrapper = styled(animated.div)`
   height: 100%;
 `
+
+SummaryBar.propTypes = {
+  positiveSize: PropTypes.number,
+  negativeSize: PropTypes.number,
+  requiredSize: PropTypes.number,
+}
 
 export default SummaryBar

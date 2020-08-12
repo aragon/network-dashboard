@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Box,
   Help,
@@ -14,7 +15,7 @@ import { round, safeDiv } from '../../utils/math-utils'
 import SummaryBar from './SummaryBar'
 
 function InfoBoxes({ vote }) {
-  //TODO: get vote support and minimum approval from connector
+  // TODO: get vote support and minimum approval from connector
   const { layoutName } = useLayout()
   const compactMode = layoutName === 'small'
 
@@ -45,7 +46,7 @@ function InfoBoxes({ vote }) {
       <div>
         <Box
           heading={
-            <React.Fragment>
+            <>
               Support %
               <Help hint="What is Support?">
                 <strong>Support</strong> is the relative percentage of tokens
@@ -54,7 +55,7 @@ function InfoBoxes({ vote }) {
                 the tokens used to vote on a proposal must vote “Yes” for it to
                 pass.
               </Help>
-            </React.Fragment>
+            </>
           }
           css={`
             height: 100%;
@@ -67,7 +68,7 @@ function InfoBoxes({ vote }) {
       <div>
         <Box
           heading={
-            <React.Fragment>
+            <>
               Minimum Approval %
               <Help hint="What is Minimum Approval?">
                 <strong>Minimum Approval</strong> is the percentage of the total
@@ -76,7 +77,7 @@ function InfoBoxes({ vote }) {
                 set to 20%, then more than 20% of the outstanding token supply
                 must vote “Yes” on a proposal for it to pass.
               </Help>
-            </React.Fragment>
+            </>
           }
           css={`
             height: 100%;
@@ -94,7 +95,7 @@ function SummaryWithPercentages({ size, requiredSize }) {
   const theme = useTheme()
 
   return (
-    <React.Fragment>
+    <>
       <div
         css={`
           ${textStyle('body2')};
@@ -116,18 +117,18 @@ function SummaryWithPercentages({ size, requiredSize }) {
           margin-top: ${2 * GU}px;
         `}
       />
-    </React.Fragment>
+    </>
   )
 }
 
 function Status({ vote }) {
   const theme = useTheme()
-  //TODO: get if vote is open
+  // TODO: get if vote is open
   const { endDate, executionDate, open } = vote
 
   if (open) {
     return (
-      <React.Fragment>
+      <>
         <div
           css={`
             ${textStyle('body2')};
@@ -138,12 +139,12 @@ function Status({ vote }) {
           Time remaining
         </div>
         <Timer end={toMs(endDate)} maxUnits={4} />
-      </React.Fragment>
+      </>
     )
   }
 
   return (
-    <React.Fragment>
+    <>
       <div
         css={`
           margin-top: ${1 * GU}px;
@@ -158,8 +159,21 @@ function Status({ vote }) {
         <IconTime size="small" />{' '}
         {dateFormat(toMs(executionDate || endDate), 'standard')}
       </div>
-    </React.Fragment>
+    </>
   )
+}
+
+InfoBoxes.propTypes = {
+  vote: PropTypes.object.isRequired,
+}
+
+Status.propTypes = {
+  vote: PropTypes.object.isRequired,
+}
+
+SummaryWithPercentages.propTypes = {
+  size: PropTypes.number,
+  requiredSize: PropTypes.number,
 }
 
 export default InfoBoxes

@@ -10,7 +10,7 @@ function DisputablePeriod({ endDate }) {
   const period = 48
 
   return (
-    <React.Fragment>
+    <>
       {now > endDate ? (
         dateFormat(endDate, 'standard')
       ) : (
@@ -30,11 +30,12 @@ function DisputablePeriod({ endDate }) {
           </div>
         </div>
       )}
-    </React.Fragment>
+    </>
   )
 }
 
 DisputablePeriod.propTypes = {
-  startDate: PropTypes.number,
+  endDate: PropTypes.number,
 }
+
 export default DisputablePeriod

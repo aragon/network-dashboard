@@ -1,58 +1,19 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {
   GU,
   IconAttention,
-  IconClock,
-  IconClose,
   IconCoin,
-  IconInfo,
   RADIUS,
   textStyle,
   useTheme,
 } from '@aragon/ui'
-import {
-  DISPUTABLE_VOTE_STATUSES,
-  VOTE_STATUS_ACTIVE,
-  VOTE_STATUS_CANCELLED,
-  VOTE_STATUS_PAUSED,
-} from '../../utils/disputable-vote-statuses'
-import { addressesEqual } from '../../web3-utils'
+import { addressesEqual } from '../../utils/web3-utils'
 import { dateFormat, toMs } from '../../utils/date-utils'
 
-function getAttributes(status, theme, mode) {
-  const attributes = {
-    [VOTE_STATUS_ACTIVE]: {
-      label: 'Scheduled',
-      Icon: IconClock,
-    },
-    [VOTE_STATUS_CANCELLED]: {
-      background: theme.surfaceUnde,
-      label: 'Cancelled',
-      Icon: IconClose,
-      color: theme.disabledContent,
-    },
-    [VOTE_STATUS_CLOSED]: {
-      background: theme.surfaceUnder,
-      label: 'Closed',
-      Icon: IconInfo,
-      color: theme.disabledContent,
-    },
-    [VOTE_STATUS_PAUSED]: {
-      background: theme.warningSurface,
-      label: 'Challenged',
-      Icon: IconAttention,
-      color: theme.warningSurfaceContent,
-    },
-  }
-
-  return attributes[status]
-}
-
 function FeedbackModule({ vote, connectedAccount }) {
-  //TODO: Replace dates and amounts with real data
+  // TODO: Replace dates and amounts with real data
   const theme = useTheme()
-
-  const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
 
   let mode = null
 
@@ -68,14 +29,8 @@ function FeedbackModule({ vote, connectedAccount }) {
   }
 
   if (!mode) {
-    return <div></div>
+    return <div />
   }
-
-  const { Icon, background, color, label } = getAttributes(
-    disputableStatus,
-    theme,
-    mode
-  )
 
   return (
     <div
@@ -159,6 +114,15 @@ function Bold({ children }) {
       {children}
     </span>
   )
+}
+
+FeedbackModule.propTypes = {
+  vote: PropTypes.object.isRequired,
+  connectedAccount: PropTypes.string,
+}
+
+Bold.propTypes = {
+  children: PropTypes.node,
 }
 
 export default FeedbackModule

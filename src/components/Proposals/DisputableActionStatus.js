@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Box,
   GU,
@@ -19,13 +20,13 @@ import DisputablePeriod from './DisputablePeriod'
 import DisputableStatusLabel from './DisputableStatusLabel'
 
 function hasDispute(vote) {
-  //TODO: Check if vote has dispute
+  // TODO: Check if vote has dispute
   return false
 }
 
 function DisputableActionStatus({ vote }) {
-  //TODO: get agreement title
-  //TODO: get collateral info from connector (actionAmount,decimals,symbol)
+  // TODO: get agreement title
+  // TODO: get collateral info from connector (actionAmount,decimals,symbol)
   const actionAmount = 100000000000000000000
   const decimals = 18
   const symbol = 'DAI'
@@ -132,6 +133,15 @@ function Item({ label, children }) {
       {children}
     </li>
   )
+}
+
+Item.propTypes = {
+  label: PropTypes.string,
+  children: PropTypes.node,
+}
+
+DisputableActionStatus.propTypes = {
+  vote: PropTypes.object.isRequired,
 }
 
 export default DisputableActionStatus

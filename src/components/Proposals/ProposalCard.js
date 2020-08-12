@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Card, GU } from '@aragon/ui'
 
 function ProposalCard({ vote, onProposalClick }) {
-  const { voteId, id, context } = vote
+  const { id, context } = vote
 
   return (
     <Card

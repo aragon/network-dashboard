@@ -1,24 +1,28 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Button, GU } from '@aragon/ui'
 import {
-  VOTE_STATUS_PAUSED,
   VOTE_STATUS_ACTIVE,
+  VOTE_STATUS_CANCELLED,
+  VOTE_STATUS_PAUSED,
+  VOTE_STATUS_EXECUTED,
+  VOTE_STATUS_DISPUTED,
 } from '../../utils/disputable-vote-statuses'
 import { addressesEqual } from '../../utils/web3-utils'
 
 function DisputableActions({ status, submitter }) {
-  //TODO: get connected account
+  // TODO: get connected account
   const connectedAccount = ''
   const connectedAccountIsSubmitter = addressesEqual(
     submitter,
     connectedAccount
   )
 
-  //TODO: add claim collateral action validation
+  // TODO: add claim collateral action validation
 
   if (status === VOTE_STATUS_PAUSED && connectedAccountIsSubmitter) {
     return (
-      <React.Fragment>
+      <>
         <Button
           css={`
             margin-bottom: ${2 * GU}px;
@@ -28,7 +32,7 @@ function DisputableActions({ status, submitter }) {
           label="Accept settlement"
         />
         <Button mode="normal" wide label="Raise dispute to court" />
-      </React.Fragment>
+      </>
     )
   }
   if (status === VOTE_STATUS_ACTIVE) {
@@ -39,6 +43,17 @@ function DisputableActions({ status, submitter }) {
     )
   }
   return <Button mode="strong" wide label="Review details" />
+}
+
+DisputableActions.propTypes = {
+  status: PropTypes.oneOf([
+    VOTE_STATUS_ACTIVE,
+    VOTE_STATUS_CANCELLED,
+    VOTE_STATUS_PAUSED,
+    VOTE_STATUS_EXECUTED,
+    VOTE_STATUS_DISPUTED,
+  ]),
+  submitter: PropTypes.string,
 }
 
 export default DisputableActions
