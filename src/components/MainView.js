@@ -1,8 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Layout, ScrollView, useViewport } from '@aragon/ui'
 import Header from './Header/Header'
 
 function MainView({ children }) {
+  const { width: vw } = useViewport()
   return (
     <div
       css={`
@@ -18,15 +20,34 @@ function MainView({ children }) {
       >
         <Header />
       </div>
-      <main
+      <div
         css={`
           flex-grow: 1;
           flex-shrink: 1;
           height: 0;
         `}
       >
-        {children}
-      </main>
+        <ScrollView>
+          <div
+            css={`
+              display: flex;
+              flex-direction: column;
+              height: 100%;
+            `}
+          >
+            <div
+              css={`
+                flex: 1 0 auto;
+              `}
+            >
+              <Layout parentWidth={vw} paddingBottom={100}>
+                {children}
+              </Layout>
+            </div>
+            <footer>footer</footer>
+          </div>
+        </ScrollView>
+      </div>
     </div>
   )
 }
