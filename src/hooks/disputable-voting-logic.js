@@ -10,6 +10,16 @@ function useGetVotes() {
   return votes
 }
 
+export function useGetVote(voteId) {
+  const [disputableVoting] = useApp('disputable-voting')
+
+  const [vote] = useDisputableVoting(disputableVoting, (app) => {
+    return app.vote(voteId)
+  })
+
+  return vote
+}
+
 // Handles the main logic of the disputable voting app.
 export function useDisputableVotingLogic() {
   return {
