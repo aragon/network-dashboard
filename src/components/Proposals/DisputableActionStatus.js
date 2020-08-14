@@ -25,11 +25,11 @@ function hasDispute(vote) {
 }
 
 function DisputableActionStatus({ vote }) {
-  // TODO: get agreement title
-  // TODO: get collateral info from connector (actionAmount,decimals,symbol)
-  const actionAmount = 100000000000000000000
-  const decimals = 18
-  const symbol = 'DAI'
+  // TODO: get agreement title, replace  tokenAddress for tokenId
+
+  const { actionAmount } = vote.collateral
+  const { decimals, symbol } = vote.token
+
   const tokenAddress = '0x6B175474E89094C44Da98b954EedeAC495271d0F'
 
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)

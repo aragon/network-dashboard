@@ -10,11 +10,13 @@ import {
   useTheme,
 } from '@aragon/ui'
 import {
+  VOTE_STATUS_ACCEPTED,
   VOTE_STATUS_ACTIVE,
   VOTE_STATUS_CANCELLED,
-  VOTE_STATUS_PAUSED,
   VOTE_STATUS_DISPUTED,
   VOTE_STATUS_EXECUTED,
+  VOTE_STATUS_PAUSED,
+  VOTE_STATUS_REJECTED,
 } from '../../utils/disputable-vote-statuses'
 
 function getAttributes(status, theme) {
@@ -22,6 +24,12 @@ function getAttributes(status, theme) {
     [VOTE_STATUS_ACTIVE]: {
       label: 'Scheduled',
       Icon: IconClock,
+    },
+    [VOTE_STATUS_ACCEPTED]: {
+      background: '#CADFAB',
+      label: 'Accepted',
+      Icon: IconInfo,
+      color: '#749C47',
     },
     [VOTE_STATUS_CANCELLED]: {
       background: theme.surfaceUnder,
@@ -47,6 +55,12 @@ function getAttributes(status, theme) {
       Icon: IconAttention,
       color: theme.warningSurfaceContent,
     },
+    [VOTE_STATUS_REJECTED]: {
+      background: '#FCC2AA',
+      label: 'Rejected',
+      Icon: IconWarning,
+      color: '#D26C41',
+    },
   }
 
   return attributes[status]
@@ -69,11 +83,13 @@ function DisputableStatusLabel({ status }) {
 
 DisputableStatusLabel.propTypes = {
   status: PropTypes.oneOf([
+    VOTE_STATUS_ACCEPTED,
     VOTE_STATUS_ACTIVE,
     VOTE_STATUS_CANCELLED,
+    VOTE_STATUS_DISPUTED,
     VOTE_STATUS_EXECUTED,
     VOTE_STATUS_PAUSED,
-    VOTE_STATUS_DISPUTED,
+    VOTE_STATUS_REJECTED,
   ]),
 }
 

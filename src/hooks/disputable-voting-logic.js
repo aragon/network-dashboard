@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { createAppHook, useApp } from '@aragon/connect-react'
 import connectVoting from '@aragon/connect-voting-disputable'
 
@@ -12,8 +12,8 @@ function useGetVotes() {
 }
 
 export function useGetVote(voteId) {
-  const [settingsLoading, setSettingsLoading] = useState(false)
-  const [voteSettings, setVoteSettings] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [extendedProperties, setExtendedProperties] = useState(null)
   const [disputableVoting] = useApp('disputable-voting')
   const [vote] = useDisputableVoting(disputableVoting, (app) => {
     return app.vote(voteId)
@@ -23,13 +23,21 @@ export function useGetVote(voteId) {
     let cancelled = false
 
     async function getVoteSettings() {
-      setSettingsLoading(true)
+      setLoading(true)
 
       if (vote) {
-        const currentVoteSettings = await vote.setting()
+        const collateral = await vote.collateralRequirement()
+
+        const extendedProperties = {
+          settings: await vote.setting(),
+          status: await vote.status(),
+          collateral: collateral,
+          token: await collateral.token(),
+        }
+
         if (!cancelled) {
-          setVoteSettings(currentVoteSettings)
-          setSettingsLoading(false)
+          setExtendedProperties(extendedProperties)
+          setLoading(false)
         }
       }
     }
@@ -41,9 +49,10 @@ export function useGetVote(voteId) {
     }
   }, [vote])
 
-  const voteLoading = vote === null
-
-  return { settingsLoading, voteLoading, vote, voteSettings }
+  return {
+    voteLoading: vote === null || loading,
+    vote: { ...vote, ...extendedProperties },
+  }
 }
 
 // Handles the main logic of the disputable voting app.

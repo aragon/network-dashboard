@@ -2,11 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Button, GU } from '@aragon/ui'
 import {
+  VOTE_STATUS_ACCEPTED,
   VOTE_STATUS_ACTIVE,
   VOTE_STATUS_CANCELLED,
-  VOTE_STATUS_PAUSED,
-  VOTE_STATUS_EXECUTED,
   VOTE_STATUS_DISPUTED,
+  VOTE_STATUS_EXECUTED,
+  VOTE_STATUS_PAUSED,
+  VOTE_STATUS_REJECTED,
 } from '../../utils/disputable-vote-statuses'
 import { addressesEqual } from '../../utils/web3-utils'
 
@@ -47,11 +49,13 @@ function DisputableActions({ status, submitter }) {
 
 DisputableActions.propTypes = {
   status: PropTypes.oneOf([
+    VOTE_STATUS_ACCEPTED,
     VOTE_STATUS_ACTIVE,
     VOTE_STATUS_CANCELLED,
-    VOTE_STATUS_PAUSED,
-    VOTE_STATUS_EXECUTED,
     VOTE_STATUS_DISPUTED,
+    VOTE_STATUS_EXECUTED,
+    VOTE_STATUS_PAUSED,
+    VOTE_STATUS_REJECTED,
   ]),
   submitter: PropTypes.string,
 }

@@ -172,6 +172,7 @@ function Status({ vote }) {
 
 InfoBoxes.propTypes = {
   vote: PropTypes.object.isRequired,
+  setting: PropTypes.object.isRequired,
 }
 
 Status.propTypes = {
