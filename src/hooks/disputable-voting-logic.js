@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react'
 import { createAppHook, useApp } from '@aragon/connect-react'
 import connectVoting from '@aragon/connect-voting-disputable'
 
@@ -11,13 +12,38 @@ function useGetVotes() {
 }
 
 export function useGetVote(voteId) {
+  const [settingsLoading, setSettingsLoading] = useState(false)
+  const [voteSettings, setVoteSettings] = useState(null)
   const [disputableVoting] = useApp('disputable-voting')
-
   const [vote] = useDisputableVoting(disputableVoting, (app) => {
     return app.vote(voteId)
   })
 
-  return vote
+  useEffect(() => {
+    let cancelled = false
+
+    async function getVoteSettings() {
+      setSettingsLoading(true)
+
+      if (vote) {
+        const currentVoteSettings = await vote.setting()
+        if (!cancelled) {
+          setVoteSettings(currentVoteSettings)
+          setSettingsLoading(false)
+        }
+      }
+    }
+
+    getVoteSettings()
+
+    return () => {
+      cancelled = true
+    }
+  }, [vote])
+
+  const voteLoading = vote === null
+
+  return { settingsLoading, voteLoading, vote, voteSettings }
 }
 
 // Handles the main logic of the disputable voting app.

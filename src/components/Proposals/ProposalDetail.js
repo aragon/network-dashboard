@@ -31,12 +31,13 @@ function ProposalDetail({ match }) {
     history.push(`/proposals`)
   }
 
-  const vote = useGetVote(proposalId)
+  const { settingsLoading, voteLoading, vote, voteSettings } = useGetVote(
+    proposalId
+  )
 
-  if (vote === null) {
+  if (voteLoading) {
     return <div>Loading...</div>
   }
-  console.log(vote)
 
   const { voteId, context, creator, yeas, nays } = vote
   const totalVotes = parseFloat(yeas) + parseFloat(nays)
@@ -143,7 +144,9 @@ function ProposalDetail({ match }) {
                 </div>
               </section>
             </Box>
-            <InfoBoxes vote={vote} />
+            {!settingsLoading && (
+              <InfoBoxes vote={vote} setting={voteSettings} />
+            )}
           </>
         }
         secondary={<DisputableActionStatus vote={vote} />}

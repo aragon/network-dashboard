@@ -14,8 +14,7 @@ import { dateFormat, toMs } from '../../utils/date-utils'
 import { round, safeDiv } from '../../utils/math-utils'
 import SummaryBar from './SummaryBar'
 
-function InfoBoxes({ vote }) {
-  // TODO: get vote support and minimum approval from connector
+function InfoBoxes({ vote, setting }) {
   const { layoutName } = useLayout()
   const compactMode = layoutName === 'small'
 
@@ -62,7 +61,10 @@ function InfoBoxes({ vote }) {
           `}
           padding={(compactMode ? 2 : 3) * GU}
         >
-          <SummaryWithPercentages size={support} requiredSize={0.5} />
+          <SummaryWithPercentages
+            size={support}
+            requiredSize={parseFloat(setting.formattedSupportRequiredPct)}
+          />
         </Box>
       </div>
       <div>
@@ -84,7 +86,12 @@ function InfoBoxes({ vote }) {
           `}
           padding={(compactMode ? 2 : 3) * GU}
         >
-          <SummaryWithPercentages size={quorumProgress} requiredSize={0.2} />
+          <SummaryWithPercentages
+            size={quorumProgress}
+            requiredSize={parseFloat(
+              setting.formattedMinimumAcceptanceQuorumPct
+            )}
+          />
         </Box>
       </div>
     </div>
@@ -107,12 +114,12 @@ function SummaryWithPercentages({ size, requiredSize }) {
             color: ${theme.surfaceContentSecondary};
           `}
         >
-          (&gt;{round(requiredSize * 100, 2)}% needed)
+          (&gt;{requiredSize}% needed)
         </span>
       </div>
       <SummaryBar
         positiveSize={size}
-        requiredSize={requiredSize}
+        requiredSize={requiredSize / 100}
         css={`
           margin-top: ${2 * GU}px;
         `}
