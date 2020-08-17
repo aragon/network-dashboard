@@ -20,34 +20,27 @@ function MainView({ children }) {
       >
         <Header />
       </div>
-      <div
+
+      <ScrollView
         css={`
+          display: flex;
+          flex-direction: column;
           flex-grow: 1;
           flex-shrink: 1;
           height: 0;
         `}
       >
-        <ScrollView>
-          <div
-            css={`
-              display: flex;
-              flex-direction: column;
-              height: 100%;
-            `}
-          >
-            <div
-              css={`
-                flex: 1 0 auto;
-              `}
-            >
-              <Layout parentWidth={vw} paddingBottom={100}>
-                {children}
-              </Layout>
-            </div>
-            <footer>footer</footer>
-          </div>
-        </ScrollView>
-      </div>
+        <main
+          css={`
+            flex: 1;
+          `}
+        >
+          <Layout parentWidth={vw} paddingBottom={100}>
+            {children}
+          </Layout>
+        </main>
+        <footer>footer</footer>
+      </ScrollView>
     </div>
   )
 }
