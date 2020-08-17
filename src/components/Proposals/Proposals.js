@@ -2,11 +2,11 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { CardLayout, GU } from '@aragon/ui'
 import ProposalCard from './ProposalCard'
-import { useDisputableVotingLogic } from '../../hooks/disputable-voting-logic'
+import { useVotes } from '../../hooks/disputable-voting-logic'
 
 const Proposals = React.memo(function Proposals() {
   const history = useHistory()
-  const { votes } = useDisputableVotingLogic()
+  const votes = useVotes()
 
   const handleProposalClick = (proposalId) => {
     history.push(`/proposals/${proposalId}`)
