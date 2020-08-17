@@ -18,9 +18,6 @@ import DisputableActionStatus from './DisputableActionStatus'
 import InfoBoxes from './InfoBoxes'
 import SummaryBar from './SummaryBar'
 
-const DEFAULT_DESCRIPTION =
-  'No additional description has been provided for this proposal.'
-
 function ProposalDetail({ match }) {
   const { id: proposalId } = match.params
   const theme = useTheme()
@@ -32,7 +29,6 @@ function ProposalDetail({ match }) {
   }
 
   const { voteLoading, vote } = useGetVote(proposalId)
-  console.log(voteLoading, vote)
 
   if (voteLoading) {
     return <div>Loading...</div>
@@ -99,7 +95,8 @@ function ProposalDetail({ match }) {
                         word-break: break-word;
                       `}
                     >
-                      {context || DEFAULT_DESCRIPTION}
+                      {context ||
+                        'No additional description has been provided for this proposal.'}
                     </div>
                   </div>
                   <div>
@@ -130,7 +127,7 @@ function ProposalDetail({ match }) {
                       margin-bottom: ${2 * GU}px;
                     `}
                   >
-                    votes
+                    Votes
                   </h2>
                   <SummaryBar
                     positiveSize={safeDiv(parseFloat(yeas), totalVotes)}
