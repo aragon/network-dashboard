@@ -34,12 +34,10 @@ function DisputableActionStatus({ vote }) {
   return (
     <Box heading="Disputable Action Status">
       <ul>
-        <Item label="Status">
-          {disputableStatus && (
-            <DisputableStatusLabel status={disputableStatus} />
-          )}
+        <Item heading="Status">
+          <DisputableStatusLabel status={disputableStatus} />
         </Item>
-        <Item label="Action collateral locked">
+        <Item heading="Action collateral locked">
           <div
             css={`
               display: flex;
@@ -63,7 +61,7 @@ function DisputableActionStatus({ vote }) {
             </span>
           </div>
         </Item>
-        <Item label={challenged ? 'Settlement period' : 'Challenge period'}>
+        <Item heading={challenged ? 'Settlement period' : 'Challenge period'}>
           <DisputablePeriod
             endDate={
               challenged
@@ -72,11 +70,11 @@ function DisputableActionStatus({ vote }) {
             }
           />
         </Item>
-        <Item label="Agreement">
+        <Item heading="Agreement">
           <Link>agreementTitle</Link>
         </Item>
         {hasDispute(vote) && (
-          <Item label="Dispute">
+          <Item heading="Dispute">
             <Link href={`https://court.aragon.org/disputes/${vote.disputeId}`}>
               Dispute #{vote.disputeId}
             </Link>
@@ -101,7 +99,7 @@ function DisputableActionStatus({ vote }) {
   )
 }
 
-function Item({ label, children }) {
+function Item({ heading, children }) {
   const theme = useTheme()
   return (
     <li
@@ -112,8 +110,8 @@ function Item({ label, children }) {
         }
       `}
     >
-      {label && (
-        <label
+      {heading && (
+        <heading
           css={`
             ${textStyle('label2')};
             color: ${theme.surfaceContentSecondary};
@@ -121,8 +119,8 @@ function Item({ label, children }) {
             margin-bottom: ${1 * GU}px;
           `}
         >
-          {label}
-        </label>
+          {heading}
+        </heading>
       )}
       {children}
     </li>
@@ -130,7 +128,7 @@ function Item({ label, children }) {
 }
 
 Item.propTypes = {
-  label: PropTypes.string,
+  heading: PropTypes.string,
   children: PropTypes.node,
 }
 
