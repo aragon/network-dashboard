@@ -2,8 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   IconAttention,
+  IconCheck,
   IconClock,
   IconClose,
+  IconCross,
   IconInfo,
   IconWarning,
   Tag,
@@ -26,10 +28,10 @@ function getAttributes(status, theme) {
       Icon: IconClock,
     },
     [VOTE_STATUS_ACCEPTED]: {
-      background: '#CADFAB',
+      background: theme.surface,
       label: 'Accepted',
-      Icon: IconInfo,
-      color: '#749C47',
+      Icon: IconCheck,
+      color: theme.positive,
     },
     [VOTE_STATUS_CANCELLED]: {
       background: theme.surfaceUnder,
@@ -56,10 +58,10 @@ function getAttributes(status, theme) {
       color: theme.warningSurfaceContent,
     },
     [VOTE_STATUS_REJECTED]: {
-      background: '#FCC2AA',
+      background: theme.surface,
       label: 'Rejected',
-      Icon: IconWarning,
-      color: '#D26C41',
+      Icon: IconCross,
+      color: theme.negative,
     },
   }
 
