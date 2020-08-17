@@ -6,8 +6,10 @@ import {
   Bar,
   Box,
   GU,
+  IconCheck,
   IdentityBadge,
   Split,
+  Tag,
   textStyle,
   useLayout,
   useTheme,
@@ -37,6 +39,9 @@ function ProposalDetail({ match }) {
   const { voteId, context, creator, yeas, nays } = vote
   const totalVotes = parseFloat(yeas) + parseFloat(nays)
 
+  // TODO: get youVoted flag from connector
+  const youVoted = true
+
   return (
     <>
       <Bar>
@@ -52,7 +57,9 @@ function ProposalDetail({ match }) {
                   justify-content: space-between;
                 `}
               >
-                voted?
+                {youVoted && (
+                  <Tag icon={<IconCheck size="small" />} label="Voted" />
+                )}
               </div>
               <section
                 css={`
