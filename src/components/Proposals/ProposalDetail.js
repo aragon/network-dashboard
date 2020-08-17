@@ -12,7 +12,7 @@ import {
   useLayout,
   useTheme,
 } from '@aragon/ui'
-import { safeDiv } from '../../utils/math-utils'
+import { safeDiv } from '../../lib/math-utils'
 import { useGetVote } from '../../hooks/disputable-voting-logic'
 import DisputableActionStatus from './DisputableActionStatus'
 import InfoBoxes from './InfoBoxes'
@@ -65,9 +65,10 @@ function ProposalDetail({ match }) {
                 <h1
                   css={`
                     ${textStyle('title2')};
+                    font-weight: bold;
                   `}
                 >
-                  <span css="font-weight: bold;">Vote #{voteId}</span>
+                  Vote #{voteId}
                 </h1>
                 <div
                   css={`

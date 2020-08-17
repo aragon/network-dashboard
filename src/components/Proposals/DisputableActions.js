@@ -9,8 +9,8 @@ import {
   VOTE_STATUS_EXECUTED,
   VOTE_STATUS_PAUSED,
   VOTE_STATUS_REJECTED,
-} from '../../utils/disputable-vote-statuses'
-import { addressesEqual } from '../../utils/web3-utils'
+} from './disputable-vote-statuses'
+import { addressesEqual } from '../../lib/web3-utils'
 
 function DisputableActions({ status, submitter }) {
   // TODO: get connected account

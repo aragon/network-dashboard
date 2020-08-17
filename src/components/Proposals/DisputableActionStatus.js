@@ -13,20 +13,16 @@ import {
 import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_PAUSED,
-} from '../../utils/disputable-vote-statuses'
-import { toMs } from '../../utils/date-utils'
+} from './disputable-vote-statuses'
+import { toMs } from '../../lib/date-utils'
 import DisputableActions from './DisputableActions'
 import DisputablePeriod from './DisputablePeriod'
 import DisputableStatusLabel from './DisputableStatusLabel'
 
-function hasDispute(vote) {
-  // TODO: Check if vote has dispute
-  return false
-}
-
 function DisputableActionStatus({ vote }) {
   // TODO: get agreement title, replace  tokenAddress for tokenId
-
+  // TODO: Check if vote has dispute
+  const hasDispute = false
   const { actionAmount } = vote.collateral
   const { decimals, symbol } = vote.token
 
@@ -95,12 +91,10 @@ function DisputableActionStatus({ vote }) {
           </Info>
         </Item>
         <Item>
-          {disputableStatus && (
-            <DisputableActions
-              status={disputableStatus}
-              submitter={vote.creator}
-            />
-          )}
+          <DisputableActions
+            status={disputableStatus}
+            submitter={vote.creator}
+          />
         </Item>
       </ul>
     </Box>

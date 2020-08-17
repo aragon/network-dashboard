@@ -8,8 +8,8 @@ import {
   textStyle,
   useTheme,
 } from '@aragon/ui'
-import { addressesEqual } from '../../utils/web3-utils'
-import { dateFormat, toMs } from '../../utils/date-utils'
+import { addressesEqual } from '../../lib/web3-utils'
+import { dateFormat, toMs } from '../../lib/date-utils'
 
 function FeedbackModule({ vote, connectedAccount }) {
   // TODO: Replace dates and amounts with real data

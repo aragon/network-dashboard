@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { GU, Timer, useTheme } from '@aragon/ui'
-import { dateFormat } from '../../utils/date-utils'
+import { dateFormat } from '../../lib/date-utils'
 
 function DisputablePeriod({ endDate }) {
   const theme = useTheme()

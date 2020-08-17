@@ -19,7 +19,7 @@ import {
   VOTE_STATUS_EXECUTED,
   VOTE_STATUS_PAUSED,
   VOTE_STATUS_REJECTED,
-} from '../../utils/disputable-vote-statuses'
+} from './disputable-vote-statuses'
 
 function getAttributes(status, theme) {
   const attributes = {

@@ -10,8 +10,8 @@ import {
   useTheme,
   GU,
 } from '@aragon/ui'
-import { dateFormat, toMs } from '../../utils/date-utils'
-import { round, safeDiv } from '../../utils/math-utils'
+import { dateFormat, toMs } from '../../lib/date-utils'
+import { round, safeDiv } from '../../lib/math-utils'
 import SummaryBar from './SummaryBar'
 
 function InfoBoxes({ vote, setting }) {
