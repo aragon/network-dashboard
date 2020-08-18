@@ -3,6 +3,8 @@ import { Button, GU, IconCross, textStyle, useTheme } from '@aragon/ui'
 import background from '../../assets/banner.svg'
 
 function Banner() {
+  // TODO: Integrate it with the layout once is merged & Make it responsive
+
   const theme = useTheme()
 
   const [bannerClosed, setBannerClosed] = useState(

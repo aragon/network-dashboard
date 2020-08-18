@@ -10,6 +10,8 @@ import HeaderLogo from './HeaderLogo'
 >>>>>>> Header
 
 function Header() {
+  // TODO: Integrate it with the layout once is merged & Make it responsive
+
   const theme = useTheme()
 
   return (
@@ -37,6 +39,7 @@ function Header() {
         align-items: center;
         justify-content: space-between;
         padding: 0 5%;
+        background: ${theme.surface};
       `}
     >
       <div
