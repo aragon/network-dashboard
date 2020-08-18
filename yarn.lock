@@ -2318,6 +2318,13 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
   integrity sha1-ibTRmasr7kneFk6gK4nORi1xt2c=
 
+base-x@^3.0.8:
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/base-x/-/base-x-3.0.8.tgz#1e1106c2537f0162e8b52474a557ebb09000018d"
+  integrity sha512-Rl/1AWP4J/zRrk54hhlxH4drNxPJXYUaKffODVI53/dAsV4t9fBxyxYKAVPU1XBHxYwOWP9h9H0hM2MVw4YfJA==
+  dependencies:
+    safe-buffer "^5.0.1"
+
 base64-js@^1.0.2:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.3.1.tgz#58ece8cb75dd07e71ed08c736abc5fac4dbf8df1"
@@ -2702,6 +2709,17 @@ ci-info@^2.0.0:
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-2.0.0.tgz#67a9e964be31a51e15e5010d58e6f12834002f46"
   integrity sha512-5tK7EtrZ0N+OLFMthtqOj4fI2Jeb88C4CAZPu25LDVUgXJ0A3Js4PMGqrn0JU1W0Mh1/Z8wZzYPxqUrXeBboCQ==
 
+cids@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/cids/-/cids-1.0.0.tgz#5a148c4adbf3c56c45bbcf9000451907dfe8b5b2"
+  integrity sha512-HEBCIElSiXlkgZq3dgHJc3eDcnFteFp96N8/1/oqX5lkxBtB66sZ12jqEP3g7Ut++jEk6kIUGifQ1Qrya1jcNQ==
+  dependencies:
+    class-is "^1.1.0"
+    multibase "^3.0.0"
+    multicodec "^2.0.0"
+    multihashes "^3.0.1"
+    uint8arrays "^1.0.0"
+
 cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/cipher-base/-/cipher-base-1.0.4.tgz#8760e4ecc272f4c363532f926d874aae2c1397de"
@@ -2709,6 +2727,11 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
   dependencies:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
+
+class-is@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/class-is/-/class-is-1.1.0.tgz#9d3c0fba0440d211d843cec3dedfa48055005825"
+  integrity sha512-rhjH9AG1fvabIDoGRVH587413LPjTZgmDF9fOFCbFJQV4yuocX1mHxxvXI4g3cGwbVY9wAYIoKlg1N79frJKQw==
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -4849,6 +4872,11 @@ ip-regex@^2.1.0:
   resolved "https://registry.yarnpkg.com/ip-regex/-/ip-regex-2.1.0.tgz#fa78bf5d2e6913c911ce9f819ee5146bb6d844e9"
   integrity sha1-+ni/XS5pE8kRzp+BnuUUa7bYROk=
 
+ip-regex@^4.0.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/ip-regex/-/ip-regex-4.1.0.tgz#5ad62f685a14edb421abebc2fff8db94df67b455"
+  integrity sha512-pKnZpbgCTfH/1NLIlOduP/V+WRXzC2MOz3Qo8xmxk8C5GudJLgK5QyLVXOSWy3ParAH7Eemurl3xjv/WXYFvMA==
+
 is-absolute-url@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/is-absolute-url/-/is-absolute-url-2.1.0.tgz#50530dfb84fcc9aa7dbe7852e83a37b93b9f2aa6"
@@ -5026,6 +5054,26 @@ is-html@^1.1.0:
   dependencies:
     html-tags "^1.0.0"
 
+is-ip@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/is-ip/-/is-ip-3.1.0.tgz#2ae5ddfafaf05cb8008a62093cf29734f657c5d8"
+  integrity sha512-35vd5necO7IitFPjd/YBeqwWnyDWbuLH9ZXQdMfDA8TEo7pv5X8yfrvVO3xbJbLUlERCMvf6X0hTUamQxCYJ9Q==
+  dependencies:
+    ip-regex "^4.0.0"
+
+is-ipfs@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/is-ipfs/-/is-ipfs-2.0.0.tgz#c046622e4daf5435b671aeb9739a832107e06805"
+  integrity sha512-X4Cg/JO+h/ygBCrIQSMgicHRLo5QpB+i5tHLhFgGBksKi3zvX6ByFCshDxNBvcq4NFxF3coI2AaLqwzugNzKcw==
+  dependencies:
+    cids "^1.0.0"
+    iso-url "~0.4.7"
+    mafmt "^8.0.0"
+    multiaddr "^8.0.0"
+    multibase "^3.0.0"
+    multihashes "^3.0.1"
+    uint8arrays "^1.1.0"
+
 is-number@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/is-number/-/is-number-3.0.0.tgz#24fd6201a4782cf50561c810276afc7d12d71195"
@@ -5171,6 +5219,11 @@ isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=
+
+iso-url@~0.4.7:
+  version "0.4.7"
+  resolved "https://registry.yarnpkg.com/iso-url/-/iso-url-0.4.7.tgz#de7e48120dae46921079fe78f325ac9e9217a385"
+  integrity sha512-27fFRDnPAMnHGLq36bWTpKET+eiXct3ENlCcdcMdk+mjXrb2kw3mhBUg1B7ewAC0kVzlOPhADzQgz1SE6Tglog==
 
 isobject@^2.0.0:
   version "2.1.0"
@@ -5987,6 +6040,13 @@ loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.2.0, loose-envify@^1.3
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
+mafmt@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/mafmt/-/mafmt-8.0.0.tgz#6a9ad6aafa66d484310698baf2acff3b8ecf1d74"
+  integrity sha512-MdaeaqZxjoYYWvlhr1GQ7sbsR3+L3s8QL0VtCuja+Iax3EhqAEgluSWPJezSDLyns7Ds4DGRyoq5+eIU7UDang==
+  dependencies:
+    multiaddr "^8.0.0"
+
 magic-string@^0.22.4:
   version "0.22.5"
   resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.22.5.tgz#8e9cf5afddf44385c1da5bc2a6a0dbd10b03657e"
@@ -6211,6 +6271,43 @@ ms@^2.1.1:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
+
+multiaddr@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/multiaddr/-/multiaddr-8.0.0.tgz#22658c1811fd46fc26aaa66ed8c0de712e9a50ef"
+  integrity sha512-4OOyr0u0i4lvh9MY/mvuCNmH5eqoTamcnGeXz6umFGc0eaVQUGPDQNbp52YfFY92NlZ76pO6h4K2HkXsT5X43w==
+  dependencies:
+    cids "^1.0.0"
+    class-is "^1.1.0"
+    is-ip "^3.1.0"
+    multibase "^3.0.0"
+    uint8arrays "^1.1.0"
+    varint "^5.0.0"
+
+multibase@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/multibase/-/multibase-3.0.0.tgz#f56eb828ee5c00241fe860ed5e2d144c8b9821f4"
+  integrity sha512-fuB+zfRbF5zWV4L+CPM0dgA0gX7DHG/IMyzwhVi2RxbRVWn41Wk7SkKW8cxYDGOg6TVh7XgyoesjOAYrB1HBAA==
+  dependencies:
+    base-x "^3.0.8"
+    web-encoding "^1.0.2"
+
+multicodec@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/multicodec/-/multicodec-2.0.0.tgz#e0c41d99ce29d5f92a9406a6a31169a3802a1ca3"
+  integrity sha512-2SLsdTCXqOpUfoSHkTaVzxnjjl5fsSO283Idb9rAYgKGVu188NFP5KncuZ8Ifg8H2gc5GOi2rkuhLumqv9nweQ==
+  dependencies:
+    uint8arrays "1.0.0"
+    varint "^5.0.0"
+
+multihashes@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/multihashes/-/multihashes-3.0.1.tgz#607c243d5e04ec022ac76c9c114e08416216f019"
+  integrity sha512-fFY67WOtb0359IjDZxaCU3gJILlkwkFbxbwrK9Bej5+NqNaYztzLOj8/NgMNMg/InxmhK+Uu8S/U4EcqsHzB7Q==
+  dependencies:
+    multibase "^3.0.0"
+    uint8arrays "^1.0.0"
+    varint "^5.0.0"
 
 nan@^2.12.1:
   version "2.14.1"
@@ -8920,6 +9017,22 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
+uint8arrays@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/uint8arrays/-/uint8arrays-1.0.0.tgz#9cf979517f85c32d6ef54adf824e3499bb715331"
+  integrity sha512-14tqEVujDREW7YwonSZZwLvo7aFDfX7b6ubvM/U7XvZol+CC/LbhaX/550VlWmhddAL9Wou1sxp0Of3tGqXigg==
+  dependencies:
+    multibase "^3.0.0"
+    web-encoding "^1.0.2"
+
+uint8arrays@^1.0.0, uint8arrays@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/uint8arrays/-/uint8arrays-1.1.0.tgz#d034aa65399a9fd213a1579e323f0b29f67d0ed2"
+  integrity sha512-cLdlZ6jnFczsKf5IH1gPHTtcHtPGho5r4CvctohmQjw8K7Q3gFdfIGHxSTdTaCKrL4w09SsPRJTqRS0drYeszA==
+  dependencies:
+    multibase "^3.0.0"
+    web-encoding "^1.0.2"
+
 uncss@^0.17.3:
   version "0.17.3"
   resolved "https://registry.yarnpkg.com/uncss/-/uncss-0.17.3.tgz#50fc1eb4ed573ffff763458d801cd86e4d69ea11"
@@ -9115,6 +9228,11 @@ value-equal@^1.0.1:
   resolved "https://registry.yarnpkg.com/value-equal/-/value-equal-1.0.1.tgz#1e0b794c734c5c0cade179c437d356d931a34d6c"
   integrity sha512-NOJ6JZCAWr0zlxZt+xqCHNTEKOsrks2HQd4MqhP1qy4z1SkbEP467eNx6TgDKXMvUOb+OENfJCZwM+16n7fRfw==
 
+varint@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/varint/-/varint-5.0.0.tgz#d826b89f7490732fabc0c0ed693ed475dcb29ebf"
+  integrity sha1-2Ca4n3SQcy+rwMDtaT7Uddyynr8=
+
 vendors@^1.0.0:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/vendors/-/vendors-1.0.4.tgz#e2b800a53e7a29b93506c3cf41100d16c4c4ad8e"
@@ -9175,6 +9293,11 @@ wcwidth@^1.0.1:
   integrity sha1-8LDc+RW8X/FSivrbLA4XtTLaL+g=
   dependencies:
     defaults "^1.0.3"
+
+web-encoding@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/web-encoding/-/web-encoding-1.0.2.tgz#e5050d4826597f242eb6e0e5fede05e3b9512ca5"
+  integrity sha512-fe9pqxglgy25Z4Ds+2GwZIrOnLxeozydMj0iV8zx0ZNxE3MPTseF4oXGrrBuH4vSkoDYDXoPRRFY/FEYitEUTA==
 
 webidl-conversions@^4.0.2:
   version "4.0.2"
