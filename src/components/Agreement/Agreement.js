@@ -1,9 +1,10 @@
 import React from 'react'
-import { Button, Box, Layout, Header, Split, noop } from '@aragon/ui'
+import { Button, Box, Header, Split, noop } from '@aragon/ui'
+import Layout from '../Layout'
 
 const Agreement = React.memo(function Agreement() {
   return (
-    <Layout paddingBottom={0}>
+    <Layout>
       <Header
         primary="Agreement"
         secondary={

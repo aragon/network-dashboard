@@ -1,5 +1,6 @@
 import React from 'react'
-import { Layout, useTheme, GU } from '@aragon/ui'
+import { useTheme, GU } from '@aragon/ui'
+import Layout from './Layout'
 
 function Footer() {
   const theme = useTheme()
@@ -11,7 +12,7 @@ function Footer() {
         padding-bottom: ${3 * GU}px;
       `}
     >
-      <Layout paddingBottom={0}>footer</Layout>
+      <Layout>footer</Layout>
     </footer>
   )
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { CardLayout, Header, Layout, GU } from '@aragon/ui'
+import { CardLayout, Header, GU } from '@aragon/ui'
+import Layout from '../Layout'
 import ProposalCard from './ProposalCard'
 import { useVotes } from '../../hooks/disputable-voting-logic'
 
@@ -14,7 +15,7 @@ const Proposals = React.memo(function Proposals() {
 
   return (
     <section>
-      <Layout paddingBottom={0}>
+      <Layout>
         <Header primary="Proposals" />
         {votes ? (
           <CardLayout columnWidthMin={30 * GU} rowHeight={294}>
