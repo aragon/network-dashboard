@@ -34,18 +34,18 @@
     ]
   },
   "dependencies": {
-    "@aragon/ui": "^1.5.0",
     "@aragon/connect": "*",
     "@aragon/connect-react": "^0.5.2",
+    "@aragon/ui": "^1.5.0",
     "@sentry/browser": "^5.20.1",
-    "@aragon/connect-react": "^0.5.2",
     "core-js": "^3.3.2",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-spring": "^8.0.1",
-    "styled-components": "^5.1.1"
+    "styled-components": "^5.1.1",
+    "use-viewport": "^0.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.11.0",
