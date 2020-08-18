@@ -17,7 +17,7 @@ const Agreement = React.memo(function Agreement() {
         primary={
           <>
             <Box>
-              <AgreementHeader />
+              <AgreementHeader title="Aragon Network DAO Agreement" />
               <AgreementDetails
                 contractAddress="0x5c6620c49f9aecf74bd483054f2d0ace0d375f96"
                 creationDate="2020/07/20"

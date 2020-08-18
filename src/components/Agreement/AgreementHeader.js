@@ -1,8 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { IconCheck, Tag, textStyle, useLayout, useTheme, GU } from '@aragon/ui'
 import icon from './assets/icon.svg'
 
-function AgreementHeader() {
+function AgreementHeader({ title }) {
   const theme = useTheme()
   const { layoutName } = useLayout()
 
@@ -31,7 +32,7 @@ function AgreementHeader() {
               margin-bottom: ${0.75 * GU}px;
             `}
           >
-            Aragon Network DAO Agreement
+            {title}
           </h2>
           <div
             css={`
@@ -73,6 +74,10 @@ function DecorativeIcon() {
       />
     </div>
   )
+}
+
+AgreementHeader.propTypes = {
+  title: PropTypes.string,
 }
 
 export default AgreementHeader
