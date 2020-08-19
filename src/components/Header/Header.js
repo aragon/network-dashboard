@@ -1,45 +1,21 @@
 import React from 'react'
-<<<<<<< HEAD
-import { Link } from 'react-router-dom'
-import { useTheme, GU } from '@aragon/ui'
-=======
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 import { GU, Link, useTheme } from '@aragon/ui'
 import HeaderLogo from './HeaderLogo'
->>>>>>> Header
 
 function Header() {
-  // TODO: Integrate it with the layout once is merged & Make it responsive
-
   const theme = useTheme()
 
   return (
     <header
       css={`
-<<<<<<< HEAD
-        background-color: ${theme.surface};
-        padding: ${2 * GU}px;
-      `}
-    >
-      <nav
-        css={`
-          display: inline-grid;
-          grid-auto-flow: column;
-          grid-gap: ${3 * GU}px;
-        `}
-      >
-        <Link to="/proposals">Proposals</Link>
-        <Link to="/agreement">Agreement</Link>
-      </nav>
-=======
         height: ${8 * GU}px;
         box-shadow: 0px 2px 4px rgba(160, 168, 194, 0.16);
         display: flex;
         align-items: center;
         justify-content: space-between;
         padding: 0 5%;
-        background: ${theme.surface};
       `}
     >
       <div
@@ -65,7 +41,6 @@ function Header() {
           Get ANT
         </Link>
       </div>
->>>>>>> Header
     </header>
   )
 }
