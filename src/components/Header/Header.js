@@ -18,7 +18,7 @@ function Header() {
         padding: 0 5%;
       `}
     >
-      <div
+      <nav
         css={`
           display: inline-grid;
           grid-auto-flow: column;
@@ -26,26 +26,25 @@ function Header() {
         `}
       >
         <HeaderLogo />
-        <MenuItem to="/proposals" name="Proposals" />
-        <MenuItem to="/agreement" name="Agreement" />
+        <MenuItem to="/proposals">Proposals</MenuItem>
+        <MenuItem to="/agreement">Agreement</MenuItem>
         <Link
           href="https://app.uniswap.org/#/swap?outputCurrency=0x960b236A07cf122663c4303350609A66A7B288C0"
           css={`
             text-decoration: none;
             display: flex;
             align-items: center;
-            font-weight: 300;
             color: ${theme.contentSecondary};
           `}
         >
           Get ANT
         </Link>
-      </div>
+      </nav>
     </header>
   )
 }
 
-function MenuItem({ to, name }) {
+function MenuItem({ to, children }) {
   const theme = useTheme()
   return (
     <NavLink
@@ -54,22 +53,20 @@ function MenuItem({ to, name }) {
         textDecoration: 'none',
         display: 'flex',
         alignItems: 'center',
-        fontWeight: '300',
         color: theme.contentSecondary,
       }}
       activeStyle={{
-        fontWeight: '400',
         color: theme.content,
       }}
     >
-      {name}
+      {children}
     </NavLink>
   )
 }
 
 MenuItem.propTypes = {
   to: PropTypes.string,
-  name: PropTypes.string,
+  children: PropTypes.node,
 }
 
 export default Header

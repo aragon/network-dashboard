@@ -22,7 +22,6 @@ function HeaderLogo() {
         css={`
           display: flex;
           height: 100%;
-          align-items: center;
           ${textStyle('body1')};
         `}
       >

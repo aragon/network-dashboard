@@ -45,10 +45,10 @@ function Banner() {
 
           <h1
             css={`
+              ${textStyle('title4')}
               font-size: ${7 * GU}px;
-              line-height: ${8 * GU}px;
-              font-weight: bold;
-              background: -webkit-linear-gradient(162.88deg, #32fff5, #01bfe3);
+              font-weight: 700;
+              background: -webkit-linear-gradient(#32fff5, #01bfe3);
               -webkit-background-clip: text;
               -webkit-text-fill-color: transparent;
             `}
@@ -58,8 +58,7 @@ function Banner() {
           <p
             css={`
               ${textStyle('body1')};
-              font-weight: 300;
-              max-width: 750px;
+              max-width: ${95 * GU}px;
               margin: auto;
               padding: ${3 * GU}px 0;
               color: ${theme.contentSecondary};
