@@ -16,6 +16,7 @@ function Header() {
         align-items: center;
         justify-content: space-between;
         padding: 0 5%;
+        background: ${theme.surface};
       `}
     >
       <nav

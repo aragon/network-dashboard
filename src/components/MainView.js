@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ScrollView } from '@aragon/ui'
 import Header from './Header/Header'
-import Banner from './Header/Banner'
 
 const MainView = React.memo(function MainView({ children }) {
   return (
@@ -16,10 +15,10 @@ const MainView = React.memo(function MainView({ children }) {
       <div
         css={`
           flex-shrink: 0;
+          z-index: 2;
         `}
       >
         <Header />
-        <Banner />
       </div>
       <ScrollView
         css={`
