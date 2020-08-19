@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ScrollView } from '@aragon/ui'
-import Footer from './Footer'
 import Header from './Header/Header'
 
 const MainView = React.memo(function MainView({ children }) {
@@ -36,7 +35,6 @@ const MainView = React.memo(function MainView({ children }) {
         >
           {children}
         </main>
-        <Footer />
       </ScrollView>
     </div>
   )
