@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Layout, ScrollView } from '@aragon/ui'
-import Footer from './Footer'
+import { ScrollView } from '@aragon/ui'
 import Header from './Header/Header'
 
 const MainView = React.memo(function MainView({ children }) {
@@ -34,9 +33,8 @@ const MainView = React.memo(function MainView({ children }) {
             flex: 1;
           `}
         >
-          <Layout paddingBottom={0}>{children}</Layout>
+          {children}
         </main>
-        <Footer />
       </ScrollView>
     </div>
   )
