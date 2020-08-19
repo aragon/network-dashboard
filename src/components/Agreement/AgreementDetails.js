@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { IdentityBadge, Link, useLayout, GU } from '@aragon/ui'
-import InfoField from './InfoField'
+import InfoField from '../InfoField'
 import { getIpfsCidFromUri, getIpfsUrlfromUri } from '../../lib/ipfs-utils'
 
 function AgreementDetails({ ipfsUri, contractAddress, creationDate }) {
@@ -15,12 +15,7 @@ function AgreementDetails({ ipfsUri, contractAddress, creationDate }) {
           margin-bottom: ${3 * GU}px;
         `}
       >
-        <InfoField
-          label="Agreement IPFS Link"
-          css={`
-            ${!compactMode && 'grid-column: span 2;'};
-          `}
-        >
+        <InfoField label="Agreement IPFS Link">
           <Link
             href={getIpfsUrlfromUri(ipfsUri)}
             css={`
