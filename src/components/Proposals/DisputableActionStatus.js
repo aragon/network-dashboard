@@ -63,11 +63,7 @@ function DisputableActionStatus({ vote }) {
         </Item>
         <Item heading={challenged ? 'Settlement period' : 'Challenge period'}>
           <DisputablePeriod
-            endDate={
-              challenged
-                ? toMs(vote.pausedAt)
-                : new Date(toMs(vote.endDate)).getTime()
-            }
+            endDate={challenged ? toMs(vote.pausedAt) : toMs(vote.endDate)}
           />
         </Item>
         <Item heading="Agreement">
