@@ -40,12 +40,14 @@
     "@sentry/browser": "^5.20.1",
     "core-js": "^3.3.2",
     "dayjs": "^1.8.27",
+    "is-ipfs": "^2.0.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-spring": "^8.0.1",
-    "styled-components": "^5.1.1"
+    "styled-components": "^5.1.1",
+    "use-viewport": "^0.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.11.0",

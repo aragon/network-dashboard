@@ -1,10 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Layout, ScrollView, useViewport } from '@aragon/ui'
+import { ScrollView } from '@aragon/ui'
 import Header from './Header/Header'
 
-function MainView({ children }) {
-  const { width: vw } = useViewport()
+const MainView = React.memo(function MainView({ children }) {
   return (
     <div
       css={`
@@ -16,6 +15,7 @@ function MainView({ children }) {
       <div
         css={`
           flex-shrink: 0;
+          z-index: 2;
         `}
       >
         <Header />
@@ -35,15 +35,12 @@ function MainView({ children }) {
             flex: 1;
           `}
         >
-          <Layout parentWidth={vw} paddingBottom={100}>
-            {children}
-          </Layout>
+          {children}
         </main>
-        <footer>footer</footer>
       </ScrollView>
     </div>
   )
-}
+})
 
 MainView.propTypes = {
   children: PropTypes.node,
