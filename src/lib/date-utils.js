@@ -6,7 +6,6 @@ import utc from 'dayjs/plugin/utc'
 export const toMs = (seconds) => seconds * 1000
 
 const KNOWN_FORMATS = {
-  iso: 'YYYY-MM-DDTHH:mm:ssZ',
   onlyDate: 'YYYY-MM-DD',
   standard: 'YYYY-MM-DD h:mm A',
 }
@@ -16,7 +15,7 @@ dayjs.extend(isBetween)
 dayjs.extend(relativeTime)
 dayjs.extend(utc)
 
-function dateFormat(date, format) {
+function dateFormat(date, format = 'onlyDate') {
   return dayjs(date).format(KNOWN_FORMATS[format] || format)
 }
 
