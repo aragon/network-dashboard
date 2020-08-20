@@ -17,7 +17,7 @@
   dependencies:
     "@aragon/connect-core" "^0.6.0"
 
-"@aragon/connect-react@0.6.0":
+"@aragon/connect-react@^0.6.0":
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/@aragon/connect-react/-/connect-react-0.6.0.tgz#9ef3df805001a8efb81bfaac3f6d15b9b12fcef2"
   integrity sha512-QdYdpGw8QMqukFkBZTD24TB+/HO5+AwHwMHJqokQNZhpDsidUFU6TN54q0M5jN8EkDVqI7YINHXqVVv5zC6KvQ==
@@ -37,7 +37,7 @@
     isomorphic-ws "^4.0.1"
     subscriptions-transport-ws "^0.9.16"
 
-"@aragon/connect@0.6.0", "@aragon/connect@^0.6.0":
+"@aragon/connect@*", "@aragon/connect@^0.6.0":
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/@aragon/connect/-/connect-0.6.0.tgz#e5b424a891ddb76b45debaca13f72d523162a1f9"
   integrity sha512-TzZU8ABT7oORt76mXrEKbmvNwDDCA+ZFSr7035xDwPM35lmkBY9MQ3sAT80lr6kkFP3Wv1qHvJhLeV4HIgTSug==
@@ -46,10 +46,10 @@
     "@aragon/connect-ethereum" "^0.6.0"
     "@aragon/connect-thegraph" "^0.6.0"
 
-"@aragon/ui@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@aragon/ui/-/ui-1.6.0.tgz#79351a0a6c2b1a887425565a24e007fb6f6cc5a2"
-  integrity sha512-+Nb9z1EwpGROiZdVQWk60uUeOQBfYLWqU5VEWG+JfVmfBvqofUPEeYAYSMzr+h29zzkKy0/P8wiF5UF/XMBGHQ==
+"@aragon/ui@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@aragon/ui/-/ui-1.7.0.tgz#cb941b1862bbf0a2542240bc7c8c168241c1d8cd"
+  integrity sha512-7avUluFhN0OLZUlWLYWfy0DkxvsCw50YWRfM14iYDfe2ErX57AW2C31McIh3wQUimFfcIWJuVlP5ldOOpGNGOQ==
   dependencies:
     "@babel/runtime" "^7.3.1"
     airbnb-prop-types "^2.9.0"

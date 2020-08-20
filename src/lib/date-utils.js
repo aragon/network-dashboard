@@ -1,5 +1,7 @@
 import dayjs from 'dayjs'
+
 import isBetween from 'dayjs/plugin/isBetween'
+import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import utc from 'dayjs/plugin/utc'
 
@@ -12,11 +14,14 @@ const KNOWN_FORMATS = {
 
 // dayjs plugins
 dayjs.extend(isBetween)
+dayjs.extend(duration)
 dayjs.extend(relativeTime)
 dayjs.extend(utc)
 
-function dateFormat(date, format = 'onlyDate') {
+export function dateFormat(date, format = 'onlyDate') {
   return dayjs(date).format(KNOWN_FORMATS[format] || format)
 }
 
-export { dayjs, dateFormat }
+export function durationToHours(duration) {
+  return dayjs.duration(duration).asHours()
+}
