@@ -14,7 +14,7 @@ import { dateFormat, toMs } from '../../lib/date-utils'
 import { round, safeDiv } from '../../lib/math-utils'
 import SummaryBar from './SummaryBar'
 
-function InfoBoxes({ vote, setting }) {
+function InfoBoxes({ vote }) {
   const { layoutName } = useLayout()
   const compactMode = layoutName === 'small'
 
@@ -63,7 +63,7 @@ function InfoBoxes({ vote, setting }) {
         >
           <SummaryWithPercentages
             size={support}
-            requiredSize={parseFloat(setting.formattedSupportRequiredPct)}
+            requiredSize={parseFloat(vote.settings.formattedSupportRequiredPct)}
           />
         </Box>
       </div>
@@ -89,7 +89,7 @@ function InfoBoxes({ vote, setting }) {
           <SummaryWithPercentages
             size={quorumProgress}
             requiredSize={parseFloat(
-              setting.formattedMinimumAcceptanceQuorumPct
+              vote.settings.formattedMinimumAcceptanceQuorumPct
             )}
           />
         </Box>
@@ -100,7 +100,6 @@ function InfoBoxes({ vote, setting }) {
 
 InfoBoxes.propTypes = {
   vote: PropTypes.object.isRequired,
-  setting: PropTypes.object.isRequired,
 }
 
 function SummaryWithPercentages({ size, requiredSize }) {

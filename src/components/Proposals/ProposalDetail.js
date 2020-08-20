@@ -151,7 +151,7 @@ function ProposalDetail({ match }) {
                 </div>
               </section>
             </Box>
-            <InfoBoxes vote={vote} setting={vote.settings} />
+            <InfoBoxes vote={vote} />
           </>
         }
         secondary={<DisputableActionStatus vote={vote} />}
