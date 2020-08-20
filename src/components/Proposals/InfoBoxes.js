@@ -98,6 +98,11 @@ function InfoBoxes({ vote, setting }) {
   )
 }
 
+InfoBoxes.propTypes = {
+  vote: PropTypes.object.isRequired,
+  setting: PropTypes.object.isRequired,
+}
+
 function SummaryWithPercentages({ size, requiredSize }) {
   const theme = useTheme()
 
@@ -114,7 +119,7 @@ function SummaryWithPercentages({ size, requiredSize }) {
             color: ${theme.surfaceContentSecondary};
           `}
         >
-          (&gt;{requiredSize}% needed)
+          (>{requiredSize}% needed)
         </span>
       </div>
       <SummaryBar
@@ -126,6 +131,11 @@ function SummaryWithPercentages({ size, requiredSize }) {
       />
     </>
   )
+}
+
+SummaryWithPercentages.propTypes = {
+  size: PropTypes.number,
+  requiredSize: PropTypes.number,
 }
 
 function Status({ vote }) {
@@ -170,18 +180,8 @@ function Status({ vote }) {
   )
 }
 
-InfoBoxes.propTypes = {
-  vote: PropTypes.object.isRequired,
-  setting: PropTypes.object.isRequired,
-}
-
 Status.propTypes = {
   vote: PropTypes.object.isRequired,
-}
-
-SummaryWithPercentages.propTypes = {
-  size: PropTypes.number,
-  requiredSize: PropTypes.number,
 }
 
 export default InfoBoxes

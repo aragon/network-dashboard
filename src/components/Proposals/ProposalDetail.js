@@ -6,6 +6,7 @@ import {
   Bar,
   Box,
   GU,
+  Header,
   IconCheck,
   IdentityBadge,
   Split,
@@ -19,6 +20,7 @@ import { useGetVote } from '../../hooks/disputable-voting-logic'
 import DisputableActionStatus from './DisputableActionStatus'
 import InfoBoxes from './InfoBoxes'
 import SummaryBar from './SummaryBar'
+import Layout from '../Layout'
 
 function ProposalDetail({ match }) {
   const { id: proposalId } = match.params
@@ -43,7 +45,8 @@ function ProposalDetail({ match }) {
   const youVoted = true
 
   return (
-    <>
+    <Layout>
+      <Header />
       <Bar>
         <BackButton onClick={handleBack} />
       </Bar>
@@ -153,7 +156,7 @@ function ProposalDetail({ match }) {
         }
         secondary={<DisputableActionStatus vote={vote} />}
       />
-    </>
+    </Layout>
   )
 }
 

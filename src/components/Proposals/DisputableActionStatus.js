@@ -20,7 +20,7 @@ import DisputablePeriod from './DisputablePeriod'
 import DisputableStatusLabel from './DisputableStatusLabel'
 
 function DisputableActionStatus({ vote }) {
-  // TODO: get agreement title, replace  tokenAddress for tokenId
+  // TODO: get agreement title, replace tokenAddress for tokenId
   // TODO: Check if vote has dispute
   const hasDispute = false
   const { actionAmount } = vote.collateral
@@ -73,7 +73,7 @@ function DisputableActionStatus({ vote }) {
         <Item heading="Agreement">
           <Link>agreementTitle</Link>
         </Item>
-        {hasDispute(vote) && (
+        {hasDispute && (
           <Item heading="Dispute">
             <Link href={`https://court.aragon.org/disputes/${vote.disputeId}`}>
               Dispute #{vote.disputeId}
@@ -111,7 +111,7 @@ function Item({ heading, children }) {
       `}
     >
       {heading && (
-        <heading
+        <h1
           css={`
             ${textStyle('label2')};
             color: ${theme.surfaceContentSecondary};
@@ -120,7 +120,7 @@ function Item({ heading, children }) {
           `}
         >
           {heading}
-        </heading>
+        </h1>
       )}
       {children}
     </li>

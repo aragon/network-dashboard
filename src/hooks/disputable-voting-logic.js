@@ -22,17 +22,26 @@ export function useGetVote(voteId) {
   useEffect(() => {
     let cancelled = false
 
-    async function getVoteSettings() {
-      setLoading(true)
+    setLoading(true)
 
+    async function getVoteSettings() {
       if (vote) {
         const collateral = await vote.collateralRequirement()
 
         const extendedProperties = {
           settings: await vote.setting(),
-          status: await vote.status(),
           collateral: collateral,
           token: await collateral.token(),
+          status: vote.status,
+          endDate: vote.endDate,
+          formattedNays: vote.formattedNays,
+          formattedNaysPct: vote.formattedNaysPct,
+          formattedVotingPower: vote.formattedVotingPower,
+          formattedYeas: vote.formattedYeas,
+          formattedYeasPct: vote.formattedYeasPct,
+          hasEnded: vote.hasEnded,
+          naysPct: vote.naysPct,
+          yeasPct: vote.yeasPct,
         }
 
         if (!cancelled) {
@@ -49,8 +58,15 @@ export function useGetVote(voteId) {
     }
   }, [vote])
 
+  if (vote === null) {
+    return {
+      voteLoading: true,
+      vote: null,
+    }
+  }
+
   return {
-    voteLoading: vote === null || loading,
+    voteLoading: loading,
     vote: { ...vote, ...extendedProperties },
   }
 }
