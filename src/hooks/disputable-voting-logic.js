@@ -66,7 +66,7 @@ export function useGetVote(voteId) {
   }, [vote])
 
   if (vote === null) {
-    return [null, { loading: voteLoading, error: voteError }]
+    return [null, { loading: voteLoading || vote === null, error: voteError }]
   }
 
   return [
