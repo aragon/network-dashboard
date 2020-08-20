@@ -1,8 +1,10 @@
 import React from 'react'
-import { GU, textStyle } from '@aragon/ui'
+import { GU, textStyle, useLayout } from '@aragon/ui'
 import headerLogoSvg from '../../assets/aragonNetworkLogo.svg'
 
 function HeaderLogo() {
+  const { layoutName } = useLayout()
+  const compactMode = layoutName === 'small'
   return (
     <div
       css={`
@@ -18,15 +20,17 @@ function HeaderLogo() {
           margin-right: ${1 * GU}px;
         `}
       />
-      <h1
-        css={`
-          display: flex;
-          height: 100%;
-          ${textStyle('body1')};
-        `}
-      >
-        Aragon Network
-      </h1>
+      {!compactMode && (
+        <h1
+          css={`
+            display: flex;
+            height: 100%;
+            ${textStyle('body1')};
+          `}
+        >
+          Aragon Network
+        </h1>
+      )}
     </div>
   )
 }
