@@ -2,10 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { GU, Timer, useTheme } from '@aragon/ui'
 import { dateFormat } from '../../lib/date-utils'
+import { useNow } from '../../hooks/useNow'
 
 function DisputablePeriod({ endDate }) {
   const theme = useTheme()
-  const now = new Date().getTime()
+  const now = useNow()
+
   // TODO: get period from connector
   const period = 48
 
