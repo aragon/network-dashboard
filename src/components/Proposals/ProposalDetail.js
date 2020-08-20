@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { useHistory } from 'react-router-dom'
 import {
@@ -30,9 +30,10 @@ function ProposalDetail({ match }) {
 
   const { layoutName } = useLayout()
   const history = useHistory()
-  const handleBack = () => {
+
+  const handleBack = useCallback(() => {
     history.push(`/proposals`)
-  }
+  }, [history])
 
   const [vote, { loading, error }] = useGetVote(
     `${disputableVotingApp}-vote-${proposalId}`
@@ -40,6 +41,10 @@ function ProposalDetail({ match }) {
 
   if (loading) {
     return <div>Loading...</div>
+  }
+
+  if (error) {
+    console.error(error)
   }
 
   const { voteId, context, creator, yeas, nays } = vote
