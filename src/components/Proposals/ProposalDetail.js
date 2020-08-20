@@ -34,11 +34,11 @@ function ProposalDetail({ match }) {
     history.push(`/proposals`)
   }
 
-  const { voteLoading, vote } = useGetVote(
+  const [vote, { loading, error }] = useGetVote(
     `${disputableVotingApp}-vote-${proposalId}`
   )
 
-  if (voteLoading) {
+  if (loading) {
     return <div>Loading...</div>
   }
 
