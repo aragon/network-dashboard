@@ -21,9 +21,11 @@ import DisputableActionStatus from './DisputableActionStatus'
 import InfoBoxes from './InfoBoxes'
 import SummaryBar from './SummaryBar'
 import Layout from '../Layout'
+import { networkEnvironment } from '../../current-environment'
 
 function ProposalDetail({ match }) {
   const { id: proposalId } = match.params
+  const { disputableVotingApp } = networkEnvironment
   const theme = useTheme()
 
   const { layoutName } = useLayout()
@@ -32,7 +34,9 @@ function ProposalDetail({ match }) {
     history.push(`/proposals`)
   }
 
-  const { voteLoading, vote } = useGetVote(proposalId)
+  const { voteLoading, vote } = useGetVote(
+    `${disputableVotingApp}-vote-${proposalId}`
+  )
 
   if (voteLoading) {
     return <div>Loading...</div>

@@ -75,7 +75,7 @@ function DisputableStatusLabel({ status }) {
   return (
     <Tag
       background={background && `${background}`}
-      color={color && `${color}`}
+      color={color}
       mode="indicator"
       label={label}
       icon={<Icon size="small" />}

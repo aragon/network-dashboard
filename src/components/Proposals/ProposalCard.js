@@ -3,11 +3,10 @@ import PropTypes from 'prop-types'
 import { Card, GU } from '@aragon/ui'
 
 function ProposalCard({ vote, onProposalClick }) {
-  const { id, context } = vote
-
+  const { voteId, context } = vote
   return (
     <Card
-      onClick={() => onProposalClick(id)}
+      onClick={() => onProposalClick(voteId)}
       css={`
         padding: ${3 * GU}px;
       `}
