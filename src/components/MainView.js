@@ -15,6 +15,7 @@ const MainView = React.memo(function MainView({ children }) {
       <div
         css={`
           flex-shrink: 0;
+          z-index: 2;
         `}
       >
         <Header />
