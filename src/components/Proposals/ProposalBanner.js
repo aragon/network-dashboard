@@ -1,6 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Button, GU, IconCross, textStyle, useTheme } from '@aragon/ui'
+import {
+  Button,
+  ButtonIcon,
+  GU,
+  IconCross,
+  textStyle,
+  useTheme,
+} from '@aragon/ui'
 import background from '../../assets/banner.svg'
 
 function ProposalBanner({ onCloseBanner }) {
@@ -20,16 +27,20 @@ function ProposalBanner({ onCloseBanner }) {
         position: relative;
       `}
     >
-      <IconCross
-        onClick={onCloseBanner}
+      <ButtonIcon
         css={`
           position: absolute;
           top: ${4 * GU}px;
           right: ${4 * GU}px;
-          color: ${theme.surfaceOpened};
-          cursor: pointer;
         `}
-      />
+        onClick={onCloseBanner}
+      >
+        <IconCross
+          css={`
+            color: ${theme.surfaceOpened};
+          `}
+        />
+      </ButtonIcon>
       <div
         css={`
           max-width: 90vw;
