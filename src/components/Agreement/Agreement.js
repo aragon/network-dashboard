@@ -17,7 +17,7 @@ const Agreement = React.memo(function Agreement() {
     ipfsUri,
   } = MOCK_AGREEMENT
 
-  const apps = useMemo(
+  const mockBindingActions = useMemo(
     () =>
       connectedApps.map(
         ({
@@ -72,7 +72,7 @@ const Agreement = React.memo(function Agreement() {
             <AgreementDocument content={content} />
           </>
         }
-        secondary={<AgreementBindingActions apps={apps} />}
+        secondary={<AgreementBindingActions apps={mockBindingActions} />}
       />
     </Layout>
   )
