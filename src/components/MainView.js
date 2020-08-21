@@ -20,6 +20,7 @@ const MainView = React.memo(function MainView({ children }) {
       >
         <Header />
       </div>
+
       <ScrollView
         css={`
           display: flex;

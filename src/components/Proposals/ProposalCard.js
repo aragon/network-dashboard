@@ -4,7 +4,6 @@ import { Card, GU } from '@aragon/ui'
 
 function ProposalCard({ vote, onProposalClick }) {
   const { voteId, context } = vote
-
   return (
     <Card
       onClick={() => onProposalClick(voteId)}

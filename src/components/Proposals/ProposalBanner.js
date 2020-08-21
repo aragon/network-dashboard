@@ -28,6 +28,7 @@ function ProposalBanner({ onCloseBanner }) {
       `}
     >
       <ButtonIcon
+        label=""
         css={`
           position: absolute;
           top: ${4 * GU}px;
