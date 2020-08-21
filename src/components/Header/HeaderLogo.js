@@ -12,20 +12,13 @@ function HeaderLogo() {
         align-items: center;
       `}
     >
-      <img
-        alt=""
-        src={headerLogoSvg}
-        width={4 * GU}
-        css={`
-          margin-right: ${1 * GU}px;
-        `}
-      />
+      <img alt="" src={headerLogoSvg} width={4 * GU} />
       {!compactMode && (
         <h1
           css={`
-            display: flex;
-            height: 100%;
             ${textStyle('body1')};
+            line-height: 1;
+            margin-left: ${1 * GU}px;
           `}
         >
           Aragon Network
