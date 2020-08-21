@@ -3,6 +3,8 @@ import { Button, Box, Header, Split, noop } from '@aragon/ui'
 import Layout from '../Layout'
 import AgreementHeader from './AgreementHeader'
 import AgreementDetails from './AgreementDetails'
+import AgreementDocument from './AgreementDocument'
+import STATIC_AGREEMENT from './static-agreement'
 
 const Agreement = React.memo(function Agreement() {
   return (
@@ -24,7 +26,7 @@ const Agreement = React.memo(function Agreement() {
                 ipfsUri="ipfs:Qmb5CHbQQQx6YXkPE6HodeXVmtCRgpSgkj9EkW9xs6jDHj"
               />
             </Box>
-            <Box>Document</Box>
+            <AgreementDocument content={STATIC_AGREEMENT} />
           </>
         }
         secondary={<Box>Binding actions</Box>}
