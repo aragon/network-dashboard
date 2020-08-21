@@ -1,8 +1,9 @@
 import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { CardLayout, Header, GU } from '@aragon/ui'
+import { Header } from '@aragon/ui'
 import Layout from '../Layout'
 import ProposalBanner from './ProposalBanner'
+import ProposalCardGroup from './ProposalCardGroup'
 import ProposalCard from './ProposalCard'
 import { useVotes } from '../../hooks/disputable-voting-logic'
 
@@ -23,23 +24,36 @@ const Proposals = React.memo(function Proposals() {
     setBannerClosed(true)
   }, [])
 
+  if (votes === null) {
+    return <div>Loading</div>
+  }
+
+  const voteGroups = [
+    ['Open votes', votes.filter((vote) => vote.hasEnded === false)],
+    ['Closed votes', votes.filter((vote) => vote.hasEnded === true)],
+  ]
+
   return (
     <section>
       {!bannerClosed && <ProposalBanner onCloseBanner={handleCloseBanner} />}
       <Layout>
         <Header primary="Proposals" />
-        {votes ? (
-          <CardLayout columnWidthMin={30 * GU} rowHeight={294}>
-            {votes.map((vote) => (
-              <ProposalCard
-                key={vote.voteId}
-                vote={vote}
-                onProposalClick={handleProposalClick}
-              />
-            ))}
-          </CardLayout>
-        ) : (
-          <div>Loading...</div>
+        {voteGroups.map(([groupName, votes]) =>
+          votes.length ? (
+            <ProposalCardGroup
+              title={groupName}
+              count={votes.length}
+              key={groupName}
+            >
+              {votes.map((vote) => (
+                <ProposalCard
+                  key={vote.voteId}
+                  vote={vote}
+                  onProposalClick={handleProposalClick}
+                />
+              ))}
+            </ProposalCardGroup>
+          ) : null
         )}
       </Layout>
     </section>
