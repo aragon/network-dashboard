@@ -16,6 +16,7 @@ export function useGetVote(voteId) {
   const [error, setError] = useState(null)
   const [extendedProperties, setExtendedProperties] = useState(null)
   const [disputableVoting] = useApp('disputable-voting')
+
   const [vote, { voteLoading, voteError }] = useDisputableVoting(
     disputableVoting,
     (app) => {
@@ -29,32 +30,33 @@ export function useGetVote(voteId) {
     setLoading(true)
 
     async function getVoteSettings() {
-      if (vote) {
-        try {
-          const collateral = await vote.collateralRequirement()
-          const extendedProperties = {
-            settings: await vote.setting(),
-            collateral: collateral,
-            token: await collateral.token(),
-            status: vote.status,
-            endDate: vote.endDate,
-            formattedNays: vote.formattedNays,
-            formattedNaysPct: vote.formattedNaysPct,
-            formattedVotingPower: vote.formattedVotingPower,
-            formattedYeas: vote.formattedYeas,
-            formattedYeasPct: vote.formattedYeasPct,
-            hasEnded: vote.hasEnded,
-            naysPct: vote.naysPct,
-            yeasPct: vote.yeasPct,
-          }
-          if (!cancelled) {
-            setExtendedProperties(extendedProperties)
-            setLoading(false)
-          }
-        } catch (error) {
-          console.error(error)
-          setError(error)
+      if (!vote) {
+        return
+      }
+      try {
+        const collateral = await vote.collateralRequirement()
+        const extendedProperties = {
+          settings: await vote.setting(),
+          collateral: collateral,
+          token: await collateral.token(),
+          status: vote.status,
+          endDate: vote.endDate,
+          formattedNays: vote.formattedNays,
+          formattedNaysPct: vote.formattedNaysPct,
+          formattedVotingPower: vote.formattedVotingPower,
+          formattedYeas: vote.formattedYeas,
+          formattedYeasPct: vote.formattedYeasPct,
+          hasEnded: vote.hasEnded,
+          naysPct: vote.naysPct,
+          yeasPct: vote.yeasPct,
         }
+        if (!cancelled) {
+          setExtendedProperties(extendedProperties)
+          setLoading(false)
+        }
+      } catch (error) {
+        console.error(error)
+        setError(error)
       }
     }
 
@@ -64,6 +66,10 @@ export function useGetVote(voteId) {
       cancelled = true
     }
   }, [vote])
+
+  useEffect(() => {
+    setExtendedProperties(null)
+  }, [voteId])
 
   if (vote === null) {
     return [null, { loading: voteLoading || vote === null, error: voteError }]
