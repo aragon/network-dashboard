@@ -1,12 +1,55 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Button, Box, Header, Split, noop } from '@aragon/ui'
 import Layout from '../Layout'
+import AgreementBindingActions from './AgreementBindingActions'
 import AgreementHeader from './AgreementHeader'
 import AgreementDetails from './AgreementDetails'
 import AgreementDocument from './AgreementDocument'
-import STATIC_AGREEMENT from './static-agreement'
+import { durationToHours } from '../../lib/date-utils'
+import { MOCK_AGREEMENT } from './mock-data'
 
 const Agreement = React.memo(function Agreement() {
+  const {
+    content,
+    connectedApps,
+    contractAddress,
+    creationDate,
+    ipfsUri,
+  } = MOCK_AGREEMENT
+
+  const mockBindingActions = useMemo(
+    () =>
+      connectedApps.map(
+        ({
+          appName,
+          appAddress,
+          actionAmount,
+          collateralToken: { address, decimals, symbol },
+          challengeAmount,
+          challengeDuration,
+        }) => {
+          return {
+            appName,
+            appAddress,
+            actionCollateral: {
+              amount: actionAmount,
+              symbol,
+              address,
+              decimals,
+            },
+            challengeCollateral: {
+              amount: challengeAmount,
+              symbol,
+              address,
+              decimals,
+            },
+            settlementPeriod: durationToHours(challengeDuration),
+          }
+        }
+      ),
+    [connectedApps]
+  )
+
   return (
     <Layout>
       <Header
@@ -21,15 +64,15 @@ const Agreement = React.memo(function Agreement() {
             <Box>
               <AgreementHeader title="Aragon Network DAO Agreement" />
               <AgreementDetails
-                contractAddress="0x5c6620c49f9aecf74bd483054f2d0ace0d375f96"
-                creationDate="2020/07/20"
-                ipfsUri="ipfs:Qmb5CHbQQQx6YXkPE6HodeXVmtCRgpSgkj9EkW9xs6jDHj"
+                contractAddress={contractAddress}
+                creationDate={creationDate}
+                ipfsUri={ipfsUri}
               />
             </Box>
-            <AgreementDocument content={STATIC_AGREEMENT} />
+            <AgreementDocument content={content} />
           </>
         }
-        secondary={<Box>Binding actions</Box>}
+        secondary={<AgreementBindingActions apps={mockBindingActions} />}
       />
     </Layout>
   )

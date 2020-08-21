@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { IdentityBadge, Link, useLayout, GU } from '@aragon/ui'
+import { dateFormat } from '../../lib/date-utils'
 import InfoField from '../InfoField'
 import { getIpfsCidFromUri, getIpfsUrlfromUri } from '../../lib/ipfs-utils'
 
@@ -51,7 +52,7 @@ function AgreementDetails({ ipfsUri, contractAddress, creationDate }) {
         <InfoField label="Agreement Contract">
           <IdentityBadge entity={contractAddress} />
         </InfoField>
-        <InfoField label="Creation Date">{creationDate}</InfoField>
+        <InfoField label="Creation Date">{dateFormat(creationDate)}</InfoField>
       </div>
     </>
   )
@@ -59,7 +60,7 @@ function AgreementDetails({ ipfsUri, contractAddress, creationDate }) {
 
 AgreementDetails.propTypes = {
   ipfsUri: PropTypes.string,
-  creationDate: PropTypes.string,
+  creationDate: PropTypes.number,
   contractAddress: PropTypes.string,
 }
 

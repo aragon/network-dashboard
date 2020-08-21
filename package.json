@@ -36,7 +36,7 @@
   "dependencies": {
     "@aragon/connect": "*",
     "@aragon/connect-react": "^0.6.0",
-    "@aragon/ui": "^1.6.0",
+    "@aragon/ui": "^1.7.0",
     "@sentry/browser": "^5.20.1",
     "core-js": "^3.3.2",
     "dayjs": "^1.8.27",
