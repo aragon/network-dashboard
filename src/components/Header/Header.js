@@ -1,7 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { NavLink } from 'react-router-dom'
-import { GU, Link, useTheme } from '@aragon/ui'
+import React, { useCallback } from 'react'
+import { useRouteMatch, useHistory } from 'react-router-dom'
+import { GU, Link, IconExternal, useTheme } from '@aragon/ui'
 import HeaderLogo from './HeaderLogo'
 import Layout from '../Layout'
 
@@ -12,64 +11,98 @@ function Header() {
     <header
       css={`
         height: ${8 * GU}px;
-        box-shadow: 0px 2px 4px rgba(160, 168, 194, 0.16);
+        box-shadow: 0px 0px 10px rgba(160, 168, 194, 0.3);
         display: flex;
         align-items: center;
-        justify-content: space-between
-        background: ${theme.surface};
+        justify-content: space-between;
+        background-color: ${theme.surface};
       `}
     >
       <Layout>
-        <nav
+        <div
           css={`
-            display: inline-grid;
-            grid-auto-flow: column;
-            grid-gap: ${4 * GU}px;
+            display: flex;
           `}
         >
           <HeaderLogo />
-          <MenuItem to="/proposals">Proposals</MenuItem>
-          <MenuItem to="/agreement">Agreement</MenuItem>
-          <Link
-            href="https://app.uniswap.org/#/swap?outputCurrency=0x960b236A07cf122663c4303350609A66A7B288C0"
+          <nav
             css={`
-              text-decoration: none;
-              display: flex;
-              align-items: center;
-              color: ${theme.contentSecondary};
+              display: inline-grid;
+              grid-auto-flow: column;
+              grid-gap: ${4 * GU}px;
+              margin-left: ${5 * GU}px;
             `}
           >
-            Get ANT
-          </Link>
-        </nav>
+            <NavItem>
+              <InteralLink to="/proposals">Proposals</InteralLink>
+            </NavItem>
+
+            <NavItem>
+              <InteralLink to="/agreement">Agreement</InteralLink>
+            </NavItem>
+            <NavItem>
+              <Link
+                href="https://app.uniswap.org/#/swap?outputCurrency=0x960b236A07cf122663c4303350609A66A7B288C0"
+                css={`
+                  display: flex;
+                  align-items: center;
+                  text-decoration: none;
+                  color: ${theme.contentSecondary};
+                `}
+              >
+                Get ANT
+                <IconExternal
+                  size="small"
+                  css={`
+                    margin-left: ${0.5 * GU}px;
+                  `}
+                />
+              </Link>
+            </NavItem>
+          </nav>
+        </div>
       </Layout>
     </header>
   )
 }
 
-function MenuItem({ to, children }) {
+/* eslint-disable react/prop-types */
+function InteralLink({ to, children }) {
+  const history = useHistory()
+  const active = useRouteMatch(to) !== null
+
+  const handlePageRequest = useCallback(() => {
+    history.push(to)
+  }, [history, to])
+
   const theme = useTheme()
   return (
-    <NavLink
-      to={to}
-      style={{
-        textDecoration: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        color: theme.contentSecondary,
-      }}
-      activeStyle={{
-        color: theme.content,
-      }}
+    <Link
+      onClick={handlePageRequest}
+      css={`
+        text-decoration: none;
+        color: ${theme.contentSecondary};
+
+        ${active && `color: ${theme.content}`}
+      `}
     >
       {children}
-    </NavLink>
+    </Link>
   )
 }
 
-MenuItem.propTypes = {
-  to: PropTypes.string,
-  children: PropTypes.node,
+function NavItem({ children }) {
+  return (
+    <div
+      css={`
+        display: flex;
+        align-items: center;
+      `}
+    >
+      {children}
+    </div>
+  )
 }
+/* eslint-enable react/prop-types */
 
 export default Header

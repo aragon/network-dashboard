@@ -19,7 +19,7 @@ function ProposalBanner({ onCloseBanner }) {
     <div
       css={`
         background-image: url(${background});
-        background-position: center;
+        background-position: 20% center;
         width: 100%;
         background-size: cover;
         text-align: center;
@@ -49,14 +49,18 @@ function ProposalBanner({ onCloseBanner }) {
       >
         <h1
           css={`
-              ${textStyle('title4')}
-              font-size: ${7 * GU}px;
-              line-height: 125%;
-              font-weight: 700;
-              background: -webkit-linear-gradient(#32fff5, #01bfe3);
-              -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;
-            `}
+            background: linear-gradient(to bottom, ${theme.accentStart} -50%,${
+            theme.accentEnd
+          } 60%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+            ${textStyle('title4')}
+            font-size: ${6.5 * GU}px;
+            line-height: 1.1;
+            font-weight: 700;
+            margin-bottom: ${1.5 * GU}px;
+          `}
         >
           Fight For Freedom
         </h1>
@@ -65,7 +69,7 @@ function ProposalBanner({ onCloseBanner }) {
             ${textStyle('body1')};
             max-width: ${95 * GU}px;
             margin: auto;
-            padding: ${3 * GU}px 0;
+            margin-bottom: ${3.5 * GU}px;
             color: ${theme.contentSecondary};
           `}
         >
@@ -75,7 +79,12 @@ function ProposalBanner({ onCloseBanner }) {
         </p>
         <Button
           label="Read Aragon Manifesto"
+          mode="strong"
           href="https://aragon.org/manifesto"
+          css={`
+            padding: ${2.75 * GU}px ${3.5 * GU}px;
+            font-weight: 600;
+          `}
         />
       </div>
     </div>
