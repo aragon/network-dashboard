@@ -6,11 +6,11 @@ import AgreementHeader from './AgreementHeader'
 import AgreementDetails from './AgreementDetails'
 import AgreementDocument from './AgreementDocument'
 import { durationToHours } from '../../lib/date-utils'
-import STATIC_AGREEMENT from './static-agreement'
 import { MOCK_AGREEMENT } from './mock-data'
 
 const Agreement = React.memo(function Agreement() {
   const {
+    content,
     connectedApps,
     contractAddress,
     creationDate,
@@ -21,14 +21,16 @@ const Agreement = React.memo(function Agreement() {
     () =>
       connectedApps.map(
         ({
-          collateralToken: { address, decimals, symbol },
+          appName,
+          appAddress,
           actionAmount,
+          collateralToken: { address, decimals, symbol },
           challengeAmount,
           challengeDuration,
-          appName,
         }) => {
           return {
             appName,
+            appAddress,
             actionCollateral: {
               amount: actionAmount,
               symbol,
@@ -67,7 +69,7 @@ const Agreement = React.memo(function Agreement() {
                 ipfsUri={ipfsUri}
               />
             </Box>
-            <AgreementDocument content={STATIC_AGREEMENT} />
+            <AgreementDocument content={content} />
           </>
         }
         secondary={<AgreementBindingActions apps={apps} />}

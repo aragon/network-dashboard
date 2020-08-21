@@ -14,7 +14,13 @@ import InfoField from './../InfoField'
 
 const AgreementBindingActions = React.memo(({ apps }) => {
   const items = apps.map(
-    ({ actionCollateral, appName, challengeCollateral, settlementPeriod }) => [
+    ({
+      appName,
+      appAddress,
+      actionCollateral,
+      challengeCollateral,
+      settlementPeriod,
+    }) => [
       <div
         css={`
           display: flex;
@@ -22,7 +28,7 @@ const AgreementBindingActions = React.memo(({ apps }) => {
           margin-left: ${-1 * GU}px;
         `}
       >
-        <AppBadge label={appName} />
+        <AppBadge label={appName} appAddress={appAddress} />
       </div>,
 
       <div
