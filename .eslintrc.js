@@ -24,6 +24,7 @@ module.exports = {
     'react/prop-types': 'warn',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'error',
+    'react/jsx-key': 0,
     'import/no-unresolved': [
       'error',
       { ignore: ['^react(-dom)?$', '^styled-components$'] },
