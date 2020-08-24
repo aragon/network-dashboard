@@ -34,7 +34,10 @@ function ProposalOption({ color, label, percentage }) {
           border-radius: ${RADIUS}px;
         `}
       >
-        <ProgressBar value={percentage / 100} color={color || theme.positive} />
+        <ProgressBar
+          value={percentage / 100}
+          color={`${color || theme.positive}`}
+        />
       </div>
     </Main>
   )
