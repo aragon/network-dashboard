@@ -18,34 +18,32 @@ function SummaryBar({
       <CombinedBar>
         {!!positiveSize && (
           <BarPart
-            style={{
-              backgroundColor: `${
-                disabledProgressBars ? theme.surfaceOpened : theme.positive
-              }`,
-              transform: `scale3d(${positiveSize}, 1, 1)`,
-            }}
+            css={`
+              background-color: ${disabledProgressBars
+                ? theme.surfaceOpened
+                : theme.positive};
+              transform: scale3d(${positiveSize}, 1, 1);
+            `}
           />
         )}
         {!!negativeSize && (
           <BarPart
-            style={{
-              backgroundColor: `${
-                disabledProgressBars ? theme.controlUnder : theme.negative
-              }`,
-              transform: `translate3d(${
-                100 * positiveSize
-              }%, 0, 0) scale3d(${negativeSize}, 1, 1)`,
-            }}
+            css={`
+              background-color: ${disabledProgressBars
+                ? theme.controlUnder
+                : theme.negative};
+              transform: translate3d(${100 * positiveSize}%, 0, 0)
+                scale3d(${negativeSize}, 1, 1);
+            `}
           />
         )}
       </CombinedBar>
       <RequiredSeparatorClip>
         <RequiredSeparatorWrapper
-          style={{
-            transform: `scale3d(1, ${
-              requiredSize > 0 ? 1 : 0
-            }, 1) translate3d(${100 * requiredSize}%, 0, 0)`,
-          }}
+          css={`
+            transform: scale3d(1, ${requiredSize > 0 ? 1 : 0}, 1)
+              translate3d(${100 * requiredSize}%, 0, 0);
+          `}
         >
           <div
             css={`
