@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
+  GU,
   IconAttention,
   IconCheck,
   IconClock,
@@ -9,6 +10,7 @@ import {
   IconInfo,
   IconWarning,
   Tag,
+  textStyle,
   useTheme,
 } from '@aragon/ui'
 import {
@@ -29,7 +31,7 @@ function getAttributes(status, theme) {
     },
     [VOTE_STATUS_ACCEPTED]: {
       background: theme.surface,
-      label: 'Accepted',
+      label: 'Passed',
       Icon: IconCheck,
       color: theme.positive,
     },
@@ -47,7 +49,7 @@ function getAttributes(status, theme) {
     },
     [VOTE_STATUS_EXECUTED]: {
       background: '#CADFAB',
-      label: 'Executed',
+      label: 'Passed (enacted)',
       Icon: IconInfo,
       color: '#749C47',
     },
@@ -72,10 +74,36 @@ function DisputableStatusLabel({ status }) {
   const theme = useTheme()
   const { Icon, background, color, label } = getAttributes(status, theme)
 
+  if (
+    status === VOTE_STATUS_ACCEPTED ||
+    status === VOTE_STATUS_EXECUTED ||
+    status === VOTE_STATUS_REJECTED
+  ) {
+    return (
+      <div
+        css={`
+          ${textStyle('body2')};
+          color: ${color || theme.surfaceContentSecondary};
+          display: flex;
+          align-items: center;
+        `}
+      >
+        {Icon && <Icon size="small" />}
+        <span
+          css={`
+            margin-left: $ ${0.5 * GU}px;
+          `}
+        >
+          {label}
+        </span>
+      </div>
+    )
+  }
+
   return (
     <Tag
       background={background && `${background}`}
-      color={`${color}`}
+      color={color && `${color}`}
       mode="indicator"
       label={label}
       icon={<Icon size="small" />}
