@@ -23,7 +23,7 @@ const ProposalCardGroup = ({ title, count, children }) => {
           display: flex;
           align-items: center;
           margin-bottom: ${3 * GU}px;
-          ${compactMode ? `padding: 0 ${2 * GU}px;` : ''}
+          ${compactMode && `padding: 0 ${2 * GU}px;`}
           ${unselectable};
         `}
       >

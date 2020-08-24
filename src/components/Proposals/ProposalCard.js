@@ -20,7 +20,7 @@ function ProposalCard({ vote, onProposalClick }) {
         padding: ${3 * GU}px;
       `}
     >
-      <div
+      <p
         css={`
           // overflow-wrap:anywhere and hyphens:auto are not supported yet by
           // the latest versions of Safari (as of June 2020), which
@@ -28,11 +28,12 @@ function ProposalCard({ vote, onProposalClick }) {
           hyphens: auto;
           overflow-wrap: anywhere;
           word-break: break-word;
+          ${textStyle('body1')}
         `}
       >
-        <span css="font-weight: bold">#{voteId}: </span>
-        <span>{context || 'No description provided'}</span>
-      </div>
+        <strong css="font-weight: bold">#{voteId}: </strong>
+        {context || 'No description provided'}
+      </p>
       <ProposalOption
         color={theme.positive}
         percentage={(vote.yeas * 100) / vote.votingPower}

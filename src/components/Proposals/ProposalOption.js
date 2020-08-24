@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { GU, RADIUS, textStyle, useTheme } from '@aragon/ui'
+import { GU, ProgressBar, RADIUS, textStyle, useTheme } from '@aragon/ui'
 
 function ProposalOption({ color, label, percentage }) {
   const theme = useTheme()
@@ -17,8 +17,7 @@ function ProposalOption({ color, label, percentage }) {
         </span>
         <span
           css={`
-            ${textStyle('body3')}
-            font-size: 12px;
+            ${textStyle('body4')}
             color: ${theme.surfaceContentSecondary};
           `}
         >
@@ -32,13 +31,7 @@ function ProposalOption({ color, label, percentage }) {
           border-radius: ${RADIUS}px;
         `}
       >
-        <Bar
-          css={`
-            background-color: ${color || theme.positive};
-            width: 100%;
-            transform: scale3d(${percentage / 100}, 1, 1);
-          `}
-        />
+        <ProgressBar value={percentage / 100} color={color || theme.positive} />
       </div>
     </Main>
   )
@@ -60,11 +53,6 @@ const Labels = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: ${0.5 * GU}px;
-`
-
-const Bar = styled.div`
-  height: 6px;
-  transform-origin: 0 0;
 `
 
 export default React.memo(ProposalOption)
