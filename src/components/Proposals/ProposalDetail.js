@@ -34,13 +34,13 @@ import { addressesEqual } from '../../lib/web3-utils'
 function getAttributes(status, theme) {
   const attributes = {
     [VOTE_STATUS_CANCELLED]: {
-      backgroundColor: '#F9FAFC',
-      borderColor: '#DDE4E9',
+      backgroundColor: theme.surfacePressed,
+      borderColor: theme.controlUnder,
       disabledProgressBars: true,
     },
     [VOTE_STATUS_PAUSED]: {
       backgroundColor: '#fffdfa',
-      borderColor: '#F5A623',
+      borderColor: theme.warning,
       disabledProgressBars: true,
     },
     [VOTE_STATUS_DISPUTED]: {
