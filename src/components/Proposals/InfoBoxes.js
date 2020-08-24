@@ -14,7 +14,7 @@ import { dateFormat, toMs } from '../../lib/date-utils'
 import { round, safeDiv } from '../../lib/math-utils'
 import SummaryBar from './SummaryBar'
 
-function InfoBoxes({ vote }) {
+function InfoBoxes({ vote, disabled }) {
   const { layoutName } = useLayout()
   const compactMode = layoutName === 'small'
 
@@ -62,6 +62,7 @@ function InfoBoxes({ vote }) {
           padding={(compactMode ? 2 : 3) * GU}
         >
           <SummaryWithPercentages
+            disabled={disabled}
             size={support}
             requiredSize={parseFloat(vote.settings.formattedSupportRequiredPct)}
           />
@@ -87,6 +88,7 @@ function InfoBoxes({ vote }) {
           padding={(compactMode ? 2 : 3) * GU}
         >
           <SummaryWithPercentages
+            disabled={disabled}
             size={quorumProgress}
             requiredSize={parseFloat(
               vote.settings.formattedMinimumAcceptanceQuorumPct
@@ -99,10 +101,11 @@ function InfoBoxes({ vote }) {
 }
 
 InfoBoxes.propTypes = {
+  disabled: PropTypes.bool,
   vote: PropTypes.object.isRequired,
 }
 
-function SummaryWithPercentages({ size, requiredSize }) {
+function SummaryWithPercentages({ disabled, size, requiredSize }) {
   const theme = useTheme()
 
   return (
@@ -122,6 +125,7 @@ function SummaryWithPercentages({ size, requiredSize }) {
         </span>
       </div>
       <SummaryBar
+        disabled={disabled}
         positiveSize={size}
         requiredSize={requiredSize / 100}
         css={`
@@ -133,6 +137,7 @@ function SummaryWithPercentages({ size, requiredSize }) {
 }
 
 SummaryWithPercentages.propTypes = {
+  disabled: PropTypes.bool,
   size: PropTypes.number,
   requiredSize: PropTypes.number,
 }

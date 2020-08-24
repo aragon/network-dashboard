@@ -17,11 +17,46 @@ import {
 } from '@aragon/ui'
 import { safeDiv } from '../../lib/math-utils'
 import { useGetVote } from '../../hooks/disputable-voting-logic'
+import {
+  DISPUTABLE_VOTE_STATUSES,
+  VOTE_STATUS_CANCELLED,
+  VOTE_STATUS_DISPUTED,
+  VOTE_STATUS_PAUSED,
+} from './disputable-vote-statuses'
 import DisputableActionStatus from './DisputableActionStatus'
 import InfoBoxes from './InfoBoxes'
 import SummaryBar from './SummaryBar'
+import FeedbackModule from './FeedbackModule'
 import Layout from '../Layout'
 import { networkEnvironment } from '../../current-environment'
+
+function getAttributes(status, theme) {
+  const attributes = {
+    [VOTE_STATUS_CANCELLED]: {
+      background: '#F9FAFC',
+      border: '#DDE4E9',
+      disabled: true,
+    },
+    [VOTE_STATUS_PAUSED]: {
+      background: '#fffdfa',
+      border: '#F5A623',
+      disabled: true,
+    },
+    [VOTE_STATUS_DISPUTED]: {
+      background: '#FFF7F2',
+      border: '#D26C41',
+      disabled: true,
+    },
+  }
+
+  return (
+    attributes[status] || {
+      background: theme.surface,
+      border: theme.border,
+      disabled: false,
+    }
+  )
+}
 
 function ProposalDetail({ match }) {
   const { id: proposalId } = match.params
@@ -50,8 +85,15 @@ function ProposalDetail({ match }) {
   const { voteId, context, creator, yeas, nays } = vote
   const totalVotes = parseFloat(yeas) + parseFloat(nays)
 
-  // TODO: get youVoted flag from connector
+  const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
+  const { background, border, disabled } = getAttributes(
+    disputableStatus,
+    theme
+  )
+
+  // TODO: get youVoted flag from connector, get real connected acount
   const youVoted = true
+  const connectedAccount = ''
 
   return (
     <Layout>
@@ -62,7 +104,12 @@ function ProposalDetail({ match }) {
       <Split
         primary={
           <>
-            <Box>
+            <Box
+              css={`
+                background: ${background};
+                border: solid 1px ${border};
+              `}
+            >
               <div
                 css={`
                   display: flex;
@@ -150,6 +197,7 @@ function ProposalDetail({ match }) {
                     Votes
                   </h2>
                   <SummaryBar
+                    disabled={disabled}
                     positiveSize={safeDiv(parseFloat(yeas), totalVotes)}
                     negativeSize={safeDiv(parseFloat(nays), totalVotes)}
                     requiredSize={0.5}
@@ -157,10 +205,14 @@ function ProposalDetail({ match }) {
                       margin-bottom: ${2 * GU}px;
                     `}
                   />
+                  <FeedbackModule
+                    vote={vote}
+                    connectedAccount={connectedAccount}
+                  />
                 </div>
               </section>
             </Box>
-            <InfoBoxes vote={vote} />
+            <InfoBoxes vote={vote} disabled={disabled} />
           </>
         }
         secondary={<DisputableActionStatus vote={vote} />}

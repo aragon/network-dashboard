@@ -100,7 +100,7 @@ function Item({ heading, children }) {
   return (
     <li
       css={`
-        list-style-type: none;
+        list-style: none;
         & + li {
           margin-top: ${3 * GU}px;
         }

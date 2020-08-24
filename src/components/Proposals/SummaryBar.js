@@ -4,15 +4,24 @@ import { RADIUS, useTheme } from '@aragon/ui'
 import { animated } from 'react-spring'
 import styled from 'styled-components'
 
-function SummaryBar({ positiveSize, negativeSize, requiredSize, ...props }) {
+function SummaryBar({
+  disabled,
+  positiveSize,
+  negativeSize,
+  requiredSize,
+  ...props
+}) {
   const theme = useTheme()
+
   return (
     <Main {...props}>
       <CombinedBar>
         {!!positiveSize && (
           <BarPart
             style={{
-              backgroundColor: theme.positive,
+              backgroundColor: `${
+                disabled ? theme.surfaceOpened : theme.positive
+              }`,
               transform: `scale3d(${positiveSize}, 1, 1)`,
             }}
           />
@@ -20,7 +29,9 @@ function SummaryBar({ positiveSize, negativeSize, requiredSize, ...props }) {
         {!!negativeSize && (
           <BarPart
             style={{
-              backgroundColor: theme.negative,
+              backgroundColor: `${
+                disabled ? theme.controlUnder : theme.negative
+              }`,
               transform: `translate3d(${
                 100 * positiveSize
               }%, 0, 0) scale3d(${negativeSize}, 1, 1)`,
@@ -102,6 +113,7 @@ const RequiredSeparatorWrapper = styled(animated.div)`
 `
 
 SummaryBar.propTypes = {
+  disabled: PropTypes.bool,
   positiveSize: PropTypes.number,
   negativeSize: PropTypes.number,
   requiredSize: PropTypes.number,

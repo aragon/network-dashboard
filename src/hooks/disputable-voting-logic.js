@@ -20,7 +20,9 @@ export function useGetVote(voteId) {
   const [vote, { voteLoading, voteError }] = useDisputableVoting(
     disputableVoting,
     (app) => {
-      return app.vote(voteId)
+      if (vote == null) {
+        return app.vote(voteId)
+      }
     }
   )
 
