@@ -5,7 +5,7 @@ import { animated } from 'react-spring'
 import styled from 'styled-components'
 
 function SummaryBar({
-  disabled,
+  disabledProgressBars,
   positiveSize,
   negativeSize,
   requiredSize,
@@ -20,7 +20,7 @@ function SummaryBar({
           <BarPart
             style={{
               backgroundColor: `${
-                disabled ? theme.surfaceOpened : theme.positive
+                disabledProgressBars ? theme.surfaceOpened : theme.positive
               }`,
               transform: `scale3d(${positiveSize}, 1, 1)`,
             }}
@@ -30,7 +30,7 @@ function SummaryBar({
           <BarPart
             style={{
               backgroundColor: `${
-                disabled ? theme.controlUnder : theme.negative
+                disabledProgressBars ? theme.controlUnder : theme.negative
               }`,
               transform: `translate3d(${
                 100 * positiveSize
@@ -113,7 +113,7 @@ const RequiredSeparatorWrapper = styled(animated.div)`
 `
 
 SummaryBar.propTypes = {
-  disabled: PropTypes.bool,
+  disabledProgressBars: PropTypes.bool,
   positiveSize: PropTypes.number,
   negativeSize: PropTypes.number,
   requiredSize: PropTypes.number,

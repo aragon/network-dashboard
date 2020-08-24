@@ -105,7 +105,6 @@ function Strong({ children }) {
     <strong
       css={`
         color: ${theme.surfaceContent};
-        font-weight: 600;
       `}
     >
       {children}

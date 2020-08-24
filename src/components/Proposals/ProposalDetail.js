@@ -33,27 +33,27 @@ import { networkEnvironment } from '../../current-environment'
 function getAttributes(status, theme) {
   const attributes = {
     [VOTE_STATUS_CANCELLED]: {
-      background: '#F9FAFC',
-      border: '#DDE4E9',
-      disabled: true,
+      backgroundColor: '#F9FAFC',
+      borderColor: '#DDE4E9',
+      disabledProgressBars: true,
     },
     [VOTE_STATUS_PAUSED]: {
-      background: '#fffdfa',
-      border: '#F5A623',
-      disabled: true,
+      backgroundColor: '#fffdfa',
+      borderColor: '#F5A623',
+      disabledProgressBars: true,
     },
     [VOTE_STATUS_DISPUTED]: {
-      background: '#FFF7F2',
-      border: '#D26C41',
-      disabled: true,
+      backgroundColor: '#FFF7F2',
+      borderColor: '#D26C41',
+      disabledProgressBars: true,
     },
   }
 
   return (
     attributes[status] || {
-      background: theme.surface,
-      border: theme.border,
-      disabled: false,
+      backgroundColor: theme.surface,
+      borderColor: theme.border,
+      disabledProgressBars: false,
     }
   )
 }
@@ -86,7 +86,7 @@ function ProposalDetail({ match }) {
   const totalVotes = parseFloat(yeas) + parseFloat(nays)
 
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
-  const { background, border, disabled } = getAttributes(
+  const { backgroundColor, borderColor, disabledProgressBars } = getAttributes(
     disputableStatus,
     theme
   )
@@ -106,8 +106,8 @@ function ProposalDetail({ match }) {
           <>
             <Box
               css={`
-                background: ${background};
-                border: solid 1px ${border};
+                background: ${backgroundColor};
+                border: solid 1px ${borderColor};
               `}
             >
               <div
@@ -197,7 +197,7 @@ function ProposalDetail({ match }) {
                     Votes
                   </h2>
                   <SummaryBar
-                    disabled={disabled}
+                    disabledProgressBars={disabledProgressBars}
                     positiveSize={safeDiv(parseFloat(yeas), totalVotes)}
                     negativeSize={safeDiv(parseFloat(nays), totalVotes)}
                     requiredSize={0.5}
@@ -212,7 +212,10 @@ function ProposalDetail({ match }) {
                 </div>
               </section>
             </Box>
-            <InfoBoxes vote={vote} disabled={disabled} />
+            <InfoBoxes
+              vote={vote}
+              disabledProgressBars={disabledProgressBars}
+            />
           </>
         }
         secondary={<DisputableActionStatus vote={vote} />}

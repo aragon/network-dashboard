@@ -14,7 +14,7 @@ import { dateFormat, toMs } from '../../lib/date-utils'
 import { round, safeDiv } from '../../lib/math-utils'
 import SummaryBar from './SummaryBar'
 
-function InfoBoxes({ vote, disabled }) {
+function InfoBoxes({ vote, disabledProgressBars }) {
   const { layoutName } = useLayout()
   const compactMode = layoutName === 'small'
 
@@ -62,7 +62,7 @@ function InfoBoxes({ vote, disabled }) {
           padding={(compactMode ? 2 : 3) * GU}
         >
           <SummaryWithPercentages
-            disabled={disabled}
+            disabledProgressBars={disabledProgressBars}
             size={support}
             requiredSize={parseFloat(vote.settings.formattedSupportRequiredPct)}
           />
@@ -88,7 +88,7 @@ function InfoBoxes({ vote, disabled }) {
           padding={(compactMode ? 2 : 3) * GU}
         >
           <SummaryWithPercentages
-            disabled={disabled}
+            disabledProgressBars={disabledProgressBars}
             size={quorumProgress}
             requiredSize={parseFloat(
               vote.settings.formattedMinimumAcceptanceQuorumPct
@@ -101,11 +101,11 @@ function InfoBoxes({ vote, disabled }) {
 }
 
 InfoBoxes.propTypes = {
-  disabled: PropTypes.bool,
+  disabledProgressBars: PropTypes.bool,
   vote: PropTypes.object.isRequired,
 }
 
-function SummaryWithPercentages({ disabled, size, requiredSize }) {
+function SummaryWithPercentages({ disabledProgressBars, size, requiredSize }) {
   const theme = useTheme()
 
   return (
@@ -125,7 +125,7 @@ function SummaryWithPercentages({ disabled, size, requiredSize }) {
         </span>
       </div>
       <SummaryBar
-        disabled={disabled}
+        disabledProgressBars={disabledProgressBars}
         positiveSize={size}
         requiredSize={requiredSize / 100}
         css={`
@@ -137,7 +137,7 @@ function SummaryWithPercentages({ disabled, size, requiredSize }) {
 }
 
 SummaryWithPercentages.propTypes = {
-  disabled: PropTypes.bool,
+  disabledProgressBars: PropTypes.bool,
   size: PropTypes.number,
   requiredSize: PropTypes.number,
 }
