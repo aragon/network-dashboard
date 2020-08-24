@@ -91,7 +91,7 @@ function DisputableStatusLabel({ status }) {
         {Icon && <Icon size="small" />}
         <span
           css={`
-            margin-left: $ ${0.5 * GU}px;
+            margin-left: ${0.5 * GU}px;
           `}
         >
           {label}
