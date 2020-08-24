@@ -9,26 +9,11 @@ import {
   textStyle,
   useTheme,
 } from '@aragon/ui'
-import { addressesEqual } from '../../lib/web3-utils'
 import { dateFormat, toMs } from '../../lib/date-utils'
 
-function FeedbackModule({ vote, connectedAccount }) {
+function FeedbackModule({ vote, mode }) {
   // TODO: Replace dates and amounts with real data
   const theme = useTheme()
-
-  let mode = null
-
-  if (vote.challenger && addressesEqual(vote.challenger, connectedAccount)) {
-    mode = 'challenger'
-  }
-
-  if (addressesEqual(vote.creator, connectedAccount)) {
-    mode = 'submitter'
-  }
-
-  if (!mode) {
-    return <div />
-  }
 
   return (
     <div
@@ -114,7 +99,7 @@ function Strong({ children }) {
 
 FeedbackModule.propTypes = {
   vote: PropTypes.object.isRequired,
-  connectedAccount: PropTypes.string,
+  mode: PropTypes.string,
 }
 
 Strong.propTypes = {

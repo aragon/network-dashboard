@@ -29,6 +29,7 @@ import SummaryBar from './SummaryBar'
 import FeedbackModule from './FeedbackModule'
 import Layout from '../Layout'
 import { networkEnvironment } from '../../current-environment'
+import { addressesEqual } from '../../lib/web3-utils'
 
 function getAttributes(status, theme) {
   const attributes = {
@@ -90,10 +91,19 @@ function ProposalDetail({ match }) {
     disputableStatus,
     theme
   )
-
-  // TODO: get youVoted flag from connector, get real connected acount
-  const youVoted = true
+  // TODO: get real connected acount
   const connectedAccount = ''
+  let mode = null
+
+  if (vote.challenger && addressesEqual(vote.challenger, connectedAccount)) {
+    mode = 'challenger'
+  }
+
+  if (addressesEqual(vote.creator, connectedAccount)) {
+    mode = 'submitter'
+  }
+  // TODO: get youVoted flag from connector
+  const youVoted = true
 
   return (
     <Layout>
@@ -205,10 +215,13 @@ function ProposalDetail({ match }) {
                       margin-bottom: ${2 * GU}px;
                     `}
                   />
-                  <FeedbackModule
-                    vote={vote}
-                    connectedAccount={connectedAccount}
-                  />
+                  {mode && (
+                    <FeedbackModule
+                      vote={vote}
+                      connectedAccount={connectedAccount}
+                      mode={mode}
+                    />
+                  )}
                 </div>
               </section>
             </Box>
