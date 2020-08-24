@@ -37,20 +37,12 @@ function ProposalCard({ vote, onProposalClick }) {
       <ProposalOption
         color={theme.positive}
         percentage={(vote.yeas * 100) / vote.votingPower}
-        label={
-          <WrapProposalOption>
-            <span>Yes</span>
-          </WrapProposalOption>
-        }
+        label="Yes"
       />
       <ProposalOption
         color={theme.negative}
         percentage={(vote.nays * 100) / vote.votingPower}
-        label={
-          <WrapProposalOption>
-            <span>No</span>
-          </WrapProposalOption>
-        }
+        label="No"
       />
       <div
         css={`
@@ -64,19 +56,7 @@ function ProposalCard({ vote, onProposalClick }) {
     </Card>
   )
 }
-function WrapProposalOption(props) {
-  return (
-    <span
-      css={`
-        display: flex;
-        align-items: center;
-        text-transform: uppercase;
-        ${textStyle('label2')};
-      `}
-      {...props}
-    />
-  )
-}
+
 ProposalCard.propTypes = {
   vote: PropTypes.object,
   onProposalClick: PropTypes.func.isRequired,

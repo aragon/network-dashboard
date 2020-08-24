@@ -10,7 +10,10 @@ function ProposalOption({ color, label, percentage }) {
       <Labels>
         <span
           css={`
-            ${textStyle('label2')}
+            display: flex;
+            align-items: center;
+            text-transform: uppercase;
+            ${textStyle('label2')};
           `}
         >
           {label}
