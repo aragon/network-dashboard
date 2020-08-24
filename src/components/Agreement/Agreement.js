@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Button, Box, Header, Split, noop } from '@aragon/ui'
+import { Box, Header, Split } from '@aragon/ui'
 import Layout from '../Layout'
 import AgreementBindingActions from './AgreementBindingActions'
 import AgreementHeader from './AgreementHeader'
@@ -7,15 +7,12 @@ import AgreementDetails from './AgreementDetails'
 import AgreementDocument from './AgreementDocument'
 import { durationToHours } from '../../lib/date-utils'
 import { MOCK_AGREEMENT } from './mock-data'
+import { useAgreementDetails } from '../../hooks/useAgreementDetails'
 
 const Agreement = React.memo(function Agreement() {
-  const {
-    content,
-    connectedApps,
-    contractAddress,
-    creationDate,
-    ipfsUri,
-  } = MOCK_AGREEMENT
+  const agreementDetails = useAgreementDetails()
+
+  const { content, connectedApps } = MOCK_AGREEMENT
 
   const mockBindingActions = useMemo(
     () =>
@@ -50,23 +47,23 @@ const Agreement = React.memo(function Agreement() {
     [connectedApps]
   )
 
+  if (!agreementDetails) {
+    return <div>...Loading</div>
+  }
+
   return (
     <Layout>
-      <Header
-        primary="Agreement"
-        secondary={
-          <Button mode="strong" label="Sign Agreement" onClick={noop} />
-        }
-      />
+      <Header primary="Agreement" />
       <Split
         primary={
           <>
             <Box>
-              <AgreementHeader title="Aragon Network DAO Agreement" />
+              <AgreementHeader title={agreementDetails.title} />
               <AgreementDetails
-                contractAddress={contractAddress}
-                creationDate={creationDate}
-                ipfsUri={ipfsUri}
+                contractAddress={agreementDetails.contractAddress}
+                creationDate={agreementDetails.effectiveFrom}
+                ipfsUri={agreementDetails.contentUri}
+                stakingAddress={agreementDetails.stakingAddress}
               />
             </Box>
             <AgreementDocument content={content} />

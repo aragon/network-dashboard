@@ -35,6 +35,7 @@ export function useGetVote(voteId) {
       }
       try {
         const collateral = await vote.collateralRequirement()
+
         const extendedProperties = {
           settings: await vote.setting(),
           collateral: collateral,
