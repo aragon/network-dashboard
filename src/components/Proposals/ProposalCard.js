@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Card, GU, textStyle, useTheme } from '@aragon/ui'
+import { AppBadge, Card, GU, textStyle, useTheme } from '@aragon/ui'
 import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_CANCELLED,
@@ -38,7 +38,7 @@ function getAttributes(status, theme) {
   )
 }
 
-function ProposalCard({ vote, onProposalClick }) {
+function ProposalCard({ appAddress, vote, onProposalClick }) {
   const theme = useTheme()
   const { context, voteId } = vote
 
@@ -54,13 +54,22 @@ function ProposalCard({ vote, onProposalClick }) {
       css={`
         display: grid;
         grid-template-columns: 100%;
-        grid-template-rows: 1fr auto auto;
+        grid-template-rows: auto 1fr auto auto;
         grid-gap: ${1 * GU}px;
         padding: ${3 * GU}px;
         background: ${backgroundColor};
         border: solid 1px ${borderColor};
       `}
     >
+      <div
+        css={`
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: ${1 * GU}px;
+        `}
+      >
+        <AppBadge label="Disputable voting" appAddress={appAddress} />
+      </div>
       <p
         css={`
           // overflow-wrap:anywhere and hyphens:auto are not supported yet by
@@ -100,6 +109,7 @@ function ProposalCard({ vote, onProposalClick }) {
 
 ProposalCard.propTypes = {
   vote: PropTypes.object,
+  appAddress: PropTypes.string,
   onProposalClick: PropTypes.func.isRequired,
 }
 

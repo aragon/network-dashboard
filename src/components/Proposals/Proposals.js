@@ -9,7 +9,7 @@ import { useVotes } from '../../hooks/disputable-voting-logic'
 
 const Proposals = React.memo(function Proposals() {
   const history = useHistory()
-  const votes = useVotes()
+  const { app, votes } = useVotes()
 
   const handleProposalClick = (proposalId) => {
     history.push(`/proposals/${proposalId}`)
@@ -49,6 +49,7 @@ const Proposals = React.memo(function Proposals() {
                 <ProposalCard
                   key={vote.voteId}
                   vote={vote}
+                  appAddress={app.address}
                   onProposalClick={handleProposalClick}
                 />
               ))}

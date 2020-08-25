@@ -8,7 +8,7 @@ export function useVotes() {
   const [disputableVoting] = useApp('disputable-voting')
   const [votes] = useDisputableVoting(disputableVoting, (app) => app.votes())
 
-  return votes
+  return { app: disputableVoting, votes: votes }
 }
 
 export function useGetVote(voteId) {
