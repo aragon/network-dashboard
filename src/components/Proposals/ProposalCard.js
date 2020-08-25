@@ -1,13 +1,52 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Card, GU, textStyle, useTheme } from '@aragon/ui'
-import { DISPUTABLE_VOTE_STATUSES } from './disputable-vote-statuses'
+import {
+  DISPUTABLE_VOTE_STATUSES,
+  VOTE_STATUS_CANCELLED,
+  VOTE_STATUS_DISPUTED,
+  VOTE_STATUS_PAUSED,
+} from './disputable-vote-statuses'
 import ProposalOption from './ProposalOption'
 import DisputableStatusLabel from './DisputableStatusLabel'
+
+function getAttributes(status, theme) {
+  const attributes = {
+    [VOTE_STATUS_CANCELLED]: {
+      backgroundColor: theme.surfacePressed,
+      borderColor: theme.controlUnder,
+      disabledProgressBars: true,
+    },
+    [VOTE_STATUS_PAUSED]: {
+      backgroundColor: '#fffdfa',
+      borderColor: theme.warning,
+      disabledProgressBars: true,
+    },
+    [VOTE_STATUS_DISPUTED]: {
+      backgroundColor: '#FFF7F2',
+      borderColor: '#D26C41',
+      disabledProgressBars: true,
+    },
+  }
+
+  return (
+    attributes[status] || {
+      backgroundColor: theme.surface,
+      borderColor: theme.border,
+      disabledProgressBars: false,
+    }
+  )
+}
 
 function ProposalCard({ vote, onProposalClick }) {
   const theme = useTheme()
   const { context, voteId } = vote
+
+  const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
+  const { backgroundColor, borderColor, disabledProgressBars } = getAttributes(
+    disputableStatus,
+    theme
+  )
 
   return (
     <Card
@@ -18,6 +57,8 @@ function ProposalCard({ vote, onProposalClick }) {
         grid-template-rows: 1fr auto auto;
         grid-gap: ${1 * GU}px;
         padding: ${3 * GU}px;
+        background: ${backgroundColor};
+        border: solid 1px ${borderColor};
       `}
     >
       <p
@@ -35,12 +76,12 @@ function ProposalCard({ vote, onProposalClick }) {
         {context || 'No description provided'}
       </p>
       <ProposalOption
-        color={theme.positive}
+        color={disabledProgressBars ? theme.surfaceOpened : theme.positive}
         percentage={(vote.yeas * 100) / vote.votingPower}
         label="Yes"
       />
       <ProposalOption
-        color={theme.negative}
+        color={disabledProgressBars ? theme.surfaceOpened : theme.negative}
         percentage={(vote.nays * 100) / vote.votingPower}
         label="No"
       />
