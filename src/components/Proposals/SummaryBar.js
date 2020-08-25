@@ -4,37 +4,46 @@ import { RADIUS, useTheme } from '@aragon/ui'
 import { animated } from 'react-spring'
 import styled from 'styled-components'
 
-function SummaryBar({ positiveSize, negativeSize, requiredSize, ...props }) {
+function SummaryBar({
+  disabledProgressBars,
+  positiveSize,
+  negativeSize,
+  requiredSize,
+  ...props
+}) {
   const theme = useTheme()
+
   return (
     <Main {...props}>
       <CombinedBar>
         {!!positiveSize && (
           <BarPart
-            style={{
-              backgroundColor: theme.positive,
-              transform: `scale3d(${positiveSize}, 1, 1)`,
-            }}
+            css={`
+              background-color: ${disabledProgressBars
+                ? theme.surfaceOpened
+                : theme.positive};
+              transform: scale3d(${positiveSize}, 1, 1);
+            `}
           />
         )}
         {!!negativeSize && (
           <BarPart
-            style={{
-              backgroundColor: theme.negative,
-              transform: `translate3d(${
-                100 * positiveSize
-              }%, 0, 0) scale3d(${negativeSize}, 1, 1)`,
-            }}
+            css={`
+              background-color: ${disabledProgressBars
+                ? theme.controlUnder
+                : theme.negative};
+              transform: translate3d(${100 * positiveSize}%, 0, 0)
+                scale3d(${negativeSize}, 1, 1);
+            `}
           />
         )}
       </CombinedBar>
       <RequiredSeparatorClip>
         <RequiredSeparatorWrapper
-          style={{
-            transform: `scale3d(1, ${
-              requiredSize > 0 ? 1 : 0
-            }, 1) translate3d(${100 * requiredSize}%, 0, 0)`,
-          }}
+          css={`
+            transform: scale3d(1, ${requiredSize > 0 ? 1 : 0}, 1)
+              translate3d(${100 * requiredSize}%, 0, 0);
+          `}
         >
           <div
             css={`
@@ -102,6 +111,7 @@ const RequiredSeparatorWrapper = styled(animated.div)`
 `
 
 SummaryBar.propTypes = {
+  disabledProgressBars: PropTypes.bool,
   positiveSize: PropTypes.number,
   negativeSize: PropTypes.number,
   requiredSize: PropTypes.number,

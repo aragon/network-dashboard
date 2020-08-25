@@ -17,11 +17,47 @@ import {
 } from '@aragon/ui'
 import { safeDiv } from '../../lib/math-utils'
 import { useGetVote } from '../../hooks/disputable-voting-logic'
+import {
+  DISPUTABLE_VOTE_STATUSES,
+  VOTE_STATUS_CANCELLED,
+  VOTE_STATUS_DISPUTED,
+  VOTE_STATUS_PAUSED,
+} from './disputable-vote-statuses'
 import DisputableActionStatus from './DisputableActionStatus'
 import InfoBoxes from './InfoBoxes'
 import SummaryBar from './SummaryBar'
+import FeedbackModule from './FeedbackModule'
 import Layout from '../Layout'
 import { networkEnvironment } from '../../current-environment'
+import { addressesEqual } from '../../lib/web3-utils'
+
+function getAttributes(status, theme) {
+  const attributes = {
+    [VOTE_STATUS_CANCELLED]: {
+      backgroundColor: theme.surfacePressed,
+      borderColor: theme.controlUnder,
+      disabledProgressBars: true,
+    },
+    [VOTE_STATUS_PAUSED]: {
+      backgroundColor: '#fffdfa',
+      borderColor: theme.warning,
+      disabledProgressBars: true,
+    },
+    [VOTE_STATUS_DISPUTED]: {
+      backgroundColor: '#FFF7F2',
+      borderColor: '#D26C41',
+      disabledProgressBars: true,
+    },
+  }
+
+  return (
+    attributes[status] || {
+      backgroundColor: theme.surface,
+      borderColor: theme.border,
+      disabledProgressBars: false,
+    }
+  )
+}
 
 function ProposalDetail({ match }) {
   const { id: proposalId } = match.params
@@ -50,6 +86,22 @@ function ProposalDetail({ match }) {
   const { voteId, context, creator, yeas, nays } = vote
   const totalVotes = parseFloat(yeas) + parseFloat(nays)
 
+  const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
+  const { backgroundColor, borderColor, disabledProgressBars } = getAttributes(
+    disputableStatus,
+    theme
+  )
+  // TODO: get real connected acount
+  const connectedAccount = ''
+  let mode = null
+
+  if (vote.challenger && addressesEqual(vote.challenger, connectedAccount)) {
+    mode = 'challenger'
+  }
+
+  if (addressesEqual(vote.creator, connectedAccount)) {
+    mode = 'submitter'
+  }
   // TODO: get youVoted flag from connector
   const youVoted = true
 
@@ -62,7 +114,12 @@ function ProposalDetail({ match }) {
       <Split
         primary={
           <>
-            <Box>
+            <Box
+              css={`
+                background: ${backgroundColor};
+                border: solid 1px ${borderColor};
+              `}
+            >
               <div
                 css={`
                   display: flex;
@@ -150,6 +207,7 @@ function ProposalDetail({ match }) {
                     Votes
                   </h2>
                   <SummaryBar
+                    disabledProgressBars={disabledProgressBars}
                     positiveSize={safeDiv(parseFloat(yeas), totalVotes)}
                     negativeSize={safeDiv(parseFloat(nays), totalVotes)}
                     requiredSize={0.5}
@@ -157,10 +215,20 @@ function ProposalDetail({ match }) {
                       margin-bottom: ${2 * GU}px;
                     `}
                   />
+                  {mode && (
+                    <FeedbackModule
+                      vote={vote}
+                      connectedAccount={connectedAccount}
+                      mode={mode}
+                    />
+                  )}
                 </div>
               </section>
             </Box>
-            <InfoBoxes vote={vote} />
+            <InfoBoxes
+              vote={vote}
+              disabledProgressBars={disabledProgressBars}
+            />
           </>
         }
         secondary={<DisputableActionStatus vote={vote} />}

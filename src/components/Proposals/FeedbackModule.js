@@ -4,33 +4,16 @@ import {
   GU,
   IconAttention,
   IconCoin,
+  Link,
   RADIUS,
   textStyle,
   useTheme,
 } from '@aragon/ui'
-import { addressesEqual } from '../../lib/web3-utils'
 import { dateFormat, toMs } from '../../lib/date-utils'
 
-function FeedbackModule({ vote, connectedAccount }) {
+function FeedbackModule({ vote, mode }) {
   // TODO: Replace dates and amounts with real data
   const theme = useTheme()
-
-  let mode = null
-
-  if (
-    vote.challenge &&
-    addressesEqual(vote.challenge.challenger, connectedAccount)
-  ) {
-    mode = 'challenger'
-  }
-
-  if (addressesEqual(vote.creator, connectedAccount)) {
-    mode = 'submitter'
-  }
-
-  if (!mode) {
-    return <div />
-  }
 
   return (
     <div
@@ -38,7 +21,6 @@ function FeedbackModule({ vote, connectedAccount }) {
         border-radius: ${RADIUS}px;
         background: ${theme.background};
         padding: ${3.5 * GU}px ${10 * GU}px;
-        text-align: center;
       `}
     >
       <div
@@ -47,7 +29,6 @@ function FeedbackModule({ vote, connectedAccount }) {
           grid-template-columns: auto 1fr;
           grid-gap: ${3 * GU}px;
           align-items: center;
-          text-align: left;
         `}
       >
         <div
@@ -79,20 +60,21 @@ function FeedbackModule({ vote, connectedAccount }) {
                 `}
           >
             {mode === 'challenger' ? (
-              <span>
+              <p>
                 You challenged this action on{' '}
-                <Bold>{dateFormat(toMs(vote.pausedAt), 'standard')}</Bold> and
-                locked <Bold>100 ANT</Bold> as the action challenge collateral.
-                You can manage your deposit balances in Stake Management.
-              </span>
+                <Strong>{dateFormat(toMs(vote.pausedAt), 'standard')}</Strong>{' '}
+                and locked <Strong>100 ANT</Strong> as the action challenge
+                collateral. You can manage your deposit balances in{' '}
+                <Link href="">Stake Management</Link>.
+              </p>
             ) : (
-              <span>
+              <p>
                 You acccepted the setttlement offer on on{' '}
-                <Bold>2020/03/20, 5:30 PM (CET)</Bold>
+                <Strong>2020/03/20, 5:30 PM (CET)</Strong>
                 and your action collateral has been slashed{' '}
-                <Bold>-100 ANT</Bold>. You can manage your deposit balances in
-                Stake Management.
-              </span>
+                <Strong>-100 ANT</Strong>. You can manage your deposit balances
+                in <Link href="">Stake Management</Link>.
+              </p>
             )}
           </div>
         </div>
@@ -101,27 +83,26 @@ function FeedbackModule({ vote, connectedAccount }) {
   )
 }
 
-function Bold({ children }) {
+function Strong({ children }) {
   const theme = useTheme()
 
   return (
-    <span
+    <strong
       css={`
         color: ${theme.surfaceContent};
-        font-weight: 600;
       `}
     >
       {children}
-    </span>
+    </strong>
   )
 }
 
 FeedbackModule.propTypes = {
   vote: PropTypes.object.isRequired,
-  connectedAccount: PropTypes.string,
+  mode: PropTypes.string,
 }
 
-Bold.propTypes = {
+Strong.propTypes = {
   children: PropTypes.node,
 }
 
