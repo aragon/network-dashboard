@@ -5,14 +5,14 @@ import AgreementBindingActions from './AgreementBindingActions'
 import AgreementHeader from './AgreementHeader'
 import AgreementDetails from './AgreementDetails'
 import AgreementDocument from './AgreementDocument'
-import { durationToHours } from '../../lib/date-utils'
+import { durationToHours, toMs } from '../../lib/date-utils'
 import { MOCK_AGREEMENT } from './mock-data'
-import { useAgreementDetails } from '../../hooks/useAgreementDetails'
+import { useAppData } from '../../providers/AppData'
+import { utils as ethersUtils } from 'ethers'
 
 const Agreement = React.memo(function Agreement() {
-  const agreementDetails = useAgreementDetails()
-
-  const { content, connectedApps } = MOCK_AGREEMENT
+  const { agreementDetails } = useAppData()
+  const { connectedApps, content: mockAgreementContent } = MOCK_AGREEMENT
 
   const mockBindingActions = useMemo(
     () =>
@@ -47,9 +47,13 @@ const Agreement = React.memo(function Agreement() {
     [connectedApps]
   )
 
-  if (!agreementDetails) {
-    return <div>...Loading</div>
-  }
+  const {
+    title,
+    contractAddress,
+    content,
+    effectiveFrom,
+    stakingAddress,
+  } = agreementDetails
 
   return (
     <Layout>
@@ -58,15 +62,15 @@ const Agreement = React.memo(function Agreement() {
         primary={
           <>
             <Box>
-              <AgreementHeader title={agreementDetails.title} />
+              <AgreementHeader title={title} />
               <AgreementDetails
-                contractAddress={agreementDetails.contractAddress}
-                creationDate={agreementDetails.effectiveFrom}
-                ipfsUri={agreementDetails.contentUri}
-                stakingAddress={agreementDetails.stakingAddress}
+                contractAddress={contractAddress}
+                creationDate={toMs(effectiveFrom)}
+                ipfsUri={ethersUtils.toUtf8String(content)}
+                stakingAddress={stakingAddress}
               />
             </Box>
-            <AgreementDocument content={content} />
+            <AgreementDocument content={mockAgreementContent} />
           </>
         }
         secondary={<AgreementBindingActions apps={mockBindingActions} />}

@@ -1,13 +1,12 @@
-import { useState, useEffect } from 'react'
-import { createAppHook, useApp } from '@aragon/connect-react'
+import { useEffect, useState } from 'react'
+import { useOrgApps } from '../providers/OrgApps'
+import { createAppHook } from '@aragon/connect-react'
 import connectAgreement from '@aragon/connect-agreement'
-import { toMs } from '../lib/date-utils'
-import { utils as ethersUtils } from 'ethers'
 
 const useAgreementHook = createAppHook(connectAgreement)
 
 export function useAgreementDetails() {
-  const [agreementApp] = useApp('agreement')
+  const { agreementApp } = useOrgApps()
   const [agreement] = useAgreementHook(agreementApp, (app) => app)
   const [agreementDetails, setAgreementDetails] = useState(null)
 
@@ -16,17 +15,40 @@ export function useAgreementDetails() {
 
     async function getAgreementDetails() {
       try {
-        const [currentVersion, stakingAddress] = await Promise.all([
+        const [
+          currentVersion,
+          stakingAddress,
+          disputableApps,
+        ] = await Promise.all([
           agreement.currentVersion(),
           agreement.stakingFactory(),
+          agreement.disputableApps(),
         ])
+
+        const allCollateralRequirements = await Promise.all(
+          disputableApps.map((app) => app.collateralRequirement())
+        )
+
+        const disputableAppsWithCollateral = disputableApps.map(
+          (disputableApp) => {
+            const collateralRequirements = allCollateralRequirements.find(
+              ({ id }) => id === disputableApp.collateralRequirementId
+            )
+
+            return {
+              ...disputableApp,
+              collateralRequirements,
+            }
+          }
+        )
 
         const { content, effectiveFrom, title } = currentVersion
 
         const details = {
-          contractAddress: agreementApp.address,
-          contentUri: ethersUtils.toUtf8String(content),
-          effectiveFrom: toMs(effectiveFrom),
+          disputableApps: disputableAppsWithCollateral,
+          contractAddress: agreement.address,
+          content,
+          effectiveFrom,
           stakingAddress,
           title,
         }
@@ -46,7 +68,7 @@ export function useAgreementDetails() {
     return () => {
       cancelled = true
     }
-  }, [agreement, agreementApp, agreementDetails])
+  }, [agreement, agreementDetails])
 
   return agreementDetails
 }
