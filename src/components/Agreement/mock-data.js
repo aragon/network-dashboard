@@ -81,9 +81,6 @@ const connectedApp = {
 }
 
 export const MOCK_AGREEMENT = {
-  contractAddress: '0x5c6620c49f9aecf74bd483054f2d0ace0d375f96',
-  creationDate: 1598028287660,
-  ipfsUri: 'ipfs:Qmb5CHbQQQx6YXkPE6HodeXVmtCRgpSgkj9EkW9xs6jDHj',
   connectedApps: [connectedApp, connectedApp, connectedApp],
   content,
 }

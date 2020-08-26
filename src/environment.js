@@ -1,5 +1,5 @@
 // Rinkeby
-const DEFAULT_NETWORK_ENVIRONMENT = 'rinkeby'
+const DEFAULT_NETWORK_ENVIRONMENT = 'rinkeby-staging'
 
 const ENV_VARS = {
   BUILD() {

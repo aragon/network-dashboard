@@ -8,8 +8,8 @@ export default new Map([
         ethereum: 'https://mainnet.eth.aragon.network/',
       },
       orgLocation: '',
-      disputableVotingApp: '',
       ipfsGateway: 'https://ipfs.eth.aragon.network/ipfs',
+      subgraphs: {},
     },
   ],
   [
@@ -21,8 +21,8 @@ export default new Map([
         ethereum: 'https://rinkeby.eth.aragon.network/',
       },
       orgLocation: 'agreement3.aragonid.eth',
-      disputableVotingApp: '0x26e14ed789b51b5b226d69a5d40f72dc2d0180fe',
       ipfsGateway: 'https://ipfs.eth.aragon.network/ipfs',
+      subgraphs: {},
     },
   ],
   [
@@ -34,8 +34,13 @@ export default new Map([
         ethereum: 'https://rinkeby.eth.aragon.network/',
       },
       orgLocation: 'agreement3.aragonid.eth',
-      disputableVotingApp: '0x26e14ed789b51b5b226d69a5d40f72dc2d0180fe',
       ipfsGateway: 'https://ipfs.eth.aragon.network/ipfs',
+      subgraphs: {
+        disputableVoting:
+          'https://api.thegraph.com/subgraphs/name/aragon/aragon-dvoting-rinkeby-staging',
+        agreement:
+          'https://api.thegraph.com/subgraphs/name/aragon/aragon-agreement-rinkeby-staging',
+      },
     },
   ],
 ])

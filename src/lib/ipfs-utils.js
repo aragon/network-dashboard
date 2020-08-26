@@ -10,7 +10,7 @@ export function getIpfsCidFromUri(uri) {
   return ''
 }
 
-export function getIpfsUrlfromUri(uri) {
+export function getIpfsUrlFromUri(uri) {
   const { ipfsGateway } = networkEnvironment
   return `${ipfsGateway}/${getIpfsCidFromUri(uri)}`
 }

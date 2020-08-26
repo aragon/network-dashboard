@@ -16,7 +16,6 @@ import {
   useTheme,
 } from '@aragon/ui'
 import { safeDiv } from '../../lib/math-utils'
-import { useGetVote } from '../../hooks/disputable-voting-logic'
 import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_CANCELLED,
@@ -28,8 +27,8 @@ import InfoBoxes from './InfoBoxes'
 import SummaryBar from './SummaryBar'
 import FeedbackModule from './FeedbackModule'
 import Layout from '../Layout'
-import { networkEnvironment } from '../../current-environment'
 import { addressesEqual } from '../../lib/web3-utils'
+import { useDisputableVote } from '../../hooks/useDisputableVotes'
 
 function getAttributes(status, theme) {
   const attributes = {
@@ -61,7 +60,7 @@ function getAttributes(status, theme) {
 
 function ProposalDetail({ match }) {
   const { id: proposalId } = match.params
-  const { disputableVotingApp } = networkEnvironment
+  const [vote, { loading }] = useDisputableVote(proposalId)
   const theme = useTheme()
 
   const { layoutName } = useLayout()
@@ -71,16 +70,8 @@ function ProposalDetail({ match }) {
     history.push(`/proposals`)
   }, [history])
 
-  const [vote, { loading, error }] = useGetVote(
-    `${disputableVotingApp}-vote-${proposalId}`
-  )
-
   if (loading) {
     return <div>Loading...</div>
-  }
-
-  if (error) {
-    console.error(error)
   }
 
   const { voteId, context, creator, yeas, nays } = vote

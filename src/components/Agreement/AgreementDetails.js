@@ -3,9 +3,14 @@ import PropTypes from 'prop-types'
 import { IdentityBadge, Link, useLayout, GU } from '@aragon/ui'
 import { dateFormat } from '../../lib/date-utils'
 import InfoField from '../InfoField'
-import { getIpfsCidFromUri, getIpfsUrlfromUri } from '../../lib/ipfs-utils'
+import { getIpfsCidFromUri, getIpfsUrlFromUri } from '../../lib/ipfs-utils'
 
-function AgreementDetails({ ipfsUri, contractAddress, creationDate }) {
+function AgreementDetails({
+  creationDate,
+  contractAddress,
+  ipfsUri,
+  stakingAddress,
+}) {
   const { layoutName } = useLayout()
   const compactMode = layoutName === 'small'
 
@@ -18,7 +23,7 @@ function AgreementDetails({ ipfsUri, contractAddress, creationDate }) {
       >
         <InfoField label="Agreement IPFS Link">
           <Link
-            href={getIpfsUrlfromUri(ipfsUri)}
+            href={getIpfsUrlFromUri(ipfsUri)}
             css={`
               max-width: 90%;
             `}
@@ -47,7 +52,7 @@ function AgreementDetails({ ipfsUri, contractAddress, creationDate }) {
           <Link href="https://court.aragon.org/">Aragon Court</Link>
         </InfoField>
         <InfoField label="Staking Pool">
-          <Link href="">Stake Management</Link>
+          <IdentityBadge entity={stakingAddress} />
         </InfoField>
         <InfoField label="Agreement Contract">
           <IdentityBadge entity={contractAddress} />
@@ -59,9 +64,10 @@ function AgreementDetails({ ipfsUri, contractAddress, creationDate }) {
 }
 
 AgreementDetails.propTypes = {
-  ipfsUri: PropTypes.string,
-  creationDate: PropTypes.number,
   contractAddress: PropTypes.string,
+  creationDate: PropTypes.number,
+  ipfsUri: PropTypes.string,
+  stakingAddress: PropTypes.string,
 }
 
 export default AgreementDetails
