@@ -5,11 +5,11 @@ import Layout from '../Layout'
 import ProposalBanner from './ProposalBanner'
 import ProposalCardGroup from './ProposalCardGroup'
 import ProposalCard from './ProposalCard'
-import { useVotes } from '../../hooks/disputable-voting-logic'
+import { useAppData } from '../../providers/AppData'
 
 const Proposals = React.memo(function Proposals() {
+  const { disputableVotes } = useAppData()
   const history = useHistory()
-  const votes = useVotes()
 
   const handleProposalClick = (proposalId) => {
     history.push(`/proposals/${proposalId}`)
@@ -24,13 +24,9 @@ const Proposals = React.memo(function Proposals() {
     setBannerClosed(true)
   }, [])
 
-  if (votes === null) {
-    return <div>Loading</div>
-  }
-
   const voteGroups = [
-    ['Open votes', votes.filter((vote) => vote.hasEnded === false)],
-    ['Closed votes', votes.filter((vote) => vote.hasEnded === true)],
+    ['Open votes', disputableVotes.filter(({ hasEnded }) => !hasEnded)],
+    ['Closed votes', disputableVotes.filter(({ hasEnded }) => hasEnded)],
   ]
 
   return (

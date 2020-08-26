@@ -12,7 +12,7 @@ import {
 } from '@aragon/ui'
 import InfoField from './../InfoField'
 
-const AgreementBindingActions = React.memo(({ apps }) => {
+function AgreementBindingActions({ apps }) {
   const items = apps.map(
     ({
       appName,
@@ -111,7 +111,7 @@ const AgreementBindingActions = React.memo(({ apps }) => {
       </StyledAccordion>
     </Box>
   )
-})
+}
 
 /* eslint-disable react/prop-types */
 function SubtleLabel({ children }) {

@@ -1,0 +1,74 @@
+import { useEffect, useState } from 'react'
+import { useOrgApps } from '../providers/OrgApps'
+import { createAppHook } from '@aragon/connect-react'
+import connectAgreement from '@aragon/connect-agreement'
+
+const useAgreementHook = createAppHook(connectAgreement)
+
+export function useAgreementDetails() {
+  const { agreementApp } = useOrgApps()
+  const [agreement] = useAgreementHook(agreementApp, (app) => app)
+  const [agreementDetails, setAgreementDetails] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function getAgreementDetails() {
+      try {
+        const [
+          currentVersion,
+          stakingAddress,
+          disputableApps,
+        ] = await Promise.all([
+          agreement.currentVersion(),
+          agreement.stakingFactory(),
+          agreement.disputableApps(),
+        ])
+
+        const allCollateralRequirements = await Promise.all(
+          disputableApps.map((app) => app.collateralRequirement())
+        )
+
+        const disputableAppsWithCollateral = disputableApps.map(
+          (disputableApp) => {
+            const collateralRequirements = allCollateralRequirements.find(
+              ({ id }) => id === disputableApp.collateralRequirementId
+            )
+
+            return {
+              ...disputableApp,
+              collateralRequirements,
+            }
+          }
+        )
+
+        const { content, effectiveFrom, title } = currentVersion
+
+        const details = {
+          disputableApps: disputableAppsWithCollateral,
+          contractAddress: agreement.address,
+          content,
+          effectiveFrom,
+          stakingAddress,
+          title,
+        }
+
+        if (!cancelled) {
+          setAgreementDetails(details)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    if (agreement && !agreementDetails) {
+      getAgreementDetails()
+    }
+
+    return () => {
+      cancelled = true
+    }
+  }, [agreement, agreementDetails])
+
+  return agreementDetails
+}
