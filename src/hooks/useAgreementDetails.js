@@ -15,8 +15,12 @@ const useAgreementHook = createAppHook(connectAgreement, connecterConfig)
 
 export function useAgreementDetails() {
   const { agreementApp } = useOrgApps()
-  const [agreement] = useAgreementHook(agreementApp, (app) => app)
+  const [agreement, { loading: agreementAppLoading }] = useAgreementHook(
+    agreementApp,
+    (app) => app
+  )
   const [agreementDetails, setAgreementDetails] = useState(null)
+  const [agreementDetailsLoading, setAgreementDetailsLoading] = useState(true)
 
   useEffect(() => {
     let cancelled = false
@@ -63,20 +67,21 @@ export function useAgreementDetails() {
 
         if (!cancelled) {
           setAgreementDetails(details)
+          setAgreementDetailsLoading(false)
         }
       } catch (error) {
         console.error(error)
       }
     }
 
-    if (agreement && !agreementDetails) {
+    if (!agreementAppLoading) {
       getAgreementDetails()
     }
 
     return () => {
       cancelled = true
     }
-  }, [agreement, agreementDetails])
+  }, [agreement, agreementAppLoading])
 
-  return agreementDetails
+  return [agreementDetails, { loading: agreementDetailsLoading }]
 }
