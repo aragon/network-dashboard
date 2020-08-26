@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useOrgApps } from '../providers/OrgApps'
 import { createAppHook } from '@aragon/connect-react'
 import connectAgreement from '@aragon/connect-agreement'
+import { getIpfsUrlFromUri } from '../lib/ipfs-utils'
 import { networkEnvironment } from '../current-environment'
+import { toMs } from '../lib/date-utils'
+import { useOrgApps } from '../providers/OrgApps'
 
 const SUBGRAPH_URL = networkEnvironment.subgraphs?.agreement
 
@@ -14,10 +16,9 @@ const connecterConfig = SUBGRAPH_URL && [
 const useAgreementHook = createAppHook(connectAgreement, connecterConfig)
 
 export function useAgreementDetails() {
-  const { agreementApp } = useOrgApps()
+  const { apps, agreementApp } = useOrgApps()
   const [agreement, { loading: agreementAppLoading }] = useAgreementHook(
-    agreementApp,
-    (app) => app
+    agreementApp
   )
   const [agreementDetails, setAgreementDetails] = useState(null)
   const [agreementDetailsLoading, setAgreementDetailsLoading] = useState(true)
@@ -37,28 +38,16 @@ export function useAgreementDetails() {
           agreement.disputableApps(),
         ])
 
-        const allCollateralRequirements = await Promise.all(
-          disputableApps.map((app) => app.collateralRequirement())
-        )
-
-        const disputableAppsWithCollateral = disputableApps.map(
-          (disputableApp) => {
-            const collateralRequirements = allCollateralRequirements.find(
-              ({ id }) => id === disputableApp.collateralRequirementId
-            )
-
-            return {
-              ...disputableApp,
-              collateralRequirements,
-            }
-          }
+        const extendedDisputableApps = await getExtendedDisputableApps(
+          apps,
+          disputableApps
         )
 
         const { content, effectiveFrom, title } = currentVersion
 
         const details = {
-          disputableApps: disputableAppsWithCollateral,
           contractAddress: agreement.address,
+          disputableApps: extendedDisputableApps,
           content,
           effectiveFrom,
           stakingAddress,
@@ -81,7 +70,58 @@ export function useAgreementDetails() {
     return () => {
       cancelled = true
     }
-  }, [agreement, agreementAppLoading])
+  }, [apps, agreement, agreementAppLoading])
 
   return [agreementDetails, { loading: agreementDetailsLoading }]
+}
+
+function getAppPresentation(apps, appAddress) {
+  const { contentUri, manifest } = apps.find(
+    ({ address }) => address === appAddress
+  )
+
+  const iconPath = manifest.icons[0].src
+  const iconSrc = getIpfsUrlFromUri(contentUri) + iconPath
+  const humanName = manifest.name
+
+  return { humanName, iconSrc }
+}
+
+async function getExtendedDisputableApps(apps, disputableApps) {
+  const allRequirements = await Promise.all(
+    disputableApps.map((app) => app.collateralRequirement())
+  )
+
+  const allTokens = await Promise.all(
+    allRequirements.map((collateral) => collateral.token())
+  )
+
+  const extendedDisputableApps = disputableApps.map((disputableApp) => {
+    const { iconSrc, humanName } = getAppPresentation(
+      apps,
+      disputableApp.address
+    )
+
+    const collateral = allRequirements.find(
+      ({ id }) => id === disputableApp.collateralRequirementId
+    )
+
+    const token = allTokens.find(({ id }) => id === collateral.tokenId)
+
+    return {
+      appName: humanName,
+      appAddress: disputableApp.address,
+      challengeAmount: collateral.challengeAmount,
+      actionAmount: collateral.actionAmount,
+      iconSrc: iconSrc,
+      token: {
+        address: token.id,
+        symbol: token.symbol,
+        decimals: token.decimals,
+      },
+      challengeDuration: toMs(collateral.challengeDuration),
+    }
+  })
+
+  return extendedDisputableApps
 }
