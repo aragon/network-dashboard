@@ -9,6 +9,7 @@ export default new Map([
       },
       orgLocation: '',
       ipfsGateway: 'https://ipfs.eth.aragon.network/ipfs',
+      subgraphs: {},
     },
   ],
   [
@@ -21,6 +22,7 @@ export default new Map([
       },
       orgLocation: 'agreement3.aragonid.eth',
       ipfsGateway: 'https://ipfs.eth.aragon.network/ipfs',
+      subgraphs: {},
     },
   ],
   [
@@ -33,6 +35,12 @@ export default new Map([
       },
       orgLocation: 'agreement3.aragonid.eth',
       ipfsGateway: 'https://ipfs.eth.aragon.network/ipfs',
+      subgraphs: {
+        disputableVoting:
+          'https://api.thegraph.com/subgraphs/name/aragon/aragon-dvoting-rinkeby-staging',
+        agreement:
+          'https://api.thegraph.com/subgraphs/name/aragon/aragon-agreement-rinkeby-staging',
+      },
     },
   ],
 ])

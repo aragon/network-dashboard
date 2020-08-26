@@ -1,9 +1,17 @@
 import { useEffect, useState } from 'react'
-import connectVoting from '@aragon/connect-voting-disputable'
+import connectVoting from '@aragon/connect-disputable-voting'
 import { createAppHook } from '@aragon/connect-react'
 import { useOrgApps } from '../providers/OrgApps'
+import { networkEnvironment } from '../current-environment'
 
-const useDisputableVotingHook = createAppHook(connectVoting)
+const SUBGRAPH_URL = networkEnvironment.subgraphs?.disputableVoting
+
+const connecterConfig = SUBGRAPH_URL && [
+  'thegraph',
+  { subgraphUrl: SUBGRAPH_URL },
+]
+
+const useDisputableVotingHook = createAppHook(connectVoting, connecterConfig)
 
 export function useDisputableVotes() {
   const { disputableVotingApp } = useOrgApps()
