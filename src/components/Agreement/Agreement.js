@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import { utils as ethersUtils } from 'ethers'
 import { Box, Header, Split } from '@aragon/ui'
 import Layout from '../Layout'
 import AgreementBindingActions from './AgreementBindingActions'
@@ -8,7 +9,6 @@ import AgreementDocument from './AgreementDocument'
 import { durationToHours, toMs } from '../../lib/date-utils'
 import { MOCK_AGREEMENT } from './mock-data'
 import { useAppData } from '../../providers/AppData'
-import { utils as ethersUtils } from 'ethers'
 
 const Agreement = React.memo(function Agreement() {
   const { agreementDetails } = useAppData()
