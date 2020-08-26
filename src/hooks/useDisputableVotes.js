@@ -24,7 +24,7 @@ export function useDisputableVotes() {
     console.error(error)
   }
 
-  return [votes, { loading, error }]
+  return [votes, { loading }]
 }
 
 export function useDisputableVote(proposalId) {
