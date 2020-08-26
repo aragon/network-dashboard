@@ -60,7 +60,8 @@ function getAttributes(status, theme) {
 
 function ProposalDetail({ match }) {
   const { id: proposalId } = match.params
-  const [vote, { loading }] = useDisputableVote(proposalId)
+
+  const [vote, { loading: voteLoading }] = useDisputableVote(proposalId)
   const theme = useTheme()
 
   const { layoutName } = useLayout()
@@ -70,7 +71,7 @@ function ProposalDetail({ match }) {
     history.push(`/proposals`)
   }, [history])
 
-  if (loading) {
+  if (voteLoading) {
     return <div>Loading...</div>
   }
 

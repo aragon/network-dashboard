@@ -10,10 +10,16 @@ const AppDataContext = React.createContext({
 })
 
 function AppDataProvider({ children }) {
-  const agreementDetails = useAgreementDetails()
-  const disputableVotes = useDisputableVotes()
+  const [
+    agreementDetails,
+    { loading: agreementDetailsLoading },
+  ] = useAgreementDetails()
+  const [
+    disputableVotes,
+    { loading: disputableVotesLoading },
+  ] = useDisputableVotes()
 
-  const dataLoading = !agreementDetails || !disputableVotes
+  const dataLoading = agreementDetailsLoading || disputableVotesLoading
 
   const appDataState = useMemo(
     () => ({
