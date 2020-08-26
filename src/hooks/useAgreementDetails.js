@@ -2,8 +2,16 @@ import { useEffect, useState } from 'react'
 import { useOrgApps } from '../providers/OrgApps'
 import { createAppHook } from '@aragon/connect-react'
 import connectAgreement from '@aragon/connect-agreement'
+import { networkEnvironment } from '../current-environment'
 
-const useAgreementHook = createAppHook(connectAgreement)
+const SUBGRAPH_URL = networkEnvironment.subgraphs?.agreement
+
+const connecterConfig = SUBGRAPH_URL && [
+  'thegraph',
+  { subgraphUrl: SUBGRAPH_URL },
+]
+
+const useAgreementHook = createAppHook(connectAgreement, connecterConfig)
 
 export function useAgreementDetails() {
   const { agreementApp } = useOrgApps()

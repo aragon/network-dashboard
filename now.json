@@ -7,7 +7,7 @@
   },
   "build": {
     "env": {
-      "NETWORK_ENVIRONMENT": "rinkeby"
+      "NETWORK_ENVIRONMENT": "rinkeby-staging"
     }
   }
 }
