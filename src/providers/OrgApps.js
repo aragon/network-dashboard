@@ -1,29 +1,35 @@
 import React, { useContext, useMemo } from 'react'
 import PropTypes from 'prop-types'
-import { useApp, useApps } from '@aragon/connect-react'
+import { useApps } from '@aragon/connect-react'
 
 const OrgAppsContext = React.createContext({
+  apps: null,
   agreementApp: null,
   disputableVotingApp: null,
-  installedApps: null,
   appsLoading: true,
 })
 
-function OrgAppsProvider({ children }) {
-  const [agreementApp] = useApp('agreement')
-  const [disputableVotingApp] = useApp('disputable-voting')
-  const [installedApps] = useApps()
+function getAppByName(apps, appName) {
+  return apps.find(({ name }) => name === appName) || null
+}
 
-  const appsLoading = !agreementApp || !disputableVotingApp || !installedApps
+function OrgAppsProvider({ children }) {
+  const [apps] = useApps()
+
+  // Avoid additional overhead by finding within existing app list
+  const agreementApp = getAppByName(apps, 'agreement')
+  const disputableVotingApp = getAppByName(apps, 'disputable-voting')
+
+  const appsLoading = !apps
 
   const OrgAppState = useMemo(
     () => ({
+      apps,
       agreementApp,
       disputableVotingApp,
-      installedApps,
       appsLoading,
     }),
-    [agreementApp, disputableVotingApp, installedApps, appsLoading]
+    [apps, agreementApp, disputableVotingApp, appsLoading]
   )
 
   return (
