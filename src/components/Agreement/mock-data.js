@@ -66,21 +66,6 @@ A section acknowledging by title and author(s) any similar or related prior work
 If the proposal changes one or more blockchain rules or the blockchain state of the Aragon Network, then a security audit report of the blockchain rule or blockchain state change MUST be included in the Justification. This security audit report MUST be produced by a third-party security auditor and remain publicly accessible for as long as the change is in effect. The third-party security auditor MUST NOT have any financial relationship to the proposal author(s) aside from their being hired to perform the security audit.
 `
 
-const connectedApp = {
-  appName: 'Voting',
-  appAddress: '0xcc0005b95b11a3925970bcb0536e92581a5b7e3c',
-  collateralToken: {
-    address: '0x6b175474e89094c44da98b954eedeac495271d0f',
-    decimals: 18,
-    name: 'DAI Token',
-    symbol: 'DAI',
-  },
-  actionAmount: '100000000000000000000',
-  challengeAmount: '200000000000000000000',
-  challengeDuration: 172800000,
-}
-
 export const MOCK_AGREEMENT = {
-  connectedApps: [connectedApp, connectedApp, connectedApp],
   content,
 }

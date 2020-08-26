@@ -11,15 +11,18 @@ import {
   GU,
 } from '@aragon/ui'
 import InfoField from './../InfoField'
+import { durationToHours } from '../../lib/date-utils'
 
-function AgreementBindingActions({ apps }) {
-  const items = apps.map(
+function AgreementBindingActions({ disputableApps }) {
+  const items = disputableApps.map(
     ({
       appName,
       appAddress,
-      actionCollateral,
-      challengeCollateral,
-      settlementPeriod,
+      iconSrc,
+      actionAmount,
+      challengeAmount,
+      challengeDuration,
+      token,
     }) => [
       <div
         css={`
@@ -28,7 +31,7 @@ function AgreementBindingActions({ apps }) {
           margin-left: ${-1 * GU}px;
         `}
       >
-        <AppBadge label={appName} appAddress={appAddress} />
+        <AppBadge iconSrc={iconSrc} label={appName} appAddress={appAddress} />
       </div>,
 
       <div
@@ -56,12 +59,7 @@ function AgreementBindingActions({ apps }) {
             </>
           }
         >
-          <AmountPerAction
-            address={actionCollateral.address}
-            amount={actionCollateral.amount}
-            decimals={actionCollateral.decimals}
-            symbol={actionCollateral.symbol}
-          />
+          <AmountPerAction amount={actionAmount} token={token} />
         </InfoField>
 
         <InfoField
@@ -76,12 +74,7 @@ function AgreementBindingActions({ apps }) {
             </>
           }
         >
-          <AmountPerAction
-            address={challengeCollateral.address}
-            amount={challengeCollateral.amount}
-            decimals={challengeCollateral.decimals}
-            symbol={challengeCollateral.symbol}
-          />
+          <AmountPerAction amount={challengeAmount} token={token} />
         </InfoField>
 
         <InfoField
@@ -98,7 +91,7 @@ function AgreementBindingActions({ apps }) {
             </>
           }
         >
-          {settlementPeriod} <SubtleLabel>Hours</SubtleLabel>
+          {durationToHours(challengeDuration)} <SubtleLabel>Hours</SubtleLabel>
         </InfoField>
       </div>,
     ]
@@ -128,7 +121,9 @@ function SubtleLabel({ children }) {
   )
 }
 
-function AmountPerAction({ address, amount, decimals, symbol }) {
+function AmountPerAction({ amount, token }) {
+  const { address, decimals, symbol } = token
+
   return (
     <div
       css={`
@@ -165,7 +160,7 @@ const StyledAccordion = styled.div`
 `
 
 AgreementBindingActions.propTypes = {
-  apps: PropTypes.array.isRequired,
+  disputableApps: PropTypes.array.isRequired,
 }
 
 export default AgreementBindingActions
