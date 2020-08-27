@@ -12,6 +12,7 @@ import {
 } from '@aragon/ui'
 import {
   DISPUTABLE_VOTE_STATUSES,
+  VOTE_STATUS_ACTIVE,
   VOTE_STATUS_PAUSED,
 } from './disputable-vote-statuses'
 import { toMs } from '../../lib/date-utils'
@@ -66,9 +67,6 @@ function DisputableActionStatus({ vote }) {
             endDate={challenged ? toMs(vote.pausedAt) : toMs(vote.endDate)}
           />
         </Item>
-        <Item heading="Agreement">
-          <Link>agreementTitle</Link>
-        </Item>
         {hasDispute && (
           <Item heading="Dispute">
             <Link href={`https://court.aragon.org/disputes/${vote.disputeId}`}>
@@ -76,14 +74,19 @@ function DisputableActionStatus({ vote }) {
             </Link>
           </Item>
         )}
-        <Item>
-          <Info>
-            Exceeding reaction chamber thermal limit. We have begun power-supply
-            calibration. Force fields have been established on all turbo lifts
-            and crawlways. Warp drive within normal parameters. I read an ion
-            trail.
-          </Info>
-        </Item>
+        {disputableStatus === VOTE_STATUS_ACTIVE && (
+          <Item>
+            {parseInt(vote.pausedAt, 10) === 0 ? (
+              <Info>
+                The proposed action will be automatically executed if nobody
+                challenges it during the challenge period and the result of the
+                vote is cast with majority support.
+              </Info>
+            ) : (
+              <Info>The proposed action cannot longer be challenged.</Info>
+            )}
+          </Item>
+        )}
         <Item>
           <DisputableActions
             status={disputableStatus}

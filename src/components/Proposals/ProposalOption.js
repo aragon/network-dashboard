@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { GU, ProgressBar, RADIUS, textStyle, useTheme } from '@aragon/ui'
+import { round } from '../../lib/math-utils'
 
 function ProposalOption({ color, label, percentage }) {
   const theme = useTheme()
@@ -24,7 +25,7 @@ function ProposalOption({ color, label, percentage }) {
             color: ${theme.surfaceContentSecondary};
           `}
         >
-          {percentage}%
+          {round(percentage, 2)}%
         </span>
       </Labels>
       <div

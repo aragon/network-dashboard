@@ -25,6 +25,8 @@ import {
 import DisputableActionStatus from './DisputableActionStatus'
 import InfoBoxes from './InfoBoxes'
 import SummaryBar from './SummaryBar'
+import SummaryRow from './SummaryRow'
+import StatusInfo from './StatusInfo'
 import FeedbackModule from './FeedbackModule'
 import Layout from '../Layout'
 import { addressesEqual } from '../../lib/web3-utils'
@@ -77,12 +79,15 @@ function ProposalDetail({ match }) {
 
   const { voteId, context, creator, yeas, nays } = vote
   const totalVotes = parseFloat(yeas) + parseFloat(nays)
+  const yeasPct = safeDiv(parseFloat(yeas), totalVotes)
+  const naysPct = safeDiv(parseFloat(nays), totalVotes)
 
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const { backgroundColor, borderColor, disabledProgressBars } = getAttributes(
     disputableStatus,
     theme
   )
+
   // TODO: get real connected acount
   const connectedAccount = ''
   let mode = null
@@ -95,7 +100,7 @@ function ProposalDetail({ match }) {
     mode = 'submitter'
   }
   // TODO: get youVoted flag from connector
-  const youVoted = true
+  const youVoted = false
 
   return (
     <Layout>
@@ -200,13 +205,52 @@ function ProposalDetail({ match }) {
                   </h2>
                   <SummaryBar
                     disabledProgressBars={disabledProgressBars}
-                    positiveSize={safeDiv(parseFloat(yeas), totalVotes)}
-                    negativeSize={safeDiv(parseFloat(nays), totalVotes)}
-                    requiredSize={0.5}
+                    positiveSize={yeasPct}
+                    negativeSize={naysPct}
+                    requiredSize={
+                      parseFloat(
+                        vote.settings.formattedMinimumAcceptanceQuorumPct
+                      ) / 100
+                    }
                     css={`
                       margin-bottom: ${2 * GU}px;
                     `}
                   />
+                  <div
+                    css={`
+                      display: inline-block;
+                    `}
+                  >
+                    <SummaryRow
+                      color={
+                        disabledProgressBars
+                          ? theme.surfaceOpened
+                          : theme.positive
+                      }
+                      label="Yes"
+                      pct={yeasPct * 100}
+                      token={{
+                        amount: yeas,
+                        symbol: 'ANT',
+                        decimals: 18,
+                      }}
+                    />
+                    <SummaryRow
+                      color={
+                        disabledProgressBars
+                          ? theme.controlUnder
+                          : theme.negative
+                      }
+                      label="No"
+                      pct={naysPct * 100}
+                      token={{
+                        amount: nays,
+                        symbol: 'ANT',
+                        decimals: 18,
+                      }}
+                    />
+                  </div>
+
                   {mode && (
                     <FeedbackModule
                       vote={vote}
@@ -214,16 +258,21 @@ function ProposalDetail({ match }) {
                       mode={mode}
                     />
                   )}
+                  <StatusInfo vote={vote} />
                 </div>
               </section>
             </Box>
+          </>
+        }
+        secondary={
+          <>
+            <DisputableActionStatus vote={vote} />
             <InfoBoxes
               vote={vote}
               disabledProgressBars={disabledProgressBars}
             />
           </>
         }
-        secondary={<DisputableActionStatus vote={vote} />}
       />
     </Layout>
   )
