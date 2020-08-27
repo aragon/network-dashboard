@@ -20,7 +20,7 @@ export default new Map([
       endpoints: {
         ethereum: 'https://rinkeby.eth.aragon.network/',
       },
-      orgLocation: 'agreement3.aragonid.eth',
+      orgLocation: 'ancashdao.aragonid.eth',
       ipfsGateway: 'https://ipfs.eth.aragon.network/ipfs',
       subgraphs: {},
     },
@@ -33,7 +33,7 @@ export default new Map([
       endpoints: {
         ethereum: 'https://rinkeby.eth.aragon.network/',
       },
-      orgLocation: 'agreement3.aragonid.eth',
+      orgLocation: 'ancashdao.aragonid.eth',
       ipfsGateway: 'https://ipfs.eth.aragon.network/ipfs',
       subgraphs: {
         disputableVoting:
