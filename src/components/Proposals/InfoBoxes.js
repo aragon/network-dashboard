@@ -20,7 +20,7 @@ function InfoBoxes({ vote, disabledProgressBars }) {
 
   const totalVotes = parseFloat(vote.yeas) + parseFloat(vote.nays)
   const support = safeDiv(parseFloat(vote.yeas), totalVotes)
-  const quorumProgress = safeDiv(vote.yeas, vote.votingPower)
+  const quorumProgress = safeDiv(vote.yeas, vote.totalPower)
   return (
     <div
       css={`
