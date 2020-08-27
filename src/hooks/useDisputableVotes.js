@@ -67,7 +67,7 @@ export function useDisputableVote(proposalId) {
           endDate: vote.endDate,
           formattedNays: vote.formattedNays,
           formattedNaysPct: vote.formattedNaysPct,
-          formattedTotalPower: vote.formattedTotingPower,
+          formattedTotalPower: vote.formattedTotalPower,
           formattedYeas: vote.formattedYeas,
           formattedYeasPct: vote.formattedYeasPct,
           hasEnded: vote.hasEnded,
