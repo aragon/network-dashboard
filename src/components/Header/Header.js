@@ -4,7 +4,7 @@ import { GU, Link, IconExternal, useTheme } from '@aragon/ui'
 import HeaderLogo from './HeaderLogo'
 import Layout from '../Layout'
 
-function Header() {
+function Header({ ...props }) {
   const theme = useTheme()
 
   return (
@@ -17,6 +17,7 @@ function Header() {
         justify-content: space-between;
         background-color: ${theme.surface};
       `}
+      {...props}
     >
       <Layout>
         <div
