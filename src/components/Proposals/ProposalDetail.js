@@ -101,7 +101,7 @@ function ProposalDetail({ match }) {
   }
   // TODO: get youVoted flag from connector
   const youVoted = true
-  console.log(vote)
+
   return (
     <Layout>
       <Header primary="Proposals" />
