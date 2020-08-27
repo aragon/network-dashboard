@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { RADIUS, useTheme } from '@aragon/ui'
-import { animated } from 'react-spring'
+import { springs, useTheme, RADIUS } from '@aragon/ui'
+import { Spring, animated } from 'react-spring/renderprops'
 import styled from 'styled-components'
 
 function SummaryBar({
@@ -14,46 +14,65 @@ function SummaryBar({
   const theme = useTheme()
 
   return (
-    <Main {...props}>
-      <CombinedBar>
-        {!!positiveSize && (
-          <BarPart
-            css={`
-              background-color: ${disabledProgressBars
-                ? theme.surfaceOpened
-                : theme.positive};
-              transform: scale3d(${positiveSize}, 1, 1);
-            `}
-          />
-        )}
-        {!!negativeSize && (
-          <BarPart
-            css={`
-              background-color: ${disabledProgressBars
-                ? theme.controlUnder
-                : theme.negative};
-              transform: translate3d(${100 * positiveSize}%, 0, 0)
-                scale3d(${negativeSize}, 1, 1);
-            `}
-          />
-        )}
-      </CombinedBar>
-      <RequiredSeparatorClip>
-        <RequiredSeparatorWrapper
-          css={`
-            transform: scale3d(1, ${requiredSize > 0 ? 1 : 0}, 1)
-              translate3d(${100 * requiredSize}%, 0, 0);
-          `}
-        >
-          <div
-            css={`
-              height: 100%;
-              border-left: 1px dashed ${theme.surfaceContent};
-            `}
-          />
-        </RequiredSeparatorWrapper>
-      </RequiredSeparatorClip>
-    </Main>
+    <Spring
+      from={{ progress: 0 }}
+      to={{ progress: 1 }}
+      config={springs.lazy}
+      native
+    >
+      {({ progress }) => (
+        <Main {...props}>
+          <CombinedBar>
+            {!!positiveSize && (
+              <BarPart
+                style={{
+                  backgroundColor: disabledProgressBars
+                    ? theme.surfaceOpened
+                    : theme.positive,
+                  transform: progress.interpolate(
+                    (v) => `scale3d(${positiveSize * v}, 1, 1)`
+                  ),
+                }}
+              />
+            )}
+            {!!negativeSize && (
+              <BarPart
+                style={{
+                  backgroundColor: disabledProgressBars
+                    ? theme.controlUnder
+                    : theme.negative,
+                  transform: progress.interpolate(
+                    (v) => `
+                    translate3d(${100 * positiveSize * v}%, 0, 0)
+                    scale3d(${negativeSize * v}, 1, 1)
+                  `
+                  ),
+                }}
+              />
+            )}
+          </CombinedBar>
+          <RequiredSeparatorClip>
+            <RequiredSeparatorWrapper
+              style={{
+                transform: progress.interpolate(
+                  (v) => `
+                  translate3d(${100 * requiredSize * v}%, 0, 0)
+                  scale3d(1, ${requiredSize > 0 ? v : 0}, 1)
+                `
+                ),
+              }}
+            >
+              <div
+                css={`
+                  height: 100%;
+                  border-left: 1px dashed ${theme.surfaceContent};
+                `}
+              />
+            </RequiredSeparatorWrapper>
+          </RequiredSeparatorClip>
+        </Main>
+      )}
+    </Spring>
   )
 }
 
