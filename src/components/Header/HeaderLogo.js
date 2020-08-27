@@ -9,6 +9,7 @@ function HeaderLogo() {
   return (
     <div
       css={`
+        ${unselectable};
         display: flex;
         align-items: center;
       `}
@@ -20,7 +21,7 @@ function HeaderLogo() {
             line-height: 1;
             margin-left: ${1 * GU}px;
             color: ${theme.surfaceContent};
-            ${unselectable};
+
             ${textStyle('body1')};
           `}
         >
