@@ -1,8 +1,9 @@
 import React from 'react'
-import { GU, textStyle, useLayout } from '@aragon/ui'
+import { textStyle, useLayout, unselectable, useTheme, GU } from '@aragon/ui'
 import headerLogoSvg from '../../assets/aragonNetworkLogo.svg'
 
 function HeaderLogo() {
+  const theme = useTheme()
   const { layoutName } = useLayout()
   const compactMode = layoutName === 'small'
   return (
@@ -16,9 +17,11 @@ function HeaderLogo() {
       {!compactMode && (
         <h1
           css={`
-            ${textStyle('body1')};
             line-height: 1;
             margin-left: ${1 * GU}px;
+            color: ${theme.surfaceContent};
+            ${unselectable};
+            ${textStyle('body1')};
           `}
         >
           Aragon Network

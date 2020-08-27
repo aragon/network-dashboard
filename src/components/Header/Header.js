@@ -6,6 +6,11 @@ import Layout from '../Layout'
 
 function Header({ ...props }) {
   const theme = useTheme()
+  const history = useHistory()
+
+  const handleLogoClick = useCallback(() => {
+    history.push('/')
+  }, [history])
 
   return (
     <header
@@ -25,7 +30,9 @@ function Header({ ...props }) {
             display: flex;
           `}
         >
-          <HeaderLogo />
+          <Link onClick={handleLogoClick}>
+            <HeaderLogo />
+          </Link>
           <nav
             css={`
               display: inline-grid;
