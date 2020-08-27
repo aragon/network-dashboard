@@ -21,15 +21,7 @@ function DisputablePeriod({ endDate }) {
             display: inline-flex;
           `}
         >
-          <Timer end={new Date(endDate)} format="hms" />{' '}
-          <div
-            css={`
-              padding-left: ${1 * GU}px;
-              color: ${theme.contentSecondary};
-            `}
-          >
-            ({period} h)
-          </div>
+          <Timer end={new Date(endDate)} />{' '}
         </div>
       )}
     </>

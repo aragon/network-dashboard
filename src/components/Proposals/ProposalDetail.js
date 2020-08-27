@@ -262,13 +262,17 @@ function ProposalDetail({ match }) {
                 </div>
               </section>
             </Box>
+          </>
+        }
+        secondary={
+          <>
+            <DisputableActionStatus vote={vote} />
             <InfoBoxes
               vote={vote}
               disabledProgressBars={disabledProgressBars}
             />
           </>
         }
-        secondary={<DisputableActionStatus vote={vote} />}
       />
     </Layout>
   )

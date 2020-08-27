@@ -19,11 +19,8 @@ import { toMs } from '../../lib/date-utils'
 import DisputableActions from './DisputableActions'
 import DisputablePeriod from './DisputablePeriod'
 import DisputableStatusLabel from './DisputableStatusLabel'
-import { useAppData } from '../../providers/AppData'
 
 function DisputableActionStatus({ vote }) {
-  const { agreementDetails } = useAppData()
-
   // TODO: get agreement title, replace tokenAddress for tokenId
   // TODO: Check if vote has dispute
   const hasDispute = false
@@ -69,9 +66,6 @@ function DisputableActionStatus({ vote }) {
           <DisputablePeriod
             endDate={challenged ? toMs(vote.pausedAt) : toMs(vote.endDate)}
           />
-        </Item>
-        <Item heading="Agreement">
-          <Link>{agreementDetails.title}</Link>
         </Item>
         {hasDispute && (
           <Item heading="Dispute">
