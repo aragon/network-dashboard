@@ -1,16 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  Box,
-  Help,
-  IconTime,
-  Timer,
-  textStyle,
-  useLayout,
-  useTheme,
-  GU,
-} from '@aragon/ui'
-import { dateFormat, toMs } from '../../lib/date-utils'
+import { Box, Help, textStyle, useLayout, useTheme, GU } from '@aragon/ui'
+
 import { round, safeDiv } from '../../lib/math-utils'
 import SummaryBar from './SummaryBar'
 

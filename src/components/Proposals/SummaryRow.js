@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { formatTokenAmount, GU, textStyle, useTheme } from '@aragon/ui'
 
+/* eslint-disable react/prop-types */
 function SummaryRow({ color, label, pct, token }) {
   // TODO: get real token decimals
   const theme = useTheme()
@@ -57,5 +58,6 @@ const Bullet = styled.div`
   border-radius: 50%;
   background: ${({ color }) => color};
 `
+/* eslint-disable react/prop-types */
 
 export default React.memo(SummaryRow)
