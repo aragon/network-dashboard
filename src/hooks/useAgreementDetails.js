@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react'
+import { utils as ethersUtils } from 'ethers'
 import { createAppHook } from '@aragon/connect-react'
 import connectAgreement from '@aragon/connect-agreement'
-import { getIpfsUrlFromUri } from '../lib/ipfs-utils'
+import {
+  getIpfsUrlFromUri,
+  getIpfsCidFromUri,
+  ipfsGet,
+} from '../lib/ipfs-utils'
 import { networkEnvironment } from '../current-environment'
 import { toMs } from '../lib/date-utils'
 import { useOrgApps } from '../providers/OrgApps'
@@ -30,7 +35,7 @@ export function useAgreementDetails() {
       try {
         const [
           currentVersion,
-          stakingAddress,
+          stakingFactory,
           disputableApps,
         ] = await Promise.all([
           agreement.currentVersion(),
@@ -38,20 +43,22 @@ export function useAgreementDetails() {
           agreement.disputableApps(),
         ])
 
-        const extendedDisputableApps = await getExtendedDisputableApps(
-          apps,
-          disputableApps
-        )
-
         const { content, effectiveFrom, title } = currentVersion
+        const contentIpfsUri = ethersUtils.toUtf8String(content)
+
+        const [extendedDisputableApps, agreementContent] = await Promise.all([
+          getExtendedDisputableApps(apps, disputableApps),
+          getAgreementContent(contentIpfsUri),
+        ])
 
         const details = {
           contractAddress: agreement.address,
+          content: agreementContent,
+          contentIpfsUri: contentIpfsUri,
           disputableApps: extendedDisputableApps,
-          content,
-          effectiveFrom,
-          stakingAddress,
-          title,
+          effectiveFrom: toMs(effectiveFrom),
+          stakingAddress: stakingFactory,
+          title: title,
         }
 
         if (!cancelled) {
@@ -114,14 +121,23 @@ async function getExtendedDisputableApps(apps, disputableApps) {
       challengeAmount: collateral.challengeAmount,
       actionAmount: collateral.actionAmount,
       iconSrc: iconSrc,
-      token: {
-        address: token.id,
-        symbol: token.symbol,
-        decimals: token.decimals,
-      },
+      token: token,
       challengeDuration: toMs(collateral.challengeDuration),
     }
   })
 
   return extendedDisputableApps
+}
+
+async function getAgreementContent(ipfsUri) {
+  const { data, error } = await ipfsGet(getIpfsCidFromUri(ipfsUri))
+
+  // TODO: Improve error handling, returning empty string to avoid render error
+  if (error) {
+    console.error(error)
+
+    return ''
+  }
+
+  return data
 }

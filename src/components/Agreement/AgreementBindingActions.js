@@ -122,7 +122,7 @@ function SubtleLabel({ children }) {
 }
 
 function AmountPerAction({ amount, token }) {
-  const { address, decimals, symbol } = token
+  const { id, decimals, symbol } = token
 
   return (
     <div
@@ -132,7 +132,7 @@ function AmountPerAction({ amount, token }) {
     >
       <TokenAmount
         amount={amount}
-        address={address}
+        address={id}
         decimals={decimals}
         symbol={symbol}
         css={`
