@@ -22,6 +22,7 @@ import {
   VOTE_STATUS_DISPUTED,
   VOTE_STATUS_PAUSED,
 } from './disputable-vote-statuses'
+import InfoField from '../InfoField'
 import DisputableActionStatus from './DisputableActionStatus'
 import InfoBoxes from './InfoBoxes'
 import SummaryBar from './SummaryBar'
@@ -152,16 +153,7 @@ function ProposalDetail({ match }) {
                     grid-gap: ${layoutName === 'large' ? 5 * GU : 2.5 * GU}px;
                   `}
                 >
-                  <div>
-                    <h2
-                      css={`
-                        ${textStyle('label2')};
-                        color: ${theme.surfaceContentSecondary};
-                        margin-bottom: ${2 * GU}px;
-                      `}
-                    >
-                      Description
-                    </h2>
+                  <InfoField label="Description">
                     <div
                       css={`
                         hyphens: auto;
@@ -172,17 +164,8 @@ function ProposalDetail({ match }) {
                       {context ||
                         'No additional description has been provided for this proposal.'}
                     </div>
-                  </div>
-                  <div>
-                    <h2
-                      css={`
-                        ${textStyle('label2')};
-                        color: ${theme.surfaceContentSecondary};
-                        margin-bottom: ${2 * GU}px;
-                      `}
-                    >
-                      Created By
-                    </h2>
+                  </InfoField>
+                  <InfoField label="Created By">
                     <div
                       css={`
                         display: flex;
@@ -191,65 +174,58 @@ function ProposalDetail({ match }) {
                     >
                       <IdentityBadge entity={creator} />
                     </div>
-                  </div>
+                  </InfoField>
                 </div>
                 <div>
-                  <h2
-                    css={`
-                      ${textStyle('label2')};
-                      color: ${theme.surfaceContentSecondary};
-                      margin-bottom: ${2 * GU}px;
-                    `}
-                  >
-                    Votes
-                  </h2>
-                  <SummaryBar
-                    disabledProgressBars={disabledProgressBars}
-                    positiveSize={yeasPct}
-                    negativeSize={naysPct}
-                    requiredSize={
-                      parseFloat(
-                        vote.settings.formattedMinimumAcceptanceQuorumPct
-                      ) / 100
-                    }
-                    css={`
-                      margin-bottom: ${2 * GU}px;
-                    `}
-                  />
-                  <div
-                    css={`
-                      display: inline-block;
-                    `}
-                  >
-                    <SummaryRow
-                      color={
-                        disabledProgressBars
-                          ? theme.surfaceOpened
-                          : theme.positive
+                  <InfoField label="Votes">
+                    <SummaryBar
+                      disabledProgressBars={disabledProgressBars}
+                      positiveSize={yeasPct}
+                      negativeSize={naysPct}
+                      requiredSize={
+                        parseFloat(
+                          vote.settings.formattedMinimumAcceptanceQuorumPct
+                        ) / 100
                       }
-                      label="Yes"
-                      pct={yeasPct * 100}
-                      token={{
-                        amount: yeas,
-                        symbol: 'ANT',
-                        decimals: 18,
-                      }}
+                      css={`
+                        margin-bottom: ${2 * GU}px;
+                      `}
                     />
-                    <SummaryRow
-                      color={
-                        disabledProgressBars
-                          ? theme.controlUnder
-                          : theme.negative
-                      }
-                      label="No"
-                      pct={naysPct * 100}
-                      token={{
-                        amount: nays,
-                        symbol: 'ANT',
-                        decimals: 18,
-                      }}
-                    />
-                  </div>
+                    <div
+                      css={`
+                        display: inline-block;
+                      `}
+                    >
+                      <SummaryRow
+                        color={
+                          disabledProgressBars
+                            ? theme.surfaceOpened
+                            : theme.positive
+                        }
+                        label="Yes"
+                        pct={yeasPct * 100}
+                        token={{
+                          amount: yeas,
+                          symbol: 'ANT',
+                          decimals: 18,
+                        }}
+                      />
+                      <SummaryRow
+                        color={
+                          disabledProgressBars
+                            ? theme.controlUnder
+                            : theme.negative
+                        }
+                        label="No"
+                        pct={naysPct * 100}
+                        token={{
+                          amount: nays,
+                          symbol: 'ANT',
+                          decimals: 18,
+                        }}
+                      />
+                    </div>
+                  </InfoField>
 
                   {mode && (
                     <FeedbackModule
