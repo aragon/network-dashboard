@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
+import { describeScript } from '@aragon/connect'
 import connectVoting from '@aragon/connect-disputable-voting'
-import { createAppHook } from '@aragon/connect-react'
+import { useApps, createAppHook } from '@aragon/connect-react'
 import { useOrgApps } from '../providers/OrgApps'
 import { networkEnvironment } from '../current-environment'
 
+const EMPTY_SCRIPT = '0x00000001'
 const SUBGRAPH_URL = networkEnvironment.subgraphs?.disputableVoting
 
 const connecterConfig = SUBGRAPH_URL && [
@@ -15,20 +17,84 @@ const useDisputableVotingHook = createAppHook(connectVoting, connecterConfig)
 
 export function useDisputableVotes() {
   const { disputableVotingApp } = useOrgApps()
-  const [
-    votes,
-    { loading, error },
-  ] = useDisputableVotingHook(disputableVotingApp, (app) => app.votes())
+  const apps = useApps()
+  const [extendedVotesLoading, setLoading] = useState(true)
+  const [processedVotes, setVotes] = useState(null)
 
-  if (error) {
-    console.error(error)
+  const [votes, { loading: votesLoading }] = useDisputableVotingHook(
+    disputableVotingApp,
+    (app) => {
+      return app.votes()
+    },
+
+    []
+  )
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function getExtendedVotes() {
+      if (!cancelled) {
+        setLoading(true)
+      }
+
+      try {
+        const processedVotes = await Promise.all(
+          votes.map(async (vote) => processVote(vote, apps))
+        )
+
+        if (!cancelled) {
+          setVotes(processedVotes)
+          setLoading(false)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    if (!votesLoading) {
+      getExtendedVotes()
+    }
+
+    return () => {
+      cancelled = true
+    }
+  }, [votes, votesLoading, apps])
+
+  return [processedVotes, { loading: extendedVotesLoading }]
+}
+
+async function processVote(vote, apps) {
+  const extendedVote = {
+    endDate: vote.endDate,
+    formattedNays: vote.formattedNays,
+    formattedNaysPct: vote.formattedNaysPct,
+    formattedTotalPower: vote.formattedTotalPower,
+    formattedYeas: vote.formattedYeas,
+    formattedYeasPct: vote.formattedYeasPct,
+    hasEnded: vote.hasEnded,
+    naysPct: vote.naysPct,
+    yeasPct: vote.yeasPct,
+    status: vote.status,
   }
 
-  return [votes, { loading }]
+  if (vote.script === EMPTY_SCRIPT) {
+    return {
+      ...vote,
+      ...extendedVote,
+    }
+  }
+  const description = await describeScript(vote.script, apps[0])
+  return {
+    ...vote,
+    ...extendedVote,
+    metadata: description,
+  }
 }
 
 export function useDisputableVote(proposalId) {
   const { disputableVotingApp } = useOrgApps()
+  const apps = useApps()
   const [extendedVoteLoading, setExtendedVoteLoading] = useState(true)
   const [extendedVote, setExtendedVote] = useState(null)
 
@@ -51,28 +117,19 @@ export function useDisputableVote(proposalId) {
       }
 
       try {
-        const [collateral, settings] = await Promise.all([
+        const [collateral, settings, process] = await Promise.all([
           vote.collateralRequirement(),
           vote.setting(),
+          processVote(vote, apps),
         ])
 
         const token = await collateral.token()
 
         const extendedVote = {
-          ...vote,
+          ...process,
           settings: settings,
           collateral: collateral,
           token: token,
-          status: vote.status,
-          endDate: vote.endDate,
-          formattedNays: vote.formattedNays,
-          formattedNaysPct: vote.formattedNaysPct,
-          formattedTotalPower: vote.formattedTotalPower,
-          formattedYeas: vote.formattedYeas,
-          formattedYeasPct: vote.formattedYeasPct,
-          hasEnded: vote.hasEnded,
-          naysPct: vote.naysPct,
-          yeasPct: vote.yeasPct,
         }
         if (!cancelled) {
           setExtendedVote(extendedVote)
@@ -90,7 +147,7 @@ export function useDisputableVote(proposalId) {
     return () => {
       cancelled = true
     }
-  }, [vote, voteLoading])
+  }, [vote, voteLoading, apps])
 
   return [extendedVote, { loading: extendedVoteLoading }]
 }
