@@ -33,7 +33,7 @@ function DescriptionStep({ step }) {
 
         if (type === 'address' || type === 'any-account') {
           return (
-            <span key={index}>
+            <span key={key}>
               {' '}
               <IdentityBadge
                 compact

@@ -29,10 +29,9 @@ export function useDisputableVotes() {
 
     []
   )
-
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     let cancelled = false
-
     async function getExtendedVotes() {
       if (!cancelled) {
         setLoading(true)
@@ -59,7 +58,8 @@ export function useDisputableVotes() {
     return () => {
       cancelled = true
     }
-  }, [votes, votesLoading, apps])
+  }, [votes, votesLoading])
+  /* eslint-disable react-hooks/exhaustive-deps */
 
   return [processedVotes, { loading: extendedVotesLoading }]
 }
@@ -108,6 +108,7 @@ export function useDisputableVote(proposalId) {
     [proposalId]
   )
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     let cancelled = false
 
@@ -147,7 +148,8 @@ export function useDisputableVote(proposalId) {
     return () => {
       cancelled = true
     }
-  }, [vote, voteLoading, apps])
+  }, [vote, voteLoading])
+  /* eslint-disable react-hooks/exhaustive-deps */
 
   return [extendedVote, { loading: extendedVoteLoading }]
 }
