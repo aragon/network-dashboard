@@ -5,7 +5,6 @@ const REQUEST_TIMEOUT = 60000
 
 export async function ipfsGet(cid) {
   const { ipfsGateway } = networkEnvironment
-
   const endpoint = `${ipfsGateway}/${cid}`
 
   try {
