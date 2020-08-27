@@ -1,15 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  Box,
-  GU,
-  IconLock,
-  Info,
-  Link,
-  textStyle,
-  TokenAmount,
-  useTheme,
-} from '@aragon/ui'
+import { Box, GU, Info, Link, textStyle, useTheme } from '@aragon/ui'
 import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_ACTIVE,
@@ -21,13 +12,7 @@ import DisputablePeriod from './DisputablePeriod'
 import DisputableStatusLabel from './DisputableStatusLabel'
 
 function DisputableActionStatus({ vote }) {
-  // TODO: get agreement title, replace tokenAddress for tokenId
-  // TODO: Check if vote has dispute
-  const hasDispute = false
-  const { actionAmount } = vote.collateral
-  const { decimals, symbol } = vote.token
-
-  const tokenAddress = '0x6B175474E89094C44Da98b954EedeAC495271d0F'
+  // TODO: get different court links for the different enviroments
 
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const challenged = disputableStatus === VOTE_STATUS_PAUSED
@@ -38,38 +23,16 @@ function DisputableActionStatus({ vote }) {
         <Item heading="Status">
           <DisputableStatusLabel status={disputableStatus} />
         </Item>
-        <Item heading="Action collateral locked">
-          <div
-            css={`
-              display: flex;
-              align-items: center;
-            `}
-          >
-            <TokenAmount
-              address={tokenAddress}
-              amount={actionAmount}
-              decimals={decimals}
-              symbol={symbol}
-            />
-
-            <span
-              css={`
-                display: inline-flex;
-                padding-left: ${1 * GU}px;
-              `}
-            >
-              <IconLock size="small" />
-            </span>
-          </div>
-        </Item>
         <Item heading={challenged ? 'Settlement period' : 'Challenge period'}>
           <DisputablePeriod
             endDate={challenged ? toMs(vote.pausedAt) : toMs(vote.endDate)}
           />
         </Item>
-        {hasDispute && (
+        {vote.disputeId && (
           <Item heading="Dispute">
-            <Link href={`https://court.aragon.org/disputes/${vote.disputeId}`}>
+            <Link
+              href={`https://court-staging.aragon.org/disputes/${vote.disputeId}`}
+            >
               Dispute #{vote.disputeId}
             </Link>
           </Item>

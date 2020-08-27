@@ -8,9 +8,11 @@ import {
   GU,
   Header,
   IconCheck,
+  IconLock,
   IdentityBadge,
   Split,
   Tag,
+  TokenAmount,
   textStyle,
   useLayout,
   useTheme,
@@ -22,6 +24,7 @@ import {
   VOTE_STATUS_DISPUTED,
   VOTE_STATUS_PAUSED,
 } from './disputable-vote-statuses'
+import InfoField from '../InfoField'
 import DisputableActionStatus from './DisputableActionStatus'
 import InfoBoxes from './InfoBoxes'
 import SummaryBar from './SummaryBar'
@@ -77,7 +80,10 @@ function ProposalDetail({ match }) {
     return <div>Loading...</div>
   }
 
-  const { voteId, context, creator, yeas, nays } = vote
+  // TODO: replace tokenAddress for tokenId
+  const tokenAddress = '0x6B175474E89094C44Da98b954EedeAC495271d0F'
+
+  const { voteId, context, creator, yeas, nays, collateral, token } = vote
   const totalVotes = parseFloat(yeas) + parseFloat(nays)
   const yeasPct = safeDiv(parseFloat(yeas), totalVotes)
   const naysPct = safeDiv(parseFloat(nays), totalVotes)
@@ -117,16 +123,6 @@ function ProposalDetail({ match }) {
                 border: solid 1px ${borderColor};
               `}
             >
-              <div
-                css={`
-                  display: flex;
-                  justify-content: space-between;
-                `}
-              >
-                {youVoted && (
-                  <Tag icon={<IconCheck size="small" />} label="Voted" />
-                )}
-              </div>
               <section
                 css={`
                   display: grid;
@@ -135,6 +131,16 @@ function ProposalDetail({ match }) {
                   margin-top: ${2.5 * GU}px;
                 `}
               >
+                {youVoted && (
+                  <div
+                    css={`
+                      display: flex;
+                      justify-content: space-between;
+                    `}
+                  >
+                    <Tag icon={<IconCheck size="small" />} label="Voted" />
+                  </div>
+                )}
                 <h1
                   css={`
                     ${textStyle('title2')};
@@ -152,16 +158,7 @@ function ProposalDetail({ match }) {
                     grid-gap: ${layoutName === 'large' ? 5 * GU : 2.5 * GU}px;
                   `}
                 >
-                  <div>
-                    <h2
-                      css={`
-                        ${textStyle('label2')};
-                        color: ${theme.surfaceContentSecondary};
-                        margin-bottom: ${2 * GU}px;
-                      `}
-                    >
-                      Description
-                    </h2>
+                  <InfoField label="Description">
                     <div
                       css={`
                         hyphens: auto;
@@ -172,84 +169,104 @@ function ProposalDetail({ match }) {
                       {context ||
                         'No additional description has been provided for this proposal.'}
                     </div>
-                  </div>
-                  <div>
-                    <h2
+                  </InfoField>
+                  <div
+                    css={`
+                      display: flex;
+                      justify-content: space-between;
+                    `}
+                  >
+                    <InfoField label="Action collateral">
+                      <div
+                        css={`
+                          display: flex;
+                          align-items: center;
+                        `}
+                      >
+                        <TokenAmount
+                          address={tokenAddress}
+                          amount={collateral.actionAmount}
+                          decimals={token.decimals}
+                          symbol={token.symbol}
+                        />
+
+                        <span
+                          css={`
+                            display: inline-flex;
+                            padding-left: ${1 * GU}px;
+                          `}
+                        >
+                          <IconLock size="small" />
+                        </span>
+                      </div>
+                    </InfoField>
+                    <InfoField
+                      label="Submitted By"
                       css={`
-                        ${textStyle('label2')};
-                        color: ${theme.surfaceContentSecondary};
-                        margin-bottom: ${2 * GU}px;
+                        margin-right: ${12 * GU}px;
                       `}
                     >
-                      Created By
-                    </h2>
-                    <div
-                      css={`
-                        display: flex;
-                        align-items: flex-start;
-                      `}
-                    >
-                      <IdentityBadge entity={creator} />
-                    </div>
+                      <div
+                        css={`
+                          display: flex;
+                          align-items: flex-start;
+                        `}
+                      >
+                        <IdentityBadge entity={creator} />
+                      </div>
+                    </InfoField>
                   </div>
                 </div>
                 <div>
-                  <h2
-                    css={`
-                      ${textStyle('label2')};
-                      color: ${theme.surfaceContentSecondary};
-                      margin-bottom: ${2 * GU}px;
-                    `}
-                  >
-                    Votes
-                  </h2>
-                  <SummaryBar
-                    disabledProgressBars={disabledProgressBars}
-                    positiveSize={yeasPct}
-                    negativeSize={naysPct}
-                    requiredSize={
-                      parseFloat(
-                        vote.settings.formattedMinimumAcceptanceQuorumPct
-                      ) / 100
-                    }
-                    css={`
-                      margin-bottom: ${2 * GU}px;
-                    `}
-                  />
-                  <div
-                    css={`
-                      display: inline-block;
-                    `}
-                  >
-                    <SummaryRow
-                      color={
-                        disabledProgressBars
-                          ? theme.surfaceOpened
-                          : theme.positive
+                  <InfoField label="Votes">
+                    <SummaryBar
+                      disabledProgressBars={disabledProgressBars}
+                      positiveSize={yeasPct}
+                      negativeSize={naysPct}
+                      requiredSize={
+                        parseFloat(
+                          vote.settings.formattedMinimumAcceptanceQuorumPct
+                        ) / 100
                       }
-                      label="Yes"
-                      pct={yeasPct * 100}
-                      token={{
-                        amount: yeas,
-                        symbol: 'ANT',
-                        decimals: 18,
-                      }}
+                      css={`
+                        margin-bottom: ${2 * GU}px;
+                      `}
                     />
-                    <SummaryRow
-                      color={
-                        disabledProgressBars
-                          ? theme.controlUnder
-                          : theme.negative
-                      }
-                      label="No"
-                      pct={naysPct * 100}
-                      token={{
-                        amount: nays,
-                        symbol: 'ANT',
-                        decimals: 18,
-                      }}
-                    />
-                  </div>
+                    <div
+                      css={`
+                        display: inline-block;
+                      `}
+                    >
+                      <SummaryRow
+                        color={
+                          disabledProgressBars
+                            ? theme.surfaceOpened
+                            : theme.positive
+                        }
+                        label="Yes"
+                        pct={yeasPct * 100}
+                        token={{
+                          amount: yeas,
+                          symbol: 'ANT',
+                          decimals: 18,
+                        }}
+                      />
+                      <SummaryRow
+                        color={
+                          disabledProgressBars
+                            ? theme.controlUnder
+                            : theme.negative
+                        }
+                        label="No"
+                        pct={naysPct * 100}
+                        token={{
+                          amount: nays,
+                          symbol: 'ANT',
+                          decimals: 18,
+                        }}
+                      />
+                    </div>
+                  </InfoField>
 
                   {mode && (
                     <FeedbackModule

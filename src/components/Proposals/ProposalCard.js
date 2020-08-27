@@ -80,6 +80,11 @@ function ProposalCard({ appAddress, vote, onProposalClick }) {
           overflow-wrap: anywhere;
           word-break: break-word;
           ${textStyle('body1')}
+          height: ${27 * 3}px; // 27px * 3 = line-height * 3 lines
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 3;
+          overflow: hidden;
         `}
       >
         <strong css="font-weight: bold">#{voteId}: </strong>
