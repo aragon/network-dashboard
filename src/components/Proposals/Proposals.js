@@ -6,8 +6,10 @@ import ProposalBanner from './ProposalBanner'
 import ProposalCardGroup from './ProposalCardGroup'
 import ProposalCard from './ProposalCard'
 import { useAppData } from '../../providers/AppData'
+import { useOrgApps } from '../../providers/OrgApps'
 
 const Proposals = React.memo(function Proposals() {
+  const { disputableVotingApp } = useOrgApps()
   const { disputableVotes } = useAppData()
   const history = useHistory()
 
@@ -45,6 +47,7 @@ const Proposals = React.memo(function Proposals() {
                 <ProposalCard
                   key={vote.voteId}
                   vote={vote}
+                  appAddress={disputableVotingApp.address}
                   onProposalClick={handleProposalClick}
                 />
               ))}
