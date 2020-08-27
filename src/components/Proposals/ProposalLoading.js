@@ -11,8 +11,8 @@ function ProposalLoading() {
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          height: 400px;
-          background-color: white;
+          padding-top: ${11 * GU}px;
+          padding-bottom: ${11 * GU}px;
         `}
       >
         <img
