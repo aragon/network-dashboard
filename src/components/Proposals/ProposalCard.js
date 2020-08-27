@@ -56,6 +56,7 @@ function ProposalCard({ appAddress, vote, onProposalClick }) {
         grid-template-columns: 100%;
         grid-template-rows: auto 1fr auto auto;
         grid-gap: ${1 * GU}px;
+        align-items: start;
         padding: ${3 * GU}px;
         background: ${backgroundColor};
         border: solid 1px ${borderColor};
@@ -64,12 +65,12 @@ function ProposalCard({ appAddress, vote, onProposalClick }) {
       <div
         css={`
           display: flex;
-          justify-content: space-between;
           margin-bottom: ${1 * GU}px;
         `}
       >
-        <AppBadge label="Disputable voting" appAddress={appAddress} />
+        <AppBadge label="Disputable Voting" appAddress={appAddress} />
       </div>
+
       <p
         css={`
           // overflow-wrap:anywhere and hyphens:auto are not supported yet by
@@ -84,6 +85,7 @@ function ProposalCard({ appAddress, vote, onProposalClick }) {
         <strong css="font-weight: bold">#{voteId}: </strong>
         {context || 'No description provided'}
       </p>
+
       <ProposalOption
         color={disabledProgressBars ? theme.surfaceOpened : theme.positive}
         percentage={(vote.yeas * 100) / vote.totalPower}
@@ -95,8 +97,10 @@ function ProposalCard({ appAddress, vote, onProposalClick }) {
         percentage={(vote.nays * 100) / vote.totalPower}
         label="No"
       />
+
       <div
         css={`
+          display: flex;
           margin-top: ${2 * GU}px;
         `}
       >

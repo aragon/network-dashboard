@@ -92,6 +92,7 @@ function DisputableStatusLabel({ status }) {
         <span
           css={`
             margin-left: ${0.5 * GU}px;
+            line-height: 1;
           `}
         >
           {label}
