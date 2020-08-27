@@ -100,7 +100,7 @@ function ProposalDetail({ match }) {
     mode = 'submitter'
   }
   // TODO: get youVoted flag from connector
-  const youVoted = true
+  const youVoted = false
 
   return (
     <Layout>
