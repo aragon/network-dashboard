@@ -5,7 +5,7 @@ import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_CANCELLED,
   VOTE_STATUS_PAUSED,
-} from './disputable-vote-statuses'
+} from '../disputable-vote-statuses'
 
 function StatusInfo({ vote }) {
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)

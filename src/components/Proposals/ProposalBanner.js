@@ -12,7 +12,6 @@ import background from '../../assets/banner.svg'
 
 function ProposalBanner({ onCloseBanner }) {
   // TODO: Integrate it with the layout once is merged & Make it responsive
-
   const theme = useTheme()
 
   return (

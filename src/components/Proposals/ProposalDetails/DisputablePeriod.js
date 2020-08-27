@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Timer } from '@aragon/ui'
-import { dateFormat } from '../../lib/date-utils'
-import { useNow } from '../../hooks/useNow'
+import { dateFormat } from '../../../lib/date-utils'
+import { useNow } from '../../../hooks/useNow'
 
 function DisputablePeriod({ endDate }) {
   const now = useNow()
