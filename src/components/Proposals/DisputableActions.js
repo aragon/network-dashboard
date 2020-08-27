@@ -30,21 +30,33 @@ function DisputableActions({ status, submitter }) {
             margin-bottom: ${2 * GU}px;
           `}
           mode="strong"
+          disabled
           wide
           label="Accept settlement"
         />
-        <Button mode="normal" wide label="Raise dispute to court" />
+        <Button mode="normal" disabled wide label="Raise dispute to court" />
       </>
     )
   }
   if (status === VOTE_STATUS_ACTIVE) {
     return connectedAccountIsSubmitter ? (
-      <Button mode="strong" wide label="Cancel vote" />
+      <Button mode="strong" disabled wide label="Cancel proposal" />
     ) : (
-      <Button mode="strong" wide label="Challenge vote" />
+      <>
+        <Button
+          mode="strong"
+          disabled
+          wide
+          label="Challenge proposal"
+          css={`
+            margin-bottom: ${2 * GU}px;
+          `}
+        />
+        <Button mode="strong" disabled wide label="Review details" />
+      </>
     )
   }
-  return <Button mode="strong" wide label="Review details" />
+  return <Button mode="strong" disabled wide label="Review details" />
 }
 
 DisputableActions.propTypes = {
