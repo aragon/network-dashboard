@@ -26,6 +26,7 @@ import DisputableActionStatus from './DisputableActionStatus'
 import InfoBoxes from './InfoBoxes'
 import SummaryBar from './SummaryBar'
 import SummaryRow from './SummaryRow'
+import StatusInfo from './StatusInfo'
 import FeedbackModule from './FeedbackModule'
 import Layout from '../Layout'
 import { addressesEqual } from '../../lib/web3-utils'
@@ -76,11 +77,10 @@ function ProposalDetail({ match }) {
     return <div>Loading...</div>
   }
 
-  const { voteId, context, creator, yeas, nays, settings } = vote
+  const { voteId, context, creator, yeas, nays } = vote
   const totalVotes = parseFloat(yeas) + parseFloat(nays)
   const yeasPct = safeDiv(parseFloat(yeas), totalVotes)
   const naysPct = safeDiv(parseFloat(nays), totalVotes)
-  const support = settings.formattedSupportRequiredPct
 
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const { backgroundColor, borderColor, disabledProgressBars } = getAttributes(
@@ -101,7 +101,7 @@ function ProposalDetail({ match }) {
   }
   // TODO: get youVoted flag from connector
   const youVoted = true
-
+  console.log(vote)
   return (
     <Layout>
       <Header primary="Proposals" />
@@ -207,7 +207,11 @@ function ProposalDetail({ match }) {
                     disabledProgressBars={disabledProgressBars}
                     positiveSize={yeasPct}
                     negativeSize={naysPct}
-                    requiredSize={support}
+                    requiredSize={
+                      parseFloat(
+                        vote.settings.formattedMinimumAcceptanceQuorumPct
+                      ) / 100
+                    }
                     css={`
                       margin-bottom: ${2 * GU}px;
                     `}
@@ -254,6 +258,7 @@ function ProposalDetail({ match }) {
                       mode={mode}
                     />
                   )}
+                  <StatusInfo vote={vote} />
                 </div>
               </section>
             </Box>
