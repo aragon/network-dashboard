@@ -86,12 +86,13 @@ function ProposalCard({ appAddress, vote, onProposalClick }) {
       </p>
       <ProposalOption
         color={disabledProgressBars ? theme.surfaceOpened : theme.positive}
-        percentage={(vote.yeas * 100) / vote.votingPower}
+        percentage={(vote.yeas * 100) / vote.totalPower}
         label="Yes"
       />
+
       <ProposalOption
         color={disabledProgressBars ? theme.surfaceOpened : theme.negative}
-        percentage={(vote.nays * 100) / vote.votingPower}
+        percentage={(vote.nays * 100) / vote.totalPower}
         label="No"
       />
       <div

@@ -14,22 +14,20 @@ function getAppByName(apps, appName) {
 }
 
 function OrgAppsProvider({ children }) {
-  const [apps] = useApps()
+  const [apps, { loading }] = useApps()
 
   // Avoid additional overhead by finding within existing app list
   const agreementApp = getAppByName(apps, 'agreement')
   const disputableVotingApp = getAppByName(apps, 'disputable-voting')
-
-  const appsLoading = !apps
 
   const OrgAppState = useMemo(
     () => ({
       apps,
       agreementApp,
       disputableVotingApp,
-      appsLoading,
+      appsLoading: loading,
     }),
-    [apps, agreementApp, disputableVotingApp, appsLoading]
+    [apps, agreementApp, disputableVotingApp, loading]
   )
 
   return (

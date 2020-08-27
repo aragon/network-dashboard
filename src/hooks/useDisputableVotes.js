@@ -15,52 +15,41 @@ const useDisputableVotingHook = createAppHook(connectVoting, connecterConfig)
 
 export function useDisputableVotes() {
   const { disputableVotingApp } = useOrgApps()
-  const [disputableVoting] = useDisputableVotingHook(
-    disputableVotingApp,
-    (app) => app
-  )
-  const [disputableVotes, setDisputableVotes] = useState(null)
+  const [
+    votes,
+    { loading, error },
+  ] = useDisputableVotingHook(disputableVotingApp, (app) => app.votes())
 
-  useEffect(() => {
-    let cancelled = false
+  if (error) {
+    console.error(error)
+  }
 
-    async function getVotes() {
-      try {
-        const votes = await disputableVoting.votes()
-
-        if (!cancelled) {
-          setDisputableVotes(votes)
-        }
-      } catch (error) {
-        console.error(error)
-      }
-    }
-
-    if (disputableVoting && !disputableVotes) {
-      getVotes()
-    }
-
-    return () => {
-      cancelled = true
-    }
-  }, [disputableVotes, disputableVoting])
-
-  return disputableVotes
+  return [votes, { loading }]
 }
 
 export function useDisputableVote(proposalId) {
   const { disputableVotingApp } = useOrgApps()
-  const [loading, setLoading] = useState(true)
+  const [extendedVoteLoading, setExtendedVoteLoading] = useState(true)
   const [extendedVote, setExtendedVote] = useState(null)
 
-  const [vote] = useDisputableVotingHook(disputableVotingApp, (app) => {
-    return app.vote(`${disputableVotingApp.address}-vote-${proposalId}`)
-  })
+  const [vote, { loading: voteLoading }] = useDisputableVotingHook(
+    disputableVotingApp,
+    (app) => {
+      return app.vote(`${disputableVotingApp.address}-vote-${proposalId}`)
+    },
+
+    // Refresh vote on id change
+    [proposalId]
+  )
 
   useEffect(() => {
     let cancelled = false
 
     async function getExtendedVote() {
+      if (!cancelled) {
+        setExtendedVoteLoading(true)
+      }
+
       try {
         const [collateral, settings] = await Promise.all([
           vote.collateralRequirement(),
@@ -78,7 +67,7 @@ export function useDisputableVote(proposalId) {
           endDate: vote.endDate,
           formattedNays: vote.formattedNays,
           formattedNaysPct: vote.formattedNaysPct,
-          formattedVotingPower: vote.formattedVotingPower,
+          formattedTotalPower: vote.formattedTotalPower,
           formattedYeas: vote.formattedYeas,
           formattedYeasPct: vote.formattedYeasPct,
           hasEnded: vote.hasEnded,
@@ -87,21 +76,21 @@ export function useDisputableVote(proposalId) {
         }
         if (!cancelled) {
           setExtendedVote(extendedVote)
-          setLoading(false)
+          setExtendedVoteLoading(false)
         }
       } catch (error) {
         console.error(error)
       }
     }
 
-    if (vote && !extendedVote) {
+    if (!voteLoading) {
       getExtendedVote()
     }
 
     return () => {
       cancelled = true
     }
-  }, [vote, extendedVote])
+  }, [vote, voteLoading])
 
-  return [extendedVote, { loading: loading }]
+  return [extendedVote, { loading: extendedVoteLoading }]
 }
