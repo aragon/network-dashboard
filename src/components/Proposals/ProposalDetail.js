@@ -99,7 +99,7 @@ function ProposalDetail({ match }) {
 
   return (
     <Layout>
-      <Header />
+      <Header primary="Proposals" />
       <Bar>
         <BackButton onClick={handleBack} />
       </Bar>
