@@ -8,9 +8,11 @@ import {
   GU,
   Header,
   IconCheck,
+  IconLock,
   IdentityBadge,
   Split,
   Tag,
+  TokenAmount,
   textStyle,
   useLayout,
   useTheme,
@@ -78,7 +80,10 @@ function ProposalDetail({ match }) {
     return <div>Loading...</div>
   }
 
-  const { voteId, context, creator, yeas, nays } = vote
+  // TODO: replace tokenAddress for tokenId
+  const tokenAddress = '0x6B175474E89094C44Da98b954EedeAC495271d0F'
+
+  const { voteId, context, creator, yeas, nays, collateral, token } = vote
   const totalVotes = parseFloat(yeas) + parseFloat(nays)
   const yeasPct = safeDiv(parseFloat(yeas), totalVotes)
   const naysPct = safeDiv(parseFloat(nays), totalVotes)
@@ -118,16 +123,6 @@ function ProposalDetail({ match }) {
                 border: solid 1px ${borderColor};
               `}
             >
-              <div
-                css={`
-                  display: flex;
-                  justify-content: space-between;
-                `}
-              >
-                {youVoted && (
-                  <Tag icon={<IconCheck size="small" />} label="Voted" />
-                )}
-              </div>
               <section
                 css={`
                   display: grid;
@@ -136,6 +131,16 @@ function ProposalDetail({ match }) {
                   margin-top: ${2.5 * GU}px;
                 `}
               >
+                {youVoted && (
+                  <div
+                    css={`
+                      display: flex;
+                      justify-content: space-between;
+                    `}
+                  >
+                    <Tag icon={<IconCheck size="small" />} label="Voted" />
+                  </div>
+                )}
                 <h1
                   css={`
                     ${textStyle('title2')};
@@ -165,16 +170,52 @@ function ProposalDetail({ match }) {
                         'No additional description has been provided for this proposal.'}
                     </div>
                   </InfoField>
-                  <InfoField label="Created By">
-                    <div
+                  <div
+                    css={`
+                      display: flex;
+                      justify-content: space-between;
+                    `}
+                  >
+                    <InfoField label="Action collateral">
+                      <div
+                        css={`
+                          display: flex;
+                          align-items: center;
+                        `}
+                      >
+                        <TokenAmount
+                          address={tokenAddress}
+                          amount={collateral.actionAmount}
+                          decimals={token.decimals}
+                          symbol={token.symbol}
+                        />
+
+                        <span
+                          css={`
+                            display: inline-flex;
+                            padding-left: ${1 * GU}px;
+                          `}
+                        >
+                          <IconLock size="small" />
+                        </span>
+                      </div>
+                    </InfoField>
+                    <InfoField
+                      label="Submitted By"
                       css={`
-                        display: flex;
-                        align-items: flex-start;
+                        margin-right: ${12 * GU}px;
                       `}
                     >
-                      <IdentityBadge entity={creator} />
-                    </div>
-                  </InfoField>
+                      <div
+                        css={`
+                          display: flex;
+                          align-items: flex-start;
+                        `}
+                      >
+                        <IdentityBadge entity={creator} />
+                      </div>
+                    </InfoField>
+                  </div>
                 </div>
                 <div>
                   <InfoField label="Votes">
