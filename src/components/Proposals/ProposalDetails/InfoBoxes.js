@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Box, Help, textStyle, useLayout, useTheme, GU } from '@aragon/ui'
 
-import { round, safeDiv } from '../../lib/math-utils'
+import { round, safeDiv } from '../../../lib/math-utils'
 import SummaryBar from './SummaryBar'
 
 function InfoBoxes({ vote, disabledProgressBars }) {
@@ -82,7 +82,8 @@ function SummaryWithPercentages({ disabledProgressBars, size, requiredSize }) {
             color: ${theme.surfaceContentSecondary};
           `}
         >
-          (>{requiredSize}% needed)
+          ({'>'}
+          {requiredSize}% needed)
         </span>
       </div>
       <SummaryBar

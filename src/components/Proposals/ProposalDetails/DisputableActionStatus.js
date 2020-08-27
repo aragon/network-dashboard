@@ -5,11 +5,11 @@ import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_ACTIVE,
   VOTE_STATUS_PAUSED,
-} from './disputable-vote-statuses'
-import { toMs } from '../../lib/date-utils'
+} from '../disputable-vote-statuses'
+import { toMs } from '../../../lib/date-utils'
 import DisputableActions from './DisputableActions'
 import DisputablePeriod from './DisputablePeriod'
-import DisputableStatusLabel from './DisputableStatusLabel'
+import DisputableStatusLabel from '../DisputableStatusLabel'
 
 function DisputableActionStatus({ vote }) {
   // TODO: get different court links for the different enviroments
