@@ -1,11 +1,16 @@
 import React, { useCallback } from 'react'
 import { useRouteMatch, useHistory } from 'react-router-dom'
-import { GU, Link, IconExternal, useTheme } from '@aragon/ui'
+import { GU, Link, IconExternal, useTheme, unselectable } from '@aragon/ui'
 import HeaderLogo from './HeaderLogo'
 import Layout from '../Layout'
 
 function Header({ ...props }) {
   const theme = useTheme()
+  const history = useHistory()
+
+  const handleLogoClick = useCallback(() => {
+    history.push('/')
+  }, [history])
 
   return (
     <header
@@ -25,7 +30,9 @@ function Header({ ...props }) {
             display: flex;
           `}
         >
-          <HeaderLogo />
+          <Link onClick={handleLogoClick}>
+            <HeaderLogo />
+          </Link>
           <nav
             css={`
               display: inline-grid;
@@ -49,6 +56,7 @@ function Header({ ...props }) {
                   align-items: center;
                   text-decoration: none;
                   color: ${theme.contentSecondary};
+                  ${unselectable};
                 `}
               >
                 Get ANT
@@ -70,21 +78,22 @@ function Header({ ...props }) {
 /* eslint-disable react/prop-types */
 function InteralLink({ to, children }) {
   const history = useHistory()
+  const theme = useTheme()
   const active = useRouteMatch(to) !== null
 
   const handlePageRequest = useCallback(() => {
     history.push(to)
   }, [history, to])
 
-  const theme = useTheme()
   return (
     <Link
       onClick={handlePageRequest}
       css={`
+        ${unselectable};
         text-decoration: none;
         color: ${theme.contentSecondary};
 
-        ${active && `color: ${theme.content}`}
+        ${active ? `color: ${theme.content}` : ''};
       `}
     >
       {children}

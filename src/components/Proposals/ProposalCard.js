@@ -68,7 +68,7 @@ function ProposalCard({ appAddress, vote, onProposalClick }) {
           margin-bottom: ${1 * GU}px;
         `}
       >
-        <AppBadge label="Disputable Voting" appAddress={appAddress} />
+        <AppBadge label="Disputable Voting" appAddress={appAddress} badgeOnly />
       </div>
 
       <p
