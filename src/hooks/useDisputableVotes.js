@@ -140,9 +140,13 @@ async function processVote(vote, apps) {
   }
 
   const description = await describeScript(vote.script, apps)
-
+  let target = null
+  if (description[0] && description[0].to) {
+    target = description[0].to
+  }
   return {
     ...extendedVote,
     description,
+    target: target,
   }
 }

@@ -82,16 +82,16 @@ export function useAgreementDetails() {
   return [agreementDetails, { loading: agreementDetailsLoading }]
 }
 
-function getAppPresentation(apps, appAddress) {
-  const { contentUri, manifest } = apps.find(
-    ({ address }) => address === appAddress
-  )
+export function getAppPresentation(apps, appAddress) {
+  const app = apps.find(({ address }) => address === appAddress)
+  if (app && app.contentUri && app.manifest) {
+    const iconPath = app.manifest.icons[0].src
+    const iconSrc = getIpfsUrlFromUri(app.contentUri) + iconPath
+    const humanName = app.manifest.name
 
-  const iconPath = manifest.icons[0].src
-  const iconSrc = getIpfsUrlFromUri(contentUri) + iconPath
-  const humanName = manifest.name
-
-  return { humanName, iconSrc }
+    return { humanName, iconSrc }
+  }
+  return null
 }
 
 async function getExtendedDisputableApps(apps, disputableApps) {

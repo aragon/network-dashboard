@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { AppBadge, Card, GU, textStyle, useTheme } from '@aragon/ui'
 import {
@@ -10,6 +10,8 @@ import {
 import ProposalOption from './ProposalOption'
 import DisputableStatusLabel from './DisputableStatusLabel'
 import Description from './Description'
+import { useOrgApps } from '../../providers/OrgApps'
+import { getAppPresentation } from '../../hooks/useAgreementDetails'
 
 function getAttributes(status, theme) {
   const attributes = {
@@ -41,6 +43,7 @@ function getAttributes(status, theme) {
 
 function ProposalCard({ appAddress, vote, onProposalClick }) {
   const theme = useTheme()
+  const { apps } = useOrgApps()
   const { context, voteId, description } = vote
 
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
@@ -48,6 +51,11 @@ function ProposalCard({ appAddress, vote, onProposalClick }) {
     disputableStatus,
     theme
   )
+  let presentation = null
+
+  if (vote.target && Array.isArray(apps)) {
+    presentation = getAppPresentation(apps, vote.target)
+  }
 
   return (
     <Card
@@ -69,7 +77,12 @@ function ProposalCard({ appAddress, vote, onProposalClick }) {
           margin-bottom: ${1 * GU}px;
         `}
       >
-        <AppBadge label="Disputable Voting" appAddress={appAddress} badgeOnly />
+        <AppBadge
+          label={presentation ? presentation.humanName : 'Disputable Voting'}
+          appAddress={appAddress}
+          icon={presentation ? presentation.iconSrc : null}
+          badgeOnly
+        />
       </div>
 
       <p
