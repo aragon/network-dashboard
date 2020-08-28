@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Header, Split } from '@aragon/ui'
+import { Box, Button, Header, Split } from '@aragon/ui'
 import Layout from '../Layout'
 import AgreementBindingActions from './AgreementBindingActions'
 import AgreementHeader from './AgreementHeader'
@@ -22,7 +22,10 @@ const Agreement = React.memo(function Agreement() {
 
   return (
     <Layout>
-      <Header primary="Agreement" />
+      <Header
+        primary="Agreement"
+        secondary={<Button mode="strong" label="Sign Agreement" disabled />}
+      />
       <Split
         primary={
           <>

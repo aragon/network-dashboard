@@ -3,10 +3,15 @@ import PropTypes from 'prop-types'
 import { Layout, useViewport } from '@aragon/ui'
 import { breakpoints } from '../style/breakpoints'
 
-function CustomLayout({ children }) {
+function CustomLayout({ children, ...props }) {
   const { width: vw } = useViewport()
   return (
-    <Layout breakpoints={breakpoints} parentWidth={vw} paddingBottom={0}>
+    <Layout
+      breakpoints={breakpoints}
+      parentWidth={vw}
+      paddingBottom={0}
+      {...props}
+    >
       {children}
     </Layout>
   )
