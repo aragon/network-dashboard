@@ -79,7 +79,7 @@ function ProposalCard({ appAddress, vote, onProposalClick }) {
       >
         <AppBadge
           label={presentation ? presentation.humanName : 'Disputable Voting'}
-          appAddress={appAddress}
+          appAddress={vote.target ? vote.target : appAddress}
           icon={presentation ? presentation.iconSrc : null}
           badgeOnly
         />
