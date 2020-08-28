@@ -60,33 +60,6 @@ export function useDisputableVotes() {
   return [extendedVotes, { loading: extendedVotesLoading }]
 }
 
-async function processVote(vote, apps) {
-  const extendedVote = {
-    ...vote,
-    endDate: vote.endDate,
-    formattedNays: vote.formattedNays,
-    formattedNaysPct: vote.formattedNaysPct,
-    formattedTotalPower: vote.formattedTotalPower,
-    formattedYeas: vote.formattedYeas,
-    formattedYeasPct: vote.formattedYeasPct,
-    hasEnded: vote.hasEnded,
-    naysPct: vote.naysPct,
-    yeasPct: vote.yeasPct,
-    status: vote.status,
-  }
-
-  if (vote.script === EMPTY_SCRIPT) {
-    return extendedVote
-  }
-
-  const description = await describeScript(vote.script, apps)
-
-  return {
-    ...extendedVote,
-    metadata: description,
-  }
-}
-
 export function useDisputableVote(proposalId) {
   const { apps, disputableVotingApp } = useOrgApps()
   const [extendedVoteLoading, setExtendedVoteLoading] = useState(true)
@@ -145,4 +118,31 @@ export function useDisputableVote(proposalId) {
   }, [apps, vote, voteLoading])
 
   return [extendedVote, { loading: extendedVoteLoading }]
+}
+
+async function processVote(vote, apps) {
+  const extendedVote = {
+    ...vote,
+    endDate: vote.endDate,
+    formattedNays: vote.formattedNays,
+    formattedNaysPct: vote.formattedNaysPct,
+    formattedTotalPower: vote.formattedTotalPower,
+    formattedYeas: vote.formattedYeas,
+    formattedYeasPct: vote.formattedYeasPct,
+    hasEnded: vote.hasEnded,
+    naysPct: vote.naysPct,
+    yeasPct: vote.yeasPct,
+    status: vote.status,
+  }
+
+  if (vote.script === EMPTY_SCRIPT) {
+    return extendedVote
+  }
+
+  const description = await describeScript(vote.script, apps)
+
+  return {
+    ...extendedVote,
+    metadata: description,
+  }
 }
