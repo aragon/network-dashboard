@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { describeScript } from '@aragon/connect'
 import connectVoting from '@aragon/connect-disputable-voting'
-import { useApps, createAppHook } from '@aragon/connect-react'
+import { createAppHook } from '@aragon/connect-react'
 import { useOrgApps } from '../providers/OrgApps'
 import { networkEnvironment } from '../current-environment'
 
@@ -16,25 +16,22 @@ const connecterConfig = SUBGRAPH_URL && [
 const useDisputableVotingHook = createAppHook(connectVoting, connecterConfig)
 
 export function useDisputableVotes() {
-  const { disputableVotingApp } = useOrgApps()
-  const apps = useApps()
-  const [extendedVotesLoading, setLoading] = useState(true)
-  const [processedVotes, setVotes] = useState(null)
+  const { apps, disputableVotingApp } = useOrgApps()
+  const [extendedVotesLoading, setExtendedVotesLoading] = useState(true)
+  const [extendedVotes, setExtendedVotes] = useState(null)
 
   const [votes, { loading: votesLoading }] = useDisputableVotingHook(
     disputableVotingApp,
     (app) => {
       return app.votes()
-    },
-
-    []
+    }
   )
-  /* eslint-disable react-hooks/exhaustive-deps */
+
   useEffect(() => {
     let cancelled = false
     async function getExtendedVotes() {
       if (!cancelled) {
-        setLoading(true)
+        setExtendedVotesLoading(true)
       }
 
       try {
@@ -43,8 +40,8 @@ export function useDisputableVotes() {
         )
 
         if (!cancelled) {
-          setVotes(processedVotes)
-          setLoading(false)
+          setExtendedVotes(processedVotes)
+          setExtendedVotesLoading(false)
         }
       } catch (error) {
         console.error(error)
@@ -58,14 +55,14 @@ export function useDisputableVotes() {
     return () => {
       cancelled = true
     }
-  }, [votes, votesLoading])
-  /* eslint-disable react-hooks/exhaustive-deps */
+  }, [apps, votes, votesLoading])
 
-  return [processedVotes, { loading: extendedVotesLoading }]
+  return [extendedVotes, { loading: extendedVotesLoading }]
 }
 
 async function processVote(vote, apps) {
   const extendedVote = {
+    ...vote,
     endDate: vote.endDate,
     formattedNays: vote.formattedNays,
     formattedNaysPct: vote.formattedNaysPct,
@@ -79,22 +76,19 @@ async function processVote(vote, apps) {
   }
 
   if (vote.script === EMPTY_SCRIPT) {
-    return {
-      ...vote,
-      ...extendedVote,
-    }
+    return extendedVote
   }
-  const description = await describeScript(vote.script, apps[0])
+
+  const description = await describeScript(vote.script, apps)
+
   return {
-    ...vote,
     ...extendedVote,
     metadata: description,
   }
 }
 
 export function useDisputableVote(proposalId) {
-  const { disputableVotingApp } = useOrgApps()
-  const apps = useApps()
+  const { apps, disputableVotingApp } = useOrgApps()
   const [extendedVoteLoading, setExtendedVoteLoading] = useState(true)
   const [extendedVote, setExtendedVote] = useState(null)
 
@@ -108,7 +102,6 @@ export function useDisputableVote(proposalId) {
     [proposalId]
   )
 
-  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     let cancelled = false
 
@@ -118,7 +111,7 @@ export function useDisputableVote(proposalId) {
       }
 
       try {
-        const [collateral, settings, process] = await Promise.all([
+        const [collateral, settings, processedVote] = await Promise.all([
           vote.collateralRequirement(),
           vote.setting(),
           processVote(vote, apps),
@@ -127,11 +120,12 @@ export function useDisputableVote(proposalId) {
         const token = await collateral.token()
 
         const extendedVote = {
-          ...process,
+          ...processedVote,
           settings: settings,
           collateral: collateral,
           token: token,
         }
+
         if (!cancelled) {
           setExtendedVote(extendedVote)
           setExtendedVoteLoading(false)
@@ -148,8 +142,7 @@ export function useDisputableVote(proposalId) {
     return () => {
       cancelled = true
     }
-  }, [vote, voteLoading])
-  /* eslint-disable react-hooks/exhaustive-deps */
+  }, [apps, vote, voteLoading])
 
   return [extendedVote, { loading: extendedVoteLoading }]
 }
