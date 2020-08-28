@@ -49,7 +49,7 @@ function DisputableActions({ status, submitter }) {
           wide
           label="Challenge proposal"
           css={`
-            margin-bottom: ${2 * GU}px;
+            margin-bottom: ${1 * GU}px;
           `}
         />
         <Button mode="strong" disabled wide label="Review details" />

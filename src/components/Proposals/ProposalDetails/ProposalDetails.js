@@ -14,6 +14,7 @@ import {
   useTheme,
 } from '@aragon/ui'
 import DisputableActionStatus from './DisputableActionStatus'
+import DisputableStatusLabel from '../DisputableStatusLabel'
 import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_CANCELLED,
@@ -27,6 +28,7 @@ import SummaryBar from './SummaryBar'
 import SummaryRow from './SummaryRow'
 import StatusInfo from './StatusInfo'
 import FeedbackModule from './FeedbackModule'
+import Description from '../Description'
 import { addressesEqual } from '../../../lib/web3-utils'
 
 function getAttributes(status, theme) {
@@ -60,33 +62,13 @@ function getAttributes(status, theme) {
 function ProposalDetail({ vote }) {
   const theme = useTheme()
 
-  const { layoutName } = useLayout()
-
-  // TODO: replace tokenAddress for tokenId
-  const tokenAddress = '0x6B175474E89094C44Da98b954EedeAC495271d0F'
-
-  const { voteId, context, creator, yeas, nays, collateral, token } = vote
-  const totalVotes = parseFloat(yeas) + parseFloat(nays)
-  const yeasPct = safeDiv(parseFloat(yeas), totalVotes)
-  const naysPct = safeDiv(parseFloat(nays), totalVotes)
-
+  const { voteId } = vote
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const { backgroundColor, borderColor, disabledProgressBars } = getAttributes(
     disputableStatus,
     theme
   )
 
-  // TODO: get real connected account
-  const connectedAccount = ''
-  let mode = null
-
-  if (vote.challenger && addressesEqual(vote.challenger, connectedAccount)) {
-    mode = 'challenger'
-  }
-
-  if (addressesEqual(vote.creator, connectedAccount)) {
-    mode = 'submitter'
-  }
   // TODO: get youVoted flag from connector
   const youVoted = false
 
@@ -100,11 +82,12 @@ function ProposalDetail({ vote }) {
               border: solid 1px ${borderColor};
             `}
           >
-            <section
+            <div
               css={`
                 display: grid;
-                grid-template-columns: auto;
-                grid-gap: ${2.5 * GU}px;
+                grid-auto-flow: row;
+
+                grid-gap: ${4 * GU}px;
               `}
             >
               {youVoted && (
@@ -124,135 +107,12 @@ function ProposalDetail({ vote }) {
               >
                 Vote #{voteId}
               </h1>
-              <div
-                css={`
-                  display: grid;
-                  grid-template-columns: ${layoutName === 'large'
-                    ? '1fr minmax(300px, auto)'
-                    : 'auto'};
-                  grid-gap: ${layoutName === 'large' ? 5 * GU : 2.5 * GU}px;
-                `}
-              >
-                <InfoField label="Description">
-                  <div
-                    css={`
-                      hyphens: auto;
-                      overflow-wrap: anywhere;
-                      word-break: break-word;
-                    `}
-                  >
-                    {context ||
-                      'No additional description has been provided for this proposal.'}
-                  </div>
-                </InfoField>
-                <div
-                  css={`
-                    display: flex;
-                    justify-content: space-between;
-                  `}
-                >
-                  <InfoField label="Action collateral">
-                    <div
-                      css={`
-                        display: flex;
-                        align-items: center;
-                      `}
-                    >
-                      <TokenAmount
-                        address={tokenAddress}
-                        amount={collateral.actionAmount}
-                        decimals={token.decimals}
-                        symbol={token.symbol}
-                      />
-
-                      <span
-                        css={`
-                          display: inline-flex;
-                          padding-left: ${1 * GU}px;
-                        `}
-                      >
-                        <IconLock size="small" />
-                      </span>
-                    </div>
-                  </InfoField>
-                  <InfoField
-                    label="Submitted By"
-                    css={`
-                      margin-right: ${12 * GU}px;
-                    `}
-                  >
-                    <div
-                      css={`
-                        display: flex;
-                        align-items: flex-start;
-                      `}
-                    >
-                      <IdentityBadge entity={creator} />
-                    </div>
-                  </InfoField>
-                </div>
-              </div>
-              <div>
-                <InfoField label="Votes">
-                  <SummaryBar
-                    disabledProgressBars={disabledProgressBars}
-                    positiveSize={yeasPct}
-                    negativeSize={naysPct}
-                    requiredSize={
-                      parseFloat(
-                        vote.settings.formattedMinimumAcceptanceQuorumPct
-                      ) / 100
-                    }
-                    css={`
-                      margin-bottom: ${2 * GU}px;
-                    `}
-                  />
-                  <div
-                    css={`
-                      display: inline-block;
-                    `}
-                  >
-                    <SummaryRow
-                      color={
-                        disabledProgressBars
-                          ? theme.surfaceOpened
-                          : theme.positive
-                      }
-                      label="Yes"
-                      pct={yeasPct * 100}
-                      token={{
-                        amount: yeas,
-                        symbol: 'ANT',
-                        decimals: 18,
-                      }}
-                    />
-                    <SummaryRow
-                      color={
-                        disabledProgressBars
-                          ? theme.controlUnder
-                          : theme.negative
-                      }
-                      label="No"
-                      pct={naysPct * 100}
-                      token={{
-                        amount: nays,
-                        symbol: 'ANT',
-                        decimals: 18,
-                      }}
-                    />
-                  </div>
-                </InfoField>
-
-                {mode && (
-                  <FeedbackModule
-                    vote={vote}
-                    connectedAccount={connectedAccount}
-                    mode={mode}
-                  />
-                )}
-                <StatusInfo vote={vote} />
-              </div>
-            </section>
+              <Details vote={vote} status={disputableStatus} />
+              <SummaryInfo
+                vote={vote}
+                disabledProgressBars={disabledProgressBars}
+              />
+            </div>
           </Box>
         </>
       }
@@ -265,6 +125,160 @@ function ProposalDetail({ vote }) {
     />
   )
 }
+
+/* eslint-disable react/prop-types */
+function Details({ vote, status }) {
+  const { context, creator, collateral, token, description } = vote
+  const { layoutName } = useLayout()
+
+  const compactMode = layoutName === 'small'
+
+  // TODO: Replace tokenAddress for tokenId
+  const tokenAddress = '0x6B175474E89094C44Da98b954EedeAC495271d0F'
+
+  return (
+    <div
+      css={`
+        display: grid;
+
+        grid-template-columns: ${compactMode ? '1fr' : `1fr ${30 * GU}px`};
+        grid-gap: ${3 * GU}px;
+      `}
+    >
+      {Array.isArray(description) ? (
+        <div>
+          <InfoField label="Description">
+            <Description path={description} />
+          </InfoField>
+          <InfoField
+            label="Justification"
+            css={`
+              margin-top: ${3 * GU}px;
+            `}
+          >
+            {context}
+          </InfoField>
+        </div>
+      ) : (
+        <InfoField label="Description">{context}</InfoField>
+      )}
+      <InfoField label="Status">
+        <DisputableStatusLabel status={status} />
+      </InfoField>
+
+      <InfoField label="Action collateral">
+        <div
+          css={`
+            display: flex;
+            align-items: center;
+          `}
+        >
+          <TokenAmount
+            address={tokenAddress}
+            amount={collateral.actionAmount}
+            decimals={token.decimals}
+            symbol={token.symbol}
+          />
+
+          <span
+            css={`
+              display: inline-flex;
+              padding-left: ${1 * GU}px;
+            `}
+          >
+            <IconLock size="small" />
+          </span>
+        </div>
+      </InfoField>
+      <InfoField label="Submitted By">
+        <div
+          css={`
+            display: flex;
+            align-items: flex-start;
+          `}
+        >
+          <IdentityBadge entity={creator} />
+        </div>
+      </InfoField>
+    </div>
+  )
+}
+
+function SummaryInfo({ vote, disabledProgressBars }) {
+  const theme = useTheme()
+
+  const { yeas, nays } = vote
+  const totalVotes = parseFloat(yeas) + parseFloat(nays)
+  const yeasPct = safeDiv(parseFloat(yeas), totalVotes)
+  const naysPct = safeDiv(parseFloat(nays), totalVotes)
+
+  // TODO: get real connected account
+  const connectedAccount = ''
+
+  let mode = null
+
+  if (vote.challenger && addressesEqual(vote.challenger, connectedAccount)) {
+    mode = 'challenger'
+  }
+
+  if (addressesEqual(vote.creator, connectedAccount)) {
+    mode = 'submitter'
+  }
+
+  return (
+    <div>
+      <InfoField label="Votes">
+        <SummaryBar
+          disabledProgressBars={disabledProgressBars}
+          positiveSize={yeasPct}
+          negativeSize={naysPct}
+          requiredSize={
+            parseFloat(vote.settings.formattedMinimumAcceptanceQuorumPct) / 100
+          }
+          css={`
+            margin-bottom: ${2 * GU}px;
+          `}
+        />
+        <div
+          css={`
+            display: inline-block;
+          `}
+        >
+          <SummaryRow
+            color={disabledProgressBars ? theme.surfaceOpened : theme.positive}
+            label="Yes"
+            pct={yeasPct * 100}
+            token={{
+              amount: yeas,
+              symbol: 'ANT',
+              decimals: 18,
+            }}
+          />
+          <SummaryRow
+            color={disabledProgressBars ? theme.controlUnder : theme.negative}
+            label="No"
+            pct={naysPct * 100}
+            token={{
+              amount: nays,
+              symbol: 'ANT',
+              decimals: 18,
+            }}
+          />
+        </div>
+      </InfoField>
+
+      {mode && (
+        <FeedbackModule
+          vote={vote}
+          connectedAccount={connectedAccount}
+          mode={mode}
+        />
+      )}
+      <StatusInfo vote={vote} />
+    </div>
+  )
+}
+/* eslint-disable react/prop-types */
 
 ProposalDetail.propTypes = {
   vote: PropTypes.object.isRequired,
