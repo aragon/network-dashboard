@@ -41,7 +41,7 @@ function getAttributes(status, theme) {
 
 function ProposalCard({ appAddress, vote, onProposalClick }) {
   const theme = useTheme()
-  const { context, voteId, metadata: description } = vote
+  const { context, voteId, description } = vote
 
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const { backgroundColor, borderColor, disabledProgressBars } = getAttributes(

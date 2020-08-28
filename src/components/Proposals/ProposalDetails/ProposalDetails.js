@@ -28,6 +28,7 @@ import SummaryBar from './SummaryBar'
 import SummaryRow from './SummaryRow'
 import StatusInfo from './StatusInfo'
 import FeedbackModule from './FeedbackModule'
+import Description from '../Description'
 import { addressesEqual } from '../../../lib/web3-utils'
 
 function getAttributes(status, theme) {
@@ -127,7 +128,7 @@ function ProposalDetail({ vote }) {
 
 /* eslint-disable react/prop-types */
 function Details({ vote, status }) {
-  const { context, creator, collateral, token } = vote
+  const { context, creator, collateral, token, description } = vote
   const { layoutName } = useLayout()
 
   const compactMode = layoutName === 'small'
@@ -144,18 +145,23 @@ function Details({ vote, status }) {
         grid-gap: ${3 * GU}px;
       `}
     >
-      <InfoField label="Description">
-        <div
-          css={`
-            hyphens: auto;
-            overflow-wrap: anywhere;
-            word-break: break-word;
-          `}
-        >
-          {context ||
-            'No additional description has been provided for this proposal.'}
+      {Array.isArray(description) ? (
+        <div>
+          <InfoField label="Description">
+            <Description path={description} />
+          </InfoField>
+          <InfoField
+            label="Justification"
+            css={`
+              margin-top: ${3 * GU}px;
+            `}
+          >
+            {context}
+          </InfoField>
         </div>
-      </InfoField>
+      ) : (
+        <InfoField label="Description">{context}</InfoField>
+      )}
       <InfoField label="Status">
         <DisputableStatusLabel status={status} />
       </InfoField>
