@@ -42,7 +42,7 @@ function getAttributes(status, theme) {
       color: theme.disabledContent,
     },
     [VOTE_STATUS_DISPUTED]: {
-      background: '#FCC2AA',
+      background: '#fde6da',
       label: 'Disputed',
       Icon: IconWarning,
       color: '#D26C41',
