@@ -22,6 +22,7 @@ import {
 } from '../disputable-vote-statuses'
 import InfoField from '../../InfoField'
 import DisputableActionStatus from './DisputableActionStatus'
+import DisputableStatusLabel from '../DisputableStatusLabel'
 import InfoBoxes from './InfoBoxes'
 import SummaryBar from './SummaryBar'
 import SummaryRow from './SummaryRow'
@@ -105,7 +106,7 @@ function ProposalDetail({ vote }) {
               >
                 Vote #{voteId}
               </h1>
-              <Details vote={vote} />
+              <Details vote={vote} status={disputableStatus} />
               <SummaryInfo
                 vote={vote}
                 disabledProgressBars={disabledProgressBars}
@@ -125,7 +126,7 @@ function ProposalDetail({ vote }) {
 }
 
 /* eslint-disable react/prop-types */
-function Details({ vote }) {
+function Details({ vote, status }) {
   const { context, creator, collateral, token } = vote
   const { layoutName } = useLayout()
 
@@ -155,7 +156,9 @@ function Details({ vote }) {
             'No additional description has been provided for this proposal.'}
         </div>
       </InfoField>
-      <InfoField label="Status">Status label</InfoField>
+      <InfoField label="Status">
+        <DisputableStatusLabel status={status} />
+      </InfoField>
 
       <InfoField label="Action collateral">
         <div

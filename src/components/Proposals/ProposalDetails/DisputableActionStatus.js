@@ -9,7 +9,6 @@ import {
 import { toMs } from '../../../lib/date-utils'
 import DisputableActions from './DisputableActions'
 import DisputablePeriod from './DisputablePeriod'
-import DisputableStatusLabel from '../DisputableStatusLabel'
 
 function DisputableActionStatus({ vote }) {
   // TODO: get different court links for the different enviroments
@@ -20,9 +19,6 @@ function DisputableActionStatus({ vote }) {
   return (
     <Box heading="Disputable Action Status">
       <ul>
-        <Item heading="Status">
-          <DisputableStatusLabel status={disputableStatus} />
-        </Item>
         <Item heading={challenged ? 'Settlement period' : 'Challenge period'}>
           <DisputablePeriod
             endDate={challenged ? toMs(vote.pausedAt) : toMs(vote.endDate)}
