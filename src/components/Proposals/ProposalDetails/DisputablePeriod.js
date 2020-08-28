@@ -15,7 +15,7 @@ function DisputablePeriod({ endDate, paused, label }) {
     >
       {paused ? (
         <p>
-          {label ? `${label} ` : ''}
+          {label && `${label} `}
           <span
             css={`
               color: ${theme.surfaceContentSecondary};
