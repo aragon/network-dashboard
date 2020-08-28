@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useTransition, animated } from 'react-spring'
-import { ScrollView } from '@aragon/ui'
+import { ScrollView, GU } from '@aragon/ui'
 import AppLoader from '../components/AppLoader/AppLoader'
 import Header from './Header/Header'
 import { useAppData } from '../providers/AppData'
@@ -62,6 +62,7 @@ const MainView = React.memo(function MainView({ children }) {
             <main
               css={`
                 flex: 1;
+                padding-bottom: ${12 * GU}px;
               `}
             >
               {children}
