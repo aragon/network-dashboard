@@ -143,6 +143,6 @@ async function processVote(vote, apps) {
 
   return {
     ...extendedVote,
-    description: description,
+    description,
   }
 }
