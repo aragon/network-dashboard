@@ -59,6 +59,7 @@ function DecorativeIcon() {
         position: relative;
         overflow: hidden;
         border-radius: 100%;
+        background-color: #5f64ff;
         flex-shrink: 0;
         margin-right: ${2 * GU}px;
       `}
