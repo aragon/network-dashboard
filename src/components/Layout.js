@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Layout, useViewport } from '@aragon/ui'
-import { BREAKPOINTS } from '../breakpoints'
+import { breakpoints } from '../style/breakpoints'
 
 function CustomLayout({ children }) {
   const { width: vw } = useViewport()
   return (
-    <Layout breakpoints={BREAKPOINTS} parentWidth={vw} paddingBottom={0}>
+    <Layout breakpoints={breakpoints} parentWidth={vw} paddingBottom={0}>
       {children}
     </Layout>
   )

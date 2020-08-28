@@ -13,7 +13,8 @@ import {
   useLayout,
   useTheme,
 } from '@aragon/ui'
-import { safeDiv } from '../../../lib/math-utils'
+import DisputableActionStatus from './DisputableActionStatus'
+import DisputableStatusLabel from '../DisputableStatusLabel'
 import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_CANCELLED,
@@ -21,9 +22,8 @@ import {
   VOTE_STATUS_PAUSED,
 } from '../disputable-vote-statuses'
 import InfoField from '../../InfoField'
-import DisputableActionStatus from './DisputableActionStatus'
-import DisputableStatusLabel from '../DisputableStatusLabel'
 import InfoBoxes from './InfoBoxes'
+import { safeDiv } from '../../../lib/math-utils'
 import SummaryBar from './SummaryBar'
 import SummaryRow from './SummaryRow'
 import StatusInfo from './StatusInfo'
@@ -35,16 +35,16 @@ function getAttributes(status, theme) {
   const attributes = {
     [VOTE_STATUS_CANCELLED]: {
       backgroundColor: theme.surfacePressed,
-      borderColor: theme.controlUnder,
+      borderColor: theme.border,
       disabledProgressBars: true,
     },
     [VOTE_STATUS_PAUSED]: {
-      backgroundColor: '#fffdfa',
+      backgroundColor: '#fefdfb',
       borderColor: theme.warning,
       disabledProgressBars: true,
     },
     [VOTE_STATUS_DISPUTED]: {
-      backgroundColor: '#FFF7F2',
+      backgroundColor: '#fffbf9',
       borderColor: '#D26C41',
       disabledProgressBars: true,
     },

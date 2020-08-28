@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { Main } from '@aragon/ui'
 import App from './App'
 import initializeSentry from './sentry'
-import theme from './theme'
+import { theme } from './style/theme'
 
 initializeSentry()
 
