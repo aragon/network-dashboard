@@ -9,6 +9,7 @@ import {
 } from './disputable-vote-statuses'
 import ProposalOption from './ProposalOption'
 import DisputableStatusLabel from './DisputableStatusLabel'
+import Description from './Description'
 
 function getAttributes(status, theme) {
   const attributes = {
@@ -40,7 +41,7 @@ function getAttributes(status, theme) {
 
 function ProposalCard({ appAddress, vote, onProposalClick }) {
   const theme = useTheme()
-  const { context, voteId } = vote
+  const { context, voteId, metadata: description } = vote
 
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const { backgroundColor, borderColor, disabledProgressBars } = getAttributes(
@@ -88,7 +89,11 @@ function ProposalCard({ appAddress, vote, onProposalClick }) {
         `}
       >
         <strong css="font-weight: bold">#{voteId}: </strong>
-        {context || 'No description provided'}
+        {Array.isArray(description) ? (
+          <Description path={description} />
+        ) : (
+          context || 'No description provided'
+        )}
       </p>
 
       <ProposalOption
