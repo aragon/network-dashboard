@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Header } from '@aragon/ui'
+import { Header, GU } from '@aragon/ui'
 import Layout from '../Layout'
 import ProposalBanner from './ProposalBanner'
 import ProposalCardGroup from './ProposalCardGroup'
@@ -33,8 +33,22 @@ const Proposals = React.memo(function Proposals() {
 
   return (
     <section>
-      {!bannerClosed && <ProposalBanner onCloseBanner={handleCloseBanner} />}
-      <Layout>
+      {!bannerClosed && (
+        <ProposalBanner
+          onCloseBanner={handleCloseBanner}
+          css={`
+            position: relative;
+            z-index: 1;
+          `}
+        />
+      )}
+      <Layout
+        css={`
+          position: relative;
+          z-index: 2;
+          ${!bannerClosed ? `margin-top: -${3 * GU}px;` : ''}
+        `}
+      >
         <Header primary="Proposals" />
         {voteGroups.map(([groupName, votes]) =>
           votes.length ? (

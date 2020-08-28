@@ -10,7 +10,7 @@ import {
 } from '@aragon/ui'
 import background from '../../assets/banner.svg'
 
-function ProposalBanner({ onCloseBanner }) {
+function ProposalBanner({ onCloseBanner, ...props }) {
   // TODO: Integrate it with the layout once is merged & Make it responsive
   const theme = useTheme()
 
@@ -23,8 +23,8 @@ function ProposalBanner({ onCloseBanner }) {
         background-size: cover;
         text-align: center;
         padding: ${13 * GU}px 0 ${15 * GU}px 0;
-        position: relative;
       `}
+      {...props}
     >
       <ButtonIcon
         label=""
