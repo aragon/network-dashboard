@@ -1,28 +1,36 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Timer } from '@aragon/ui'
+import { Timer, useTheme } from '@aragon/ui'
 import { dateFormat } from '../../../lib/date-utils'
-import { useNow } from '../../../hooks/useNow'
 
-function DisputablePeriod({ endDate }) {
-  const now = useNow()
+/* eslint-disable react/prop-types */
+function DisputablePeriod({ endDate, paused, label }) {
+  const theme = useTheme()
 
   return (
-    <>
-      {now > endDate ? (
-        dateFormat(endDate, 'standard')
+    <div
+      css={`
+        display: inline-flex;
+      `}
+    >
+      {paused ? (
+        <p>
+          {label ? `(${label}) ` : ''}
+          <span
+            css={`
+              color: ${theme.surfaceContentSecondary};
+            `}
+          >
+            {dateFormat(paused, 'standard')}
+          </span>
+        </p>
       ) : (
-        <div
-          css={`
-            display: inline-flex;
-          `}
-        >
-          <Timer end={new Date(endDate)} />{' '}
-        </div>
+        <Timer end={new Date(endDate)} />
       )}
-    </>
+    </div>
   )
 }
+/* eslint-disable react/prop-types */
 
 DisputablePeriod.propTypes = {
   endDate: PropTypes.number,

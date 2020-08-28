@@ -19,11 +19,26 @@ function DisputableActionStatus({ vote }) {
   return (
     <Box heading="Disputable Action Status">
       <ul>
-        <Item heading={challenged ? 'Settlement period' : 'Challenge period'}>
+        <Item heading="Challenge period">
           <DisputablePeriod
-            endDate={challenged ? toMs(vote.pausedAt) : toMs(vote.endDate)}
+            endDate={toMs(vote.endDate)}
+            paused={
+              toMs(parseInt(vote.pausedAt, 10)) !== 0 &&
+              toMs(parseInt(vote.pausedAt, 10))
+            }
+            label={parseInt(vote.pausedAt, 10) !== 0 && 'Paused'}
           />
         </Item>
+        {parseInt(vote.challengeEndDate, 10) !== 0 && (
+          <Item heading="Settlement period">
+            <DisputablePeriod
+              endDate={toMs(parseInt(vote.challengeEndDate, 10))}
+              paused={!challenged && toMs(parseInt(vote.challengeEndDate, 10))}
+              label={!challenged && 'Ended'}
+            />
+          </Item>
+        )}
+
         {vote.disputeId && (
           <Item heading="Dispute">
             <Link
