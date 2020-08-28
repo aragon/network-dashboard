@@ -15,25 +15,25 @@ function DisputableActionStatus({ vote }) {
 
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const challenged = disputableStatus === VOTE_STATUS_PAUSED
+  const challengeEndDate = toMs(vote.challengeEndDate)
+  const pausedAt = toMs(vote.pausedAt)
+  const voteEndDate = toMs(vote.endDate)
 
   return (
     <Box heading="Disputable Action Status">
       <ul>
         <Item heading="Challenge period">
           <DisputablePeriod
-            endDate={toMs(vote.endDate)}
-            paused={
-              toMs(parseInt(vote.pausedAt, 10)) !== 0 &&
-              toMs(parseInt(vote.pausedAt, 10))
-            }
-            label={parseInt(vote.pausedAt, 10) !== 0 && 'Paused'}
+            endDate={voteEndDate}
+            paused={pausedAt !== 0 && pausedAt}
+            label={pausedAt !== 0 && 'Paused'}
           />
         </Item>
-        {parseInt(vote.challengeEndDate, 10) !== 0 && (
+        {challengeEndDate !== 0 && (
           <Item heading="Settlement period">
             <DisputablePeriod
-              endDate={toMs(parseInt(vote.challengeEndDate, 10))}
-              paused={!challenged && toMs(parseInt(vote.challengeEndDate, 10))}
+              endDate={challengeEndDate}
+              paused={!challenged && challengeEndDate}
               label={!challenged && 'Ended'}
             />
           </Item>
