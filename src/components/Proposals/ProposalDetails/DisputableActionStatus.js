@@ -64,7 +64,7 @@ function Item({ heading, children }) {
       css={`
         list-style: none;
         & + li {
-          margin-top: ${3 * GU}px;
+          margin-top: ${2 * GU}px;
         }
       `}
     >

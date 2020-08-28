@@ -91,7 +91,7 @@ function SummaryWithPercentages({ disabledProgressBars, size, requiredSize }) {
         positiveSize={size}
         requiredSize={requiredSize / 100}
         css={`
-          margin-top: ${2 * GU}px;
+          margin-top: ${1 * GU}px;
         `}
       />
     </>
