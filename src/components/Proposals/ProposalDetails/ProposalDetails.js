@@ -130,7 +130,6 @@ function ProposalDetail({ vote }) {
 function Details({ vote, status }) {
   const { context, creator, collateral, token, description } = vote
   const { layoutName } = useLayout()
-
   const compactMode = layoutName === 'small'
 
   // TODO: Replace tokenAddress for tokenId

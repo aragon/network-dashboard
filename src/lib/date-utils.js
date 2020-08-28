@@ -8,8 +8,8 @@ import utc from 'dayjs/plugin/utc'
 export const toMs = (seconds) => seconds * 1000
 
 const KNOWN_FORMATS = {
-  onlyDate: 'YYYY-MM-DD',
-  standard: 'YYYY-MM-DD h:mm A',
+  onlyDate: 'YYYY/MM/DD',
+  standard: 'YYYY/MM/DD HH:mm',
 }
 
 // dayjs plugins
