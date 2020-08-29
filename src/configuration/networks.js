@@ -20,7 +20,7 @@ export default new Map([
       endpoints: {
         ethereum: 'https://rinkeby.eth.aragon.network/',
       },
-      orgLocation: 'ancashdao.aragonid.eth',
+      orgLocation: 'ancashdaostaging2.aragonid.eth',
       ipfsGateway: 'https://ipfs.eth.aragon.network/ipfs',
       subgraphs: {},
     },
@@ -33,13 +33,13 @@ export default new Map([
       endpoints: {
         ethereum: 'https://rinkeby.eth.aragon.network/',
       },
-      orgLocation: 'ancashdao.aragonid.eth',
+      orgLocation: 'ancashdaostaging2.aragonid.eth',
       ipfsGateway: 'https://ipfs.eth.aragon.network/ipfs',
       subgraphs: {
         disputableVoting:
-          'https://api.thegraph.com/subgraphs/name/aragon/aragon-dvoting-rinkeby-staging',
+          'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-dvoting-rinkeby-staging',
         agreement:
-          'https://api.thegraph.com/subgraphs/name/aragon/aragon-agreement-rinkeby-staging',
+          'https://api.thegraph.com/subgraphs/name/facuspagnuolo/aragon-agreement-rinkeby-staging',
       },
     },
   ],
