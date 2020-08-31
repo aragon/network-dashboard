@@ -25,9 +25,11 @@ export function getAppPresentation(apps, appAddress) {
   const { contentUri, manifest } = apps.find(
     ({ address }) => address === appAddress
   )
-
-  const iconPath = manifest.icons[0].src
-  const iconSrc = getIpfsUrlFromUri(contentUri) + iconPath
+  let iconSrc = ''
+  if (manifest.icons && manifest.icons[0]) {
+    const iconPath = manifest.icons[0].src
+    iconSrc = getIpfsUrlFromUri(contentUri) + iconPath
+  }
   const humanName = manifest.name
 
   return { humanName, iconSrc }
