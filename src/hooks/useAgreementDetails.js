@@ -82,7 +82,7 @@ export function useAgreementDetails() {
   return [agreementDetails, { loading: agreementDetailsLoading }]
 }
 
-function getAppPresentation(apps, appAddress) {
+export function getAppPresentation(apps, appAddress) {
   const { contentUri, manifest } = apps.find(
     ({ address }) => address === appAddress
   )
