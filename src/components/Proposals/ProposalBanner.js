@@ -5,6 +5,7 @@ import {
   ButtonIcon,
   GU,
   IconCross,
+  Link,
   textStyle,
   useTheme,
 } from '@aragon/ui'
@@ -63,7 +64,7 @@ function ProposalBanner({ onCloseBanner, ...props }) {
         >
           Fight For Freedom
         </h1>
-        <p
+        <div
           css={`
             ${textStyle('body1')};
             max-width: ${95 * GU}px;
@@ -74,8 +75,9 @@ function ProposalBanner({ onCloseBanner, ...props }) {
         >
           This is a test <br /> Aragon Network Cash is a test organization set
           up as part of a new round of precedence campaign disputes. Learn more
-          on the Aragon project blog
-        </p>
+          on the <Link href="https://aragon.org/blog">Aragon project blog</Link>
+          .
+        </div>
         <div
           css={`
             display: flex;
@@ -86,7 +88,7 @@ function ProposalBanner({ onCloseBanner, ...props }) {
         >
           <Button
             label="Learn more"
-            mode="normal"
+            mode="strong"
             href="https://aragon.org/blog"
             css={`
               padding: ${2.75 * GU}px ${3.5 * GU}px;
@@ -97,12 +99,12 @@ function ProposalBanner({ onCloseBanner, ...props }) {
           />
           <Button
             label="Read Aragon Manifesto"
-            mode="strong"
+            mode="normal"
             href="https://aragon.org/manifesto"
             css={`
               padding: ${2.75 * GU}px ${3.5 * GU}px;
               font-weight: 600;
-              margin: ${3 * GU}px ${2 * GU}px 0;
+              margin: ${3 * GU}px ${1 * GU}px 0;
             `}
           />
         </div>
