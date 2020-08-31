@@ -46,7 +46,7 @@ const ProposalCardGroup = ({ title, count, children }) => {
           <Tag limitDigits={4} label={count} size="small" />
         </span>
       </h2>
-      <CardLayout columnWidthMin={30 * GU} rowHeight={rowHeight}>
+      <CardLayout columnWidthMin={32 * GU} rowHeight={rowHeight}>
         {children}
       </CardLayout>
     </section>

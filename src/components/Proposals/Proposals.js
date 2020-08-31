@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Header, GU } from '@aragon/ui'
-import Layout from '../Layout'
+import LayoutGutter from '../Layout/LayoutGutter'
+import LayoutLimiter from '../Layout/LayoutLimiter'
 import ProposalBanner from './ProposalBanner'
 import ProposalCardGroup from './ProposalCardGroup'
 import ProposalCard from './ProposalCard'
@@ -42,33 +43,35 @@ const Proposals = React.memo(function Proposals() {
           `}
         />
       )}
-      <Layout
+      <LayoutGutter
         css={`
           position: relative;
           z-index: 2;
           ${!bannerClosed ? `margin-top: -${3 * GU}px;` : ''}
         `}
       >
-        <Header primary="Proposals" />
-        {voteGroups.map(([groupName, votes]) =>
-          votes.length ? (
-            <ProposalCardGroup
-              title={groupName}
-              count={votes.length}
-              key={groupName}
-            >
-              {votes.map((vote) => (
-                <ProposalCard
-                  key={vote.voteId}
-                  vote={vote}
-                  appAddress={disputableVotingApp.address}
-                  onProposalClick={handleProposalClick}
-                />
-              ))}
-            </ProposalCardGroup>
-          ) : null
-        )}
-      </Layout>
+        <LayoutLimiter>
+          <Header primary="Proposals" />
+          {voteGroups.map(([groupName, votes]) =>
+            votes.length ? (
+              <ProposalCardGroup
+                title={groupName}
+                count={votes.length}
+                key={groupName}
+              >
+                {votes.map((vote) => (
+                  <ProposalCard
+                    key={vote.voteId}
+                    vote={vote}
+                    appAddress={disputableVotingApp.address}
+                    onProposalClick={handleProposalClick}
+                  />
+                ))}
+              </ProposalCardGroup>
+            ) : null
+          )}
+        </LayoutLimiter>
+      </LayoutGutter>
     </section>
   )
 })

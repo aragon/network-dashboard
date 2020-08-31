@@ -4,7 +4,8 @@ import { useTransition, animated } from 'react-spring'
 import styled from 'styled-components'
 import { useHistory } from 'react-router-dom'
 import { BackButton, Bar, Header, GU } from '@aragon/ui'
-import Layout from '../Layout'
+import LayoutGutter from '../Layout/LayoutGutter'
+import LayoutLimiter from '../Layout/LayoutLimiter'
 import ProposalDetails from './ProposalDetails/ProposalDetails'
 import ProposalLoading from './ProposalLoading'
 import { useDisputableVote } from '../../hooks/useDisputableVotes'
@@ -36,8 +37,8 @@ function ProposalSingle({ match }) {
   })
 
   return (
-    <>
-      <Layout>
+    <LayoutGutter>
+      <LayoutLimiter>
         <Header primary="Proposals" />
         <Bar>
           <BackButton onClick={handleBack} />
@@ -59,8 +60,8 @@ function ProposalSingle({ match }) {
             )
           )}
         </div>
-      </Layout>
-    </>
+      </LayoutLimiter>
+    </LayoutGutter>
   )
 }
 

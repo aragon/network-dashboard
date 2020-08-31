@@ -1,6 +1,7 @@
 import React from 'react'
 import { Box, Button, Header, Split } from '@aragon/ui'
-import Layout from '../Layout'
+import LayoutGutter from '../Layout/LayoutGutter'
+import LayoutLimiter from '../Layout/LayoutLimiter'
 import AgreementBindingActions from './AgreementBindingActions'
 import AgreementHeader from './AgreementHeader'
 import AgreementDetails from './AgreementDetails'
@@ -21,29 +22,33 @@ const Agreement = React.memo(function Agreement() {
   } = agreementDetails
 
   return (
-    <Layout>
-      <Header
-        primary="Agreement"
-        secondary={<Button mode="strong" label="Sign Agreement" disabled />}
-      />
-      <Split
-        primary={
-          <>
-            <Box>
-              <AgreementHeader title={title} />
-              <AgreementDetails
-                contractAddress={contractAddress}
-                creationDate={effectiveFrom}
-                ipfsUri={contentIpfsUri}
-                stakingAddress={stakingAddress}
-              />
-            </Box>
-            <AgreementDocument content={content} />
-          </>
-        }
-        secondary={<AgreementBindingActions disputableApps={disputableApps} />}
-      />
-    </Layout>
+    <LayoutGutter>
+      <LayoutLimiter>
+        <Header
+          primary="Agreement"
+          secondary={<Button mode="strong" label="Sign Agreement" disabled />}
+        />
+        <Split
+          primary={
+            <>
+              <Box>
+                <AgreementHeader title={title} />
+                <AgreementDetails
+                  contractAddress={contractAddress}
+                  creationDate={effectiveFrom}
+                  ipfsUri={contentIpfsUri}
+                  stakingAddress={stakingAddress}
+                />
+              </Box>
+              <AgreementDocument content={content} />
+            </>
+          }
+          secondary={
+            <AgreementBindingActions disputableApps={disputableApps} />
+          }
+        />
+      </LayoutLimiter>
+    </LayoutGutter>
   )
 })
 

@@ -9,6 +9,7 @@ import {
   useTheme,
 } from '@aragon/ui'
 import background from '../../assets/banner.svg'
+import LayoutGutter from '../Layout/LayoutGutter'
 
 function ProposalBanner({ onCloseBanner, ...props }) {
   const theme = useTheme()
@@ -21,31 +22,28 @@ function ProposalBanner({ onCloseBanner, ...props }) {
         width: 100%;
         background-size: cover;
         text-align: center;
-        padding: ${13 * GU}px 0 ${15 * GU}px 0;
+        padding-top: ${13 * GU}px;
+        padding-bottom: ${15 * GU}px;
       `}
       {...props}
     >
-      <ButtonIcon
-        label=""
-        css={`
-          position: absolute;
-          top: ${4 * GU}px;
-          right: ${4 * GU}px;
-        `}
-        onClick={onCloseBanner}
-      >
-        <IconCross
+      <LayoutGutter collapseWhenSmall={false}>
+        <ButtonIcon
+          label=""
           css={`
-            color: ${theme.surfaceOpened};
+            position: absolute;
+            top: ${4 * GU}px;
+            right: ${4 * GU}px;
           `}
-        />
-      </ButtonIcon>
-      <div
-        css={`
-          max-width: 90vw;
-          margin: auto;
-        `}
-      >
+          onClick={onCloseBanner}
+        >
+          <IconCross
+            css={`
+              color: ${theme.surfaceOpened};
+            `}
+          />
+        </ButtonIcon>
+
         <h1
           css={`
             background: linear-gradient(to bottom, ${theme.accentStart} -50%,${
@@ -79,7 +77,7 @@ function ProposalBanner({ onCloseBanner, ...props }) {
           </Link>
           .
         </div>
-      </div>
+      </LayoutGutter>
     </div>
   )
 }
