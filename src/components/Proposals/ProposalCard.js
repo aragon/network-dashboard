@@ -69,14 +69,12 @@ function ProposalCard({ appAddress, vote, onProposalClick }) {
           margin-bottom: ${1 * GU}px;
         `}
       >
-        {target && (
-          <AppBadge
-            label={target.name ? target.name : target.address}
-            appAddress={target.address}
-            iconSrc={target.icon ? target.icon : ''}
-            badgeOnly
-          />
-        )}
+        <AppBadge
+          label={target.name ? target.name : target.address}
+          appAddress={target.address}
+          iconSrc={target.icon ? target.icon : ''}
+          badgeOnly
+        />
       </div>
 
       <p
