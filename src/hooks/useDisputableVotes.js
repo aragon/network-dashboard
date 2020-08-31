@@ -155,7 +155,7 @@ async function processVote(vote, apps, disputableVotingApp) {
     }
   }
 
-  // If the target app is known to us then we can get it's icon and name 
+  // If the target app is known to us then we can get it's icon and name
   if (isKnownApp(apps, extendedVote.target.address)) {
     extendedVote.target = getTargetData(apps, extendedVote.target.address)
   }

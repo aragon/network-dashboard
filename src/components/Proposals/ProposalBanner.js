@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  Button,
   ButtonIcon,
   GU,
   IconCross,
@@ -62,7 +61,7 @@ function ProposalBanner({ onCloseBanner, ...props }) {
             margin-bottom: ${1.5 * GU}px;
           `}
         >
-          Fight For Freedom
+          This is a test
         </h1>
         <div
           css={`
@@ -73,39 +72,12 @@ function ProposalBanner({ onCloseBanner, ...props }) {
             color: ${theme.contentSecondary};
           `}
         >
-          This is a test - Aragon Network Cash is a test organization set up as
-          part of a new round of precedence campaign disputes. Learn more on the{' '}
-          <Link href="https://aragon.org/blog">Aragon project blog</Link>.
-        </div>
-        <div
-          css={`
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-          `}
-        >
-          <Button
-            label="Learn more"
-            mode="strong"
-            href="https://aragon.org/blog"
-            css={`
-              padding: ${2.75 * GU}px ${3.5 * GU}px;
-              font-weight: 600;
-              margin: ${0.5 * GU}px;
-              width: 221px;
-            `}
-          />
-          <Button
-            label="Read Aragon Manifesto"
-            mode="normal"
-            href="https://aragon.org/manifesto"
-            css={`
-              padding: ${2.75 * GU}px ${3.5 * GU}px;
-              font-weight: 600;
-              margin: ${0.5 * GU}px;
-            `}
-          />
+          Aragon Network Cash is a test organization set up as part of a new
+          round of precedence campaign disputes. Learn more on the{' '}
+          <Link href="https://aragon.org/blog/juror-dispute-guide-aragon-network-cash">
+            Aragon project blog
+          </Link>
+          .
         </div>
       </div>
     </div>
