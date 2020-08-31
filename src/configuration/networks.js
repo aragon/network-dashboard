@@ -12,9 +12,9 @@ export default new Map([
       ipfsGateway: 'https://ipfs.eth.aragon.network/ipfs',
       subgraphs: {
         disputableVoting:
-          'https://api.thegraph.com/subgraphs/name/aragon/aragon-dvoting-mainnet-staging',
+          'https://graph.backend.aragon.org/subgraphs/name/aragon/aragon-dvoting-mainnet-staging',
         agreement:
-          'https://api.thegraph.com/subgraphs/name/aragon/aragon-agreement-mainnet-staging',
+          'https://graph.backend.aragon.org/subgraphs/name/aragon/aragon-agreement-mainnet-staging',
       },
     },
   ],
