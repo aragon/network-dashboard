@@ -62,7 +62,7 @@ function ProposalBanner({ onCloseBanner, ...props }) {
             margin-bottom: ${1.5 * GU}px;
           `}
         >
-          Fight For Freedom
+          This is a test
         </h1>
         <div
           css={`
@@ -73,8 +73,8 @@ function ProposalBanner({ onCloseBanner, ...props }) {
             color: ${theme.contentSecondary};
           `}
         >
-          This is a test - Aragon Network Cash is a test organization set up as
-          part of a new round of precedence campaign disputes. Learn more on the{' '}
+          Aragon Network Cash is a test organization set up as part of a new
+          round of precedence campaign disputes. Learn more on the{' '}
           <Link href="https://aragon.org/blog/juror-dispute-guide-aragon-network-cash">
             Aragon project blog
           </Link>
