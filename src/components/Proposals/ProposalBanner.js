@@ -75,7 +75,10 @@ function ProposalBanner({ onCloseBanner, ...props }) {
         >
           This is a test - Aragon Network Cash is a test organization set up as
           part of a new round of precedence campaign disputes. Learn more on the{' '}
-          <Link href="https://aragon.org/blog">Aragon project blog</Link>.
+          <Link href="https://aragon.org/blog/juror-dispute-guide-aragon-network-cash">
+            Aragon project blog
+          </Link>
+          .
         </div>
       </div>
     </div>
