@@ -46,8 +46,8 @@ function getAttributes(status, theme) {
       disabledProgressBars: true,
     },
     [VOTE_STATUS_DISPUTED]: {
-      backgroundColor: '#fffbf9',
-      borderColor: '#D26C41',
+      backgroundColor: '#FFFAFA',
+      borderColor: '#FF7C7C',
       disabledProgressBars: true,
     },
   }

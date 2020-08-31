@@ -8,11 +8,11 @@ import {
   IconClose,
   IconCross,
   IconInfo,
-  IconWarning,
   Tag,
   textStyle,
   useTheme,
 } from '@aragon/ui'
+import IconDisputed from './IconDisputed'
 import {
   VOTE_STATUS_ACCEPTED,
   VOTE_STATUS_ACTIVE,
@@ -42,10 +42,10 @@ function getAttributes(status, theme) {
       color: theme.disabledContent,
     },
     [VOTE_STATUS_DISPUTED]: {
-      background: '#fde6da',
+      background: '#FFEAEA',
       label: 'Disputed',
-      Icon: IconWarning,
-      color: '#D26C41',
+      Icon: IconDisputed,
+      color: '#FF7C7C',
     },
     [VOTE_STATUS_EXECUTED]: {
       background: '#CADFAB',
@@ -88,7 +88,7 @@ function DisputableStatusLabel({ status }) {
           align-items: center;
         `}
       >
-        {Icon && <Icon size="small" />}
+        <Icon size="small" />
         <span
           css={`
             margin-left: ${0.5 * GU}px;
