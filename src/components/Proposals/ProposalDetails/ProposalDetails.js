@@ -132,9 +132,6 @@ function Details({ vote, status }) {
   const { layoutName } = useLayout()
   const compactMode = layoutName === 'small'
 
-  // TODO: Replace tokenAddress for tokenId
-  const tokenAddress = '0x6B175474E89094C44Da98b954EedeAC495271d0F'
-
   return (
     <div
       css={`
@@ -173,7 +170,7 @@ function Details({ vote, status }) {
           `}
         >
           <TokenAmount
-            address={tokenAddress}
+            address={token.id}
             amount={collateral.actionAmount}
             decimals={token.decimals}
             symbol={token.symbol}
