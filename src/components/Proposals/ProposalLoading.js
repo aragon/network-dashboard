@@ -15,15 +15,33 @@ function ProposalLoading() {
           padding-bottom: ${11 * GU}px;
         `}
       >
-        <img
-          src={loadingGraphic}
-          alt=""
+        <div
           css={`
-            display: block;
             max-width: 100%;
             width: ${34 * GU}px;
           `}
-        />
+        >
+          <div
+            css={`
+              position: relative;
+
+              /* Reserve space for graphic during first load */
+              padding-top: 58.5%;
+            `}
+          >
+            <img
+              src={loadingGraphic}
+              alt=""
+              css={`
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+              `}
+            />
+          </div>
+        </div>
 
         <span
           css={`
