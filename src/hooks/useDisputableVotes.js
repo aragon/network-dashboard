@@ -4,6 +4,7 @@ import connectVoting from '@aragon/connect-disputable-voting'
 import { createAppHook } from '@aragon/connect-react'
 import { useOrgApps } from '../providers/OrgApps'
 import { networkEnvironment } from '../current-environment'
+import { getAppPresentation } from '../lib/web3-utils'
 
 const EMPTY_SCRIPT = '0x00000001'
 const SUBGRAPH_URL = networkEnvironment.subgraphs?.disputableVoting
@@ -36,7 +37,9 @@ export function useDisputableVotes() {
 
       try {
         const processedVotes = await Promise.all(
-          votes.map(async (vote) => processVote(vote, apps))
+          votes.map(async (vote) =>
+            processVote(vote, apps, disputableVotingApp)
+          )
         )
 
         if (!cancelled) {
@@ -55,7 +58,7 @@ export function useDisputableVotes() {
     return () => {
       cancelled = true
     }
-  }, [apps, votes, votesLoading])
+  }, [apps, votes, votesLoading, disputableVotingApp])
 
   return [extendedVotes, { loading: extendedVotesLoading }]
 }
@@ -87,7 +90,7 @@ export function useDisputableVote(proposalId) {
         const [collateral, settings, processedVote] = await Promise.all([
           vote.collateralRequirement(),
           vote.setting(),
-          processVote(vote, apps),
+          processVote(vote, apps, disputableVotingApp),
         ])
 
         const token = await collateral.token()
@@ -115,12 +118,12 @@ export function useDisputableVote(proposalId) {
     return () => {
       cancelled = true
     }
-  }, [apps, vote, voteLoading])
+  }, [apps, vote, voteLoading, disputableVotingApp])
 
   return [extendedVote, { loading: extendedVoteLoading }]
 }
 
-async function processVote(vote, apps) {
+async function processVote(vote, apps, disputableVotingApp) {
   const extendedVote = {
     ...vote,
     endDate: vote.endDate,
@@ -133,16 +136,45 @@ async function processVote(vote, apps) {
     naysPct: vote.naysPct,
     yeasPct: vote.yeasPct,
     status: vote.status,
+    target: getTargetData(apps, disputableVotingApp.address),
   }
 
+  // Return disputableVotingApp as the default app target
   if (vote.script === EMPTY_SCRIPT) {
     return extendedVote
   }
 
   const description = await describeScript(vote.script, apps)
+  const voteHasAppTarget = description[0] && description[0].to
+
+  // If we have the target app on the description, build the target data with it instead
+  if (voteHasAppTarget) {
+    extendedVote.target = {
+      address: description[0].to,
+      name: description[0].name || description[0].identifier,
+    }
+  }
+
+  // If the target app is known to us then we can get it's icon and name 
+  if (isKnownApp(apps, extendedVote.target.address)) {
+    extendedVote.target = getTargetData(apps, extendedVote.target.address)
+  }
 
   return {
     ...extendedVote,
     description,
+  }
+}
+
+function isKnownApp(apps, appAddress) {
+  return apps && apps.filter((app) => app.address === appAddress).length > 0
+}
+
+function getTargetData(apps, address) {
+  const presentation = getAppPresentation(apps, address)
+  return {
+    address: address,
+    name: presentation.humanName,
+    icon: presentation.iconSrc,
   }
 }
