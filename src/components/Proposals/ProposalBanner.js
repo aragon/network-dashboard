@@ -77,36 +77,6 @@ function ProposalBanner({ onCloseBanner, ...props }) {
           part of a new round of precedence campaign disputes. Learn more on the{' '}
           <Link href="https://aragon.org/blog">Aragon project blog</Link>.
         </div>
-        <div
-          css={`
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-          `}
-        >
-          <Button
-            label="Learn more"
-            mode="strong"
-            href="https://aragon.org/blog"
-            css={`
-              padding: ${2.75 * GU}px ${3.5 * GU}px;
-              font-weight: 600;
-              margin: ${0.5 * GU}px;
-              width: 221px;
-            `}
-          />
-          <Button
-            label="Read Aragon Manifesto"
-            mode="normal"
-            href="https://aragon.org/manifesto"
-            css={`
-              padding: ${2.75 * GU}px ${3.5 * GU}px;
-              font-weight: 600;
-              margin: ${0.5 * GU}px;
-            `}
-          />
-        </div>
       </div>
     </div>
   )
