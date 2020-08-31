@@ -4,6 +4,7 @@ export default new Map([
     {
       chainId: 1,
       legacyNetworkType: 'main',
+      courtUrl: 'https://court.aragon.org',
       endpoints: {
         ethereum: 'https://mainnet.eth.aragon.network/',
       },
@@ -17,6 +18,7 @@ export default new Map([
     {
       chainId: 4,
       legacyNetworkType: 'rinkeby',
+      courtUrl: 'https://court-rinkeby.aragon.org',
       endpoints: {
         ethereum: 'https://rinkeby.eth.aragon.network/',
       },
@@ -30,6 +32,7 @@ export default new Map([
     {
       chainId: 4,
       legacyNetworkType: 'rinkeby',
+      courtUrl: 'https://court-staging.aragon.org',
       endpoints: {
         ethereum: 'https://rinkeby.eth.aragon.network/',
       },

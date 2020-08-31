@@ -4,6 +4,7 @@ import { IdentityBadge, Link, useLayout, GU } from '@aragon/ui'
 import { dateFormat } from '../../lib/date-utils'
 import InfoField from '../InfoField'
 import { getIpfsCidFromUri, getIpfsUrlFromUri } from '../../lib/ipfs-utils'
+import { networkEnvironment } from '../../current-environment'
 
 function AgreementDetails({
   creationDate,
@@ -49,7 +50,7 @@ function AgreementDetails({
         `}
       >
         <InfoField label="Arbitrator">
-          <Link href="https://court.aragon.org/">Aragon Court</Link>
+          <Link href={networkEnvironment.courtUrl}>Aragon Court</Link>
         </InfoField>
         <InfoField label="Staking Pool">
           <IdentityBadge entity={stakingAddress} />
