@@ -11,7 +11,6 @@ import {
 import background from '../../assets/banner.svg'
 
 function ProposalBanner({ onCloseBanner, ...props }) {
-  // TODO: Integrate it with the layout once is merged & Make it responsive
   const theme = useTheme()
 
   return (
@@ -73,19 +72,40 @@ function ProposalBanner({ onCloseBanner, ...props }) {
             color: ${theme.contentSecondary};
           `}
         >
-          We believe humankind should use technology as a liberating tool to
-          unleash all the goodwill and creativity of our species, rather than as
-          a tool to enslave and take advantage of one another.
+          This is a test <br /> Aragon Network Cash is a test organization set
+          up as part of a new round of precedence campaign disputes. Learn more
+          on the Aragon project blog
         </p>
-        <Button
-          label="Read Aragon Manifesto"
-          mode="strong"
-          href="https://aragon.org/manifesto"
+        <div
           css={`
-            padding: ${2.75 * GU}px ${3.5 * GU}px;
-            font-weight: 600;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
           `}
-        />
+        >
+          <Button
+            label="Learn more"
+            mode="normal"
+            href="https://aragon.org/blog"
+            css={`
+              padding: ${2.75 * GU}px ${3.5 * GU}px;
+              font-weight: 600;
+              margin: ${3 * GU}px ${2 * GU}px 0;
+              width: 221px;
+            `}
+          />
+          <Button
+            label="Read Aragon Manifesto"
+            mode="strong"
+            href="https://aragon.org/manifesto"
+            css={`
+              padding: ${2.75 * GU}px ${3.5 * GU}px;
+              font-weight: 600;
+              margin: ${3 * GU}px ${2 * GU}px 0;
+            `}
+          />
+        </div>
       </div>
     </div>
   )
