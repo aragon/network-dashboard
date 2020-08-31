@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { utils as ethersUtils } from 'ethers'
+import { captureException } from '@sentry/browser'
 import { createAppHook } from '@aragon/connect-react'
 import connectAgreement from '@aragon/connect-agreement'
 import {
@@ -65,8 +66,9 @@ export function useAgreementDetails() {
           setAgreementDetails(details)
           setAgreementDetailsLoading(false)
         }
-      } catch (error) {
-        console.error(error)
+      } catch (err) {
+        captureException(err)
+        console.error(err)
       }
     }
 

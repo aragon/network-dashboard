@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { captureException } from '@sentry/browser'
 import { describeScript } from '@aragon/connect'
 import connectVoting from '@aragon/connect-disputable-voting'
 import { createAppHook } from '@aragon/connect-react'
@@ -43,8 +44,9 @@ export function useDisputableVotes() {
           setExtendedVotes(processedVotes)
           setExtendedVotesLoading(false)
         }
-      } catch (error) {
-        console.error(error)
+      } catch (err) {
+        captureException(err)
+        console.error(err)
       }
     }
 
@@ -103,8 +105,9 @@ export function useDisputableVote(proposalId) {
           setExtendedVote(extendedVote)
           setExtendedVoteLoading(false)
         }
-      } catch (error) {
-        console.error(error)
+      } catch (err) {
+        captureException(err)
+        console.error(err)
       }
     }
 
