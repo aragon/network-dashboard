@@ -9,10 +9,9 @@ import {
 import { toMs } from '../../../lib/date-utils'
 import DisputableActions from './DisputableActions'
 import DisputablePeriod from './DisputablePeriod'
+import { networkEnvironment } from '../../../current-environment'
 
 function DisputableActionStatus({ vote }) {
-  // TODO: get different court links for the different enviroments
-
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const challenged = disputableStatus === VOTE_STATUS_PAUSED
   const challengeEndDate = toMs(vote.challengeEndDate)
@@ -42,7 +41,7 @@ function DisputableActionStatus({ vote }) {
         {vote.disputeId && (
           <Item heading="Dispute">
             <Link
-              href={`https://court-staging.aragon.org/disputes/${vote.disputeId}`}
+              href={`${networkEnvironment.courtUrl}/disputes/${vote.disputeId}`}
             >
               Dispute #{vote.disputeId}
             </Link>
@@ -72,6 +71,7 @@ function DisputableActionStatus({ vote }) {
   )
 }
 
+/* eslint-disable react/prop-types */
 function Item({ heading, children }) {
   const theme = useTheme()
   return (
@@ -99,11 +99,7 @@ function Item({ heading, children }) {
     </li>
   )
 }
-
-Item.propTypes = {
-  heading: PropTypes.string,
-  children: PropTypes.node,
-}
+/* eslint-enable react/prop-types */
 
 DisputableActionStatus.propTypes = {
   vote: PropTypes.object.isRequired,
