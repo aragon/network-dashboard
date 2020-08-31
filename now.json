@@ -7,7 +7,7 @@
   },
   "build": {
     "env": {
-      "NETWORK_ENVIRONMENT": "mainnet"
+      "NETWORK_ENVIRONMENT": "ethereum"
     }
   }
 }
