@@ -7,9 +7,14 @@ export default new Map([
       endpoints: {
         ethereum: 'https://mainnet.eth.aragon.network/',
       },
-      orgLocation: '',
+      orgLocation: '0xa23367a7f2a6efa4599ec7189fe653a0cf114c1e', // ancashdao.aragonid.eth
       ipfsGateway: 'https://ipfs.eth.aragon.network/ipfs',
-      subgraphs: {},
+      subgraphs: {
+        disputableVoting:
+          'https://api.thegraph.com/subgraphs/name/aragon/aragon-dvoting-mainnet-staging',
+        agreement:
+          'https://api.thegraph.com/subgraphs/name/aragon/aragon-agreement-mainnet-staging',
+      },
     },
   ],
   [
