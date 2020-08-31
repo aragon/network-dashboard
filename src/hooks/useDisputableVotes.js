@@ -139,7 +139,7 @@ async function processVote(vote, apps, disputableVotingApp) {
     target: getTargetData(apps, disputableVotingApp.address),
   }
 
-  // return with disputableVotingApp as the default app target
+  // Return disputableVotingApp as the default app target
   if (vote.script === EMPTY_SCRIPT) {
     return extendedVote
   }
@@ -147,7 +147,7 @@ async function processVote(vote, apps, disputableVotingApp) {
   const description = await describeScript(vote.script, apps)
   const voteHasAppTarget = description[0] && description[0].to
 
-  // if we have the target app on the description, we change the default one
+  // If we have the target app on the description, build the target data with it instead
   if (voteHasAppTarget) {
     extendedVote.target = {
       address: description[0].to,
@@ -155,8 +155,7 @@ async function processVote(vote, apps, disputableVotingApp) {
     }
   }
 
-  // if the target app is one of the known ones
-  // we try to get the icon and name from there
+  // If the target app is known to us then we can get it's icon and name 
   if (isKnownApp(apps, extendedVote.target.address)) {
     extendedVote.target = getTargetData(apps, extendedVote.target.address)
   }
