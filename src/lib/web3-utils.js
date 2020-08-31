@@ -1,3 +1,5 @@
+import { getIpfsUrlFromUri } from '../lib/ipfs-utils'
+
 export function getNetworkName(chainId) {
   chainId = String(chainId)
 
@@ -17,4 +19,16 @@ export function addressesEqual(first, second) {
   first = first && first.toLowerCase()
   second = second && second.toLowerCase()
   return first === second
+}
+
+export function getAppPresentation(apps, appAddress) {
+  const { contentUri, manifest } = apps.find(
+    ({ address }) => address === appAddress
+  )
+
+  const iconPath = manifest.icons[0].src
+  const iconSrc = getIpfsUrlFromUri(contentUri) + iconPath
+  const humanName = manifest.name
+
+  return { humanName, iconSrc }
 }

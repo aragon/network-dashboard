@@ -41,7 +41,7 @@ function getAttributes(status, theme) {
 
 function ProposalCard({ appAddress, vote, onProposalClick }) {
   const theme = useTheme()
-  const { context, voteId, description } = vote
+  const { context, voteId, description, target } = vote
 
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const { backgroundColor, borderColor, disabledProgressBars } = getAttributes(
@@ -69,7 +69,12 @@ function ProposalCard({ appAddress, vote, onProposalClick }) {
           margin-bottom: ${1 * GU}px;
         `}
       >
-        <AppBadge label="Disputable Voting" appAddress={appAddress} badgeOnly />
+        <AppBadge
+          label={target.name ? target.name : target.address}
+          appAddress={target.address}
+          iconSrc={target.icon ? target.icon : ''}
+          badgeOnly
+        />
       </div>
 
       <p

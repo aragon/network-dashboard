@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  Button,
   ButtonIcon,
   GU,
   IconCross,
+  Link,
   textStyle,
   useTheme,
 } from '@aragon/ui'
@@ -12,7 +12,6 @@ import background from '../../assets/banner.svg'
 import LayoutGutter from '../Layout/LayoutGutter'
 
 function ProposalBanner({ onCloseBanner, ...props }) {
-  // TODO: Integrate it with the layout once is merged & Make it responsive
   const theme = useTheme()
 
   return (
@@ -60,9 +59,9 @@ function ProposalBanner({ onCloseBanner, ...props }) {
             margin-bottom: ${1.5 * GU}px;
           `}
         >
-          Fight For Freedom
+          This is a test
         </h1>
-        <p
+        <div
           css={`
             ${textStyle('body1')};
             max-width: ${95 * GU}px;
@@ -71,19 +70,13 @@ function ProposalBanner({ onCloseBanner, ...props }) {
             color: ${theme.contentSecondary};
           `}
         >
-          We believe humankind should use technology as a liberating tool to
-          unleash all the goodwill and creativity of our species, rather than as
-          a tool to enslave and take advantage of one another.
-        </p>
-        <Button
-          label="Read Aragon Manifesto"
-          mode="strong"
-          href="https://aragon.org/manifesto"
-          css={`
-            padding: ${2.75 * GU}px ${3.5 * GU}px;
-            font-weight: 600;
-          `}
-        />
+          Aragon Network Cash is a test organization set up as part of a new
+          round of precedence campaign disputes. Learn more on the{' '}
+          <Link href="https://aragon.org/blog/juror-dispute-guide-aragon-network-cash">
+            Aragon project blog
+          </Link>
+          .
+        </div>
       </LayoutGutter>
     </div>
   )
