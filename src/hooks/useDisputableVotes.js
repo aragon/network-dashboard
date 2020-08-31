@@ -4,7 +4,7 @@ import connectVoting from '@aragon/connect-disputable-voting'
 import { createAppHook } from '@aragon/connect-react'
 import { useOrgApps } from '../providers/OrgApps'
 import { networkEnvironment } from '../current-environment'
-import { getAppPresentation } from './useAgreementDetails'
+import { getAppPresentation } from '../lib/web3-utils'
 
 const EMPTY_SCRIPT = '0x00000001'
 const SUBGRAPH_URL = networkEnvironment.subgraphs?.disputableVoting
@@ -139,23 +139,25 @@ async function processVote(vote, apps, disputableVotingApp) {
     target: getTargetData(apps, disputableVotingApp.address),
   }
 
+  // return with disputableVotingApp as the default app target
   if (vote.script === EMPTY_SCRIPT) {
     return extendedVote
   }
 
   const description = await describeScript(vote.script, apps)
-  if (description[0] && description[0].to) {
+  const voteHasAppTarget = description[0] && description[0].to
+
+  // if we have the target app on the description, we change the default one
+  if (voteHasAppTarget) {
     extendedVote.target = {
       address: description[0].to,
-      name: description[0].name || description[0].identifier || '',
-      icon: '',
+      name: description[0].name || description[0].identifier,
     }
   }
 
-  if (
-    apps &&
-    apps.filter((app) => app.address === extendedVote.target.address).length > 0
-  ) {
+  // if the target app is one of the known ones
+  // we try to get the icon and name from there
+  if (isKnownApp(apps, extendedVote.target.address)) {
     extendedVote.target = getTargetData(apps, extendedVote.target.address)
   }
 
@@ -163,6 +165,10 @@ async function processVote(vote, apps, disputableVotingApp) {
     ...extendedVote,
     description,
   }
+}
+
+function isKnownApp(apps, appAddress) {
+  return apps && apps.filter((app) => app.address === appAddress).length > 0
 }
 
 function getTargetData(apps, address) {

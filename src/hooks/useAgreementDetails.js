@@ -2,14 +2,11 @@ import { useEffect, useState } from 'react'
 import { utils as ethersUtils } from 'ethers'
 import { createAppHook } from '@aragon/connect-react'
 import connectAgreement from '@aragon/connect-agreement'
-import {
-  getIpfsUrlFromUri,
-  getIpfsCidFromUri,
-  ipfsGet,
-} from '../lib/ipfs-utils'
+import { getIpfsCidFromUri, ipfsGet } from '../lib/ipfs-utils'
 import { networkEnvironment } from '../current-environment'
 import { toMs } from '../lib/date-utils'
 import { useOrgApps } from '../providers/OrgApps'
+import { getAppPresentation } from '../lib/web3-utils'
 
 const SUBGRAPH_URL = networkEnvironment.subgraphs?.agreement
 
@@ -80,18 +77,6 @@ export function useAgreementDetails() {
   }, [apps, agreement, agreementAppLoading])
 
   return [agreementDetails, { loading: agreementDetailsLoading }]
-}
-
-export function getAppPresentation(apps, appAddress) {
-  const { contentUri, manifest } = apps.find(
-    ({ address }) => address === appAddress
-  )
-
-  const iconPath = manifest.icons[0].src
-  const iconSrc = getIpfsUrlFromUri(contentUri) + iconPath
-  const humanName = manifest.name
-
-  return { humanName, iconSrc }
 }
 
 async function getExtendedDisputableApps(apps, disputableApps) {
