@@ -6,6 +6,7 @@ import {
   IconCheck,
   IconLock,
   IdentityBadge,
+  Link,
   Split,
   Tag,
   TokenAmount,
@@ -30,6 +31,7 @@ import StatusInfo from './StatusInfo'
 import FeedbackModule from './FeedbackModule'
 import Description from '../Description'
 import { addressesEqual } from '../../../lib/web3-utils'
+import { getIpfsUrlFromUri } from '../../../lib/ipfs-utils'
 
 function getAttributes(status, theme) {
   const attributes = {
@@ -132,6 +134,10 @@ function Details({ vote, status }) {
   const { layoutName } = useLayout()
   const compactMode = layoutName === 'small'
 
+  let ipfsJustification = null
+  if (context.startsWith('ipfs')) {
+    ipfsJustification = context
+  }
   return (
     <div
       css={`
@@ -152,7 +158,27 @@ function Details({ vote, status }) {
               margin-top: ${3 * GU}px;
             `}
           >
-            {context}
+            {ipfsJustification ? (
+              <Link
+                href={getIpfsUrlFromUri(ipfsJustification)}
+                css={`
+                  max-width: 90%;
+                `}
+              >
+                <span
+                  css={`
+                    display: block;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    text-align: left;
+                  `}
+                >
+                  Read more
+                </span>
+              </Link>
+            ) : (
+              context
+            )}
           </InfoField>
         </div>
       ) : (
