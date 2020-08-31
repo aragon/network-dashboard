@@ -27,10 +27,13 @@ const Proposals = React.memo(function Proposals() {
     setBannerClosed(true)
   }, [])
 
-  const voteGroups = [
-    ['Open votes', disputableVotes.filter(({ hasEnded }) => !hasEnded)],
-    ['Closed votes', disputableVotes.filter(({ hasEnded }) => hasEnded)],
-  ]
+  let voteGroups = []
+  if (disputableVotes) {
+    voteGroups = [
+      ['Open votes', disputableVotes.filter(({ hasEnded }) => !hasEnded)],
+      ['Closed votes', disputableVotes.filter(({ hasEnded }) => hasEnded)],
+    ]
+  }
 
   return (
     <section>
