@@ -8,7 +8,6 @@ import {
   IconClose,
   IconCross,
   IconInfo,
-  IconWarning,
   Tag,
   textStyle,
   useTheme,
@@ -22,47 +21,48 @@ import {
   VOTE_STATUS_PAUSED,
   VOTE_STATUS_REJECTED,
 } from './disputable-vote-statuses'
+import disputed from '../../assets/disputed.svg'
 
 function getAttributes(status, theme) {
   const attributes = {
     [VOTE_STATUS_ACTIVE]: {
       label: 'Scheduled',
-      Icon: IconClock,
+      icon: <IconClock size="small" />,
     },
     [VOTE_STATUS_ACCEPTED]: {
       background: theme.surface,
       label: 'Passed',
-      Icon: IconCheck,
+      icon: <IconCheck size="small" />,
       color: theme.positive,
     },
     [VOTE_STATUS_CANCELLED]: {
       background: theme.surfaceUnder,
       label: 'Cancelled',
-      Icon: IconClose,
+      icon: <IconClose size="small" />,
       color: theme.disabledContent,
     },
     [VOTE_STATUS_DISPUTED]: {
-      background: '#fde6da',
+      background: '#FFEAEA',
       label: 'Disputed',
-      Icon: IconWarning,
-      color: '#D26C41',
+      icon: <img src={disputed} />,
+      color: '#FF7C7C',
     },
     [VOTE_STATUS_EXECUTED]: {
       background: '#CADFAB',
       label: 'Passed (enacted)',
-      Icon: IconInfo,
+      icon: <IconInfo size="small" />,
       color: '#749C47',
     },
     [VOTE_STATUS_PAUSED]: {
       background: theme.warningSurface,
       label: 'Challenged',
-      Icon: IconAttention,
+      icon: <IconAttention size="small" />,
       color: theme.warningSurfaceContent,
     },
     [VOTE_STATUS_REJECTED]: {
       background: theme.surface,
       label: 'Rejected',
-      Icon: IconCross,
+      icon: <IconCross size="small" />,
       color: theme.negative,
     },
   }
@@ -72,7 +72,7 @@ function getAttributes(status, theme) {
 
 function DisputableStatusLabel({ status }) {
   const theme = useTheme()
-  const { Icon, background, color, label } = getAttributes(status, theme)
+  const { icon, background, color, label } = getAttributes(status, theme)
 
   if (
     status === VOTE_STATUS_ACCEPTED ||
@@ -88,7 +88,7 @@ function DisputableStatusLabel({ status }) {
           align-items: center;
         `}
       >
-        {Icon && <Icon size="small" />}
+        {icon}
         <span
           css={`
             margin-left: ${0.5 * GU}px;
@@ -107,7 +107,7 @@ function DisputableStatusLabel({ status }) {
       color={color && `${color}`}
       mode="indicator"
       label={label}
-      icon={<Icon size="small" />}
+      icon={icon}
     />
   )
 }
