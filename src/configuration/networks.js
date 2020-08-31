@@ -7,7 +7,7 @@ export default new Map([
       endpoints: {
         ethereum: 'https://mainnet.eth.aragon.network/',
       },
-      orgLocation: '0xa23367a7f2a6efa4599ec7189fe653a0cf114c1e', // ancashdao.aragonid.eth
+      orgLocation: 'cash.aragonnetwork.eth',
       ipfsGateway: 'https://ipfs.eth.aragon.network/ipfs',
       subgraphs: {
         disputableVoting:
