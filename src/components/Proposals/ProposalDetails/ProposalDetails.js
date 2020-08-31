@@ -31,7 +31,7 @@ import StatusInfo from './StatusInfo'
 import FeedbackModule from './FeedbackModule'
 import Description from '../Description'
 import { addressesEqual } from '../../../lib/web3-utils'
-import { getIpfsCidFromUri, getIpfsUrlFromUri } from '../../../lib/ipfs-utils'
+import { getIpfsUrlFromUri } from '../../../lib/ipfs-utils'
 
 function getAttributes(status, theme) {
   const attributes = {
@@ -173,7 +173,7 @@ function Details({ vote, status }) {
                     text-align: left;
                   `}
                 >
-                  {getIpfsCidFromUri(ipfsJustification)}
+                  Read more
                 </span>
               </Link>
             ) : (
