@@ -92,7 +92,7 @@ function ProposalBanner({ onCloseBanner, ...props }) {
             css={`
               padding: ${2.75 * GU}px ${3.5 * GU}px;
               font-weight: 600;
-              margin: ${3 * GU}px ${2 * GU}px 0;
+              margin: ${0.5 * GU}px;
               width: 221px;
             `}
           />
@@ -103,7 +103,7 @@ function ProposalBanner({ onCloseBanner, ...props }) {
             css={`
               padding: ${2.75 * GU}px ${3.5 * GU}px;
               font-weight: 600;
-              margin: ${3 * GU}px ${1 * GU}px 0;
+              margin: ${0.5 * GU}px;
             `}
           />
         </div>
