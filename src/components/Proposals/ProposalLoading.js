@@ -25,7 +25,7 @@ function ProposalLoading() {
             css={`
               position: relative;
 
-              /* Reserve space for graphic during first load */
+              /* Match aspect ratio of loading graphic to reserve space during initial load */
               padding-top: 58.5%;
             `}
           >
