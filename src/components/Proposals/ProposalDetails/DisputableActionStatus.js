@@ -41,7 +41,7 @@ function DisputableActionStatus({ vote }) {
         {vote.disputeId && (
           <Item heading="Dispute">
             <Link
-              href={`${networkEnvironment.courtUrl}/disputes/${vote.disputeId}`}
+              href={`${networkEnvironment.courtUrl}/#/disputes/${vote.disputeId}`}
             >
               Dispute #{vote.disputeId}
             </Link>
