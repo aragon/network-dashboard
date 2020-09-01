@@ -69,7 +69,7 @@ function ProposalBanner({ onCloseBanner, ...props }) {
               >
                 This is a test organization
               </h1>
-              <div
+              <p
                 css={`
                   ${textStyle('title4')};
                   font-size: ${compactMode ? 2.5 * GU : 2.75 * GU}px;
@@ -88,7 +88,7 @@ function ProposalBanner({ onCloseBanner, ...props }) {
                   Aragon project blog
                 </Link>
                 .
-              </div>
+              </p>
             </div>
 
             <img
