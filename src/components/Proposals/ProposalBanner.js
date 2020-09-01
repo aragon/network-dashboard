@@ -25,7 +25,7 @@ function ProposalBanner({ onCloseBanner, ...props }) {
         background: linear-gradient(241.18deg, #ffb36d 6.22%, #ff8888 95.3%);
         width: 100%;
         background-size: cover;
-        padding-top: ${4 * GU}px;
+        padding-top: ${8 * GU}px;
         padding-bottom: ${8 * GU}px;
       `}
       {...props}
@@ -37,7 +37,7 @@ function ProposalBanner({ onCloseBanner, ...props }) {
             css={`
               position: absolute;
               top: ${4 * GU}px;
-              right: ${4 * GU}px;
+              right: ${compactMode ? 2 * GU : 4 * GU}px;
             `}
             onClick={onCloseBanner}
           >
@@ -90,14 +90,17 @@ function ProposalBanner({ onCloseBanner, ...props }) {
                 .
               </p>
             </div>
-
-            <img
-              src={pcBanner}
-              css={`
-                max-width: 70%;
-                margin-top: ${compactMode ? `${4 * GU}px` : `auto`};
-              `}
-            />
+            {!compactMode && (
+              <img
+                height="401"
+                width="472"
+                src={pcBanner}
+                css={`
+                  max-width: 70%;
+                  margin-top: ${-3 * GU}px;
+                `}
+              />
+            )}
           </div>
         </LayoutLimiter>
       </LayoutGutter>
