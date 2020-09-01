@@ -11,6 +11,8 @@ export default new Map([
       orgLocation: 'cash.aragonnetwork.eth',
       ipfsGateway: 'https://ipfs.eth.aragon.network/ipfs',
       subgraphs: {
+        organization:
+          'https://graph.backend.aragon.org/subgraphs/name/aragon/aragon-mainnet',
         disputableVoting:
           'https://graph.backend.aragon.org/subgraphs/name/aragon/aragon-dvoting-mainnet-staging',
         agreement:
