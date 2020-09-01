@@ -39,7 +39,7 @@ function getAttributes(status, theme) {
   )
 }
 
-function ProposalCard({ appAddress, vote, onProposalClick }) {
+function ProposalCard({ vote, onProposalClick }) {
   const theme = useTheme()
   const { context, voteId, description, target } = vote
 
@@ -129,7 +129,6 @@ function ProposalCard({ appAddress, vote, onProposalClick }) {
 
 ProposalCard.propTypes = {
   vote: PropTypes.object,
-  appAddress: PropTypes.string,
   onProposalClick: PropTypes.func.isRequired,
 }
 

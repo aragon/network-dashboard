@@ -6,11 +6,29 @@ import AgreementBindingActions from './AgreementBindingActions'
 import AgreementHeader from './AgreementHeader'
 import AgreementDetails from './AgreementDetails'
 import AgreementDocument from './AgreementDocument'
-import { useAppData } from '../../providers/AppData'
+import LoadingSection from '../Loading/LoadingSection'
+import { useAgreementData } from '../../providers/AgreementData'
 
 const Agreement = React.memo(function Agreement() {
-  const { agreementDetails } = useAppData()
+  const { agreementDetails, loading } = useAgreementData()
 
+  return (
+    <LayoutGutter>
+      <LayoutLimiter>
+        <Header
+          primary="Agreement"
+          secondary={<Button mode="strong" label="Sign Agreement" disabled />}
+        />
+        <LoadingSection title="Loading agreement" loading={loading}>
+          <AgreementLayout agreementDetails={agreementDetails} />
+        </LoadingSection>
+      </LayoutLimiter>
+    </LayoutGutter>
+  )
+})
+
+/* eslint-disable react/prop-types */
+function AgreementLayout({ agreementDetails }) {
   const {
     title,
     content,
@@ -22,34 +40,25 @@ const Agreement = React.memo(function Agreement() {
   } = agreementDetails
 
   return (
-    <LayoutGutter>
-      <LayoutLimiter>
-        <Header
-          primary="Agreement"
-          secondary={<Button mode="strong" label="Sign Agreement" disabled />}
-        />
-        <Split
-          primary={
-            <>
-              <Box>
-                <AgreementHeader title={title} />
-                <AgreementDetails
-                  contractAddress={contractAddress}
-                  creationDate={effectiveFrom}
-                  ipfsUri={contentIpfsUri}
-                  stakingAddress={stakingAddress}
-                />
-              </Box>
-              <AgreementDocument content={content} />
-            </>
-          }
-          secondary={
-            <AgreementBindingActions disputableApps={disputableApps} />
-          }
-        />
-      </LayoutLimiter>
-    </LayoutGutter>
+    <Split
+      primary={
+        <>
+          <Box>
+            <AgreementHeader title={title} />
+            <AgreementDetails
+              contractAddress={contractAddress}
+              creationDate={effectiveFrom}
+              ipfsUri={contentIpfsUri}
+              stakingAddress={stakingAddress}
+            />
+          </Box>
+          <AgreementDocument content={content} />
+        </>
+      }
+      secondary={<AgreementBindingActions disputableApps={disputableApps} />}
+    />
   )
-})
+}
+/* eslint-enable react/prop-types */
 
 export default Agreement

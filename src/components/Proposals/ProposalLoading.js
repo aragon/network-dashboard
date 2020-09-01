@@ -11,8 +11,8 @@ function ProposalLoading() {
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          padding-top: ${11 * GU}px;
-          padding-bottom: ${11 * GU}px;
+          padding-top: ${14 * GU}px;
+          padding-bottom: ${14 * GU}px;
         `}
       >
         <div

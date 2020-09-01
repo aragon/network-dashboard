@@ -1,20 +1,12 @@
 import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { useTransition, animated } from 'react-spring'
-import styled from 'styled-components'
 import { useHistory } from 'react-router-dom'
-import { BackButton, Bar, Header, GU } from '@aragon/ui'
+import { BackButton, Bar, Header } from '@aragon/ui'
 import LayoutGutter from '../Layout/LayoutGutter'
 import LayoutLimiter from '../Layout/LayoutLimiter'
+import LoadingSection from '../Loading/LoadingSection'
 import ProposalDetails from './ProposalDetails/ProposalDetails'
-import ProposalLoading from './ProposalLoading'
 import { useDisputableVote } from '../../hooks/useDisputableVotes'
-
-const AnimatedDiv = styled(animated.div)`
-  top: 0;
-  left: 0;
-  width: 100%;
-`
 
 function ProposalSingle({ match }) {
   const { id: proposalId } = match.params
@@ -25,17 +17,6 @@ function ProposalSingle({ match }) {
     history.push(`/proposals`)
   }, [history])
 
-  const loadingSwapTransitions = useTransition(loading, null, {
-    config: { mass: 1, tension: 200, friction: 20 },
-    from: { opacity: 0, transform: `translate3d(0, ${1 * GU}px, 0)` },
-    enter: { opacity: 1, transform: `translate3d(0, 0, 0)` },
-    leave: {
-      opacity: 0,
-      position: 'absolute',
-      transform: `translate3d(0, -${1 * GU}px, 0)`,
-    },
-  })
-
   return (
     <LayoutGutter>
       <LayoutLimiter>
@@ -43,23 +24,9 @@ function ProposalSingle({ match }) {
         <Bar>
           <BackButton onClick={handleBack} />
         </Bar>
-        <div
-          css={`
-            position: relative;
-          `}
-        >
-          {loadingSwapTransitions.map(({ item: loading, key, props }) =>
-            loading ? (
-              <AnimatedDiv style={props} key={key}>
-                <ProposalLoading />
-              </AnimatedDiv>
-            ) : (
-              <AnimatedDiv style={props} key={key}>
-                <ProposalDetails vote={vote} />
-              </AnimatedDiv>
-            )
-          )}
-        </div>
+        <LoadingSection loading={loading} title="Loading proposal">
+          <ProposalDetails vote={vote} />
+        </LoadingSection>
       </LayoutLimiter>
     </LayoutGutter>
   )

@@ -2,18 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useTransition, animated } from 'react-spring'
 import { ScrollView, GU } from '@aragon/ui'
-import AppLoader from '../components/AppLoader/AppLoader'
+import LoadingFullscreen from '../components/Loading/LoadingFullscreen'
 import Header from './Header/Header'
-import { useAppData } from '../providers/AppData'
 import { useOrgApps } from '../providers/OrgApps'
 
 const AnimatedDiv = animated.div
 
 const MainView = React.memo(function MainView({ children }) {
-  const { dataLoading } = useAppData()
-  const { appsLoading } = useOrgApps()
-
-  const loading = dataLoading || appsLoading
+  const { loading } = useOrgApps()
 
   const loaderExitTransitions = useTransition(loading, null, {
     from: { opacity: 0 },
@@ -89,7 +85,7 @@ const MainView = React.memo(function MainView({ children }) {
                 z-index: 2;
               `}
             >
-              <AppLoader
+              <LoadingFullscreen
                 css={`
                   flex: 1;
                 `}

@@ -25,7 +25,7 @@ function OrgAppsProvider({ children }) {
       apps,
       agreementApp,
       disputableVotingApp,
-      appsLoading: loading,
+      loading,
     }),
     [apps, agreementApp, disputableVotingApp, loading]
   )
