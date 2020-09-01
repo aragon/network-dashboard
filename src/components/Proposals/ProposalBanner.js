@@ -95,7 +95,7 @@ function ProposalBanner({ onCloseBanner, ...props }) {
               src={pcBanner}
               css={`
                 max-width: 70%;
-                margin-top: ${compactMode ? `${4 * GU}px` : auto};
+                margin-top: ${compactMode ? `${4 * GU}px` : `auto`};
               `}
             />
           </div>
