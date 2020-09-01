@@ -6,24 +6,27 @@ import {
   IconCross,
   Link,
   textStyle,
+  useLayout,
   useTheme,
 } from '@aragon/ui'
-import background from '../../assets/banner.svg'
+import pcBanner from '../../assets/pc-banner.svg'
 import LayoutGutter from '../Layout/LayoutGutter'
 
 function ProposalBanner({ onCloseBanner, ...props }) {
   const theme = useTheme()
+  const { layoutName } = useLayout()
+  const compactMode =
+    layoutName === 'medium' || layoutName === 'small' || layoutName === 'min'
 
   return (
     <div
       css={`
-        background-image: url(${background});
-        background-position: 20% center;
+        background: linear-gradient(241.18deg, #ffb36d 6.22%, #ff8888 95.3%);
         width: 100%;
         background-size: cover;
         text-align: center;
-        padding-top: ${13 * GU}px;
-        padding-bottom: ${15 * GU}px;
+        padding-top: ${4 * GU}px;
+        padding-bottom: ${8 * GU}px;
       `}
       {...props}
     >
@@ -39,43 +42,62 @@ function ProposalBanner({ onCloseBanner, ...props }) {
         >
           <IconCross
             css={`
-              color: ${theme.surfaceOpened};
+              color: ${theme.surface};
             `}
           />
         </ButtonIcon>
-
-        <h1
-          css={`
-            background: linear-gradient(to bottom, ${theme.accentStart} -50%,${
-            theme.accentEnd
-          } 60%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-
-            ${textStyle('title4')}
-            font-size: ${6.5 * GU}px;
-            line-height: 1.1;
-            font-weight: 700;
-            margin-bottom: ${1.5 * GU}px;
-          `}
-        >
-          This is a test
-        </h1>
         <div
           css={`
-            ${textStyle('body1')};
-            max-width: ${95 * GU}px;
-            margin: auto;
-            margin-bottom: ${3.5 * GU}px;
-            color: ${theme.contentSecondary};
+            display: flex;
+            flex-direction: ${compactMode ? `column` : `row`};
+            align-items: center;
+            justify-content: space-around;
           `}
         >
-          Aragon Network Cash is a test organization set up as part of a new
-          round of precedence campaign disputes. Learn more on the{' '}
-          <Link href="https://aragon.org/blog/juror-dispute-guide-aragon-network-cash">
-            Aragon project blog
-          </Link>
-          .
+          <div>
+            <h1
+              css={`
+                color: ${theme.surface};
+                ${textStyle('title4')}
+                font-size: ${compactMode ? 6.5 * GU : 7.75 * GU}px;
+                line-height: 1.1;
+                font-weight: 700;
+                text-align: left;
+                margin-bottom: ${2.5 * GU}px;
+                max-width: ${62 * GU}px;
+              `}
+            >
+              This is a test organization
+            </h1>
+            <div
+              css={`
+                ${textStyle('title4')};
+                font-size: ${compactMode ? 2.5 * GU : 2.75 * GU}px;
+                max-width: ${62 * GU}px;
+                text-align: left;
+                color: ${theme.surface};
+              `}
+            >
+              Aragon Network Cash is a test organization set up as part of a new
+              round of precedence campaign disputes. Learn more on the{' '}
+              <Link
+                href="https://aragon.org/blog/juror-dispute-guide-aragon-network-cash"
+                css={`
+                  color: ${theme.surface};
+                `}
+              >
+                Aragon project blog
+              </Link>
+              .
+            </div>
+          </div>
+
+          <img
+            src={pcBanner}
+            css={`
+              max-width: 90%;
+            `}
+          />
         </div>
       </LayoutGutter>
     </div>
