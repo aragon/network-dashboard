@@ -2,83 +2,107 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   ButtonIcon,
-  GU,
   IconCross,
   Link,
   textStyle,
+  useLayout,
   useTheme,
+  GU,
 } from '@aragon/ui'
-import background from '../../assets/banner.svg'
 import LayoutGutter from '../Layout/LayoutGutter'
+import LayoutLimiter from '../Layout/LayoutLimiter'
+import pcSvgBanner from '../../assets/pc-banner.svg'
 
 function ProposalBanner({ onCloseBanner, ...props }) {
   const theme = useTheme()
+  const { layoutName } = useLayout()
+  const wideMode = layoutName === 'large' || layoutName === 'max'
 
   return (
-    <div
+    <LayoutGutter
+      collapseWhenSmall={false}
       css={`
-        background-image: url(${background});
-        background-position: 20% center;
-        width: 100%;
-        background-size: cover;
-        text-align: center;
-        padding-top: ${13 * GU}px;
-        padding-bottom: ${15 * GU}px;
+        background: linear-gradient(241.18deg, #ffb36d 6.22%, #ff8888 95.3%);
+        padding-top: ${7 * GU}px;
+        padding-bottom: ${7 * GU}px;
+        position: relative;
       `}
       {...props}
     >
-      <LayoutGutter collapseWhenSmall={false}>
-        <ButtonIcon
-          label=""
+      <ButtonIcon
+        label=""
+        css={`
+          position: absolute;
+          top: ${wideMode ? 4 * GU : 2 * GU}px;
+          right: ${wideMode ? 3.5 * GU : 2 * GU}px;
+        `}
+        onClick={onCloseBanner}
+      >
+        <IconCross
           css={`
-            position: absolute;
-            top: ${4 * GU}px;
-            right: ${4 * GU}px;
+            color: ${theme.surface};
           `}
-          onClick={onCloseBanner}
-        >
-          <IconCross
-            css={`
-              color: ${theme.surfaceOpened};
-            `}
-          />
-        </ButtonIcon>
-
-        <h1
-          css={`
-            background: linear-gradient(to bottom, ${theme.accentStart} -50%,${
-            theme.accentEnd
-          } 60%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-
-            ${textStyle('title4')}
-            font-size: ${6.5 * GU}px;
-            line-height: 1.1;
-            font-weight: 700;
-            margin-bottom: ${1.5 * GU}px;
-          `}
-        >
-          This is a test
-        </h1>
+        />
+      </ButtonIcon>
+      <LayoutLimiter>
         <div
           css={`
-            ${textStyle('body1')};
-            max-width: ${95 * GU}px;
-            margin: auto;
-            margin-bottom: ${3.5 * GU}px;
-            color: ${theme.contentSecondary};
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 ${wideMode ? '5%' : '0'};
           `}
         >
-          Aragon Network Cash is a test organization set up as part of a new
-          round of precedence campaign disputes. Learn more on the{' '}
-          <Link href="https://aragon.org/blog/juror-dispute-guide-aragon-network-cash">
-            Aragon project blog
-          </Link>
-          .
+          <div>
+            <h1
+              css={`
+                margin-bottom: ${2.5 * GU}px;
+                max-width: ${62 * GU}px;
+
+                ${textStyle('title4')}
+                color: ${theme.overlay};
+                font-size: ${wideMode ? '62px' : '52px'};
+                line-height: 1.05;
+                font-weight: 700;
+              `}
+            >
+              This is a test organization
+            </h1>
+            <p
+              css={`
+                ${textStyle('title4')};
+                font-size: ${wideMode ? 2.75 * GU : 2.5 * GU}px;
+                max-width: ${62 * GU}px;
+                color: ${theme.overlay};
+              `}
+            >
+              Aragon Network Cash is a test organization set up as part of a new
+              round of precedence campaign disputes. Learn more on the{' '}
+              <Link
+                href="https://aragon.org/blog/juror-dispute-guide-aragon-network-cash"
+                css={`
+                  color: ${theme.overlay};
+                `}
+              >
+                Aragon project blog
+              </Link>
+              .
+            </p>
+          </div>
+          {wideMode && (
+            <img
+              src={pcSvgBanner}
+              css={`
+                width: 472px;
+                height: 401px;
+                margin-top: ${-3 * GU}px;
+                margin-right: ${3 * GU}px;
+              `}
+            />
+          )}
         </div>
-      </LayoutGutter>
-    </div>
+      </LayoutLimiter>
+    </LayoutGutter>
   )
 }
 

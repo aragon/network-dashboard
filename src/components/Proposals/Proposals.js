@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Header, GU } from '@aragon/ui'
+import { Header } from '@aragon/ui'
 import LayoutGutter from '../Layout/LayoutGutter'
 import LayoutLimiter from '../Layout/LayoutLimiter'
 import ProposalBanner from './ProposalBanner'
@@ -50,7 +50,6 @@ const Proposals = React.memo(function Proposals() {
         css={`
           position: relative;
           z-index: 2;
-          ${!bannerClosed ? `margin-top: -${3 * GU}px;` : ''}
         `}
       >
         <LayoutLimiter>

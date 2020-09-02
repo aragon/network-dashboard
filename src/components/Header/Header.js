@@ -1,6 +1,13 @@
 import React, { useCallback } from 'react'
 import { useRouteMatch, useHistory } from 'react-router-dom'
-import { GU, Link, IconExternal, useTheme, unselectable } from '@aragon/ui'
+import {
+  GU,
+  Link,
+  IconExternal,
+  useLayout,
+  useTheme,
+  unselectable,
+} from '@aragon/ui'
 import HeaderLogo from './HeaderLogo'
 import LayoutGutter from '../Layout/LayoutGutter'
 import LayoutLimiter from '../Layout/LayoutLimiter'
@@ -8,6 +15,8 @@ import LayoutLimiter from '../Layout/LayoutLimiter'
 function Header({ ...props }) {
   const theme = useTheme()
   const history = useHistory()
+  const { layoutName } = useLayout()
+  const compactMode = layoutName === 'small'
 
   const handleLogoClick = useCallback(() => {
     history.push('/')
@@ -37,7 +46,7 @@ function Header({ ...props }) {
               css={`
                 display: inline-grid;
                 grid-auto-flow: column;
-                grid-gap: ${4 * GU}px;
+                grid-gap: ${compactMode ? 3 * GU : 4 * GU}px;
                 margin-left: ${5 * GU}px;
               `}
             >
