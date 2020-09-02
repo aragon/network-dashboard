@@ -85,14 +85,14 @@ function LoadingSection({ children, loading, title }) {
                   >
                     <LoadingRing mode="half-circle" />
                   </div>
-                  <h1
+                  <h2
                     css={`
                       ${textStyle('title3')}
                       line-height: 1.2;
                     `}
                   >
                     {title}…
-                  </h1>
+                  </h2>
                 </span>
               </div>
             </Box>
