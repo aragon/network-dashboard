@@ -91,12 +91,12 @@ function ProposalBanner({ onCloseBanner, ...props }) {
           </div>
           {wideMode && (
             <img
-              height="401"
-              width="472"
               src={pcSvgBanner}
               css={`
-                max-width: 70%;
+                width: 472px;
+                height: 401px;
                 margin-top: ${-3 * GU}px;
+                margin-right: ${3 * GU}px;
               `}
             />
           )}
