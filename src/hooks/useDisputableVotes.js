@@ -62,7 +62,7 @@ export function useDisputableVotes() {
     }
   }, [apps, votes, votesLoading, disputableVotingApp])
 
-  return [extendedVotes, { loading: extendedVotesLoading }]
+  return [extendedVotes, extendedVotesLoading]
 }
 
 export function useDisputableVote(proposalId) {

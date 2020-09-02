@@ -303,7 +303,7 @@ function SummaryInfo({ vote, disabledProgressBars }) {
 /* eslint-disable react/prop-types */
 
 ProposalDetail.propTypes = {
-  vote: PropTypes.object.isRequired,
+  vote: PropTypes.object,
 }
 
 export default ProposalDetail
