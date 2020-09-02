@@ -4,8 +4,8 @@ import { ViewportProvider } from 'use-viewport'
 import { LayoutProvider } from '@aragon/ui'
 import { breakpoints } from './style/breakpoints'
 import { OrgAppsProvider } from './providers/OrgApps'
-import { VotesDataProvider } from './providers/VotesData'
-import { AgreementDataProvider } from './providers/AgreementData'
+import { VotesProvider } from './providers/Votes'
+import { AgreementProvider } from './providers/Agreement'
 import { ConnectProvider as Connect } from './providers/Connect'
 import MainView from './components/MainView'
 import Routes from './Routes'
@@ -14,8 +14,8 @@ function App() {
   return (
     <Connect>
       <OrgAppsProvider>
-        <VotesDataProvider>
-          <AgreementDataProvider>
+        <VotesProvider>
+          <AgreementProvider>
             <ViewportProvider>
               <LayoutProvider breakpoints={breakpoints}>
                 <Router>
@@ -25,8 +25,8 @@ function App() {
                 </Router>
               </LayoutProvider>
             </ViewportProvider>
-          </AgreementDataProvider>
-        </VotesDataProvider>
+          </AgreementProvider>
+        </VotesProvider>
       </OrgAppsProvider>
     </Connect>
   )

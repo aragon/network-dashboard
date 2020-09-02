@@ -7,10 +7,10 @@ import AgreementHeader from './AgreementHeader'
 import AgreementDetails from './AgreementDetails'
 import AgreementDocument from './AgreementDocument'
 import LoadingSection from '../Loading/LoadingSection'
-import { useAgreementData } from '../../providers/AgreementData'
+import { useAgreement } from '../../providers/Agreement'
 
 const Agreement = React.memo(function Agreement() {
-  const { agreementDetails, loading } = useAgreementData()
+  const { agreementDetails, loading } = useAgreement()
 
   return (
     <LayoutGutter>

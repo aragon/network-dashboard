@@ -45,7 +45,7 @@ export function useAgreementDetails() {
         const contentIpfsUri = ethersUtils.toUtf8String(content)
 
         const [extendedDisputableApps, agreementContent] = await Promise.all([
-          getExtendedDisputableApps(apps, disputableApps),
+          processDisputableApps(apps, disputableApps),
           getAgreementContent(contentIpfsUri),
         ])
 
@@ -78,10 +78,10 @@ export function useAgreementDetails() {
     }
   }, [apps, agreement, agreementAppLoading])
 
-  return [agreementDetails, { loading: agreementDetailsLoading }]
+  return [agreementDetails, agreementDetailsLoading]
 }
 
-async function getExtendedDisputableApps(apps, disputableApps) {
+async function processDisputableApps(apps, disputableApps) {
   const allRequirements = await Promise.all(
     disputableApps.map((app) => app.collateralRequirement())
   )
@@ -121,6 +121,7 @@ async function getAgreementContent(ipfsUri) {
 
   // TODO: Improve error handling, returning empty string to avoid render error
   if (error) {
+    captureException(error)
     console.error(error)
 
     return ''
