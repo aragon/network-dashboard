@@ -1,8 +1,9 @@
 import iconAcl from '../assets/icon-acl.svg'
 import iconKernel from '../assets/icon-kernel.svg'
 import iconRegistry from '../assets/icon-registry.svg'
+import { getIpfsUrlFromUri } from '../lib/ipfs-utils'
 
-export const KNOWN_APPS = new Map([
+export const KNOW_SYSTEM_APPS = new Map([
   [
     '0x3b4bf6bf3ad5000ecf0f989d5befde585c6860fea3e574a4fab4c49d1c177d9c',
     {
@@ -25,3 +26,24 @@ export const KNOWN_APPS = new Map([
     },
   ],
 ])
+
+export function getAppPresentation(apps, appAddress) {
+  const { contentUri, manifest, appId } = apps.find(
+    ({ address }) => address === appAddress
+  )
+
+  // Get human readable name and icon from manifest if available
+  if (manifest && manifest.name && manifest.icons) {
+    const { name, icons } = manifest
+    const iconPath = icons[0].src
+
+    return {
+      humanName: name,
+      iconSrc: getIpfsUrlFromUri(contentUri) + iconPath,
+    }
+  }
+
+  // System apps don't have icons or readable names so use our
+  // static properties if possible
+  return KNOW_SYSTEM_APPS.get(appId) || null
+}

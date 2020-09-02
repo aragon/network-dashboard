@@ -10,6 +10,9 @@ import {
 import ProposalOption from './ProposalOption'
 import DisputableStatusLabel from './DisputableStatusLabel'
 import Description from './Description'
+import { useDescribeVote } from '../../hooks/useDescribeVote'
+import { getAppPresentation } from '../../utils/app-utils'
+import { useOrgApps } from '../../providers/OrgApps'
 
 function getAttributes(status, theme) {
   const attributes = {
@@ -41,7 +44,13 @@ function getAttributes(status, theme) {
 
 function ProposalCard({ vote, onProposalClick }) {
   const theme = useTheme()
-  const { context, voteId, description, target } = vote
+  const { context, voteId, script } = vote
+  const {
+    description,
+    emptyScript,
+    targetApp,
+    loading: descriptionLoading,
+  } = useDescribeVote(script, vote.id)
 
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const { backgroundColor, borderColor, disabledProgressBars } = getAttributes(
@@ -69,12 +78,14 @@ function ProposalCard({ vote, onProposalClick }) {
           margin-bottom: ${1 * GU}px;
         `}
       >
-        <AppBadge
-          label={target.name ? target.name : target.address}
-          appAddress={target.address}
-          iconSrc={target.icon ? target.icon : ''}
-          badgeOnly
-        />
+        {emptyScript ? (
+          <DefaultAppBadge />
+        ) : (
+          <AppBadgeWithSkeleton
+            targetApp={targetApp}
+            loading={descriptionLoading}
+          />
+        )}
       </div>
 
       <p
@@ -94,10 +105,10 @@ function ProposalCard({ vote, onProposalClick }) {
         `}
       >
         <strong css="font-weight: bold">#{voteId}: </strong>
-        {Array.isArray(description) ? (
-          <Description path={description} />
-        ) : (
+        {emptyScript ? (
           context || 'No description provided'
+        ) : (
+          <Description path={description} loading={descriptionLoading} />
         )}
       </p>
 
@@ -131,5 +142,42 @@ ProposalCard.propTypes = {
   vote: PropTypes.object,
   onProposalClick: PropTypes.func.isRequired,
 }
+
+function DefaultAppBadge() {
+  const { apps, disputableVotingApp } = useOrgApps()
+
+  const { humanName, iconSrc } = getAppPresentation(
+    apps,
+    disputableVotingApp.address
+  )
+
+  return (
+    <AppBadge
+      label={humanName}
+      appAddress={disputableVotingApp.address}
+      iconSrc={iconSrc}
+      badgeOnly
+    />
+  )
+}
+
+/* eslint-disable react/prop-types */
+function AppBadgeWithSkeleton({ targetApp, loading }) {
+  if (loading) {
+    return 'AppBadge is loading'
+  }
+
+  const { address, name, icon } = targetApp
+
+  return (
+    <AppBadge
+      label={name || address}
+      appAddress={address}
+      iconSrc={icon}
+      badgeOnly
+    />
+  )
+}
+/* eslint-enable react/prop-types */
 
 export default ProposalCard

@@ -1,9 +1,11 @@
 import React from 'react'
 import { GU, IdentityBadge, useTheme } from '@aragon/ui'
+import { propTypes } from '@aragon/ui/dist/index-46d0e707'
 
-/* eslint-disable react/prop-types */
-function Description({ path }) {
-  return (
+function Description({ path, loading }) {
+  return loading ? (
+    'Loading...'
+  ) : (
     <span
       css={`
         // overflow-wrap:anywhere and hyphens:auto are not supported yet by
@@ -21,6 +23,7 @@ function Description({ path }) {
   )
 }
 
+/* eslint-disable react/prop-types */
 function DescriptionStep({ step }) {
   const theme = useTheme()
 
@@ -61,7 +64,8 @@ function DescriptionStep({ step }) {
       </span>
     )
   }
-  description.push(<br key={description.lenth + 1} />)
+
+  description.push(<br key={description.length + 1} />)
 
   const childrenDescriptions = (step.children || []).map((child, index) => {
     return <DescriptionStep step={child} key={index} />
@@ -103,6 +107,11 @@ function DescriptionStep({ step }) {
     </>
   )
 }
-/* eslint-disable react/prop-types */
+/* eslint-enable react/prop-types */
+
+Description.propTypes = {
+  path: propTypes.array,
+  loading: propTypes.bool,
+}
 
 export default Description
