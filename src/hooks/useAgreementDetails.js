@@ -5,7 +5,7 @@ import { createAppHook } from '@aragon/connect-react'
 import connectAgreement from '@aragon/connect-agreement'
 import { getIpfsCidFromUri, ipfsGet } from '../lib/ipfs-utils'
 import { networkEnvironment } from '../current-environment'
-import { toMs } from '../lib/date-utils'
+import { toMs } from '../utils/date-utils'
 import { useOrgApps } from '../providers/OrgApps'
 import { getAppPresentation } from '../lib/web3-utils'
 

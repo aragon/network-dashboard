@@ -11,7 +11,7 @@ import {
   GU,
 } from '@aragon/ui'
 import InfoField from './../InfoField'
-import { durationToHours } from '../../lib/date-utils'
+import { durationToHours } from '../../utils/date-utils'
 
 function AgreementBindingActions({ disputableApps }) {
   const items = disputableApps.map(

@@ -1,5 +1,5 @@
 import { getIpfsUrlFromUri } from '../lib/ipfs-utils'
-import { KNOWN_APPS } from './apps-utils'
+import { KNOWN_APPS } from '../utils/app-utils'
 
 export function getNetworkName(chainId) {
   chainId = String(chainId)
