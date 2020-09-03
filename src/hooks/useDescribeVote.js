@@ -34,7 +34,7 @@ export function useDescribeVote(script, voteId) {
 
     let cancelled = false
 
-    // Return from cache if description is was previously fetched
+    // Return from cache if description was previously fetched
     if (cachedDescriptions.has(voteId)) {
       if (!cancelled) {
         setDescription(cachedDescriptions.get(voteId))
@@ -52,7 +52,7 @@ export function useDescribeVote(script, voteId) {
           setDescription(description)
           setLoading(false)
 
-          // Cache vote description to avoid unnecessary additional calls
+          // Cache vote description to avoid unnecessary future call
           cachedDescriptions.set(voteId, description)
         }
       } catch (err) {
