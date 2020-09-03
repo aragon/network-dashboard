@@ -13,10 +13,12 @@ export function useDescribeVote(script, voteId) {
   const [description, setDescription] = useState(null)
   const [loading, setLoading] = useState(true)
 
+  // TODO: This provider will be supplied to describeScript by default in a future connect release
+  // https://github.com/aragon/connect/pull/223
   const provider = org.connection.ethersProvider
   const emptyScript = script === '0x00000001'
 
-  // Populate target app data from transacton request
+  // Populate target app data from transaction request
   const targetApp = useMemo(
     () =>
       description

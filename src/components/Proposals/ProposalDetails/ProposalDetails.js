@@ -243,12 +243,10 @@ function Details({ vote, status }) {
 }
 
 function DescriptionWithSkeleton({ description, loading }) {
-  const theme = useTheme()
   if (loading) {
     return (
       <>
         <LoadingSkeleton
-          theme={theme}
           css={`
             width: 95%;
           `}
