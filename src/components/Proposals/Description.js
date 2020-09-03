@@ -1,6 +1,6 @@
 import React from 'react'
+import { PropTypes } from 'prop-types'
 import { GU, IdentityBadge, useTheme } from '@aragon/ui'
-import { propTypes } from '@aragon/ui/dist/index-46d0e707'
 
 function Description({ path }) {
   return (
@@ -108,7 +108,7 @@ function DescriptionStep({ step }) {
 /* eslint-enable react/prop-types */
 
 Description.propTypes = {
-  path: propTypes.array,
+  path: PropTypes.array,
 }
 
 export default Description
