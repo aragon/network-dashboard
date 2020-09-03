@@ -16,7 +16,7 @@ export function useDescribeVote(script, voteId) {
   const provider = org.connection.ethersProvider
   const emptyScript = script === '0x00000001'
 
-  // Populate target app data from description
+  // Populate target app data from transacton request
   const targetApp = useMemo(
     () =>
       description
@@ -32,7 +32,7 @@ export function useDescribeVote(script, voteId) {
 
     let cancelled = false
 
-    // Return early from cache if description is already available
+    // Return from cache if description is was previously fetched
     if (cachedDescriptions.has(voteId)) {
       if (!cancelled) {
         setDescription(cachedDescriptions.get(voteId))
@@ -50,7 +50,7 @@ export function useDescribeVote(script, voteId) {
           setDescription(description)
           setLoading(false)
 
-          // Cache vote description to avoid additional calls
+          // Cache vote description to avoid unnecessary additional calls
           cachedDescriptions.set(voteId, description)
         }
       } catch (err) {
@@ -71,7 +71,7 @@ export function useDescribeVote(script, voteId) {
 function targetDataFromTransactionRequest(apps, transactionRequest) {
   const { to: targetAppAddress, name, identifier } = transactionRequest
 
-  // Populate via known org apps if we know about it
+  // Populate details via our apps list if it's available
   if (apps.some(({ address }) => addressesEqual(address, targetAppAddress))) {
     const { humanName, iconSrc } = getAppPresentation(apps, targetAppAddress)
     return {
@@ -81,7 +81,7 @@ function targetDataFromTransactionRequest(apps, transactionRequest) {
     }
   }
 
-  // Otherwise provide the information we can
+  // Otherwise provide some fallback values
   return {
     address: targetAppAddress,
     name: name || identifier,

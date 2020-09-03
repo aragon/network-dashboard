@@ -3,7 +3,9 @@ import iconKernel from '../assets/icon-kernel.svg'
 import iconRegistry from '../assets/icon-registry.svg'
 import { getIpfsUrlFromUri } from '../lib/ipfs-utils'
 
-export const KNOW_SYSTEM_APPS = new Map([
+// TODO: Replace with information supplied by connect when available
+// https://github.com/aragon/connect/pull/259
+export const KNOWN_SYSTEM_APPS = new Map([
   [
     '0x3b4bf6bf3ad5000ecf0f989d5befde585c6860fea3e574a4fab4c49d1c177d9c',
     {
@@ -43,7 +45,7 @@ export function getAppPresentation(apps, appAddress) {
     }
   }
 
-  // System apps don't have icons or readable names so use our
-  // static properties if possible
-  return KNOW_SYSTEM_APPS.get(appId) || null
+  // System apps don't have icons or human readable names
+  // so we get them via a static mapping instead
+  return KNOWN_SYSTEM_APPS.get(appId) || null
 }

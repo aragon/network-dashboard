@@ -10,8 +10,9 @@ import {
 import ProposalOption from './ProposalOption'
 import DisputableStatusLabel from './DisputableStatusLabel'
 import Description from './Description'
-import { useDescribeVote } from '../../hooks/useDescribeVote'
 import { getAppPresentation } from '../../utils/app-utils'
+import LoadingSkeleton from '../Loading/LoadingSkeleton'
+import { useDescribeVote } from '../../hooks/useDescribeVote'
 import { useOrgApps } from '../../providers/OrgApps'
 
 function getAttributes(status, theme) {
@@ -104,11 +105,17 @@ function ProposalCard({ vote, onProposalClick }) {
           overflow: hidden;
         `}
       >
-        <strong css="font-weight: bold">#{voteId}: </strong>
         {emptyScript ? (
-          context || 'No description provided'
+          <>
+            <strong css="font-weight: bold">#{voteId}: </strong>
+            {context || 'No description provided'}
+          </>
         ) : (
-          <Description path={description} loading={descriptionLoading} />
+          <DescriptionWithSkeleton
+            description={description}
+            loading={descriptionLoading}
+            voteNumber={voteId}
+          />
         )}
       </p>
 
@@ -164,7 +171,14 @@ function DefaultAppBadge() {
 /* eslint-disable react/prop-types */
 function AppBadgeWithSkeleton({ targetApp, loading }) {
   if (loading) {
-    return 'AppBadge is loading'
+    return (
+      <LoadingSkeleton
+        css={`
+          height: ${3 * GU}px;
+          width: ${12 * GU}px;
+        `}
+      />
+    )
   }
 
   const { address, name, icon } = targetApp
@@ -176,6 +190,37 @@ function AppBadgeWithSkeleton({ targetApp, loading }) {
       iconSrc={icon}
       badgeOnly
     />
+  )
+}
+
+function DescriptionWithSkeleton({ description, voteNumber, loading }) {
+  if (loading) {
+    return (
+      <>
+        <LoadingSkeleton
+          css={`
+            width: 95%;
+          `}
+        />
+        <LoadingSkeleton
+          css={`
+            width: 70%;
+          `}
+        />
+        <LoadingSkeleton
+          css={`
+            width: 35%;
+          `}
+        />
+      </>
+    )
+  }
+
+  return (
+    <>
+      <strong css="font-weight: bold">#{voteNumber}: </strong>{' '}
+      <Description path={description} />
+    </>
   )
 }
 /* eslint-enable react/prop-types */

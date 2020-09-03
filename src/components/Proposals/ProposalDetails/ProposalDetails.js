@@ -33,6 +33,7 @@ import Description from '../Description'
 import { addressesEqual } from '../../../lib/web3-utils'
 import { getIpfsUrlFromUri } from '../../../lib/ipfs-utils'
 import { useDescribeVote } from '../../../hooks/useDescribeVote'
+import LoadingSkeleton from '../../Loading/LoadingSkeleton'
 
 function getAttributes(status, theme) {
   const attributes = {
@@ -162,7 +163,10 @@ function Details({ vote, status }) {
       ) : (
         <div>
           <InfoField label="Description">
-            <Description path={description} loading={descriptionLoading} />
+            <DescriptionWithSkeleton
+              description={description}
+              loading={descriptionLoading}
+            />
           </InfoField>
 
           <InfoField
@@ -236,6 +240,34 @@ function Details({ vote, status }) {
       </InfoField>
     </div>
   )
+}
+
+function DescriptionWithSkeleton({ description, loading }) {
+  const theme = useTheme()
+  if (loading) {
+    return (
+      <>
+        <LoadingSkeleton
+          theme={theme}
+          css={`
+            width: 95%;
+          `}
+        />
+        <LoadingSkeleton
+          css={`
+            width: 70%;
+          `}
+        />
+        <LoadingSkeleton
+          css={`
+            width: 35%;
+          `}
+        />
+      </>
+    )
+  }
+
+  return <Description path={description} />
 }
 
 function SummaryInfo({ vote, disabledProgressBars }) {

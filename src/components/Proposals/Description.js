@@ -2,10 +2,8 @@ import React from 'react'
 import { GU, IdentityBadge, useTheme } from '@aragon/ui'
 import { propTypes } from '@aragon/ui/dist/index-46d0e707'
 
-function Description({ path, loading }) {
-  return loading ? (
-    'Loading...'
-  ) : (
+function Description({ path }) {
+  return (
     <span
       css={`
         // overflow-wrap:anywhere and hyphens:auto are not supported yet by
@@ -111,7 +109,6 @@ function DescriptionStep({ step }) {
 
 Description.propTypes = {
   path: propTypes.array,
-  loading: propTypes.bool,
 }
 
 export default Description
