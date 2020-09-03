@@ -1,11 +1,13 @@
 import React from 'react'
-import { Box, Button, Header, Split } from '@aragon/ui'
+import { Button, Header } from '@aragon/ui'
 import LayoutGutter from '../Layout/LayoutGutter'
 import LayoutLimiter from '../Layout/LayoutLimiter'
 import AgreementBindingActions from './AgreementBindingActions'
 import AgreementHeader from './AgreementHeader'
 import AgreementDetails from './AgreementDetails'
 import AgreementDocument from './AgreementDocument'
+import LayoutBox from '../Layout/LayoutBox'
+import LayoutColumns from '../Layout/LayoutColumns'
 import LoadingSection from '../Loading/LoadingSection'
 import { useAgreement } from '../../providers/Agreement'
 
@@ -40,10 +42,10 @@ function AgreementLayout({ agreementDetails }) {
   } = agreementDetails
 
   return (
-    <Split
+    <LayoutColumns
       primary={
         <>
-          <Box>
+          <LayoutBox primary>
             <AgreementHeader title={title} />
             <AgreementDetails
               contractAddress={contractAddress}
@@ -51,7 +53,7 @@ function AgreementLayout({ agreementDetails }) {
               ipfsUri={contentIpfsUri}
               stakingAddress={stakingAddress}
             />
-          </Box>
+          </LayoutBox>
           <AgreementDocument content={content} />
         </>
       }

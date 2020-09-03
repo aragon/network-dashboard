@@ -10,6 +10,7 @@ function LayoutColumns({ primary, secondary }) {
     <div
       css={`
         flex-grow: 1;
+        min-width: 0;
       `}
     >
       {primary}
@@ -20,7 +21,6 @@ function LayoutColumns({ primary, secondary }) {
     <div
       css={`
         flex-shrink: 0;
-        min-width: 0;
         flex-grow: 0;
         width: ${oneColumn ? '100%' : `306px`};
         margin-left: ${!oneColumn ? 2 * GU : 0}px;
