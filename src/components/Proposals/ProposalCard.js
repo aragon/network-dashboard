@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { AppBadge, Card, GU, textStyle, useTheme } from '@aragon/ui'
+import { AppBadge, Card, GU, textStyle, useTheme, RADIUS } from '@aragon/ui'
 import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_CANCELLED,
@@ -60,37 +60,45 @@ function ProposalCard({ vote, onProposalClick }) {
   )
 
   return (
-    <Card
-      onClick={() => onProposalClick(voteId)}
-      css={`
-        display: grid;
-        grid-template-columns: 100%;
-        grid-template-rows: auto 1fr auto auto;
-        grid-gap: ${1 * GU}px;
-        align-items: start;
-        padding: ${3 * GU}px;
-        background: ${backgroundColor};
-        border: solid 1px ${borderColor};
-      `}
-    >
+    <Card onClick={() => onProposalClick(voteId)}>
       <div
         css={`
-          display: flex;
-          margin-bottom: ${1 * GU}px;
+          display: grid;
+          grid-template-columns: 100%;
+          grid-template-rows: auto 1fr auto auto;
+          grid-gap: ${1 * GU}px;
+          align-items: start;
+          padding: ${3 * GU}px;
+          width: 100%;
+
+          background: ${backgroundColor};
+          border: solid 1px ${borderColor};
+          border-radius: ${RADIUS}px;
         `}
       >
-        {emptyScript ? (
-          <DefaultAppBadge />
-        ) : (
-          <AppBadgeWithSkeleton
-            targetApp={targetApp}
-            loading={descriptionLoading}
-          />
-        )}
-      </div>
+        <div
+          css={`
+            display: flex;
+            margin-bottom: ${1 * GU}px;
 
-      <p
-        css={`
+            /* Prevent default cursor interruption when hovering badge */
+            & > a {
+              cursor: inherit;
+            }
+          `}
+        >
+          {emptyScript ? (
+            <DefaultAppBadge />
+          ) : (
+            <AppBadgeWithSkeleton
+              targetApp={targetApp}
+              loading={descriptionLoading}
+            />
+          )}
+        </div>
+
+        <div
+          css={`
           // overflow-wrap:anywhere and hyphens:auto are not supported yet by
           // the latest versions of Safari (as of June 2020), which
           // is why word-break:break-word has been added here.
@@ -104,42 +112,43 @@ function ProposalCard({ vote, onProposalClick }) {
           -webkit-line-clamp: 3;
           overflow: hidden;
         `}
-      >
-        {emptyScript ? (
-          <>
-            <strong css="font-weight: bold">#{voteId}: </strong>
-            {context || 'No description provided'}
-          </>
-        ) : (
-          <DescriptionWithSkeleton
-            description={description}
-            loading={descriptionLoading}
-            voteNumber={voteId}
-          />
-        )}
-      </p>
+        >
+          {emptyScript ? (
+            <p>
+              <strong css="font-weight: bold">#{voteId}: </strong>
+              {context || 'No description provided'}
+            </p>
+          ) : (
+            <DescriptionWithSkeleton
+              description={description}
+              loading={descriptionLoading}
+              voteNumber={voteId}
+            />
+          )}
+        </div>
 
-      <ProposalOption
-        color={disabledProgressBars ? theme.surfaceOpened : theme.positive}
-        percentage={(vote.yeas * 100) / vote.totalPower}
-        label="Yes"
-      />
-
-      <ProposalOption
-        color={disabledProgressBars ? theme.surfaceOpened : theme.negative}
-        percentage={(vote.nays * 100) / vote.totalPower}
-        label="No"
-      />
-
-      <div
-        css={`
-          display: flex;
-          margin-top: ${2 * GU}px;
-        `}
-      >
-        <DisputableStatusLabel
-          status={DISPUTABLE_VOTE_STATUSES.get(vote.status)}
+        <ProposalOption
+          color={disabledProgressBars ? theme.surfaceOpened : theme.positive}
+          percentage={(vote.yeas * 100) / vote.totalPower}
+          label="Yes"
         />
+
+        <ProposalOption
+          color={disabledProgressBars ? theme.surfaceOpened : theme.negative}
+          percentage={(vote.nays * 100) / vote.totalPower}
+          label="No"
+        />
+
+        <div
+          css={`
+            display: flex;
+            margin-top: ${2 * GU}px;
+          `}
+        >
+          <DisputableStatusLabel
+            status={DISPUTABLE_VOTE_STATUSES.get(vote.status)}
+          />
+        </div>
       </div>
     </Card>
   )
@@ -219,7 +228,7 @@ function DescriptionWithSkeleton({ description, voteNumber, loading }) {
   return (
     <>
       <strong css="font-weight: bold">#{voteNumber}: </strong>{' '}
-      <Description path={description} />
+      <Description disableBadgeInteraction path={description} />
     </>
   )
 }
