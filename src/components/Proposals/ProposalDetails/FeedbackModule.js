@@ -9,7 +9,7 @@ import {
   textStyle,
   useTheme,
 } from '@aragon/ui'
-import { dateFormat, toMs } from '../../../lib/date-utils'
+import { dateFormat, toMs } from '../../../utils/date-utils'
 
 function FeedbackModule({ vote, mode }) {
   // TODO: Replace dates and amounts with real data

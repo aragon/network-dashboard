@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { IdentityBadge, Link, useLayout, GU } from '@aragon/ui'
-import { dateFormat } from '../../lib/date-utils'
+import { dateFormat } from '../../utils/date-utils'
 import InfoField from '../InfoField'
 import { getIpfsCidFromUri, getIpfsUrlFromUri } from '../../lib/ipfs-utils'
 import { networkEnvironment } from '../../current-environment'

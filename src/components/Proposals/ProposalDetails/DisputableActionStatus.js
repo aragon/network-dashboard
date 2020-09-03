@@ -6,7 +6,7 @@ import {
   VOTE_STATUS_ACTIVE,
   VOTE_STATUS_PAUSED,
 } from '../disputable-vote-statuses'
-import { toMs } from '../../../lib/date-utils'
+import { toMs } from '../../../utils/date-utils'
 import DisputableActions from './DisputableActions'
 import DisputablePeriod from './DisputablePeriod'
 import { networkEnvironment } from '../../../current-environment'

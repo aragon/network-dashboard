@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Timer, useTheme } from '@aragon/ui'
-import { dateFormat } from '../../../lib/date-utils'
+import { dateFormat } from '../../../utils/date-utils'
 
 /* eslint-disable react/prop-types */
 function DisputablePeriod({ endDate, paused, label }) {
