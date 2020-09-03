@@ -7,7 +7,7 @@ import { getIpfsCidFromUri, ipfsGet } from '../lib/ipfs-utils'
 import { networkEnvironment } from '../current-environment'
 import { toMs } from '../utils/date-utils'
 import { useOrgApps } from '../providers/OrgApps'
-import { getAppPresentation } from '../lib/web3-utils'
+import { getAppPresentation } from '../utils/app-utils'
 
 const SUBGRAPH_URL = networkEnvironment.subgraphs?.agreement
 

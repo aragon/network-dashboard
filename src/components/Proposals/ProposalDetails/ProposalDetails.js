@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import {
   Box,
@@ -32,6 +32,8 @@ import FeedbackModule from './FeedbackModule'
 import Description from '../Description'
 import { addressesEqual } from '../../../lib/web3-utils'
 import { getIpfsUrlFromUri } from '../../../lib/ipfs-utils'
+import { useDescribeVote } from '../../../hooks/useDescribeVote'
+import LoadingSkeleton from '../../Loading/LoadingSkeleton'
 
 function getAttributes(status, theme) {
   const attributes = {
@@ -130,14 +132,21 @@ function ProposalDetail({ vote }) {
 
 /* eslint-disable react/prop-types */
 function Details({ vote, status }) {
-  const { context, creator, collateral, token, description } = vote
+  const { context, creator, collateral, token, script } = vote
   const { layoutName } = useLayout()
+  const {
+    description,
+    emptyScript,
+    loading: descriptionLoading,
+  } = useDescribeVote(script, vote.id)
+
   const compactMode = layoutName === 'small'
 
-  let ipfsJustification = null
-  if (context.startsWith('ipfs')) {
-    ipfsJustification = context
-  }
+  const justificationUrl = useMemo(
+    () => (context.startsWith('ipfs') ? getIpfsUrlFromUri(context) : null),
+    [context]
+  )
+
   return (
     <div
       css={`
@@ -147,20 +156,28 @@ function Details({ vote, status }) {
         grid-gap: ${3 * GU}px;
       `}
     >
-      {Array.isArray(description) ? (
+      {emptyScript ? (
+        <InfoField label="Description">
+          <p>{context}</p>
+        </InfoField>
+      ) : (
         <div>
           <InfoField label="Description">
-            <Description path={description} />
+            <DescriptionWithSkeleton
+              description={description}
+              loading={descriptionLoading}
+            />
           </InfoField>
+
           <InfoField
             label="Justification"
             css={`
               margin-top: ${3 * GU}px;
             `}
           >
-            {ipfsJustification ? (
+            {justificationUrl ? (
               <Link
-                href={getIpfsUrlFromUri(ipfsJustification)}
+                href={justificationUrl}
                 css={`
                   max-width: 90%;
                 `}
@@ -177,13 +194,12 @@ function Details({ vote, status }) {
                 </span>
               </Link>
             ) : (
-              context
+              <p>{context}</p>
             )}
           </InfoField>
         </div>
-      ) : (
-        <InfoField label="Description">{context}</InfoField>
       )}
+
       <InfoField label="Status">
         <DisputableStatusLabel status={status} />
       </InfoField>
@@ -224,6 +240,32 @@ function Details({ vote, status }) {
       </InfoField>
     </div>
   )
+}
+
+function DescriptionWithSkeleton({ description, loading }) {
+  if (loading) {
+    return (
+      <>
+        <LoadingSkeleton
+          css={`
+            width: 95%;
+          `}
+        />
+        <LoadingSkeleton
+          css={`
+            width: 70%;
+          `}
+        />
+        <LoadingSkeleton
+          css={`
+            width: 35%;
+          `}
+        />
+      </>
+    )
+  }
+
+  return <Description path={description} />
 }
 
 function SummaryInfo({ vote, disabledProgressBars }) {
