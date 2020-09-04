@@ -35,13 +35,6 @@
   dependencies:
     "@aragon/connect-core" "^0.7.0-beta.3"
 
-"@aragon/connect-react@^0.7.0-beta.3":
-  version "0.7.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-react/-/connect-react-0.7.0-beta.3.tgz#1d840e7d219bff9a1d3292693dd4164970aac27b"
-  integrity sha512-w26jngv4ieq8ys1gu6rpVkWQMfxGa3VeqEHlHYuF8wMDws7rxAGIhraYni8jB976nSmN8SOjmPQGyN6a/zfvWw==
-  dependencies:
-    "@aragon/connect" "^0.7.0-beta.3"
-
 "@aragon/connect-thegraph@^0.7.0-beta.3":
   version "0.7.0-beta.3"
   resolved "https://registry.yarnpkg.com/@aragon/connect-thegraph/-/connect-thegraph-0.7.0-beta.3.tgz#b2053076c6b5731a289c78fa6cdf4ea356b0f043"

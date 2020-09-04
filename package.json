@@ -37,7 +37,6 @@
     "@aragon/connect": "^0.7.0-beta.3",
     "@aragon/connect-agreement": "^0.0.0-beta.4",
     "@aragon/connect-disputable-voting": "^0.0.0-beta.4",
-    "@aragon/connect-react": "^0.7.0-beta.3",
     "@aragon/ui": "^1.7.0",
     "@sentry/browser": "^5.20.1",
     "core-js": "^3.3.2",
