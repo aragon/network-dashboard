@@ -110,7 +110,6 @@ function ProposalCard({ vote, onProposalClick }) {
             <strong css="font-weight: bold">#{voteId}: </strong>
             {context || 'No description provided'}
           </>
-
         ) : (
           <DescriptionWithSkeleton
             description={description}
