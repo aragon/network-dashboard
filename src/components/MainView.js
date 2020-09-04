@@ -4,12 +4,12 @@ import { useTransition, animated } from 'react-spring'
 import { ScrollView, GU } from '@aragon/ui'
 import LoadingFullscreen from '../components/Loading/LoadingFullscreen'
 import Header from './Header/Header'
-import { useOrgApps } from '../providers/OrgApps'
+import { useAppState } from '../providers/AppState'
 
 const AnimatedDiv = animated.div
 
 const MainView = React.memo(function MainView({ children }) {
-  const { loading } = useOrgApps()
+  const { loading } = useAppState()
 
   const loaderExitTransitions = useTransition(loading, null, {
     from: { opacity: 0 },

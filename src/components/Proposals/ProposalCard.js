@@ -13,7 +13,7 @@ import Description from './Description'
 import { getAppPresentation } from '../../utils/app-utils'
 import LoadingSkeleton from '../Loading/LoadingSkeleton'
 import { useDescribeVote } from '../../hooks/useDescribeVote'
-import { useOrgApps } from '../../providers/OrgApps'
+import { useAppState } from '../../providers/AppState'
 
 function getAttributes(status, theme) {
   const attributes = {
@@ -151,7 +151,7 @@ ProposalCard.propTypes = {
 }
 
 function DefaultAppBadge() {
-  const { apps, disputableVotingApp } = useOrgApps()
+  const { apps, disputableVotingApp } = useAppState()
 
   const { humanName, iconSrc } = getAppPresentation(
     apps,

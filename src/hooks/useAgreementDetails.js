@@ -6,7 +6,7 @@ import connectAgreement from '@aragon/connect-agreement'
 import { getIpfsCidFromUri, ipfsGet } from '../lib/ipfs-utils'
 import { networkEnvironment } from '../current-environment'
 import { toMs } from '../utils/date-utils'
-import { useOrgApps } from '../providers/OrgApps'
+import { useAppState } from '../providers/AppState'
 import { getAppPresentation } from '../utils/app-utils'
 
 const SUBGRAPH_URL = networkEnvironment.subgraphs?.agreement
@@ -19,7 +19,7 @@ const connecterConfig = SUBGRAPH_URL && [
 const useAgreementHook = createAppHook(connectAgreement, connecterConfig)
 
 export function useAgreementDetails() {
-  const { apps, agreementApp } = useOrgApps()
+  const { apps, agreementApp } = useAppState()
   const [agreement, { loading: agreementAppLoading }] = useAgreementHook(
     agreementApp
   )

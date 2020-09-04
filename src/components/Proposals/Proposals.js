@@ -7,7 +7,7 @@ import LoadingSection from '../Loading/LoadingSection'
 import ProposalBanner from './ProposalBanner'
 import ProposalCardGroup from './ProposalCardGroup'
 import ProposalCard from './ProposalCard'
-import { useOrgApps } from '../../providers/OrgApps'
+import { useAppState } from '../../providers/AppState'
 import { useVotes } from '../../providers/Votes'
 
 const Proposals = React.memo(function Proposals() {
@@ -51,7 +51,7 @@ const Proposals = React.memo(function Proposals() {
 })
 
 function VotesLayout({ votes }) {
-  const { disputableVotingApp } = useOrgApps()
+  const { disputableVotingApp } = useAppState()
   const history = useHistory()
 
   const handleProposalClick = useCallback(

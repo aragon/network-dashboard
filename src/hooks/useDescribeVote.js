@@ -1,22 +1,23 @@
 import { useEffect, useState, useMemo } from 'react'
 import { describeScript } from '@aragon/connect'
-import { useOrganization } from '@aragon/connect-react'
-import { useOrgApps } from '../providers/OrgApps'
+import { useAppState } from '../providers/AppState'
 import { getAppPresentation } from '../utils/app-utils'
 import { addressesEqual } from '../lib/web3-utils'
 
 const cachedDescriptions = new Map([])
 
 export function useDescribeVote(script, voteId) {
-  const [org] = useOrganization()
-  const { apps } = useOrgApps()
+  const { organization } = useAppState()
+  const { apps } = useAppState()
   const [description, setDescription] = useState(null)
   const [loading, setLoading] = useState(true)
 
   // TODO: This provider will be supplied to describeScript by default in a future connect release
   // https://github.com/aragon/connect/pull/223
-  const provider = org.connection.ethersProvider
+  const provider = organization.connection.ethersProvider
   const emptyScript = script === '0x00000001'
+
+  console.log(organization)
 
   // Populate target app data from transaction request
   const targetApp = useMemo(

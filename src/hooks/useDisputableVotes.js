@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from 'react'
 import { captureErrorWithSentry } from '../sentry'
 import connectVoting from '@aragon/connect-disputable-voting'
 import { createAppHook } from '@aragon/connect-react'
-import { useOrgApps } from '../providers/OrgApps'
+import { useAppState } from '../providers/AppState'
 import { networkEnvironment } from '../current-environment'
 
 const SUBGRAPH_URL = networkEnvironment.subgraphs?.disputableVoting
@@ -15,7 +15,7 @@ const connecterConfig = SUBGRAPH_URL && [
 const useDisputableVotingHook = createAppHook(connectVoting, connecterConfig)
 
 export function useDisputableVotes() {
-  const { disputableVotingApp } = useOrgApps()
+  const { disputableVotingApp } = useAppState()
 
   const [votes, { loading }] = useDisputableVotingHook(
     disputableVotingApp,
@@ -33,7 +33,7 @@ export function useDisputableVotes() {
 }
 
 export function useDisputableVote(proposalId) {
-  const { apps, disputableVotingApp } = useOrgApps()
+  const { apps, disputableVotingApp } = useAppState()
   const [extendedVoteLoading, setExtendedVoteLoading] = useState(true)
   const [extendedVote, setExtendedVote] = useState(null)
 
