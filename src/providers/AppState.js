@@ -16,7 +16,6 @@ function getAppByName(apps, appName) {
 function AppStateProvider({ children }) {
   const { apps, organization, loading } = useOrganzation()
 
-  // Avoid additional overhead by finding within existing app list
   const [agreementApp, disputableVotingApp] = useMemo(
     () => [
       getAppByName(apps, 'agreement'),

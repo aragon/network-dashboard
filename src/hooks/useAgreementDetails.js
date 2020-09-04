@@ -82,14 +82,15 @@ export function useAgreementDetails() {
 }
 
 async function processDisputableApps(apps, disputableApps) {
+  // Get all collateral requirement details concurrently
   const allRequirements = await Promise.all(
     disputableApps.map((app) => app.collateralRequirement())
   )
-
   const allTokens = await Promise.all(
     allRequirements.map((collateral) => collateral.token())
   )
 
+  // Extend disputable apps list with collateral requirements
   const extendedDisputableApps = disputableApps.map((disputableApp) => {
     const { iconSrc, humanName } = getAppPresentation(
       apps,

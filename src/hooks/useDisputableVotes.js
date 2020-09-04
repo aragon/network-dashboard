@@ -64,7 +64,7 @@ export function useDisputableVote(proposalId) {
   useEffect(() => {
     let cancelled = false
 
-    async function getExtendedVote() {
+    async function getVote() {
       if (!cancelled) {
         setLoading(true)
       }
@@ -105,7 +105,7 @@ export function useDisputableVote(proposalId) {
     }
 
     if (!appLoading) {
-      getExtendedVote()
+      getVote()
     }
 
     return () => {
