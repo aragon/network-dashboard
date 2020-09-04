@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react'
-import { captureException } from '@sentry/browser'
+import { captureErrorWithSentry } from '../sentry'
 import connectVoting from '@aragon/connect-disputable-voting'
 import { createAppHook } from '@aragon/connect-react'
 import { useOrgApps } from '../providers/OrgApps'
@@ -75,7 +75,7 @@ export function useDisputableVote(proposalId) {
           setExtendedVoteLoading(false)
         }
       } catch (err) {
-        captureException(err)
+        captureErrorWithSentry(err)
         console.error(err)
       }
     }
