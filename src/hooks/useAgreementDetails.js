@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { utils as ethersUtils } from 'ethers'
-import { captureException } from '@sentry/browser'
+import { captureErrorWithSentry } from '../sentry'
 import { createAppHook } from '@aragon/connect-react'
 import connectAgreement from '@aragon/connect-agreement'
 import { getIpfsCidFromUri, ipfsGet } from '../lib/ipfs-utils'
@@ -64,7 +64,7 @@ export function useAgreementDetails() {
           setAgreementDetailsLoading(false)
         }
       } catch (err) {
-        captureException(err)
+        captureErrorWithSentry(err)
         console.error(err)
       }
     }
@@ -121,7 +121,7 @@ async function getAgreementContent(ipfsUri) {
 
   // TODO: Improve error handling, returning empty string to avoid render error
   if (error) {
-    captureException(error)
+    captureErrorWithSentry(error)
     console.error(error)
 
     return ''
