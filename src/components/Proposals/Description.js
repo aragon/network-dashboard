@@ -1,7 +1,7 @@
 import React from 'react'
+import { PropTypes } from 'prop-types'
 import { GU, IdentityBadge, useTheme } from '@aragon/ui'
 
-/* eslint-disable react/prop-types */
 function Description({ path }) {
   return (
     <span
@@ -21,6 +21,7 @@ function Description({ path }) {
   )
 }
 
+/* eslint-disable react/prop-types */
 function DescriptionStep({ step }) {
   const theme = useTheme()
 
@@ -61,7 +62,8 @@ function DescriptionStep({ step }) {
       </span>
     )
   }
-  description.push(<br key={description.lenth + 1} />)
+
+  description.push(<br key={description.length + 1} />)
 
   const childrenDescriptions = (step.children || []).map((child, index) => {
     return <DescriptionStep step={child} key={index} />
@@ -103,6 +105,10 @@ function DescriptionStep({ step }) {
     </>
   )
 }
-/* eslint-disable react/prop-types */
+/* eslint-enable react/prop-types */
+
+Description.propTypes = {
+  path: PropTypes.array,
+}
 
 export default Description

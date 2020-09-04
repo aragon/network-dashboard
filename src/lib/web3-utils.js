@@ -1,5 +1,3 @@
-import { getIpfsUrlFromUri } from '../lib/ipfs-utils'
-import { KNOWN_APPS } from '../utils/app-utils'
 import env from '../environment'
 
 export const DEFAULT_LOCAL_CHAIN = 'private'
@@ -64,40 +62,3 @@ export function addressesEqual(first, second) {
   return first === second
 }
 
-export function getAppPresentation(apps, appAddress) {
-  const { contentUri, manifest, appId } = apps.find(
-    ({ address }) => address === appAddress
-  )
-  let iconSrc = ''
-  let humanName = ''
-  if (manifest && manifest.name) {
-    humanName = manifest.name
-  }
-
-  if (manifest && manifest.icons && manifest.icons[0]) {
-    const iconPath = manifest.icons[0].src
-    iconSrc = getIpfsUrlFromUri(contentUri) + iconPath
-  }
-
-  if (KNOWN_APPS.get(appId)) {
-    humanName = KNOWN_APPS.get(appId).humanName
-    iconSrc = KNOWN_APPS.get(appId).iconSrc
-  }
-
-  return { humanName, iconSrc }
-}
-
-export function shortenAddress(address, charsLength = 4) {
-  const prefixLength = 2 // "0x"
-  if (!address) {
-    return ''
-  }
-  if (address.length < charsLength * 2 + prefixLength) {
-    return address
-  }
-  return (
-    address.slice(0, charsLength + prefixLength) +
-    '…' +
-    address.slice(-charsLength)
-  )
-}
