@@ -1,9 +1,14 @@
 // Rinkeby
 const DEFAULT_NETWORK_ENVIRONMENT = 'rinkeby-staging'
+const CHAIN_ID_DEFAULT = 4
 
 const ENV_VARS = {
   BUILD() {
     return process.env.BUILD || 'undefined'
+  },
+  CHAIN_ID() {
+    const chainId = parseInt(process.env.REACT_APP_CHAIN_ID)
+    return isNaN(chainId) ? CHAIN_ID_DEFAULT : chainId
   },
   NETWORK_ENVIRONMENT() {
     return process.env.NETWORK_ENVIRONMENT || DEFAULT_NETWORK_ENVIRONMENT

@@ -93,7 +93,13 @@ function ProposalCard({ vote, onProposalClick }) {
           overflow: hidden;
         `}
       >
-        <strong css="font-weight: bold">#{voteId}: </strong>
+        <strong
+          css={`
+            font-weight: bold;
+          `}
+        >
+          #{voteId}:{' '}
+        </strong>
         {Array.isArray(description) ? (
           <Description path={description} />
         ) : (
