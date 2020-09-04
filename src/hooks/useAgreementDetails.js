@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { utils as ethersUtils } from 'ethers'
 import { captureErrorWithSentry } from '../sentry'
-import { createAppHook } from '@aragon/connect-react'
 import connectAgreement from '@aragon/connect-agreement'
 import { getIpfsCidFromUri, ipfsGet } from '../lib/ipfs-utils'
 import { networkEnvironment } from '../current-environment'
@@ -16,21 +15,18 @@ const connecterConfig = SUBGRAPH_URL && [
   { subgraphUrl: SUBGRAPH_URL },
 ]
 
-const useAgreementHook = createAppHook(connectAgreement, connecterConfig)
-
 export function useAgreementDetails() {
-  const { apps, agreementApp } = useAppState()
-  const [agreement, { loading: agreementAppLoading }] = useAgreementHook(
-    agreementApp
-  )
+  const { apps, agreementApp, loading: appLoading } = useAppState()
   const [agreementDetails, setAgreementDetails] = useState(null)
-  const [agreementDetailsLoading, setAgreementDetailsLoading] = useState(true)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     let cancelled = false
 
     async function getAgreementDetails() {
       try {
+        const agreement = await connectAgreement(agreementApp, connecterConfig)
+
         const [
           currentVersion,
           stakingFactory,
@@ -61,24 +57,28 @@ export function useAgreementDetails() {
 
         if (!cancelled) {
           setAgreementDetails(details)
-          setAgreementDetailsLoading(false)
+          setLoading(false)
         }
       } catch (err) {
         captureErrorWithSentry(err)
         console.error(err)
+
+        if (!cancelled) {
+          setLoading(false)
+        }
       }
     }
 
-    if (!agreementAppLoading) {
+    if (!appLoading) {
       getAgreementDetails()
     }
 
     return () => {
       cancelled = true
     }
-  }, [apps, agreement, agreementAppLoading])
+  }, [apps, agreementApp, appLoading])
 
-  return [agreementDetails, agreementDetailsLoading]
+  return [agreementDetails, loading]
 }
 
 async function processDisputableApps(apps, disputableApps) {
