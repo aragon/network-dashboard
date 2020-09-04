@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { connect } from '@aragon/connect-react'
+import { connect } from '@aragon/connect'
 import { captureErrorWithSentry } from '../sentry'
 import { networkEnvironment } from '../current-environment'
 
@@ -20,10 +20,13 @@ export function useOrganzation() {
         setLoading(true)
       }
       try {
-        const organization = await connect(orgLocation, 'thegraph', {
-          network: chainId,
-          orgSubgraphUrl: ORG_SUBGRAPH_URL,
-        })
+        const organization = await connect(orgLocation, [
+          'thegraph',
+          {
+            network: chainId,
+            orgSubgraphUrl: ORG_SUBGRAPH_URL,
+          },
+        ])
 
         const apps = await organization.apps()
 

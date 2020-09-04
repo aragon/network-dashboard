@@ -17,8 +17,6 @@ export function useDescribeVote(script, voteId) {
   const provider = organization.connection.ethersProvider
   const emptyScript = script === '0x00000001'
 
-  console.log(organization)
-
   // Populate target app data from transaction request
   const targetApp = useMemo(
     () =>
