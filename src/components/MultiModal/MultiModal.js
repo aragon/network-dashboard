@@ -16,6 +16,8 @@ import { MultiModalProvider, useMultiModal } from './MultiModalProvider'
 const DEFAULT_MODAL_WIDTH = 80 * GU
 const AnimatedDiv = animated.div
 
+const spring = { mass: 0.75, tension: 600, friction: 40 }
+
 function MultiModal({ visible, screens, onClose }) {
   const [render, setRender] = useState(visible)
 
@@ -26,7 +28,7 @@ function MultiModal({ visible, screens, onClose }) {
   }, [render, visible])
 
   const handleOnClosed = useCallback(() => {
-    // Workaround for setState on unmount warning caused by react-spring
+    // Ensure react-spring has properly cleaned up state prior to unmount
     setTimeout(() => setRender(false))
   }, [setRender])
 
@@ -34,7 +36,7 @@ function MultiModal({ visible, screens, onClose }) {
     <>
       {render && (
         <MultiModalProvider screens={screens}>
-          <MultiModalContents
+          <MultiModalFrame
             visible={visible}
             onClose={onClose}
             onClosed={handleOnClosed}
@@ -63,7 +65,7 @@ MultiModal.defaultProps = {
 }
 
 /* eslint-disable react/prop-types */
-function MultiModalContents({ visible, onClose, onClosed }) {
+function MultiModalFrame({ visible, onClose, onClosed }) {
   const { currentScreen } = useMultiModal()
   const { disableClose, width: currentScreenWidth } = currentScreen
 
@@ -82,19 +84,31 @@ function MultiModalContents({ visible, onClose, onClosed }) {
         const viewportWidth = width - 4 * GU
 
         return (
-          <Modal
-            padding={0}
-            width={Math.min(viewportWidth, modalWidth)}
-            onClose={handleModalClose}
-            onClosed={onClosed}
-            visible={visible}
-            closeButton={!disableClose}
-            css={`
-              z-index: 2;
-            `}
+          <Spring
+            config={spring}
+            to={{ width: Math.min(viewportWidth, modalWidth) }}
           >
-            <ModalContent onClose={onClose} viewportWidth={viewportWidth} />
-          </Modal>
+            {({ width }) => {
+              return (
+                <Modal
+                  padding={0}
+                  width={width}
+                  onClose={handleModalClose}
+                  onClosed={onClosed}
+                  visible={visible}
+                  closeButton={!disableClose}
+                  css={`
+                    z-index: 2;
+                  `}
+                >
+                  <ModalContent
+                    onClose={onClose}
+                    viewportWidth={viewportWidth}
+                  />
+                </Modal>
+              )
+            }}
+          </Spring>
         )
       }}
     </Viewport>
@@ -144,7 +158,7 @@ function ModalContent({ viewportWidth }) {
 
   return (
     <Spring
-      config={springs.swift}
+      config={spring}
       to={{ height }}
       immediate={animationDisabled}
       native
@@ -158,13 +172,13 @@ function ModalContent({ viewportWidth }) {
         >
           <Transition
             config={(_, state) =>
-              state === 'leave' ? springs.instant : springs.smooth
+              state === 'leave' ? springs.instant : spring
             }
             items={step}
             immediate={animationDisabled}
             from={{
               opacity: 0,
-              transform: `translate3d(${5 * GU * direction}px, 0, 0)`,
+              transform: `translate3d(${2 * GU * direction}px, 0, 0)`,
             }}
             enter={{
               opacity: 1,
@@ -172,7 +186,7 @@ function ModalContent({ viewportWidth }) {
             }}
             leave={{
               opacity: 0,
-              transform: `translate3d(${5 * GU * -direction}px, 0, 0)`,
+              transform: `translate3d(${2 * GU * -direction}px, 0, 0)`,
               position: 'absolute',
               top: 0,
               left: 0,

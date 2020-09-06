@@ -11,6 +11,7 @@ import { useAgreement } from '../../providers/Agreement'
 import MultiModal from '../MultiModal/MultiModal'
 import TestComponent from './TestComponent'
 import TestComponentTwo from './TestComponentTwo'
+import TestComponentThree from './TestComponentThree'
 
 const screens = [
   {
@@ -19,7 +20,12 @@ const screens = [
   },
   {
     title: 'hello2',
+    width: 800,
     content: <TestComponentTwo />,
+  },
+  {
+    title: 'hello3',
+    content: <TestComponentThree />,
   },
 ]
 

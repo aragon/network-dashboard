@@ -2,7 +2,7 @@ import React from 'react'
 import { useMultiModal } from '../MultiModal/MultiModalProvider'
 
 function TestComponentTwo() {
-  const { next, prev } = useMultiModal()
+  const { prev } = useMultiModal()
 
   return (
     <div>
@@ -10,9 +10,15 @@ function TestComponentTwo() {
       hello world <br />
       hello world <br />
       hello world <br />
+      hello world <br /> hello world <br />
       hello world <br />
-      <button onClick={() => prev()}>Previous</button>
-      <button onClick={() => next()}>Next</button>{' '}
+      hello world <br />
+      hello world <br />
+      hello world <br /> hello world <br />
+      hello world <br />
+      hello world <br />
+      hello world <br />
+      hello world <br /> <button onClick={() => prev()}>Previous</button>
     </div>
   )
 }
