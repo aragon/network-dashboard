@@ -2,6 +2,7 @@ import React from 'react'
 import { useSpring, animated } from 'react-spring'
 import { keyframes, css } from 'styled-components'
 import { useTheme, GU } from '@aragon/ui'
+import { springs } from '../../style/springs'
 
 const AnimatedDiv = animated.div
 
@@ -22,7 +23,7 @@ function LoadingFullscreen({ ...props }) {
   const theme = useTheme()
 
   const ringTransitionIn = useSpring({
-    config: { mass: 1, tension: 200, friction: 20 },
+    config: springs.gentle,
     from: { opacity: 0, transform: `scale3d(1.5, 1.5, 1)` },
     to: { opacity: 1, transform: `scale3d(1, 1, 1)` },
   })
