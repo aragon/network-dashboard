@@ -21,6 +21,7 @@ import {
   VOTE_STATUS_EXECUTED,
   VOTE_STATUS_PAUSED,
   VOTE_STATUS_REJECTED,
+  VOTE_STATUS_SETTLED,
 } from './disputable-vote-statuses'
 
 function getAttributes(status, theme) {
@@ -64,6 +65,12 @@ function getAttributes(status, theme) {
       label: 'Rejected',
       Icon: IconCross,
       color: theme.negative,
+    },
+    [VOTE_STATUS_SETTLED]: {
+      background: theme.surfaceUnder,
+      label: 'Settled',
+      Icon: IconCross,
+      color: theme.disabledContent,
     },
   }
 
@@ -121,6 +128,7 @@ DisputableStatusLabel.propTypes = {
     VOTE_STATUS_EXECUTED,
     VOTE_STATUS_PAUSED,
     VOTE_STATUS_REJECTED,
+    VOTE_STATUS_SETTLED,
   ]),
 }
 
