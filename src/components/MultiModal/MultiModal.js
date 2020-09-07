@@ -54,7 +54,7 @@ MultiModal.propTypes = {
   screens: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string,
-      content: PropTypes.func,
+      content: PropTypes.node,
       disableClose: PropTypes.bool,
       width: PropTypes.number,
     })
