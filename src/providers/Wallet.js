@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from 'react'
 import { providers as EthersProviders } from 'ethers'
 import { UseWalletProvider, useWallet } from 'use-wallet'
 import { getUseWalletConnectors } from '../lib/web3-utils'
-import env from '../environment'
+import { networkEnvironment } from '../current-environment'
 
 /* eslint-disable react/prop-types */
 const WalletAugmentedContext = React.createContext()
@@ -33,7 +33,7 @@ function WalletAugmented({ children }) {
 function WalletProvider({ children }) {
   return (
     <UseWalletProvider
-      chainId={env('CHAIN_ID')}
+      chainId={networkEnvironment.chainId}
       connectors={getUseWalletConnectors()}
     >
       <WalletAugmented>{children}</WalletAugmented>
