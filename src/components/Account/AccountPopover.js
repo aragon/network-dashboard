@@ -119,7 +119,7 @@ function AccountPopover({
                     setMeasuredHeight(false)
                   }
                 }}
-                onStart={(_, status) => {
+                onStart={() => {
                   setMeasuredHeight(true)
                 }}
               >

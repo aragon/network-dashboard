@@ -15,7 +15,7 @@ import { getProviderFromUseWalletId } from '../../ethereum-providers'
 import { useCopyToClipboard } from '../../hooks/useCopyToClipboard'
 
 /* eslint-disable react/prop-types */
-function AccountScreenConnected({ wallet }) {
+function ScreenConnected({ wallet }) {
   const theme = useTheme()
   const copy = useCopyToClipboard()
 
@@ -128,4 +128,4 @@ function AccountScreenConnected({ wallet }) {
 }
 /* eslint-disable react/prop-types */
 
-export default AccountScreenConnected
+export default ScreenConnected
