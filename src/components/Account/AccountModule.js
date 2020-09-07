@@ -80,7 +80,6 @@ function AccountModule() {
   return (
     <div
       ref={buttonRef}
-      tabIndex="0"
       css={`
         display: flex;
         align-items: center;

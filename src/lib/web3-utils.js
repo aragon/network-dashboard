@@ -1,17 +1,5 @@
 import env from '../environment'
 
-export const DEFAULT_LOCAL_CHAIN = 'private'
-
-export function getNetworkType(chainId = env('CHAIN_ID')) {
-  chainId = String(chainId)
-
-  if (chainId === '1') return 'main'
-  if (chainId === '3') return 'ropsten'
-  if (chainId === '4') return 'rinkeby'
-
-  return DEFAULT_LOCAL_CHAIN
-}
-
 export function getNetworkName(chainId) {
   chainId = String(chainId)
 

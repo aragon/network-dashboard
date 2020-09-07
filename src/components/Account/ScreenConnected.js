@@ -10,7 +10,7 @@ import {
   textStyle,
   useTheme,
 } from '@aragon/ui'
-import { getNetworkType, shortenAddress } from '../../lib/web3-utils'
+import { getNetworkName, shortenAddress } from '../../lib/web3-utils'
 import { getProviderFromUseWalletId } from '../../ethereum-providers'
 import { useCopyToClipboard } from '../../hooks/useCopyToClipboard'
 
@@ -80,13 +80,12 @@ function AccountScreenConnected({ wallet }) {
           >
             <IdentityBadge
               entity={wallet.account}
-              label={shortenAddress(wallet.account)}
               compact
               badgeOnly
               css={`
                 cursor: pointer;
               `}
-              networkType={getNetworkType()}
+              networkType={getNetworkName()}
             />
             <IconCopy
               css={`
