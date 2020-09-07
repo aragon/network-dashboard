@@ -37,7 +37,7 @@ function getAttributes(status, theme) {
   return (
     attributes[status] || {
       backgroundColor: theme.surface,
-      borderColor: theme.border,
+      borderColor: theme.surface,
       disabledProgressBars: false,
     }
   )
@@ -70,6 +70,7 @@ function ProposalCard({ vote, onProposalClick }) {
           align-items: start;
           padding: ${3 * GU}px;
           width: 100%;
+          height: 100%;
 
           background: ${backgroundColor};
           border: solid 1px ${borderColor};
