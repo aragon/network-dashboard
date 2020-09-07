@@ -11,12 +11,12 @@ function AccountModuleErrorScreen({ error, onBack }) {
   const elementRef = useRef()
 
   const [title, secondary] = useMemo(() => {
-    const { chainId } = networkEnvironment
-    const network = getNetworkName(chainId)
+    const networkName = getNetworkName(networkEnvironment.chainId)
+
     if (error instanceof ChainUnsupportedError) {
       return [
         'Wrong network',
-        `Please select the ${network} network in your wallet and try again.`,
+        `Please select the ${networkName} network in your wallet and try again.`,
       ]
     }
     return [
