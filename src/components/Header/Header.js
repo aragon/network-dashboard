@@ -35,6 +35,7 @@ function Header({ ...props }) {
         <LayoutLimiter>
           <div
             css={`
+              height: ${8 * GU}px;
               width: 100%;
               display: flex;
               align-items: center;
@@ -43,7 +44,6 @@ function Header({ ...props }) {
           >
             <div
               css={`
-                height: ${8 * GU}px;
                 display: flex;
                 align-items: center;
               `}
@@ -74,6 +74,7 @@ function Header({ ...props }) {
                       align-items: center;
                       text-decoration: none;
                       color: ${theme.contentSecondary};
+                      padding: ${0.5 * GU}px 0;
                       ${unselectable};
                     `}
                   >
@@ -114,6 +115,7 @@ function InteralLink({ to, children }) {
       onClick={handlePageRequest}
       css={`
         ${unselectable};
+        padding: ${0.5 * GU}px 0;
         text-decoration: none;
         color: ${theme.contentSecondary};
 
