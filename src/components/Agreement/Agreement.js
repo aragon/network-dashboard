@@ -15,7 +15,7 @@ import TestComponentThree from './TestComponentThree'
 
 const screens = [
   {
-    title: 'hello',
+    title: 'New proposal',
     graphicHeader: true,
     content: <TestComponent />,
   },
