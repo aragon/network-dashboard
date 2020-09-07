@@ -37,12 +37,8 @@ function MultiModal({ visible, screens, onClose }) {
   return (
     <>
       {render && (
-        <MultiModalProvider screens={screens}>
-          <MultiModalFrame
-            visible={visible}
-            onClose={onClose}
-            onClosed={handleOnClosed}
-          />
+        <MultiModalProvider screens={screens} onClose={onClose}>
+          <MultiModalFrame visible={visible} onClosed={handleOnClosed} />
         </MultiModalProvider>
       )}
     </>
@@ -67,22 +63,23 @@ MultiModal.defaultProps = {
 }
 
 /* eslint-disable react/prop-types */
-function MultiModalFrame({ visible, onClose, onClosed }) {
+function MultiModalFrame({ visible, onClosed }) {
   const theme = useTheme()
   const { currentScreen } = useMultiModal()
   const {
     disableClose,
     width: currentScreenWidth,
     graphicHeader,
+    close,
   } = currentScreen
 
   const modalWidth = currentScreenWidth || DEFAULT_MODAL_WIDTH
 
   const handleModalClose = useCallback(() => {
     if (!disableClose) {
-      onClose()
+      close()
     }
-  }, [disableClose, onClose])
+  }, [disableClose, close])
 
   return (
     <Viewport>
@@ -135,10 +132,7 @@ function MultiModalFrame({ visible, onClose, onClosed }) {
                       </ButtonIcon>
                     )}
 
-                    <ModalContent
-                      onClose={onClose}
-                      viewportWidth={viewportWidth}
-                    />
+                    <ModalContent viewportWidth={viewportWidth} />
                   </div>
                 </Modal>
               )
