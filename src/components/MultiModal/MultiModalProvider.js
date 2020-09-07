@@ -10,7 +10,15 @@ function MultiModalProvider({ screens, children }) {
   const currentScreen = useMemo(() => getScreen(step), [getScreen, step])
 
   const multiModalState = useMemo(
-    () => ({ currentScreen, direction, getScreen, next, prev, step }),
+    () => ({
+      // Prevent possible destructure error if screens length is dynamically reduced below current index
+      currentScreen: currentScreen || {},
+      direction,
+      getScreen,
+      next,
+      prev,
+      step,
+    }),
     [currentScreen, direction, getScreen, next, prev, step]
   )
 
