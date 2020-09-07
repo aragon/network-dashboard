@@ -42,6 +42,7 @@ function ScreenProviders({ onActivate }) {
           display: flex;
           justify-content: center;
           margin-top: ${2 * GU}px;
+          padding-bottom: ${2 * GU}px;
         `}
       >
         <Link
