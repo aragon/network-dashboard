@@ -2,20 +2,20 @@ import React, { useCallback, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Spring, Transition, animated } from 'react-spring/renderprops'
 import {
-  IconCross,
   ButtonIcon,
+  IconCross,
   Modal,
   noop,
-  Viewport,
   textStyle,
   useLayout,
   useTheme,
+  Viewport,
   GU,
 } from '@aragon/ui'
-import { useDisableAnimation } from '../../hooks/useDisableAnimation'
+import logoMarkOverlay from '../../assets/logo-mark-overlay.svg'
 import { MultiModalProvider, useMultiModal } from './MultiModalProvider'
 import { springs } from '../../style/springs'
-import logoMarkOverlay from '../../assets/logo-mark-overlay.svg'
+import { useDisableAnimation } from '../../hooks/useDisableAnimation'
 
 const DEFAULT_MODAL_WIDTH = 80 * GU
 const AnimatedDiv = animated.div
@@ -46,7 +46,7 @@ function MultiModal({ visible, screens, onClose }) {
 }
 
 MultiModal.propTypes = {
-  visible: PropTypes.bool,
+  onClose: PropTypes.func,
   screens: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string,
@@ -55,7 +55,7 @@ MultiModal.propTypes = {
       width: PropTypes.number,
     })
   ).isRequired,
-  onClose: PropTypes.func,
+  visible: PropTypes.bool,
 }
 
 MultiModal.defaultProps = {
@@ -117,7 +117,6 @@ function MultiModalFrame({ visible, onClosed }) {
                           position: absolute;
                           top: ${2.5 * GU}px;
                           right: ${2.5 * GU}px;
-
                           z-index: 2;
                         `}
                         onClick={handleModalClose}
@@ -132,7 +131,7 @@ function MultiModalFrame({ visible, onClosed }) {
                       </ButtonIcon>
                     )}
 
-                    <ModalContent viewportWidth={viewportWidth} />
+                    <MultiModalContent viewportWidth={viewportWidth} />
                   </div>
                 </Modal>
               )
@@ -144,15 +143,15 @@ function MultiModalFrame({ visible, onClosed }) {
   )
 }
 
-const ModalContent = React.memo(function ModalContent({ viewportWidth }) {
+// We memoize this compontent to avoid excessive re-renders when animating
+const MultiModalContent = React.memo(function ModalContent({ viewportWidth }) {
   const theme = useTheme()
   const { step, direction, getScreen } = useMultiModal()
-
   const [applyStaticHeight, setApplyStaticHeight] = useState(false)
   const [height, setHeight] = useState(null)
   const [animationDisabled, enableAnimation] = useDisableAnimation()
-
   const { layoutName } = useLayout()
+
   const smallMode = layoutName === 'small'
 
   const onStart = useCallback(() => {
@@ -166,7 +165,6 @@ const ModalContent = React.memo(function ModalContent({ viewportWidth }) {
   const renderScreen = useCallback(
     (screen) => {
       const { title, content, graphicHeader, width } = screen
-
       const standardPadding = smallMode ? 3 * GU : 5 * GU
 
       return (
@@ -185,21 +183,17 @@ const ModalContent = React.memo(function ModalContent({ viewportWidth }) {
                 );
 
                 margin-bottom: ${smallMode ? 2 * GU : 3 * GU}px;
+                
 
+                /* Soft shadow below title */
                 &::after {
                   content '';
 
                   position: absolute;
-
                   bottom: 0;
                   left: 0;
-
-                  background-color: red;
-
                   width: 100%;
                   height: ${6 * GU}px;
-                  background-color: red;
-
                   background: linear-gradient(
                   to top,
                   rgba(0,0,0,0.04) 0%,
@@ -212,8 +206,8 @@ const ModalContent = React.memo(function ModalContent({ viewportWidth }) {
                 css={`
                   position: relative;
                   z-index: 1;
-                  ${smallMode ? textStyle('title3') : textStyle('title2')};
 
+                  ${smallMode ? textStyle('title3') : textStyle('title2')};
                   font-weight: 600;
                   color: ${theme.overlay};
                 `}
@@ -229,8 +223,8 @@ const ModalContent = React.memo(function ModalContent({ viewportWidth }) {
                   bottom: -${5 * GU}px;
                   left: ${2 * GU}px;
 
-                  width: 130px;
-                  height: 130px;
+                  width: ${16 * GU}px;
+                  height: ${16 * GU}px;
                   opacity: 0.3;
                 `}
               />
@@ -299,11 +293,11 @@ const ModalContent = React.memo(function ModalContent({ viewportWidth }) {
               transform: 'translate3d(0, 0, 0)',
             }}
             leave={{
-              opacity: 0,
-              transform: `translate3d(0, ${5 * GU * -direction}px, 0)`,
               position: 'absolute',
               top: 0,
               left: 0,
+              opacity: 0,
+              transform: `translate3d(0, ${5 * GU * -direction}px, 0)`,
             }}
             onRest={(_, status) => {
               if (status === 'update') {

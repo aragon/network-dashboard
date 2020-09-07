@@ -14,7 +14,7 @@ function MultiModalProvider({ screens, onClose, children }) {
 
   const multiModalState = useMemo(
     () => ({
-      // Prevent possible destructure error if screens length is dynamically reduced below current index
+      // Prevent destructure errors if screens length is dynamically reduced below current index
       currentScreen: currentScreen || {},
       close: handleClose,
       direction,
@@ -35,8 +35,8 @@ function MultiModalProvider({ screens, onClose, children }) {
 
 MultiModalProvider.propTypes = {
   children: PropTypes.node,
-  screens: PropTypes.array,
   onClose: PropTypes.func,
+  screens: PropTypes.array,
 }
 
 MultiModalProvider.defaultProps = {
