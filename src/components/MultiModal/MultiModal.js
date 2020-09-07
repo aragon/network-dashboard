@@ -113,25 +113,28 @@ function MultiModalFrame({ visible, onClose, onClosed }) {
                       position: relative;
                     `}
                   >
-                    <ButtonIcon
-                      label=""
-                      css={`
-                        position: absolute;
-                        top: ${2.5 * GU}px;
-                        right: ${2.5 * GU}px;
-
-                        z-index: 2;
-                      `}
-                      onClick={handleModalClose}
-                    >
-                      <IconCross
+                    {!disableClose && (
+                      <ButtonIcon
+                        label=""
                         css={`
-                          color: ${graphicHeader
-                            ? theme.overlay
-                            : theme.surfaceContentSecondary};
+                          position: absolute;
+                          top: ${2.5 * GU}px;
+                          right: ${2.5 * GU}px;
+
+                          z-index: 2;
                         `}
-                      />
-                    </ButtonIcon>
+                        onClick={handleModalClose}
+                      >
+                        <IconCross
+                          css={`
+                            color: ${graphicHeader
+                              ? theme.overlay
+                              : theme.surfaceContentSecondary};
+                          `}
+                        />
+                      </ButtonIcon>
+                    )}
+
                     <ModalContent
                       onClose={onClose}
                       viewportWidth={viewportWidth}

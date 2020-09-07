@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Box, Button, Header, Split } from '@aragon/ui'
 import LayoutGutter from '../Layout/LayoutGutter'
 import LayoutLimiter from '../Layout/LayoutLimiter'
@@ -8,30 +8,8 @@ import AgreementDetails from './AgreementDetails'
 import AgreementDocument from './AgreementDocument'
 import LoadingSection from '../Loading/LoadingSection'
 import { useAgreement } from '../../providers/Agreement'
-import MultiModal from '../MultiModal/MultiModal'
-import TestComponent from './TestComponent'
-import TestComponentTwo from './TestComponentTwo'
-import TestComponentThree from './TestComponentThree'
-
-const screens = [
-  {
-    title: 'New proposal',
-    graphicHeader: true,
-    content: <TestComponent />,
-  },
-  {
-    title: 'hello2',
-    width: 800,
-    content: <TestComponentTwo />,
-  },
-  {
-    title: 'hello3',
-    content: <TestComponentThree />,
-  },
-]
 
 const Agreement = React.memo(function Agreement() {
-  const [modalVisible, setModalVisible] = useState(true)
   const { agreementDetails, loading } = useAgreement()
 
   return (
@@ -40,26 +18,13 @@ const Agreement = React.memo(function Agreement() {
         <LayoutLimiter>
           <Header
             primary="Agreement"
-            secondary={
-              <Button
-                mode="strong"
-                label="Sign Agreement"
-                onClick={() => {
-                  setModalVisible(true)
-                }}
-              />
-            }
+            secondary={<Button mode="strong" label="Sign Agreement" disabled />}
           />
           <LoadingSection title="Loading agreement" loading={loading}>
             <AgreementLayout agreementDetails={agreementDetails} />
           </LoadingSection>
         </LayoutLimiter>
       </LayoutGutter>
-      <MultiModal
-        visible={modalVisible}
-        screens={screens}
-        onClose={() => setModalVisible(false)}
-      />
     </>
   )
 })
