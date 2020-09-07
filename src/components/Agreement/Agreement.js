@@ -13,19 +13,17 @@ const Agreement = React.memo(function Agreement() {
   const { agreementDetails, loading } = useAgreement()
 
   return (
-    <>
-      <LayoutGutter>
-        <LayoutLimiter>
-          <Header
-            primary="Agreement"
-            secondary={<Button mode="strong" label="Sign Agreement" disabled />}
-          />
-          <LoadingSection title="Loading agreement" loading={loading}>
-            <AgreementLayout agreementDetails={agreementDetails} />
-          </LoadingSection>
-        </LayoutLimiter>
-      </LayoutGutter>
-    </>
+    <LayoutGutter>
+      <LayoutLimiter>
+        <Header
+          primary="Agreement"
+          secondary={<Button mode="strong" label="Sign Agreement" disabled />}
+        />
+        <LoadingSection title="Loading agreement" loading={loading}>
+          <AgreementLayout agreementDetails={agreementDetails} />
+        </LoadingSection>
+      </LayoutLimiter>
+    </LayoutGutter>
   )
 })
 
@@ -42,25 +40,23 @@ function AgreementLayout({ agreementDetails }) {
   } = agreementDetails
 
   return (
-    <>
-      <Split
-        primary={
-          <>
-            <Box>
-              <AgreementHeader title={title} />
-              <AgreementDetails
-                contractAddress={contractAddress}
-                creationDate={effectiveFrom}
-                ipfsUri={contentIpfsUri}
-                stakingAddress={stakingAddress}
-              />
-            </Box>
-            <AgreementDocument content={content} />
-          </>
-        }
-        secondary={<AgreementBindingActions disputableApps={disputableApps} />}
-      />
-    </>
+    <Split
+      primary={
+        <>
+          <Box>
+            <AgreementHeader title={title} />
+            <AgreementDetails
+              contractAddress={contractAddress}
+              creationDate={effectiveFrom}
+              ipfsUri={contentIpfsUri}
+              stakingAddress={stakingAddress}
+            />
+          </Box>
+          <AgreementDocument content={content} />
+        </>
+      }
+      secondary={<AgreementBindingActions disputableApps={disputableApps} />}
+    />
   )
 }
 /* eslint-enable react/prop-types */
