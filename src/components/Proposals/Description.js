@@ -119,4 +119,8 @@ Description.propTypes = {
   path: PropTypes.array,
 }
 
+Description.defaultProps = {
+  disableBadgeInteraction: false,
+}
+
 export default Description
