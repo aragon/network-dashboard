@@ -13,7 +13,7 @@ function AgreementDetails({
   stakingAddress,
 }) {
   const { layoutName } = useLayout()
-  const compactMode = layoutName === 'small'
+  const multiColumnsMode = layoutName === 'max' || layoutName === 'medium'
 
   return (
     <>
@@ -45,8 +45,8 @@ function AgreementDetails({
       <div
         css={`
           display: grid;
-          grid-gap: ${compactMode ? 3 * GU : 4 * GU}px;
-          grid-auto-flow: ${compactMode ? 'row' : 'column'};
+          grid-gap: ${multiColumnsMode ? 2 * GU : 3 * GU}px;
+          grid-auto-flow: ${multiColumnsMode ? 'column' : 'row'};
         `}
       >
         <InfoField label="Arbitrator">
