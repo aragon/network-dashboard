@@ -11,6 +11,7 @@ import {
 import HeaderLogo from './HeaderLogo'
 import LayoutGutter from '../Layout/LayoutGutter'
 import LayoutLimiter from '../Layout/LayoutLimiter'
+import AccountModule from '../Account/AccountModule'
 
 function Header({ ...props }) {
   const theme = useTheme()
@@ -34,50 +35,63 @@ function Header({ ...props }) {
         <LayoutLimiter>
           <div
             css={`
-              height: ${8 * GU}px;
+              width: 100%;
               display: flex;
               align-items: center;
+              justify-content: space-between;
             `}
           >
-            <Link onClick={handleLogoClick}>
-              <HeaderLogo />
-            </Link>
-            <nav
+            <div
               css={`
-                display: inline-grid;
-                grid-auto-flow: column;
-                grid-gap: ${compactMode ? 3 * GU : 4 * GU}px;
-                margin-left: ${5 * GU}px;
+                height: ${8 * GU}px;
+                display: flex;
+                align-items: center;
               `}
             >
-              <NavItem>
-                <InteralLink to="/proposals">Proposals</InteralLink>
-              </NavItem>
+              <Link onClick={handleLogoClick}>
+                <HeaderLogo />
+              </Link>
+              <nav
+                css={`
+                  display: inline-grid;
+                  grid-auto-flow: column;
+                  grid-gap: ${compactMode ? 2 * GU : 4 * GU}px;
+                  margin-left: ${compactMode ? 2 * GU : 5 * GU}px;
+                `}
+              >
+                <NavItem>
+                  <InteralLink to="/proposals">Proposals</InteralLink>
+                </NavItem>
 
-              <NavItem>
-                <InteralLink to="/agreement">Agreement</InteralLink>
-              </NavItem>
-              <NavItem>
-                <Link
-                  href="https://app.uniswap.org/#/swap?outputCurrency=0x960b236A07cf122663c4303350609A66A7B288C0"
-                  css={`
-                    display: flex;
-                    align-items: center;
-                    text-decoration: none;
-                    color: ${theme.contentSecondary};
-                    ${unselectable};
-                  `}
-                >
-                  Get ANT
-                  <IconExternal
-                    size="small"
+                <NavItem>
+                  <InteralLink to="/agreement">Agreement</InteralLink>
+                </NavItem>
+                <NavItem>
+                  <Link
+                    href="https://app.uniswap.org/#/swap?outputCurrency=0x960b236A07cf122663c4303350609A66A7B288C0"
                     css={`
-                      margin-left: ${0.5 * GU}px;
+                      display: flex;
+                      align-items: center;
+                      text-decoration: none;
+                      color: ${theme.contentSecondary};
+                      ${unselectable};
                     `}
-                  />
-                </Link>
-              </NavItem>
-            </nav>
+                  >
+                    Get ANT
+                    {!compactMode && (
+                      <IconExternal
+                        size="small"
+                        css={`
+                          margin-left: ${0.5 * GU}px;
+                        `}
+                      />
+                    )}
+                  </Link>
+                </NavItem>
+              </nav>
+            </div>
+
+            <AccountModule />
           </div>
         </LayoutLimiter>
       </LayoutGutter>
