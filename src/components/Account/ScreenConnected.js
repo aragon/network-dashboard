@@ -10,7 +10,7 @@ import {
   textStyle,
   useTheme,
 } from '@aragon/ui'
-import { getNetworkName } from '../../lib/web3-utils'
+import { networkEnvironment } from '../../current-environment'
 import { getProviderFromUseWalletId } from '../../ethereum-providers'
 import { useCopyToClipboard } from '../../hooks/useCopyToClipboard'
 
@@ -85,7 +85,7 @@ function AccountScreenConnected({ wallet }) {
               css={`
                 cursor: pointer;
               `}
-              networkType={getNetworkName()}
+              networkType={networkEnvironment.legacyNetworkType}
             />
             <IconCopy
               css={`
