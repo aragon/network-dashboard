@@ -1,13 +1,11 @@
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import {
-  Box,
   GU,
   IconCheck,
   IconLock,
   IdentityBadge,
   Link,
-  Split,
   Tag,
   TokenAmount,
   textStyle,
@@ -24,6 +22,8 @@ import {
 } from '../disputable-vote-statuses'
 import InfoField from '../../InfoField'
 import InfoBoxes from './InfoBoxes'
+import LayoutColumns from '../../Layout/LayoutColumns'
+import LayoutBox from '../../Layout/LayoutBox'
 import { safeDiv } from '../../../lib/math-utils'
 import SummaryBar from './SummaryBar'
 import SummaryRow from './SummaryRow'
@@ -35,90 +35,68 @@ import { getIpfsUrlFromUri } from '../../../lib/ipfs-utils'
 import { useDescribeVote } from '../../../hooks/useDescribeVote'
 import LoadingSkeleton from '../../Loading/LoadingSkeleton'
 
-function getAttributes(status, theme) {
-  const attributes = {
-    [VOTE_STATUS_CANCELLED]: {
-      backgroundColor: theme.surfacePressed,
-      borderColor: theme.border,
-      disabledProgressBars: true,
-    },
-    [VOTE_STATUS_PAUSED]: {
-      backgroundColor: '#fefdfb',
-      borderColor: theme.warning,
-      disabledProgressBars: true,
-    },
-    [VOTE_STATUS_DISPUTED]: {
-      backgroundColor: '#FFFAFA',
-      borderColor: '#FF7C7C',
-      disabledProgressBars: true,
-    },
-  }
-
-  return (
-    attributes[status] || {
-      backgroundColor: theme.surface,
-      borderColor: theme.border,
-      disabledProgressBars: false,
-    }
-  )
-}
-
-function ProposalDetail({ vote }) {
-  const theme = useTheme()
-
+function ProposalDetails({ vote }) {
   const { voteId } = vote
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
-  const { backgroundColor, borderColor, disabledProgressBars } = getAttributes(
-    disputableStatus,
-    theme
-  )
+
+  const { boxPresentation, disabledProgressBars } = useMemo(() => {
+    const disputablePresentation = {
+      [VOTE_STATUS_CANCELLED]: {
+        boxPresentation: 'disabled',
+        disabledProgressBars: true,
+      },
+      [VOTE_STATUS_PAUSED]: {
+        boxPresentation: 'warning',
+        disabledProgressBars: true,
+      },
+      [VOTE_STATUS_DISPUTED]: {
+        boxPresentation: 'negative',
+        disabledProgressBars: true,
+      },
+    }
+
+    return disputablePresentation[disputableStatus] || {}
+  }, [disputableStatus])
 
   // TODO: get youVoted flag from connector
   const youVoted = false
 
   return (
-    <Split
+    <LayoutColumns
       primary={
-        <>
-          <Box
+        <LayoutBox primary mode={boxPresentation}>
+          <div
             css={`
-              background: ${backgroundColor};
-              border: solid 1px ${borderColor};
+              display: grid;
+              grid-auto-flow: row;
+
+              grid-gap: ${4 * GU}px;
             `}
           >
-            <div
-              css={`
-                display: grid;
-                grid-auto-flow: row;
-
-                grid-gap: ${4 * GU}px;
-              `}
-            >
-              {youVoted && (
-                <div
-                  css={`
-                    display: flex;
-                  `}
-                >
-                  <Tag icon={<IconCheck size="small" />} label="Voted" />
-                </div>
-              )}
-              <h1
+            {youVoted && (
+              <div
                 css={`
-                  ${textStyle('title2')};
-                  font-weight: bold;
+                  display: flex;
                 `}
               >
-                Vote #{voteId}
-              </h1>
-              <Details vote={vote} status={disputableStatus} />
-              <SummaryInfo
-                vote={vote}
-                disabledProgressBars={disabledProgressBars}
-              />
-            </div>
-          </Box>
-        </>
+                <Tag icon={<IconCheck size="small" />} label="Voted" />
+              </div>
+            )}
+            <h1
+              css={`
+                ${textStyle('title2')};
+                font-weight: bold;
+              `}
+            >
+              Vote #{voteId}
+            </h1>
+            <Details vote={vote} status={disputableStatus} />
+            <SummaryInfo
+              vote={vote}
+              disabledProgressBars={disabledProgressBars}
+            />
+          </div>
+        </LayoutBox>
       }
       secondary={
         <>
@@ -133,14 +111,15 @@ function ProposalDetail({ vote }) {
 /* eslint-disable react/prop-types */
 function Details({ vote, status }) {
   const { context, creator, collateral, token, script } = vote
-  const { layoutName } = useLayout()
   const {
     description,
     emptyScript,
     loading: descriptionLoading,
   } = useDescribeVote(script, vote.id)
 
-  const compactMode = layoutName === 'small'
+  const { layoutName } = useLayout()
+
+  const twoColumnMode = layoutName === 'max'
 
   const justificationUrl = useMemo(
     () => (context.startsWith('ipfs') ? getIpfsUrlFromUri(context) : null),
@@ -152,7 +131,7 @@ function Details({ vote, status }) {
       css={`
         display: grid;
 
-        grid-template-columns: ${compactMode ? '1fr' : `1fr ${30 * GU}px`};
+        grid-template-columns: ${twoColumnMode ? `1fr ${30 * GU}px` : '1fr'};
         grid-gap: ${3 * GU}px;
       `}
     >
@@ -344,8 +323,8 @@ function SummaryInfo({ vote, disabledProgressBars }) {
 }
 /* eslint-disable react/prop-types */
 
-ProposalDetail.propTypes = {
+ProposalDetails.propTypes = {
   vote: PropTypes.object,
 }
 
-export default ProposalDetail
+export default ProposalDetails

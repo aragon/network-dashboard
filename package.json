@@ -28,7 +28,7 @@
     "files": [
       {
         "path": "public/*.js",
-        "maxSize": "800kb",
+        "maxSize": "1000kb",
         "compression": "gzip"
       }
     ]
