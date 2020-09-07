@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { AppBadge, Card, GU, textStyle, useTheme } from '@aragon/ui'
+import { AppBadge, Card, GU, textStyle, useTheme, RADIUS } from '@aragon/ui'
 import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_CANCELLED,
@@ -10,6 +10,10 @@ import {
 import ProposalOption from './ProposalOption'
 import DisputableStatusLabel from './DisputableStatusLabel'
 import Description from './Description'
+import { getAppPresentation } from '../../utils/app-utils'
+import LoadingSkeleton from '../Loading/LoadingSkeleton'
+import { useDescribeVote } from '../../hooks/useDescribeVote'
+import { useOrgApps } from '../../providers/OrgApps'
 
 function getAttributes(status, theme) {
   const attributes = {
@@ -41,7 +45,13 @@ function getAttributes(status, theme) {
 
 function ProposalCard({ vote, onProposalClick }) {
   const theme = useTheme()
-  const { context, voteId, description, target } = vote
+  const { context, voteId, script } = vote
+  const {
+    description,
+    emptyScript,
+    targetApp,
+    loading: descriptionLoading,
+  } = useDescribeVote(script, vote.id)
 
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const { backgroundColor, borderColor, disabledProgressBars } = getAttributes(
@@ -50,35 +60,45 @@ function ProposalCard({ vote, onProposalClick }) {
   )
 
   return (
-    <Card
-      onClick={() => onProposalClick(voteId)}
-      css={`
-        display: grid;
-        grid-template-columns: 100%;
-        grid-template-rows: auto 1fr auto auto;
-        grid-gap: ${1 * GU}px;
-        align-items: start;
-        padding: ${3 * GU}px;
-        background: ${backgroundColor};
-        border: solid 1px ${borderColor};
-      `}
-    >
+    <Card onClick={() => onProposalClick(voteId)}>
       <div
         css={`
-          display: flex;
-          margin-bottom: ${1 * GU}px;
+          display: grid;
+          grid-template-columns: 100%;
+          grid-template-rows: auto 1fr auto auto;
+          grid-gap: ${1 * GU}px;
+          align-items: start;
+          padding: ${3 * GU}px;
+          width: 100%;
+
+          background: ${backgroundColor};
+          border: solid 1px ${borderColor};
+          border-radius: ${RADIUS}px;
         `}
       >
-        <AppBadge
-          label={target.name ? target.name : target.address}
-          appAddress={target.address}
-          iconSrc={target.icon ? target.icon : ''}
-          badgeOnly
-        />
-      </div>
+        <div
+          css={`
+            display: flex;
+            margin-bottom: ${1 * GU}px;
 
-      <p
-        css={`
+            /* Prevent default cursor interruption when hovering badge */
+            & > a {
+              cursor: inherit;
+            }
+          `}
+        >
+          {emptyScript ? (
+            <DefaultAppBadge />
+          ) : (
+            <AppBadgeWithSkeleton
+              targetApp={targetApp}
+              loading={descriptionLoading}
+            />
+          )}
+        </div>
+
+        <div
+          css={`
           // overflow-wrap:anywhere and hyphens:auto are not supported yet by
           // the latest versions of Safari (as of June 2020), which
           // is why word-break:break-word has been added here.
@@ -92,36 +112,43 @@ function ProposalCard({ vote, onProposalClick }) {
           -webkit-line-clamp: 3;
           overflow: hidden;
         `}
-      >
-        <strong css="font-weight: bold">#{voteId}: </strong>
-        {Array.isArray(description) ? (
-          <Description path={description} />
-        ) : (
-          context || 'No description provided'
-        )}
-      </p>
+        >
+          {emptyScript ? (
+            <p>
+              <strong css="font-weight: bold">#{voteId}: </strong>
+              {context || 'No description provided'}
+            </p>
+          ) : (
+            <DescriptionWithSkeleton
+              description={description}
+              loading={descriptionLoading}
+              voteNumber={voteId}
+            />
+          )}
+        </div>
 
-      <ProposalOption
-        color={disabledProgressBars ? theme.surfaceOpened : theme.positive}
-        percentage={(vote.yeas * 100) / vote.totalPower}
-        label="Yes"
-      />
-
-      <ProposalOption
-        color={disabledProgressBars ? theme.surfaceOpened : theme.negative}
-        percentage={(vote.nays * 100) / vote.totalPower}
-        label="No"
-      />
-
-      <div
-        css={`
-          display: flex;
-          margin-top: ${2 * GU}px;
-        `}
-      >
-        <DisputableStatusLabel
-          status={DISPUTABLE_VOTE_STATUSES.get(vote.status)}
+        <ProposalOption
+          color={disabledProgressBars ? theme.surfaceOpened : theme.positive}
+          percentage={(vote.yeas * 100) / vote.totalPower}
+          label="Yes"
         />
+
+        <ProposalOption
+          color={disabledProgressBars ? theme.surfaceOpened : theme.negative}
+          percentage={(vote.nays * 100) / vote.totalPower}
+          label="No"
+        />
+
+        <div
+          css={`
+            display: flex;
+            margin-top: ${2 * GU}px;
+          `}
+        >
+          <DisputableStatusLabel
+            status={DISPUTABLE_VOTE_STATUSES.get(vote.status)}
+          />
+        </div>
       </div>
     </Card>
   )
@@ -131,5 +158,80 @@ ProposalCard.propTypes = {
   vote: PropTypes.object,
   onProposalClick: PropTypes.func.isRequired,
 }
+
+function DefaultAppBadge() {
+  const { apps, disputableVotingApp } = useOrgApps()
+
+  const { humanName, iconSrc } = getAppPresentation(
+    apps,
+    disputableVotingApp.address
+  )
+
+  return (
+    <AppBadge
+      label={humanName}
+      appAddress={disputableVotingApp.address}
+      iconSrc={iconSrc}
+      badgeOnly
+    />
+  )
+}
+
+/* eslint-disable react/prop-types */
+function AppBadgeWithSkeleton({ targetApp, loading }) {
+  if (loading) {
+    return (
+      <LoadingSkeleton
+        css={`
+          height: ${3 * GU}px;
+          width: ${12 * GU}px;
+        `}
+      />
+    )
+  }
+
+  const { address, name, icon } = targetApp
+
+  return (
+    <AppBadge
+      label={name || address}
+      appAddress={address}
+      iconSrc={icon}
+      badgeOnly
+    />
+  )
+}
+
+function DescriptionWithSkeleton({ description, voteNumber, loading }) {
+  if (loading) {
+    return (
+      <>
+        <LoadingSkeleton
+          css={`
+            width: 95%;
+          `}
+        />
+        <LoadingSkeleton
+          css={`
+            width: 70%;
+          `}
+        />
+        <LoadingSkeleton
+          css={`
+            width: 35%;
+          `}
+        />
+      </>
+    )
+  }
+
+  return (
+    <>
+      <strong css="font-weight: bold">#{voteNumber}: </strong>{' '}
+      <Description disableBadgeInteraction path={description} />
+    </>
+  )
+}
+/* eslint-enable react/prop-types */
 
 export default ProposalCard

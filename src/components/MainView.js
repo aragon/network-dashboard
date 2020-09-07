@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useTransition, animated } from 'react-spring'
+import { Transition, animated } from 'react-spring/renderprops'
 import { ScrollView, GU } from '@aragon/ui'
 import LoadingFullscreen from '../components/Loading/LoadingFullscreen'
 import Header from './Header/Header'
@@ -10,12 +10,6 @@ const AnimatedDiv = animated.div
 
 const MainView = React.memo(function MainView({ children }) {
   const { loading } = useOrgApps()
-
-  const loaderExitTransitions = useTransition(loading, null, {
-    from: { opacity: 0 },
-    enter: { opacity: 1 },
-    leave: { opacity: 0 },
-  })
 
   return (
     <div
@@ -61,18 +55,23 @@ const MainView = React.memo(function MainView({ children }) {
                 padding-bottom: ${12 * GU}px;
               `}
             >
-              {children}
+              {!loading && children}
             </main>
           </ScrollView>
         </div>
       )}
 
-      {loaderExitTransitions.map(
-        ({ item: loading, key, props }) =>
-          loading && (
+      <Transition
+        items={loading}
+        from={{ opacity: 0 }}
+        enter={{ opacity: 1 }}
+        leave={{ opacity: 0 }}
+      >
+        {(loading) =>
+          loading &&
+          ((props) => (
             <AnimatedDiv
               style={props}
-              key={key}
               css={`
                 display: flex;
                 position: absolute;
@@ -91,8 +90,9 @@ const MainView = React.memo(function MainView({ children }) {
                 `}
               />
             </AnimatedDiv>
-          )
-      )}
+          ))
+        }
+      </Transition>
     </div>
   )
 })

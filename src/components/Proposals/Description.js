@@ -1,8 +1,8 @@
 import React from 'react'
+import { PropTypes } from 'prop-types'
 import { GU, IdentityBadge, useTheme } from '@aragon/ui'
 
-/* eslint-disable react/prop-types */
-function Description({ path }) {
+function Description({ disableBadgeInteraction, path }) {
   return (
     <span
       css={`
@@ -15,13 +15,20 @@ function Description({ path }) {
       `}
     >
       {path
-        ? path.map((step, index) => <DescriptionStep key={index} step={step} />)
+        ? path.map((step, index) => (
+            <DescriptionStep
+              disableBadgeInteraction={disableBadgeInteraction}
+              key={index}
+              step={step}
+            />
+          ))
         : ''}
     </span>
   )
 }
 
-function DescriptionStep({ step }) {
+/* eslint-disable react/prop-types */
+function DescriptionStep({ step, disableBadgeInteraction }) {
   const theme = useTheme()
 
   const description = []
@@ -36,6 +43,7 @@ function DescriptionStep({ step }) {
             <span key={key}>
               {' '}
               <IdentityBadge
+                badgeOnly={disableBadgeInteraction}
                 compact
                 entity={type === 'any-account' ? 'Any account' : value}
               />
@@ -61,7 +69,8 @@ function DescriptionStep({ step }) {
       </span>
     )
   }
-  description.push(<br key={description.lenth + 1} />)
+
+  description.push(<br key={description.length + 1} />)
 
   const childrenDescriptions = (step.children || []).map((child, index) => {
     return <DescriptionStep step={child} key={index} />
@@ -103,6 +112,15 @@ function DescriptionStep({ step }) {
     </>
   )
 }
-/* eslint-disable react/prop-types */
+/* eslint-enable react/prop-types */
+
+Description.propTypes = {
+  disableBadgeInteraction: PropTypes.bool,
+  path: PropTypes.array,
+}
+
+Description.defaultProps = {
+  disableBadgeInteraction: false,
+}
 
 export default Description
