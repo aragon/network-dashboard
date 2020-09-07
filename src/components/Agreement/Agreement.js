@@ -16,6 +16,7 @@ import TestComponentThree from './TestComponentThree'
 const screens = [
   {
     title: 'hello',
+    graphicHeader: true,
     content: <TestComponent />,
   },
   {
@@ -30,7 +31,7 @@ const screens = [
 ]
 
 const Agreement = React.memo(function Agreement() {
-  const [modalVisible, setModalVisible] = useState(false)
+  const [modalVisible, setModalVisible] = useState(true)
   const { agreementDetails, loading } = useAgreement()
 
   return (
