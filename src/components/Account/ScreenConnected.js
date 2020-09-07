@@ -10,7 +10,7 @@ import {
   textStyle,
   useTheme,
 } from '@aragon/ui'
-import { getNetworkName, shortenAddress } from '../../lib/web3-utils'
+import { getNetworkName } from '../../lib/web3-utils'
 import { getProviderFromUseWalletId } from '../../ethereum-providers'
 import { useCopyToClipboard } from '../../hooks/useCopyToClipboard'
 
