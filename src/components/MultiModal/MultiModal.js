@@ -15,6 +15,7 @@ import {
 import { useDisableAnimation } from '../../hooks/useDisableAnimation'
 import { MultiModalProvider, useMultiModal } from './MultiModalProvider'
 import { springs } from '../../style/springs'
+import logoMarkOverlay from '../../assets/logo-mark-overlay.svg'
 
 const DEFAULT_MODAL_WIDTH = 80 * GU
 const AnimatedDiv = animated.div
@@ -176,28 +177,66 @@ const ModalContent = React.memo(function ModalContent({ viewportWidth }) {
           {graphicHeader ? (
             <div
               css={`
-                padding: ${smallMode ? 5 * GU : 6 * GU}px ${standardPadding}px
-                  ${smallMode ? 2 * GU : 3 * GU}px ${standardPadding}px;
+                position: relative;
+                overflow: hidden;
+                padding: ${smallMode ? 5 * GU : 6.5 * GU}px ${standardPadding}px
+                  ${smallMode ? 2 * GU : 2.5 * GU}px ${standardPadding}px;
                 background: linear-gradient(
                   10deg,
                   ${theme.accentEnd} 0%,
-                  ${theme.accentStart} 150%
+                  ${theme.accentStart} 200%
                 );
 
                 margin-bottom: ${smallMode ? 2 * GU : 3 * GU}px;
+
+                &::after {
+                  content '';
+
+                  position: absolute;
+
+                  bottom: 0;
+                  left: 0;
+
+                  background-color: red;
+
+                  width: 100%;
+                  height: ${6 * GU}px;
+                  background-color: red;
+
+                  background: linear-gradient(
+                  to top,
+                  rgba(0,0,0,0.04) 0%,
+                  rgba(0,0,0,0) 70%
+                );
+                }
               `}
             >
               <h1
                 css={`
-                  ${smallMode ? textStyle('title4') : textStyle('title2')};
+                  position: relative;
+                  z-index: 1;
+                  ${smallMode ? textStyle('title3') : textStyle('title2')};
 
                   font-weight: 600;
-
                   color: ${theme.overlay};
                 `}
               >
                 {title}
               </h1>
+              <img
+                alt=""
+                src={logoMarkOverlay}
+                css={`
+                  position: absolute;
+
+                  bottom: -${5 * GU}px;
+                  left: ${2 * GU}px;
+
+                  width: 130px;
+                  height: 130px;
+                  opacity: 0.3;
+                `}
+              />
             </div>
           ) : (
             <div
@@ -208,7 +247,7 @@ const ModalContent = React.memo(function ModalContent({ viewportWidth }) {
             >
               <h1
                 css={`
-                  ${smallMode ? textStyle('title4') : textStyle('title2')};
+                  ${smallMode ? textStyle('title3') : textStyle('title2')};
 
                   margin-top: -${0.5 * GU}px;
                 `}
