@@ -24,6 +24,7 @@ const CardAccordion = React.memo(function CardAccordion({ card, expansion }) {
     <div
       css={`
         position: relative;
+        margin-bottom: ${RADIUS}px;
       `}
     >
       <OpenedSurfaceBorder opened={opened} />
@@ -36,45 +37,50 @@ const CardAccordion = React.memo(function CardAccordion({ card, expansion }) {
         <ToggleButton onClick={toggleButton} opened={opened} />
         {card}
       </Card>
-      <Transition
-        native
-        items={opened}
-        from={{ height: 0 }}
-        enter={{ height: 'auto' }}
-        leave={{ height: 0 }}
-        trail={0}
+      <div
+        css={`
+          margin-top: ${-RADIUS}px;
+        `}
       >
-        {(show) =>
-          show &&
-          ((props) => (
-            <Expansion
-              css={`
-                background: ${theme.surfaceUnder};
-                overflow: hidden;
-              `}
-              style={props}
-            >
-              <div
+        <Transition
+          native
+          items={opened}
+          from={{ height: 0 }}
+          enter={{ height: 'auto' }}
+          leave={{ height: 0 }}
+        >
+          {(show) =>
+            show &&
+            ((props) => (
+              <Expansion
                 css={`
-                  width: 100%;
+                  background: ${theme.surfaceUnder};
                   overflow: hidden;
-                  padding: ${4 * GU}px ${3 * GU}px ${3 * GU}px;
-                  box-shadow: inset 0 ${RADIUS + 4}px 4px -4px rgba(0, 0, 0, 0.16);
                 `}
+                style={props}
               >
-                {expansion}
-              </div>
-            </Expansion>
-          ))
-        }
-      </Transition>
+                <div
+                  css={`
+                    width: 100%;
+                    overflow: hidden;
+
+                    padding: ${4 * GU}px ${3 * GU}px ${3 * GU}px;
+                    box-shadow: inset 0 ${RADIUS + 4}px 4px -4px rgba(0, 0, 0, 0.16);
+                  `}
+                >
+                  {expansion}
+                </div>
+              </Expansion>
+            ))
+          }
+        </Transition>
+      </div>
     </div>
   )
 })
 
 const Expansion = styled(animated.div)`
   z-index: 1;
-  margin-top: ${-RADIUS}px;
 `
 
 CardAccordion.propTypes = {
