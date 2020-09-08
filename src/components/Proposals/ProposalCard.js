@@ -4,6 +4,7 @@ import { AppBadge, Card, GU, textStyle, useTheme, RADIUS } from '@aragon/ui'
 import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_CANCELLED,
+  VOTE_STATUS_SETTLED,
   VOTE_STATUS_DISPUTED,
   VOTE_STATUS_PAUSED,
 } from './disputable-vote-statuses'
@@ -25,6 +26,11 @@ function getAttributes(status, theme) {
     [VOTE_STATUS_PAUSED]: {
       backgroundColor: '#fefdfb',
       borderColor: theme.warning,
+      disabledProgressBars: true,
+    },
+    [VOTE_STATUS_SETTLED]: {
+      backgroundColor: theme.surfacePressed,
+      borderColor: theme.border,
       disabledProgressBars: true,
     },
     [VOTE_STATUS_DISPUTED]: {

@@ -17,6 +17,7 @@ import DisputableStatusLabel from '../DisputableStatusLabel'
 import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_CANCELLED,
+  VOTE_STATUS_SETTLED,
   VOTE_STATUS_DISPUTED,
   VOTE_STATUS_PAUSED,
 } from '../disputable-vote-statuses'
@@ -42,6 +43,10 @@ function ProposalDetails({ vote }) {
   const { boxPresentation, disabledProgressBars } = useMemo(() => {
     const disputablePresentation = {
       [VOTE_STATUS_CANCELLED]: {
+        boxPresentation: 'disabled',
+        disabledProgressBars: true,
+      },
+      [VOTE_STATUS_SETTLED]: {
         boxPresentation: 'disabled',
         disabledProgressBars: true,
       },

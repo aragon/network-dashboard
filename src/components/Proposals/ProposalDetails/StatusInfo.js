@@ -4,6 +4,7 @@ import { GU, Info } from '@aragon/ui'
 import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_CANCELLED,
+  VOTE_STATUS_SETTLED,
   VOTE_STATUS_PAUSED,
 } from '../disputable-vote-statuses'
 
@@ -24,7 +25,10 @@ function StatusInfo({ vote }) {
       </Info>
     )
   }
-  if (disputableStatus === VOTE_STATUS_CANCELLED) {
+  if (
+    disputableStatus === VOTE_STATUS_CANCELLED ||
+    disputableStatus === VOTE_STATUS_SETTLED
+  ) {
     if (vote.disputeId) {
       return (
         <Info
