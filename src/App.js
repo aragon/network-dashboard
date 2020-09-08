@@ -9,6 +9,7 @@ import GlobalErrorHandler from './GlobalErrorHandler'
 import MainView from './components/MainView'
 import { OrgAppsProvider } from './providers/OrgApps'
 import { VotesProvider } from './providers/Votes'
+import { WalletProvider } from './providers/Wallet'
 
 import Routes from './Routes'
 
@@ -16,21 +17,23 @@ function App() {
   return (
     <GlobalErrorHandler>
       <Connect>
-        <OrgAppsProvider>
-          <VotesProvider>
-            <AgreementProvider>
-              <ViewportProvider>
-                <LayoutProvider breakpoints={breakpoints}>
-                  <Router>
-                    <MainView>
-                      <Routes />
-                    </MainView>
-                  </Router>
-                </LayoutProvider>
-              </ViewportProvider>
-            </AgreementProvider>
-          </VotesProvider>
-        </OrgAppsProvider>
+        <WalletProvider>
+          <OrgAppsProvider>
+            <VotesProvider>
+              <AgreementProvider>
+                <ViewportProvider>
+                  <LayoutProvider breakpoints={breakpoints}>
+                    <Router>
+                      <MainView>
+                        <Routes />
+                      </MainView>
+                    </Router>
+                  </LayoutProvider>
+                </ViewportProvider>
+              </AgreementProvider>
+            </VotesProvider>
+          </OrgAppsProvider>
+        </WalletProvider>
       </Connect>
     </GlobalErrorHandler>
   )
