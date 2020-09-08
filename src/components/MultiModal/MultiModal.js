@@ -65,12 +65,11 @@ MultiModal.defaultProps = {
 /* eslint-disable react/prop-types */
 function MultiModalFrame({ visible, onClosed }) {
   const theme = useTheme()
-  const { currentScreen } = useMultiModal()
+  const { currentScreen, close } = useMultiModal()
   const {
     disableClose,
     width: currentScreenWidth,
     graphicHeader,
-    close,
   } = currentScreen
 
   const modalWidth = currentScreenWidth || DEFAULT_MODAL_WIDTH
