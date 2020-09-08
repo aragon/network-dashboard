@@ -23,7 +23,6 @@ const CardAccordion = React.memo(function CardAccordion({ card, expansion }) {
   return (
     <div
       css={`
-        margin-bottom: 16px;
         position: relative;
       `}
     >
@@ -49,10 +48,13 @@ const CardAccordion = React.memo(function CardAccordion({ card, expansion }) {
           show &&
           ((props) => (
             <Expansion
-              style={props}
               css={`
                 background: ${theme.surfaceUnder};
+                overflow: hidden;
               `}
+              style={{
+                height: props.height.interpolate((v) => `${v}px`),
+              }}
             >
               <div
                 css={`

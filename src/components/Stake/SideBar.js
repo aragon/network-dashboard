@@ -7,14 +7,21 @@ import wallet from './assets/wallet.svg'
 
 const Sidebar = React.memo(function Sidebar() {
   return (
-    <>
+    <div
+      css={`
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        grid-gap: ${2 * GU}px;
+      `}
+    >
       <CardAccordion
         card={
           <CardContent
-            amount="113,070.85"
+            amount="72,243.47"
             icon={wallet}
-            title="Total ANT"
-            tokenAmount="17,746.21"
+            title="Available ANT"
+            tokenAmount="11,278.04"
           />
         }
         expansion="I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. ANT holders in equal measure."
@@ -22,27 +29,27 @@ const Sidebar = React.memo(function Sidebar() {
       <CardAccordion
         card={
           <CardContent
-            amount="113,070.85"
+            amount="40,319.701"
             icon={coin}
-            title="Total ANT"
-            tokenAmount="17,746.21"
+            title="Locked ANT"
+            tokenAmount="6,684.60"
+          />
+        }
+        expansion="I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. ANT holders in equal measure."
+      />
+      <CardAccordion
+        card={
+          <CardContent
+            amount="-555.57"
+            icon={coin}
+            title="Slashed ANT"
+            tokenAmount="83.39"
             negative
           />
         }
         expansion="I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. ANT holders in equal measure."
       />
-      <CardAccordion
-        card={
-          <CardContent
-            amount="113,070.85"
-            icon={coin}
-            title="Total ANT"
-            tokenAmount="17,746.21"
-          />
-        }
-        expansion="I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. ANT holders in equal measure."
-      />
-    </>
+    </div>
   )
 })
 
