@@ -26,7 +26,7 @@ class GlobalErrorHandler extends React.Component {
     // Once this point is reached, the app can not recover because the routing
     // system, being below this component in the tree, is not functional
     // anymore. To make hash changes work despite this (e.g. by pressing the
-    // back button in the browser), the page need to be reloaded.
+    // back button in the browser), the page needs to be reloaded.
     window.removeEventListener('hashchange', this.handleHashchange)
     window.addEventListener('hashchange', this.handleHashchange)
   }
