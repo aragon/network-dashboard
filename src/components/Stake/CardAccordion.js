@@ -54,7 +54,16 @@ const CardAccordion = React.memo(function CardAccordion({ card, expansion }) {
                 background: ${theme.surfaceUnder};
               `}
             >
-              {expansion}
+              <div
+                css={`
+                  width: 100%;
+                  overflow: hidden;
+                  padding: ${4 * GU}px ${3 * GU}px ${3 * GU}px;
+                  box-shadow: inset 0 ${RADIUS + 4}px 4px -4px rgba(0, 0, 0, 0.16);
+                `}
+              >
+                {expansion}
+              </div>
             </Expansion>
           ))
         }
@@ -62,6 +71,11 @@ const CardAccordion = React.memo(function CardAccordion({ card, expansion }) {
     </div>
   )
 })
+
+const Expansion = styled(animated.div)`
+  z-index: 1;
+  margin-top: ${-RADIUS}px;
+`
 
 CardAccordion.propTypes = {
   card: PropTypes.node,
@@ -137,14 +151,6 @@ OpenedSurfaceBorder.propTypes = {
   opened: PropTypes.bool,
 }
 
-const Expansion = styled(animated.div)`
-  z-index: 1;
-  width: 100%;
-  overflow: hidden;
-  margin-top: ${-1 * GU}px;
-  padding: ${4 * GU}px ${3 * GU}px ${3 * GU}px;
-  box-shadow: inset 0 12px 4px -4px rgba(0, 0, 0, 0.16);
-`
 const Surface = styled(animated.div)`
   z-index: 3;
   position: absolute;
