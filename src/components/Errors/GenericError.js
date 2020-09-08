@@ -123,7 +123,7 @@ const GenericError = React.memo(function GenericError({
         css={`
           display: grid;
           grid-gap: ${1 * GU}px;
-          grid-template-columns: auto auto;
+          grid-template-columns: 50% 50%;
         `}
       >
         <Button onClick={reportCallback}>Send Report</Button>
