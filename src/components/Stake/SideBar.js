@@ -16,7 +16,7 @@ const Sidebar = React.memo(function Sidebar() {
       `}
     >
       <CardAccordion
-        card={
+        content={
           <CardContent
             amount="72,243.47"
             icon={wallet}
@@ -27,7 +27,7 @@ const Sidebar = React.memo(function Sidebar() {
         expansion="I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. ANT holders in equal measure."
       />
       <CardAccordion
-        card={
+        content={
           <CardContent
             amount="40,319.701"
             icon={coin}
@@ -38,7 +38,7 @@ const Sidebar = React.memo(function Sidebar() {
         expansion="I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. ANT holders in equal measure."
       />
       <CardAccordion
-        card={
+        content={
           <CardContent
             amount="-555.57"
             icon={coin}

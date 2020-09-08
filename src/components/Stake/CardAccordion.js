@@ -10,9 +10,10 @@ import {
   useTheme,
 } from '@aragon/ui'
 import { Spring, Transition, animated } from 'react-spring/renderprops'
-import styled from 'styled-components'
 
-const CardAccordion = React.memo(function CardAccordion({ card, expansion }) {
+const AnimatedDiv = animated.div
+
+function CardAccordion({ content, expansion }) {
   const [opened, setOpened] = useState(false)
   const theme = useTheme()
 
@@ -35,7 +36,7 @@ const CardAccordion = React.memo(function CardAccordion({ card, expansion }) {
         `}
       >
         <ToggleButton onClick={toggleButton} opened={opened} />
-        {card}
+        {content}
       </Card>
       <div
         css={`
@@ -52,10 +53,11 @@ const CardAccordion = React.memo(function CardAccordion({ card, expansion }) {
           {(show) =>
             show &&
             ((props) => (
-              <Expansion
+              <AnimatedDiv
                 css={`
                   background: ${theme.surfaceUnder};
                   overflow: hidden;
+                  z-index: 1;
                 `}
                 style={props}
               >
@@ -70,21 +72,17 @@ const CardAccordion = React.memo(function CardAccordion({ card, expansion }) {
                 >
                   {expansion}
                 </div>
-              </Expansion>
+              </AnimatedDiv>
             ))
           }
         </Transition>
       </div>
     </div>
   )
-})
-
-const Expansion = styled(animated.div)`
-  z-index: 1;
-`
+}
 
 CardAccordion.propTypes = {
-  card: PropTypes.node,
+  content: PropTypes.node,
   expansion: PropTypes.node,
 }
 
@@ -143,7 +141,23 @@ function OpenedSurfaceBorder({ opened }) {
       config={{ mass: 0.8, tension: 300, friction: 28 }}
     >
       {({ width }) => (
-        <Surface
+        <AnimatedDiv
+          css={`
+            z-index: 3;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 3px;
+            border-top-left-radius: ${RADIUS}px;
+            border-bottom-left-radius: ${RADIUS}px;
+            background: linear-gradient(
+              90deg,
+              #32fff5 -103.98%,
+              #01bfe3 80.13%
+            );
+            transform-origin: 0 0;
+          `}
           style={{
             transform: width.interpolate((v) => `scale3d(${v}, 1, 1)`),
           }}
@@ -156,18 +170,5 @@ function OpenedSurfaceBorder({ opened }) {
 OpenedSurfaceBorder.propTypes = {
   opened: PropTypes.bool,
 }
-
-const Surface = styled(animated.div)`
-  z-index: 3;
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 3px;
-  border-top-left-radius: ${RADIUS}px;
-  border-bottom-left-radius: ${RADIUS}px;
-  background: linear-gradient(90deg, #32fff5 -103.98%, #01bfe3 80.13%);
-  transform-origin: 0 0;
-`
 
 export default CardAccordion
