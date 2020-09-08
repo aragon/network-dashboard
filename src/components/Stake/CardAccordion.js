@@ -52,9 +52,7 @@ const CardAccordion = React.memo(function CardAccordion({ card, expansion }) {
                 background: ${theme.surfaceUnder};
                 overflow: hidden;
               `}
-              style={{
-                height: props.height.interpolate((v) => `${v}px`),
-              }}
+              style={props}
             >
               <div
                 css={`
