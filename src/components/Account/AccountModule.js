@@ -28,20 +28,13 @@ function AccountModule() {
   const toggle = useCallback(() => setOpened((opened) => !opened), [])
 
   useEffect(() => {
-    let timer
-
     if (status === 'error') {
       setActivatingDelayed(null)
     }
 
     if (status === 'connecting') {
       setActivatingDelayed(connector)
-      timer = setTimeout(() => {
-        setActivatingDelayed(null)
-      }, 400)
     }
-
-    return () => clearTimeout(timer)
   }, [connector, status])
 
   const handleResetConnection = useCallback(() => {
@@ -84,6 +77,7 @@ function AccountModule() {
         display: flex;
         align-items: center;
         justify-content: space-around;
+        height: 100%;
         width: ${compactMode ? 'auto' : `${24.5 * GU}px`};
         outline: 0;
       `}

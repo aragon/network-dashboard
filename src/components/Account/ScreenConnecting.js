@@ -18,7 +18,7 @@ const spin = keyframes`
   }
 `
 
-function AccountModuleConnectingScreen({ onCancel, providerId }) {
+function ScreenConnecting({ onCancel, providerId }) {
   const theme = useTheme()
   const provider = getProviderFromUseWalletId(providerId)
   return (
@@ -107,9 +107,9 @@ function AccountModuleConnectingScreen({ onCancel, providerId }) {
   )
 }
 
-AccountModuleConnectingScreen.propTypes = {
+ScreenConnecting.propTypes = {
   providerId: PropTypes.string,
   onCancel: PropTypes.func.isRequired,
 }
 
-export default AccountModuleConnectingScreen
+export default ScreenConnecting

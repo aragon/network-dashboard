@@ -6,7 +6,7 @@ import { getNetworkName } from '../../lib/web3-utils'
 import { networkEnvironment } from '../../current-environment'
 import connectionError from './assets/connection-error.png'
 
-function AccountModuleErrorScreen({ error, onBack }) {
+function ScreenError({ error, onBack }) {
   const theme = useTheme()
   const elementRef = useRef()
 
@@ -84,9 +84,9 @@ function AccountModuleErrorScreen({ error, onBack }) {
   )
 }
 
-AccountModuleErrorScreen.propTypes = {
-  error: PropTypes.instanceOf(Error),
+ScreenError.propTypes = {
+  error: PropTypes.object,
   onBack: PropTypes.func.isRequired,
 }
 
-export default AccountModuleErrorScreen
+export default ScreenError
