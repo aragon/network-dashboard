@@ -14,9 +14,9 @@ export default new Map([
         organization:
           'https://graph.backend.aragon.org/subgraphs/name/aragon/aragon-mainnet',
         disputableVoting:
-          'https://graph.backend.aragon.org/subgraphs/name/facuspagnuolo/ancashdao-dvoting-mainnet',
+          'https://api.thegraph.com/subgraphs/name/facuspagnuolo/ancashdao-dvoting-mainnet',
         agreement:
-          'https://graph.backend.aragon.org/subgraphs/name/facuspagnuolo/ancashdao-agreement-mainnet',
+          'https://api.thegraph.com/subgraphs/name/facuspagnuolo/ancashdao-agreement-mainnet',
       },
     },
   ],
