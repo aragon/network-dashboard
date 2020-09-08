@@ -14,9 +14,9 @@ export default new Map([
         organization:
           'https://graph.backend.aragon.org/subgraphs/name/aragon/aragon-mainnet',
         disputableVoting:
-          'https://graph.backend.aragon.org/subgraphs/name/aragon/aragon-dvoting-mainnet-staging',
+          'https://graph.backend.aragon.org/subgraphs/name/facuspagnuolo/ancashdao-dvoting-mainnet',
         agreement:
-          'https://graph.backend.aragon.org/subgraphs/name/aragon/aragon-agreement-mainnet-staging',
+          'https://graph.backend.aragon.org/subgraphs/name/facuspagnuolo/ancashdao-agreement-mainnet',
       },
     },
   ],
@@ -47,9 +47,9 @@ export default new Map([
       ipfsGateway: 'https://ipfs.eth.aragon.network/ipfs',
       subgraphs: {
         disputableVoting:
-          'https://api.thegraph.com/subgraphs/name/aragon/aragon-dvoting-rinkeby-staging',
+          'https://api.thegraph.com/subgraphs/name/facuspagnuolo/ancashdao-dvoting-rinkeby',
         agreement:
-          'https://api.thegraph.com/subgraphs/name/aragon/aragon-agreement-rinkeby-staging',
+          'https://api.thegraph.com/subgraphs/name/facuspagnuolo/ancashdao-agreement-rinkeby',
       },
     },
   ],
