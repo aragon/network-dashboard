@@ -1,10 +1,10 @@
-import React, { useCallback, useState, useMemo } from 'react'
-import { useHistory } from 'react-router-dom'
+import React from 'react'
 import { Header } from '@aragon/ui'
+import LayoutBox from '../Layout/LayoutBox'
+import LayoutColumns from '../Layout/LayoutColumns'
 import LayoutGutter from '../Layout/LayoutGutter'
 import LayoutLimiter from '../Layout/LayoutLimiter'
-import LayoutColumns from '../Layout/LayoutColumns'
-import LayoutBox from '../Layout/LayoutBox'
+import SideBar from './SideBar'
 
 const Stake = React.memo(function Stake() {
   return (
@@ -17,8 +17,8 @@ const Stake = React.memo(function Stake() {
       <LayoutLimiter>
         <Header primary="Stake management" />
         <LayoutColumns
-          primary={<LayoutBox primary></LayoutBox>}
-          secondary={<LayoutBox primary></LayoutBox>}
+          primary={<LayoutBox primary />}
+          secondary={<SideBar />}
         />
       </LayoutLimiter>
     </LayoutGutter>

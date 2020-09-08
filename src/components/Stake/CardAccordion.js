@@ -1,0 +1,161 @@
+import React, { useState, useCallback } from 'react'
+import PropTypes from 'prop-types'
+import {
+  ButtonIcon,
+  Card,
+  GU,
+  IconUp,
+  IconDown,
+  RADIUS,
+  useTheme,
+} from '@aragon/ui'
+import { Spring, Transition, animated } from 'react-spring/renderprops'
+import styled from 'styled-components'
+
+const CardAccordion = React.memo(function CardAccordion({ card, expansion }) {
+  const [opened, setOpened] = useState(false)
+  const theme = useTheme()
+
+  const toggleButton = useCallback((index) => {
+    setOpened((opened) => !opened)
+  }, [])
+
+  return (
+    <div
+      css={`
+        margin-bottom: 16px;
+        position: relative;
+      `}
+    >
+      <OpenedSurfaceBorder opened={opened} />
+      <Card
+        css={`
+          width: 100%;
+          z-index: 2;
+        `}
+      >
+        <ToggleButton onClick={toggleButton} opened={opened} />
+        {card}
+      </Card>
+      <Transition
+        native
+        items={opened}
+        from={{ height: 0 }}
+        enter={{ height: 'auto' }}
+        leave={{ height: 0 }}
+        trail={0}
+      >
+        {(show) =>
+          show &&
+          ((props) => (
+            <Expansion
+              style={props}
+              css={`
+                background: ${theme.surfaceUnder};
+              `}
+            >
+              {expansion}
+            </Expansion>
+          ))
+        }
+      </Transition>
+    </div>
+  )
+})
+
+CardAccordion.propTypes = {
+  card: PropTypes.node,
+  expansion: PropTypes.node,
+}
+
+function ToggleButton({ onClick, opened }) {
+  const theme = useTheme()
+  return (
+    <ButtonIcon
+      label={opened ? 'Close' : 'Open'}
+      focusRingRadius={RADIUS}
+      onClick={onClick}
+      css={`
+        position: absolute;
+        top: ${3.5 * GU}px;
+        left: ${3.5 * GU}px;
+        display: flex;
+        flex-direction: column;
+        color: ${theme.surfaceContentSecondary};
+        & > div {
+          display: flex;
+          transform-origin: 50% 50%;
+          transition: transform 250ms ease-in-out;
+        }
+      `}
+    >
+      <div
+        css={`
+          transform: rotate3d(${opened ? 1 : 0}, 0, 0, 180deg);
+          transform: rotate3d(0, 0, ${opened ? 1 : 0}, 180deg);
+        `}
+      >
+        <IconUp size="small" />
+      </div>
+      <div
+        css={`
+          transform: rotate3d(${opened ? -1 : 0}, 0, 0, 180deg);
+          transform: rotate3d(0, 0, ${opened ? -1 : 0}, 180deg);
+        `}
+      >
+        <IconDown size="small" />
+      </div>
+    </ButtonIcon>
+  )
+}
+
+ToggleButton.propTypes = {
+  opened: PropTypes.bool,
+  onClick: PropTypes.func,
+}
+
+function OpenedSurfaceBorder({ opened }) {
+  return (
+    <Spring
+      native
+      from={{ width: 0 }}
+      to={{ width: Number(opened) }}
+      config={{ mass: 0.8, tension: 300, friction: 28 }}
+    >
+      {({ width }) => (
+        <Surface
+          style={{
+            transform: width.interpolate((v) => `scale3d(${v}, 1, 1)`),
+          }}
+        />
+      )}
+    </Spring>
+  )
+}
+
+OpenedSurfaceBorder.propTypes = {
+  opened: PropTypes.bool,
+}
+
+const Expansion = styled(animated.div)`
+  z-index: 1;
+  width: 100%;
+  overflow: hidden;
+  margin-top: ${-1 * GU}px;
+  padding: ${4 * GU}px ${3 * GU}px ${3 * GU}px;
+  box-shadow: inset 0 12px 4px -4px rgba(0, 0, 0, 0.16);
+`
+const Surface = styled(animated.div)`
+  z-index: 3;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 3px;
+  border-top-left-radius: ${RADIUS}px;
+  border-bottom-left-radius: ${RADIUS}px;
+  background: linear-gradient(90deg, #32fff5 -103.98%, #01bfe3 80.13%);
+  transform-origin: 0 0;
+`
+
+export default CardAccordion
