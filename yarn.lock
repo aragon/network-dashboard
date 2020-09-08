@@ -19,13 +19,21 @@
     ethers "^5.0.7"
     radspec "^2.0.0-rc.2"
 
-"@aragon/connect-disputable-voting@^0.0.0-beta.4":
-  version "0.0.0-beta.4"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-disputable-voting/-/connect-disputable-voting-0.0.0-beta.4.tgz#8e509fa97478afa61b3e34faac85e3fbee0f5ede"
-  integrity sha512-XyZHIiKl3Q5kc3389I3j5siEeraBtYKwowUO596aXJWMqslzgXoo7bKUo0ngBcpJ70MKqO9t2xPBmej7jScxag==
+"@aragon/connect-core@^0.8.0-alpha.1":
+  version "0.8.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-core/-/connect-core-0.8.0-alpha.1.tgz#722981312f5828e86ed91a38e4b8320b6d3185a0"
+  integrity sha512-ifBzNl41tJzBav5TWXxKjq0M/m+r6QZqrq4XsnxpMKi2L6+FdXDMKm4gD3GX75Ogg23XHmo1M9dmD4Rz13PEOg==
   dependencies:
-    "@aragon/connect-core" "^0.7.0-beta.3"
-    "@aragon/connect-thegraph" "^0.7.0-beta.3"
+    ethers "^5.0.7"
+    radspec "^2.0.0-rc.2"
+
+"@aragon/connect-disputable-voting@^0.5.0-beta.5":
+  version "0.5.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-disputable-voting/-/connect-disputable-voting-0.5.0-beta.5.tgz#dba9c2905a6025cad8368ffad82c6cfe2d82dd3c"
+  integrity sha512-H/4ZNZJKc5RkrFjv7JKJ/9qqGdVXl0RMzgHBEIwWnS/w70VhjZCWI2wcvFB/dwh1LiPQyizatsr3F16dTtSk5A==
+  dependencies:
+    "@aragon/connect-core" "^0.8.0-alpha.1"
+    "@aragon/connect-thegraph" "^0.8.0-alpha.1"
     graphql-tag "^2.10.3"
 
 "@aragon/connect-ethereum@^0.7.0-beta.3":
@@ -48,6 +56,19 @@
   integrity sha512-aAJdaSskFtloZjFDWTHxuJMq5vKKM1yum/azTT892RsLOwC0pwt/Pw8Sx29zGjKE3BwZUvxiyANpnYBkW6Wp7A==
   dependencies:
     "@aragon/connect-core" "^0.7.0-beta.3"
+    "@urql/core" "^1.11.7"
+    graphql "^15.0.0"
+    graphql-tag "^2.10.3"
+    isomorphic-unfetch "^3.0.0"
+    isomorphic-ws "^4.0.1"
+    subscriptions-transport-ws "^0.9.16"
+
+"@aragon/connect-thegraph@^0.8.0-alpha.1":
+  version "0.8.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-thegraph/-/connect-thegraph-0.8.0-alpha.1.tgz#bb86f284b8ddfb064279a2c3cac3463494e84fef"
+  integrity sha512-baJyAKUBYCHRy6LdaRmtGgx+QS+Zr5j6cHaLPt5Ry/Bv0Lc/FK28XsKsLhRLX50dHXsL9S1Tzg30r98rAa33/w==
+  dependencies:
+    "@aragon/connect-core" "^0.8.0-alpha.1"
     "@urql/core" "^1.11.7"
     graphql "^15.0.0"
     graphql-tag "^2.10.3"

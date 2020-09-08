@@ -17,6 +17,7 @@ import {
   VOTE_STATUS_ACCEPTED,
   VOTE_STATUS_ACTIVE,
   VOTE_STATUS_CANCELLED,
+  VOTE_STATUS_SETTLED,
   VOTE_STATUS_DISPUTED,
   VOTE_STATUS_EXECUTED,
   VOTE_STATUS_PAUSED,
@@ -38,6 +39,12 @@ function getAttributes(status, theme) {
     [VOTE_STATUS_CANCELLED]: {
       background: theme.surfaceUnder,
       label: 'Cancelled',
+      Icon: IconClose,
+      color: theme.disabledContent,
+    },
+    [VOTE_STATUS_SETTLED]: {
+      background: theme.surfaceUnder,
+      label: 'Settled',
       Icon: IconClose,
       color: theme.disabledContent,
     },
