@@ -2,60 +2,60 @@
 # yarn lockfile v1
 
 
-"@aragon/connect-agreement@^0.0.0-beta.4":
-  version "0.0.0-beta.4"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-agreement/-/connect-agreement-0.0.0-beta.4.tgz#547941817355ea38051a7b4ec1ea420945a3eae7"
-  integrity sha512-TuJO3NIlvl35jKTrq/8Rl+lbTZoa+n/WDJQlySQh0jHeZu6sOnHIaaDDtCqdFaekb/TkSEbnsP9amyjywhxsHw==
+"@aragon/connect-agreement@^0.8.0-beta.1":
+  version "0.8.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-agreement/-/connect-agreement-0.8.0-beta.1.tgz#8799f0c857e807ea619678d2101b53e9e4185e33"
+  integrity sha512-GXx+DMz51Mf1F9SQObe0Gni6uoUCh3dLNUDbU5pHonfcOp7Fgi6LjUV9XC1HAHysT2r7vc0AhA1TZ3NQyN4ICA==
   dependencies:
-    "@aragon/connect-core" "^0.7.0-beta.3"
-    "@aragon/connect-thegraph" "^0.7.0-beta.3"
+    "@aragon/connect-core" "^0.8.0-alpha.2"
+    "@aragon/connect-thegraph" "^0.8.0-alpha.2"
     graphql-tag "^2.10.3"
 
-"@aragon/connect-core@^0.7.0-beta.3":
-  version "0.7.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-core/-/connect-core-0.7.0-beta.3.tgz#cb7eacf22dc7cbff79cfe54160b0e39b79859a75"
-  integrity sha512-VtKfCJv1QzmBcyuUFvduvo8thTKVWZ2iooGjVV7bMZL5dMbGmBsmqhu7M4G7fql/qqfTL7Q3X4QgcAGlrJCR9g==
+"@aragon/connect-core@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-core/-/connect-core-0.7.0.tgz#2464a1ce136fb1166d0de32fcada5a8c5da6e2dc"
+  integrity sha512-Edt42nVzuuQ1weVIVILIZts8k8//40AYzmikROH9WtWxGQyR41PPf3rLTkVtFnuekfVk/3qr1NSeRXuEJBXzXQ==
   dependencies:
     ethers "^5.0.7"
     radspec "^2.0.0-rc.2"
 
-"@aragon/connect-core@^0.8.0-alpha.1":
-  version "0.8.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-core/-/connect-core-0.8.0-alpha.1.tgz#722981312f5828e86ed91a38e4b8320b6d3185a0"
-  integrity sha512-ifBzNl41tJzBav5TWXxKjq0M/m+r6QZqrq4XsnxpMKi2L6+FdXDMKm4gD3GX75Ogg23XHmo1M9dmD4Rz13PEOg==
+"@aragon/connect-core@^0.8.0-alpha.2":
+  version "0.8.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-core/-/connect-core-0.8.0-alpha.2.tgz#69d93c73f4f3ebf5d075d00fab08db9e3e1f26ad"
+  integrity sha512-yo6IOVB/ct7VrO4iynxE/+6eVy6ZcgC1Lqf8m7SCEMBYXRoJBcUX+gtGFJhFjBPgQpArzDPkZsOKshtmDLRL6g==
   dependencies:
     ethers "^5.0.7"
     radspec "^2.0.0-rc.2"
 
-"@aragon/connect-disputable-voting@^0.5.0-beta.5":
-  version "0.5.0-beta.5"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-disputable-voting/-/connect-disputable-voting-0.5.0-beta.5.tgz#dba9c2905a6025cad8368ffad82c6cfe2d82dd3c"
-  integrity sha512-H/4ZNZJKc5RkrFjv7JKJ/9qqGdVXl0RMzgHBEIwWnS/w70VhjZCWI2wcvFB/dwh1LiPQyizatsr3F16dTtSk5A==
+"@aragon/connect-disputable-voting@^0.8.0-beta.1":
+  version "0.8.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-disputable-voting/-/connect-disputable-voting-0.8.0-beta.1.tgz#9fe6e14d116e2f57e71ed2e67a14e696c3d5b379"
+  integrity sha512-VN224Ey0Tw2/PM9xh2C6XMh45eROkJSUywaNnXpQKr6ZRQYpBJEJNN8SE8zl33fQ1f8+ox0XxqqlyUg/ZbMeDQ==
   dependencies:
-    "@aragon/connect-core" "^0.8.0-alpha.1"
-    "@aragon/connect-thegraph" "^0.8.0-alpha.1"
+    "@aragon/connect-core" "^0.8.0-alpha.2"
+    "@aragon/connect-thegraph" "^0.8.0-alpha.2"
     graphql-tag "^2.10.3"
 
-"@aragon/connect-ethereum@^0.7.0-beta.3":
-  version "0.7.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-ethereum/-/connect-ethereum-0.7.0-beta.3.tgz#a3072159e8556ac127646df316eabbc10a1c3123"
-  integrity sha512-299HUpI3HlRi6n6OcAADjnAFjl1rMi5P9tlsrifAnCypvkbe7g/rXZkWopsKuSpdQgm5B005gJd8F4sNeefcgQ==
+"@aragon/connect-ethereum@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-ethereum/-/connect-ethereum-0.7.0.tgz#c58b1a0eb92e8ecf0b1207b4654eca56e4d94969"
+  integrity sha512-0wjMHq5VVgAKqicClKEWqtREQl/ISQsv9QYGTtktvSuIrlDV9+TPzrv3HSYxSn7IpwGJMa0fUvoKhvm94jq1dg==
   dependencies:
-    "@aragon/connect-core" "^0.7.0-beta.3"
+    "@aragon/connect-core" "^0.7.0"
 
-"@aragon/connect-react@^0.7.0-beta.3":
-  version "0.7.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-react/-/connect-react-0.7.0-beta.3.tgz#1d840e7d219bff9a1d3292693dd4164970aac27b"
-  integrity sha512-w26jngv4ieq8ys1gu6rpVkWQMfxGa3VeqEHlHYuF8wMDws7rxAGIhraYni8jB976nSmN8SOjmPQGyN6a/zfvWw==
+"@aragon/connect-react@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-react/-/connect-react-0.7.0.tgz#caeea8c8992b1a20ae689bee0d2898d2542fcbbd"
+  integrity sha512-Y28WVWd/ADgtMPE0Rb0WJp3TEEwJk7tkva843QbM26xcAqNaeBVkOL1TrAXNRQwpYThwtZCQK8Ix4dY9x807nA==
   dependencies:
-    "@aragon/connect" "^0.7.0-beta.3"
+    "@aragon/connect" "^0.7.0"
 
-"@aragon/connect-thegraph@^0.7.0-beta.3":
-  version "0.7.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-thegraph/-/connect-thegraph-0.7.0-beta.3.tgz#b2053076c6b5731a289c78fa6cdf4ea356b0f043"
-  integrity sha512-aAJdaSskFtloZjFDWTHxuJMq5vKKM1yum/azTT892RsLOwC0pwt/Pw8Sx29zGjKE3BwZUvxiyANpnYBkW6Wp7A==
+"@aragon/connect-thegraph@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-thegraph/-/connect-thegraph-0.7.0.tgz#f4331d19ab78f33047b852adbd970efd6cd547b1"
+  integrity sha512-2s7uqMdoMEqr3M4r6tAoNAlOo3+yQRoRwxRy0i8r3mBhmo5kjU/jkfnLQO1SpS3HRHZrMZcc9Tkrj0zlijurDw==
   dependencies:
-    "@aragon/connect-core" "^0.7.0-beta.3"
+    "@aragon/connect-core" "^0.7.0"
     "@urql/core" "^1.11.7"
     graphql "^15.0.0"
     graphql-tag "^2.10.3"
@@ -63,12 +63,12 @@
     isomorphic-ws "^4.0.1"
     subscriptions-transport-ws "^0.9.16"
 
-"@aragon/connect-thegraph@^0.8.0-alpha.1":
-  version "0.8.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-thegraph/-/connect-thegraph-0.8.0-alpha.1.tgz#bb86f284b8ddfb064279a2c3cac3463494e84fef"
-  integrity sha512-baJyAKUBYCHRy6LdaRmtGgx+QS+Zr5j6cHaLPt5Ry/Bv0Lc/FK28XsKsLhRLX50dHXsL9S1Tzg30r98rAa33/w==
+"@aragon/connect-thegraph@^0.8.0-alpha.2":
+  version "0.8.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-thegraph/-/connect-thegraph-0.8.0-alpha.2.tgz#40b6a6154e8e5014a579fdf82ffeb1027b3dccd8"
+  integrity sha512-YkQouE0mAGj11Z8SXD7KjK+1KQkO2skhaJ3Sb8rgBkR8zXpK7ODwByGhA80V1eCzkzleQyEcv0b9j9qAOjBKrg==
   dependencies:
-    "@aragon/connect-core" "^0.8.0-alpha.1"
+    "@aragon/connect-core" "^0.8.0-alpha.2"
     "@urql/core" "^1.11.7"
     graphql "^15.0.0"
     graphql-tag "^2.10.3"
@@ -76,14 +76,14 @@
     isomorphic-ws "^4.0.1"
     subscriptions-transport-ws "^0.9.16"
 
-"@aragon/connect@^0.7.0-beta.3":
-  version "0.7.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@aragon/connect/-/connect-0.7.0-beta.3.tgz#08a652df71f89896aceeb38132ea809aea80b8dd"
-  integrity sha512-6Erz+Tryhr6C085igpwbhl7WI5Oy1hmXU8u8wf2kdgfPLj0Q9V6eS4Geq4MUUkJOCm/2RocEdpVejF//BWVYpQ==
+"@aragon/connect@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@aragon/connect/-/connect-0.7.0.tgz#ee667747c3d5e4b10c7faca7d84d4185597ed3a8"
+  integrity sha512-YXdTmJAZXaMybmdb+21vV8Wg8xjGUkPdvXGLN+bQS5Dw044TLNL3rhpYn4k+CKijVXlO9vi702ohmU+S1SSy/A==
   dependencies:
-    "@aragon/connect-core" "^0.7.0-beta.3"
-    "@aragon/connect-ethereum" "^0.7.0-beta.3"
-    "@aragon/connect-thegraph" "^0.7.0-beta.3"
+    "@aragon/connect-core" "^0.7.0"
+    "@aragon/connect-ethereum" "^0.7.0"
+    "@aragon/connect-thegraph" "^0.7.0"
 
 "@aragon/provided-connector@^6.0.7":
   version "6.0.8"

@@ -97,7 +97,7 @@ async function processDisputableApps(apps, disputableApps) {
     )
 
     const collateral = allRequirements.find(
-      ({ id }) => id === disputableApp.collateralRequirementId
+      ({ id }) => id === disputableApp.currentCollateralRequirementId
     )
 
     const token = allTokens.find(({ id }) => id === collateral.tokenId)
