@@ -2,8 +2,9 @@ import { useEffect, useState, useMemo } from 'react'
 import { captureErrorWithSentry } from '../sentry'
 import connectVoting from '@aragon/connect-disputable-voting'
 import { createAppHook } from '@aragon/connect-react'
-import { useOrgApps } from '../providers/OrgApps'
+import { ProposalNotFound } from '../errors'
 import { networkEnvironment } from '../current-environment'
+import { useOrgApps } from '../providers/OrgApps'
 
 const SUBGRAPH_URL = networkEnvironment.subgraphs?.disputableVoting
 
@@ -47,6 +48,13 @@ export function useDisputableVote(proposalId) {
     [proposalId]
   )
 
+  // Throw to error boundary if vote doesn't exist
+  useEffect(() => {
+    if (!vote && !voteLoading) {
+      throw new ProposalNotFound(proposalId)
+    }
+  }, [vote, voteLoading, proposalId])
+
   useEffect(() => {
     let cancelled = false
 
@@ -77,6 +85,7 @@ export function useDisputableVote(proposalId) {
       } catch (err) {
         captureErrorWithSentry(err)
         console.error(err)
+        setExtendedVoteLoading(false)
       }
     }
 
