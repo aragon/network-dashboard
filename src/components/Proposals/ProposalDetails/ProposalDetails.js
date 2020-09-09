@@ -38,6 +38,7 @@ import LoadingSkeleton from '../../Loading/LoadingSkeleton'
 
 function ProposalDetails({ vote }) {
   const { voteId } = vote
+  console.log(vote)
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const { boxPresentation, disabledProgressBars } = useMemo(() => {
     const disputablePresentation = {

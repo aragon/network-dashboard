@@ -8,12 +8,7 @@ import SideBar from './SideBar'
 
 const Stake = React.memo(function Stake() {
   return (
-    <LayoutGutter
-      css={`
-        position: relative;
-        z-index: 2;
-      `}
-    >
+    <LayoutGutter>
       <LayoutLimiter>
         <Header primary="Stake management" />
         <LayoutColumns

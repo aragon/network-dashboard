@@ -5,7 +5,7 @@ import CardAccordion from './CardAccordion'
 import coin from './assets/coin.svg'
 import wallet from './assets/wallet.svg'
 
-const Sidebar = React.memo(function Sidebar() {
+function Sidebar() {
   return (
     <div
       css={`
@@ -51,7 +51,7 @@ const Sidebar = React.memo(function Sidebar() {
       />
     </div>
   )
-})
+}
 
 function CardContent({ icon, title, tokenAmount, amount, negative }) {
   const theme = useTheme()

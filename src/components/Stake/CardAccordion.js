@@ -7,6 +7,7 @@ import {
   IconUp,
   IconDown,
   RADIUS,
+  springs,
   useTheme,
 } from '@aragon/ui'
 import { Spring, Transition, animated } from 'react-spring/renderprops'
@@ -138,7 +139,7 @@ function OpenedSurfaceBorder({ opened }) {
       native
       from={{ width: 0 }}
       to={{ width: Number(opened) }}
-      config={{ mass: 0.8, tension: 300, friction: 28 }}
+      config={springs.smooth}
     >
       {({ width }) => (
         <AnimatedDiv
