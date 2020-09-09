@@ -34,6 +34,8 @@ function CardAccordion({ content, expansion }) {
         css={`
           width: 100%;
           z-index: 2;
+          height: auto;
+          padding: ${3 * GU}px;
         `}
       >
         <ToggleButton onClick={toggleButton} opened={opened} />
