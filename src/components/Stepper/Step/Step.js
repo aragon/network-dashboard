@@ -14,7 +14,7 @@ import StatusVisual from './StatusVisual'
 import { springs } from '../../../style/springs'
 import { useDisableAnimation } from '../../../hooks/useDisableAnimation'
 
-const AnimatedDiv = animated.div
+const AnimatedSpan = animated.span
 
 function Step({
   title,
@@ -125,7 +125,7 @@ function Step({
             {(item) =>
               item &&
               ((transitionProps) => (
-                <AnimatedDiv
+                <AnimatedSpan
                   css={`
                     display: flex;
                     justify-content: center;
@@ -137,7 +137,7 @@ function Step({
                   style={transitionProps}
                 >
                   {item.currentDesc}
-                </AnimatedDiv>
+                </AnimatedSpan>
               ))
             }
           </Transition>
@@ -172,7 +172,7 @@ function Step({
           >
             {(currentHash) => (transitionProps) =>
               currentHash ? (
-                <AnimatedDiv
+                <AnimatedSpan
                   style={transitionProps}
                   css={`
                     display: flex;
@@ -181,9 +181,9 @@ function Step({
                   `}
                 >
                   <TransactionBadge transaction={currentHash} />
-                </AnimatedDiv>
+                </AnimatedSpan>
               ) : (
-                <AnimatedDiv
+                <AnimatedSpan
                   style={transitionProps}
                   css={`
                     display: flex;
@@ -199,7 +199,7 @@ function Step({
                       border: 1px dashed ${theme.border};
                     `}
                   />
-                </AnimatedDiv>
+                </AnimatedSpan>
               )}
           </Transition>
         </div>

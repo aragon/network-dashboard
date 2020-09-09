@@ -10,6 +10,7 @@ import {
   STEP_WAITING,
   STEP_WORKING,
 } from './stepper-statuses'
+import { TRANSACTION_SIGNING_DESC } from './stepper-descriptions'
 import { useDisableAnimation } from '../../hooks/useDisableAnimation'
 import { useMounted } from '../../hooks/useMounted'
 import useStepperLayout from './useStepperLayout'
@@ -17,6 +18,7 @@ import useStepperLayout from './useStepperLayout'
 const AnimatedDiv = animated.div
 
 const INITIAL_STATUS = STEP_PROMPTING
+const DEFAULT_DESCRIPTIONS = TRANSACTION_SIGNING_DESC
 
 function initialStepState(steps) {
   return steps.map((_, i) => {
@@ -54,8 +56,9 @@ function Stepper({ steps, onComplete, ...props }) {
 
   const renderStep = useCallback(
     (stepIndex, showDivider) => {
-      const { title, descriptions } = steps[stepIndex]
+      const { title, descriptions: suppliedDescriptions } = steps[stepIndex]
       const { status, hash } = stepState[stepIndex]
+      const descriptions = suppliedDescriptions || DEFAULT_DESCRIPTIONS
 
       return (
         <li
@@ -233,7 +236,7 @@ Stepper.propTypes = {
         [STEP_WORKING]: PropTypes.string,
         [STEP_SUCCESS]: PropTypes.string,
         [STEP_ERROR]: PropTypes.string,
-      }).isRequired,
+      }),
     })
   ).isRequired,
   onComplete: PropTypes.func,

@@ -40,6 +40,7 @@ import { useWallet } from '../../../providers/Wallet'
 function ProposalDetails({ vote }) {
   const { voteId } = vote
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
+
   const { boxPresentation, disabledProgressBars } = useMemo(() => {
     const disputablePresentation = {
       [VOTE_STATUS_CANCELLED]: {
@@ -105,7 +106,10 @@ function ProposalDetails({ vote }) {
       }
       secondary={
         <>
-          <DisputableActionStatus vote={vote} />
+          <DisputableActionStatus
+            vote={vote}
+            disputableStatus={disputableStatus}
+          />
           <InfoBoxes vote={vote} disabledProgressBars={disabledProgressBars} />
         </>
       }

@@ -52,6 +52,7 @@
     "react-spring": "^8.0.1",
     "react-use-measure": "^2.0.1",
     "styled-components": "^5.1.1",
+    "use-inside": "^0.2.0",
     "use-viewport": "^0.2.0",
     "use-wallet": "^0.8.0"
   },
