@@ -225,7 +225,6 @@ Step.propTypes = {
   title: PropTypes.string,
   desc: PropTypes.string,
   transactionHash: PropTypes.string,
-  className: PropTypes.string,
   number: PropTypes.number,
   status: PropTypes.oneOf([
     STEP_WAITING,

@@ -174,7 +174,6 @@ StatusVisual.propTypes = {
   ]).isRequired,
   color: PropTypes.string.isRequired,
   number: PropTypes.number.isRequired,
-  className: PropTypes.string,
 }
 
 /* eslint-disable react/prop-types */
