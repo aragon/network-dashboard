@@ -14,11 +14,11 @@ import { Spring, Transition, animated } from 'react-spring/renderprops'
 
 const AnimatedDiv = animated.div
 
-function CardAccordion({ content, expansion }) {
+function ExpandableCard({ content, expansion }) {
   const [opened, setOpened] = useState(false)
   const theme = useTheme()
 
-  const toggleButton = useCallback((index) => {
+  const toggleButton = useCallback(() => {
     setOpened((opened) => !opened)
   }, [])
 
@@ -84,7 +84,7 @@ function CardAccordion({ content, expansion }) {
   )
 }
 
-CardAccordion.propTypes = {
+ExpandableCard.propTypes = {
   content: PropTypes.node,
   expansion: PropTypes.node,
 }
@@ -174,4 +174,4 @@ OpenedSurfaceBorder.propTypes = {
   opened: PropTypes.bool,
 }
 
-export default CardAccordion
+export default ExpandableCard

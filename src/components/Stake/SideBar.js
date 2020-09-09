@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { GU, textStyle, useTheme } from '@aragon/ui'
-import CardAccordion from './CardAccordion'
+import ExpandableCard from './ExpandableCard'
 import coin from './assets/coin.svg'
 import wallet from './assets/wallet.svg'
 
@@ -15,7 +15,7 @@ function Sidebar() {
         grid-gap: ${2 * GU}px;
       `}
     >
-      <CardAccordion
+      <ExpandableCard
         content={
           <CardContent
             amount="72,243.47"
@@ -26,7 +26,7 @@ function Sidebar() {
         }
         expansion="I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. ANT holders in equal measure."
       />
-      <CardAccordion
+      <ExpandableCard
         content={
           <CardContent
             amount="40,319.701"
@@ -37,7 +37,7 @@ function Sidebar() {
         }
         expansion="I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. ANT holders in equal measure."
       />
-      <CardAccordion
+      <ExpandableCard
         content={
           <CardContent
             amount="-555.57"
