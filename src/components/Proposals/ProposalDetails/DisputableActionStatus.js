@@ -6,17 +6,21 @@ import {
   VOTE_STATUS_ACTIVE,
   VOTE_STATUS_PAUSED,
 } from '../disputable-vote-statuses'
-import { toMs } from '../../../utils/date-utils'
 import DisputableActions from './DisputableActions'
 import DisputablePeriod from './DisputablePeriod'
+import { durationToHours, toMs } from '../../../utils/date-utils'
 import { networkEnvironment } from '../../../current-environment'
 
 function DisputableActionStatus({ vote }) {
+  const theme = useTheme()
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const challenged = disputableStatus === VOTE_STATUS_PAUSED
+  const scheduled = disputableStatus === VOTE_STATUS_ACTIVE
   const challengeEndDate = toMs(vote.challengeEndDate)
   const pausedAt = toMs(vote.pausedAt)
   const voteEndDate = toMs(vote.endDate)
+
+  console.log(vote)
 
   return (
     <Box heading="Disputable Action Status">
@@ -47,7 +51,7 @@ function DisputableActionStatus({ vote }) {
             </Link>
           </Item>
         )}
-        {disputableStatus === VOTE_STATUS_ACTIVE && (
+        {scheduled && (
           <Item>
             {parseInt(vote.pausedAt, 10) === 0 ? (
               <Info>
@@ -58,6 +62,18 @@ function DisputableActionStatus({ vote }) {
             ) : (
               <Info>The proposed action cannot longer be challenged.</Info>
             )}
+          </Item>
+        )}
+        {scheduled && vote.settings.quietEndingPeriod && (
+          <Item heading="Quiet ending period">
+            <span
+              css={`
+                color: ${theme.surfaceContentSecondary};
+              `}
+            >
+              Last {durationToHours(toMs(vote.settings.quietEndingPeriod))}{' '}
+              hours
+            </span>
           </Item>
         )}
         <Item>
