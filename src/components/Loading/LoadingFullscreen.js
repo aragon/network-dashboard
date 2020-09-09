@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSpring, animated } from 'react-spring'
+import { Spring, animated } from 'react-spring/renderprops'
 import { keyframes, css } from 'styled-components'
 import { useTheme, GU } from '@aragon/ui'
 import { springs } from '../../style/springs'
@@ -22,12 +22,6 @@ const ringSpinAnimation = css`
 function LoadingFullscreen({ ...props }) {
   const theme = useTheme()
 
-  const ringTransitionIn = useSpring({
-    config: springs.gentle,
-    from: { opacity: 0, transform: `scale3d(1.5, 1.5, 1)` },
-    to: { opacity: 1, transform: `scale3d(1, 1, 1)` },
-  })
-
   return (
     <div
       css={`
@@ -47,35 +41,43 @@ function LoadingFullscreen({ ...props }) {
       `}
       {...props}
     >
-      <AnimatedDiv
-        css={`
-          display: flex;
-          position: relative;
-
-          width: ${11 * GU}px;
-          height: ${11 * GU}px;
-        `}
-        style={ringTransitionIn}
+      <Spring
+        config={springs.gentle}
+        from={{ opacity: 0, transform: `scale3d(1.5, 1.5, 1)` }}
+        to={{ opacity: 1, transform: `scale3d(1, 1, 1)` }}
       >
-        <LoadingGraphic />
+        {(transitionProps) => (
+          <AnimatedDiv
+            css={`
+              display: flex;
+              position: relative;
 
-        <div
-          css={`
-            position: absolute;
+              width: ${11 * GU}px;
+              height: ${11 * GU}px;
+            `}
+            style={transitionProps}
+          >
+            <LoadingGraphic />
 
-            /* Pull outside of bounding element to create visual space */
-            top: -${1.5 * GU}px;
-            left: -${1.5 * GU}px;
-            right: -${1.5 * GU}px;
-            bottom: -${1.5 * GU}px;
+            <div
+              css={`
+                position: absolute;
 
-            border-radius: 100%;
-            border: 3px solid white;
+                /* Pull outside of bounding element to create visual space */
+                top: -${1.25 * GU}px;
+                left: -${1.25 * GU}px;
+                right: -${1.25 * GU}px;
+                bottom: -${1.25 * GU}px;
 
-            ${ringSpinAnimation}
-          `}
-        />
-      </AnimatedDiv>
+                border-radius: 100%;
+                border: 3px solid white;
+
+                ${ringSpinAnimation}
+              `}
+            />
+          </AnimatedDiv>
+        )}
+      </Spring>
     </div>
   )
 }

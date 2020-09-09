@@ -28,17 +28,18 @@
     "files": [
       {
         "path": "public/*.js",
-        "maxSize": "800kb",
+        "maxSize": "1000kb",
         "compression": "gzip"
       }
     ]
   },
   "dependencies": {
     "@aragon/connect-agreement": "^0.0.0-beta.4",
-    "@aragon/connect-disputable-voting": "^0.0.0-beta.4",
+    "@aragon/connect-disputable-voting": "^0.5.0-beta.5",
     "@aragon/connect-react": "^0.7.0-beta.3",
     "@aragon/ui": "^1.7.0",
     "@sentry/browser": "^5.20.1",
+    "clipboard-polyfill": "^3.0.1",
     "core-js": "^3.3.2",
     "dayjs": "^1.8.27",
     "ethers": "^5.0.8",
@@ -49,7 +50,8 @@
     "react-router-dom": "^5.2.0",
     "react-spring": "^8.0.1",
     "styled-components": "^5.1.1",
-    "use-viewport": "^0.2.0"
+    "use-viewport": "^0.2.0",
+    "use-wallet": "^0.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.11.0",

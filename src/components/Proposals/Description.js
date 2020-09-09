@@ -2,7 +2,7 @@ import React from 'react'
 import { PropTypes } from 'prop-types'
 import { GU, IdentityBadge, useTheme } from '@aragon/ui'
 
-function Description({ path }) {
+function Description({ disableBadgeInteraction, path }) {
   return (
     <span
       css={`
@@ -15,14 +15,20 @@ function Description({ path }) {
       `}
     >
       {path
-        ? path.map((step, index) => <DescriptionStep key={index} step={step} />)
+        ? path.map((step, index) => (
+            <DescriptionStep
+              disableBadgeInteraction={disableBadgeInteraction}
+              key={index}
+              step={step}
+            />
+          ))
         : ''}
     </span>
   )
 }
 
 /* eslint-disable react/prop-types */
-function DescriptionStep({ step }) {
+function DescriptionStep({ step, disableBadgeInteraction }) {
   const theme = useTheme()
 
   const description = []
@@ -37,6 +43,7 @@ function DescriptionStep({ step }) {
             <span key={key}>
               {' '}
               <IdentityBadge
+                badgeOnly={disableBadgeInteraction}
                 compact
                 entity={type === 'any-account' ? 'Any account' : value}
               />
@@ -108,7 +115,12 @@ function DescriptionStep({ step }) {
 /* eslint-enable react/prop-types */
 
 Description.propTypes = {
+  disableBadgeInteraction: PropTypes.bool,
   path: PropTypes.array,
+}
+
+Description.defaultProps = {
+  disableBadgeInteraction: false,
 }
 
 export default Description
