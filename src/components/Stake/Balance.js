@@ -1,5 +1,4 @@
-import React, { useState, useCallback } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import { Button, Card, GU, textStyle, useTheme } from '@aragon/ui'
 import tokenIcon from './assets/tokenIcon.svg'
 
@@ -58,11 +57,6 @@ function Balance() {
       <Button mode="strong" wide label="Deposit" />
     </Card>
   )
-}
-
-Balance.propTypes = {
-  content: PropTypes.node,
-  expansion: PropTypes.node,
 }
 
 export default Balance
