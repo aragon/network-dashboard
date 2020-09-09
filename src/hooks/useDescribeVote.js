@@ -1,5 +1,4 @@
 import { useEffect, useState, useMemo } from 'react'
-import { describeScript } from '@aragon/connect'
 import { useOrganization } from '@aragon/connect-react'
 import { useOrgApps } from '../providers/OrgApps'
 import { getAppPresentation } from '../utils/app-utils'
@@ -13,9 +12,6 @@ export function useDescribeVote(script, voteId) {
   const [description, setDescription] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  // TODO: This provider will be supplied to describeScript by default in a future connect release
-  // https://github.com/aragon/connect/pull/223
-  const provider = org.connection.ethersProvider
   const emptyScript = script === '0x00000001'
 
   // Populate target app data from transaction request
@@ -46,14 +42,14 @@ export function useDescribeVote(script, voteId) {
 
     async function describe() {
       try {
-        const description = await describeScript(script, apps, provider)
+        const { describedSteps } = await org.describeScript(script)
 
         if (!cancelled) {
-          setDescription(description)
+          setDescription(describedSteps)
           setLoading(false)
 
           // Cache vote description to avoid unnecessary future call
-          cachedDescriptions.set(voteId, description)
+          cachedDescriptions.set(voteId, describedSteps)
         }
       } catch (err) {
         console.error(err)
@@ -65,7 +61,7 @@ export function useDescribeVote(script, voteId) {
     return () => {
       cancelled = true
     }
-  }, [apps, emptyScript, provider, script, voteId])
+  }, [emptyScript, script, voteId, org])
 
   return { description, emptyScript, loading, targetApp }
 }

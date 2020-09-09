@@ -33,9 +33,9 @@ function DescriptionStep({ step, disableBadgeInteraction }) {
 
   const description = []
 
-  if (step.descriptionAnnotated) {
+  if (step.annotatedDescription) {
     description.push(
-      step.descriptionAnnotated.map(({ type, value }, index) => {
+      step.annotatedDescription.map(({ type, value }, index) => {
         const key = index + 1
 
         if (type === 'address' || type === 'any-account') {
@@ -56,7 +56,7 @@ function DescriptionStep({ step, disableBadgeInteraction }) {
         }
 
         if (type === 'apmPackage') {
-          return <span key={key}> “{value.appName}”</span>
+          return <span key={key}> “{value.artifact.appName}”</span>
         }
 
         return <span key={key}> {value.description || value}</span>
