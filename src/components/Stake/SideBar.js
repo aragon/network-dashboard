@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { GU, textStyle, useTheme } from '@aragon/ui'
+import Balance from './Balance'
 import ExpandableCard from './ExpandableCard'
 import coin from './assets/coin.svg'
 import wallet from './assets/wallet.svg'
@@ -15,6 +16,7 @@ function Sidebar() {
         grid-gap: ${2 * GU}px;
       `}
     >
+      <Balance />
       <ExpandableCard
         content={
           <CardContent
