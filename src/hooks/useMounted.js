@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 
+// Simple hook for checking a component is mounted prior to an async state update
 export function useMounted() {
   const mounted = useRef(true)
 
