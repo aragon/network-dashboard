@@ -46,10 +46,12 @@ export default new Map([
       orgLocation: 'ancashdao.aragonid.eth',
       ipfsGateway: 'https://ipfs.eth.aragon.network/ipfs',
       subgraphs: {
+        organization:
+          'https://graph.backend.aragon.org/subgraphs/name/aragon/aragon-rinkeby-staging',
         disputableVoting:
-          'https://api.thegraph.com/subgraphs/name/aragon/aragon-dvoting-rinkeby-staging',
+          'https://graph.backend.aragon.org/subgraphs/name/aragon/aragon-dvoting-rinkeby-staging',
         agreement:
-          'https://api.thegraph.com/subgraphs/name/aragon/aragon-agreement-rinkeby-staging',
+          'https://graph.backend.aragon.org/subgraphs/name/aragon/aragon-agreement-rinkeby-staging',
       },
     },
   ],
