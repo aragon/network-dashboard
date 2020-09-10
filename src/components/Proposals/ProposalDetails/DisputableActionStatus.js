@@ -42,29 +42,6 @@ function DisputableActionStatus({ vote }) {
             />
           </Item>
         )}
-
-        {vote.disputeId && (
-          <Item heading="Dispute">
-            <Link
-              href={`${networkEnvironment.courtUrl}/#/disputes/${vote.disputeId}`}
-            >
-              Dispute #{vote.disputeId}
-            </Link>
-          </Item>
-        )}
-        {scheduled && (
-          <Item>
-            {parseInt(vote.pausedAt, 10) === 0 ? (
-              <Info>
-                The proposed action will be automatically executed if nobody
-                challenges it during the challenge period and the result of the
-                vote is cast with majority support.
-              </Info>
-            ) : (
-              <Info>The proposed action cannot longer be challenged.</Info>
-            )}
-          </Item>
-        )}
         {scheduled && vote.settings.quietEndingPeriod && (
           <Item heading="Quiet ending period">
             <span>
@@ -93,6 +70,29 @@ function DisputableActionStatus({ vote }) {
             </span>
           </Item>
         )}
+        {vote.disputeId && (
+          <Item heading="Dispute">
+            <Link
+              href={`${networkEnvironment.courtUrl}/#/disputes/${vote.disputeId}`}
+            >
+              Dispute #{vote.disputeId}
+            </Link>
+          </Item>
+        )}
+        {scheduled && (
+          <Item>
+            {parseInt(vote.pausedAt, 10) === 0 ? (
+              <Info>
+                The proposed action will be automatically executed if nobody
+                challenges it during the challenge period and the result of the
+                vote is cast with majority support.
+              </Info>
+            ) : (
+              <Info>The proposed action cannot longer be challenged.</Info>
+            )}
+          </Item>
+        )}
+
         <Item>
           <DisputableActions
             status={disputableStatus}
