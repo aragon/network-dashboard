@@ -2,19 +2,26 @@ import React, { useMemo, useCallback, useState } from 'react'
 import MultiModalScreens from '../../MultiModal/MultiModalScreens'
 import VoteActionDetails from './VoteActionDetails'
 import TransactionStepper, { modalWidthFromCount } from '../TransactionStepper'
+import { useMounted } from '../../../hooks/useMounted'
 
 function VoteOnProposalModal() {
+  const mounted = useMounted()
   const [transactions, setTransactions] = useState([])
 
-  const voteOnProposal = useCallback(async (onComplete) => {
-    try {
-      setTransactions([])
+  const voteOnProposal = useCallback(
+    async (onComplete) => {
+      try {
+        if (mounted()) {
+          setTransactions([])
+        }
 
-      onComplete && onComplete()
-    } catch (err) {
-      console.error(err)
-    }
-  }, [])
+        onComplete && onComplete()
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    [mounted]
+  )
 
   const screens = useMemo(
     () => [

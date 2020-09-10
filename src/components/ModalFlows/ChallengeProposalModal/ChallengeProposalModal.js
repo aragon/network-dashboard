@@ -2,19 +2,26 @@ import React, { useMemo, useState, useCallback } from 'react'
 import MultiModalScreens from '../../MultiModal/MultiModalScreens'
 import ChallengeBalances from './ChallengeBalances'
 import TransactionStepper, { modalWidthFromCount } from '../TransactionStepper'
+import { useMounted } from '../../../hooks/useMounted'
 
 function ChallengeProposalModal() {
+  const mounted = useMounted()
   const [transactions, setTransactions] = useState([])
 
-  const challengeProposal = useCallback(async (onComplete) => {
-    try {
-      setTransactions([])
+  const challengeProposal = useCallback(
+    async (onComplete) => {
+      try {
+        if (mounted()) {
+          setTransactions([])
+        }
 
-      onComplete && onComplete()
-    } catch (err) {
-      console.error(err)
-    }
-  }, [])
+        onComplete && onComplete()
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    [mounted]
+  )
 
   const screens = useMemo(
     () => [

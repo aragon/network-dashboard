@@ -4,8 +4,10 @@ import SignOverview from './SignOverview'
 import TransactionStepper, { modalWidthFromCount } from '../TransactionStepper'
 import { useAgreement } from '../../../providers/Agreement'
 import { useWallet } from '../../../providers/Wallet'
+import { useMounted } from '../../../hooks/useMounted'
 
 function SignAgreementModal() {
+  const mounted = useMounted()
   const { account } = useWallet()
   const { agreementDetails } = useAgreement()
   const [transactions, setTransactions] = useState([])
@@ -15,14 +17,16 @@ function SignAgreementModal() {
       try {
         const { transactions } = await agreementDetails.sign(account)
 
-        setTransactions(transactions)
+        if (mounted()) {
+          setTransactions(transactions)
+        }
 
         onComplete && onComplete()
       } catch (err) {
         console.error(err)
       }
     },
-    [account, agreementDetails]
+    [account, agreementDetails, mounted]
   )
 
   const screens = useMemo(
