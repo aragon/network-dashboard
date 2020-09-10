@@ -50,7 +50,7 @@ function DisputableActionStatus({ vote }) {
                 color: ${theme.surfaceContentSecondary};
               `}
             >
-              hours
+              Hours
             </span>
           </Item>
         )}
