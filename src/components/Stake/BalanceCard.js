@@ -2,14 +2,13 @@ import React from 'react'
 import { Button, Card, GU, textStyle, useTheme } from '@aragon/ui'
 import tokenIcon from './assets/tokenIcon.svg'
 
-function Balance() {
+function BalanceCard() {
   const theme = useTheme()
 
   return (
     <Card
       css={`
         width: 100%;
-        z-index: 2;
         height: auto;
         text-align: center;
         padding: ${3 * GU}px;
@@ -59,4 +58,4 @@ function Balance() {
   )
 }
 
-export default Balance
+export default BalanceCard
