@@ -114,5 +114,7 @@ function processVote(vote) {
     naysPct: vote.naysPct,
     yeasPct: vote.yeasPct,
     status: vote.status,
+    currentQuietEndingExtensionDuration:
+      vote.currentQuietEndingExtensionDuration,
   }
 }
