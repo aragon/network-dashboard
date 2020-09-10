@@ -19,9 +19,7 @@ function DisputableActionStatus({ vote }) {
   const challengeEndDate = toMs(vote.challengeEndDate)
   const pausedAt = toMs(vote.pausedAt)
   const voteEndDate = toMs(vote.endDate)
-  const extendedPeriod =
-    vote.quietEndingExtensionDuration &&
-    parseInt(vote.quietEndingExtensionDuration) > 0
+  const extendedPeriod = toMs(vote.quietEndingExtensionDuration)
 
   return (
     <Box heading="Disputable Action Status">
@@ -56,11 +54,9 @@ function DisputableActionStatus({ vote }) {
             </span>
           </Item>
         )}
-        {scheduled && extendedPeriod && (
+        {scheduled && extendedPeriod > 0 && (
           <Item heading="Quiet ending extension">
-            <span>
-              {durationToHours(toMs(vote.quietEndingExtensionDuration))}{' '}
-            </span>
+            <span>{durationToHours(extendedPeriod)} </span>
             <span
               css={`
                 color: ${theme.surfaceContentSecondary};
