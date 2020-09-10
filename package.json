@@ -34,8 +34,8 @@
     ]
   },
   "dependencies": {
-    "@aragon/connect-agreement": "^0.0.0-beta.6",
-    "@aragon/connect-disputable-voting": "^0.0.0-beta.6",
+    "@aragon/connect-agreement": "^0.0.0-beta.7",
+    "@aragon/connect-disputable-voting": "^0.0.0-beta.7",
     "@aragon/connect-react": "^0.8.0-alpha.2",
     "@aragon/ui": "^1.7.0",
     "@juggle/resize-observer": "^3.2.0",
