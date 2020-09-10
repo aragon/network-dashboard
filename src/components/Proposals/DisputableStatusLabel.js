@@ -15,18 +15,18 @@ import {
 import IconDisputed from './IconDisputed'
 import {
   VOTE_STATUS_ACCEPTED,
-  VOTE_STATUS_ACTIVE,
+  VOTE_STATUS_SCHEDULED,
   VOTE_STATUS_CANCELLED,
   VOTE_STATUS_SETTLED,
   VOTE_STATUS_DISPUTED,
   VOTE_STATUS_EXECUTED,
-  VOTE_STATUS_PAUSED,
+  VOTE_STATUS_CHALLENGED,
   VOTE_STATUS_REJECTED,
 } from './disputable-vote-statuses'
 
 function getAttributes(status, theme) {
   const attributes = {
-    [VOTE_STATUS_ACTIVE]: {
+    [VOTE_STATUS_SCHEDULED]: {
       label: 'Scheduled',
       Icon: IconClock,
     },
@@ -60,7 +60,7 @@ function getAttributes(status, theme) {
       Icon: IconInfo,
       color: '#749C47',
     },
-    [VOTE_STATUS_PAUSED]: {
+    [VOTE_STATUS_CHALLENGED]: {
       background: theme.warningSurface,
       label: 'Challenged',
       Icon: IconAttention,
@@ -122,12 +122,12 @@ function DisputableStatusLabel({ status }) {
 DisputableStatusLabel.propTypes = {
   status: PropTypes.oneOf([
     VOTE_STATUS_ACCEPTED,
-    VOTE_STATUS_ACTIVE,
+    VOTE_STATUS_SCHEDULED,
     VOTE_STATUS_CANCELLED,
     VOTE_STATUS_SETTLED,
     VOTE_STATUS_DISPUTED,
     VOTE_STATUS_EXECUTED,
-    VOTE_STATUS_PAUSED,
+    VOTE_STATUS_CHALLENGED,
     VOTE_STATUS_REJECTED,
   ]),
 }

@@ -4,12 +4,12 @@ import { GU, Info } from '@aragon/ui'
 import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_CANCELLED,
-  VOTE_STATUS_PAUSED,
+  VOTE_STATUS_CHALLENGED,
 } from '../disputable-vote-statuses'
 
 function StatusInfo({ vote }) {
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
-  if (disputableStatus === VOTE_STATUS_PAUSED) {
+  if (disputableStatus === VOTE_STATUS_CHALLENGED) {
     return (
       <Info
         mode="warning"

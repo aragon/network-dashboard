@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { Box, GU, Info, Link, textStyle, useTheme } from '@aragon/ui'
 import {
   DISPUTABLE_VOTE_STATUSES,
-  VOTE_STATUS_ACTIVE,
-  VOTE_STATUS_PAUSED,
+  VOTE_STATUS_SCHEDULED,
+  VOTE_STATUS_CHALLENGED,
 } from '../disputable-vote-statuses'
 import DisputableActions from './DisputableActions'
 import DisputablePeriod from './DisputablePeriod'
@@ -14,13 +14,14 @@ import { networkEnvironment } from '../../../current-environment'
 function DisputableActionStatus({ vote }) {
   const theme = useTheme()
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
-  const challenged = disputableStatus === VOTE_STATUS_PAUSED
-  const scheduled = disputableStatus === VOTE_STATUS_ACTIVE
+  const challenged = disputableStatus === VOTE_STATUS_CHALLENGED
+  const scheduled = disputableStatus === VOTE_STATUS_SCHEDULED
   const challengeEndDate = toMs(vote.challengeEndDate)
   const pausedAt = toMs(vote.pausedAt)
   const voteEndDate = toMs(vote.endDate)
-  const extendedPeriod = toMs(vote.quietEndingExtensionDuration)
+  const extendedPeriod = toMs(vote.currentQuietEndingExtensionDuration)
 
+  console.log(vote)
   return (
     <Box heading="Disputable Action Status">
       <ul>
