@@ -21,7 +21,6 @@ function DisputableActionStatus({ vote }) {
   const voteEndDate = toMs(vote.endDate)
   const extendedPeriod = toMs(vote.currentQuietEndingExtensionDuration)
 
-  console.log(vote)
   return (
     <Box heading="Disputable Action Status">
       <ul>
