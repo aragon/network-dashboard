@@ -35,6 +35,7 @@ import { addressesEqual } from '../../../lib/web3-utils'
 import { getIpfsUrlFromUri } from '../../../lib/ipfs-utils'
 import { useDescribeVote } from '../../../hooks/useDescribeVote'
 import LoadingSkeleton from '../../Loading/LoadingSkeleton'
+import { useWallet } from '../../../providers/Wallet'
 
 function ProposalDetails({ vote }) {
   const { voteId } = vote
@@ -252,15 +253,13 @@ function DescriptionWithSkeleton({ description, loading }) {
 }
 
 function SummaryInfo({ vote, disabledProgressBars }) {
+  const { account: connectedAccount } = useWallet()
   const theme = useTheme()
 
   const { yeas, nays } = vote
   const totalVotes = parseFloat(yeas) + parseFloat(nays)
   const yeasPct = safeDiv(parseFloat(yeas), totalVotes)
   const naysPct = safeDiv(parseFloat(nays), totalVotes)
-
-  // TODO: get real connected account
-  const connectedAccount = ''
 
   let mode = null
 

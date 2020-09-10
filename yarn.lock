@@ -2,19 +2,19 @@
 # yarn lockfile v1
 
 
-"@aragon/connect-agreement@^0.0.0-beta.4":
-  version "0.0.0-beta.4"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-agreement/-/connect-agreement-0.0.0-beta.4.tgz#547941817355ea38051a7b4ec1ea420945a3eae7"
-  integrity sha512-TuJO3NIlvl35jKTrq/8Rl+lbTZoa+n/WDJQlySQh0jHeZu6sOnHIaaDDtCqdFaekb/TkSEbnsP9amyjywhxsHw==
+"@aragon/connect-agreement@^0.8.0-beta.1":
+  version "0.8.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-agreement/-/connect-agreement-0.8.0-beta.1.tgz#8799f0c857e807ea619678d2101b53e9e4185e33"
+  integrity sha512-GXx+DMz51Mf1F9SQObe0Gni6uoUCh3dLNUDbU5pHonfcOp7Fgi6LjUV9XC1HAHysT2r7vc0AhA1TZ3NQyN4ICA==
   dependencies:
-    "@aragon/connect-core" "^0.7.0-beta.3"
-    "@aragon/connect-thegraph" "^0.7.0-beta.3"
+    "@aragon/connect-core" "^0.8.0-alpha.2"
+    "@aragon/connect-thegraph" "^0.8.0-alpha.2"
     graphql-tag "^2.10.3"
 
-"@aragon/connect-core@^0.7.0-beta.3":
-  version "0.7.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-core/-/connect-core-0.7.0-beta.3.tgz#cb7eacf22dc7cbff79cfe54160b0e39b79859a75"
-  integrity sha512-VtKfCJv1QzmBcyuUFvduvo8thTKVWZ2iooGjVV7bMZL5dMbGmBsmqhu7M4G7fql/qqfTL7Q3X4QgcAGlrJCR9g==
+"@aragon/connect-core@^0.8.0-alpha.2":
+  version "0.8.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-core/-/connect-core-0.8.0-alpha.2.tgz#69d93c73f4f3ebf5d075d00fab08db9e3e1f26ad"
+  integrity sha512-yo6IOVB/ct7VrO4iynxE/+6eVy6ZcgC1Lqf8m7SCEMBYXRoJBcUX+gtGFJhFjBPgQpArzDPkZsOKshtmDLRL6g==
   dependencies:
     ethers "^5.0.7"
     radspec "^2.0.0-rc.2"
@@ -36,32 +36,19 @@
     "@aragon/connect-thegraph" "^0.8.0-alpha.2"
     graphql-tag "^2.10.3"
 
-"@aragon/connect-ethereum@^0.7.0-beta.3":
-  version "0.7.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-ethereum/-/connect-ethereum-0.7.0-beta.3.tgz#a3072159e8556ac127646df316eabbc10a1c3123"
-  integrity sha512-299HUpI3HlRi6n6OcAADjnAFjl1rMi5P9tlsrifAnCypvkbe7g/rXZkWopsKuSpdQgm5B005gJd8F4sNeefcgQ==
+"@aragon/connect-ethereum@^0.8.0-alpha.2":
+  version "0.8.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-ethereum/-/connect-ethereum-0.8.0-alpha.2.tgz#e4b32053a2fa7ddc0a77fef3e78a450c2e5ae4c5"
+  integrity sha512-xRXxeSNzrvtles/xvm37M77RYJEytO/XtjekFGtYEjZjiJl6Hc4Ymnr4ZxwuhGPVtFftDHI8Sk02lhmXrOt/Ag==
   dependencies:
-    "@aragon/connect-core" "^0.7.0-beta.3"
+    "@aragon/connect-core" "^0.8.0-alpha.2"
 
-"@aragon/connect-react@^0.7.0-beta.3":
-  version "0.7.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-react/-/connect-react-0.7.0-beta.3.tgz#1d840e7d219bff9a1d3292693dd4164970aac27b"
-  integrity sha512-w26jngv4ieq8ys1gu6rpVkWQMfxGa3VeqEHlHYuF8wMDws7rxAGIhraYni8jB976nSmN8SOjmPQGyN6a/zfvWw==
+"@aragon/connect-react@^0.8.0-alpha.2":
+  version "0.8.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-react/-/connect-react-0.8.0-alpha.2.tgz#3bc86f7ce4caa539325b282fbb0b22b2c96b769e"
+  integrity sha512-GhQVoe+enKftV6yhBrNnhvZ6LysWM/5/CreTGLojVbk5mvrel6NAlkma8n6HaSin5c0o4h2G6pVe8lkWx3pfUw==
   dependencies:
-    "@aragon/connect" "^0.7.0-beta.3"
-
-"@aragon/connect-thegraph@^0.7.0-beta.3":
-  version "0.7.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-thegraph/-/connect-thegraph-0.7.0-beta.3.tgz#b2053076c6b5731a289c78fa6cdf4ea356b0f043"
-  integrity sha512-aAJdaSskFtloZjFDWTHxuJMq5vKKM1yum/azTT892RsLOwC0pwt/Pw8Sx29zGjKE3BwZUvxiyANpnYBkW6Wp7A==
-  dependencies:
-    "@aragon/connect-core" "^0.7.0-beta.3"
-    "@urql/core" "^1.11.7"
-    graphql "^15.0.0"
-    graphql-tag "^2.10.3"
-    isomorphic-unfetch "^3.0.0"
-    isomorphic-ws "^4.0.1"
-    subscriptions-transport-ws "^0.9.16"
+    "@aragon/connect" "^0.8.0-alpha.2"
 
 "@aragon/connect-thegraph@^0.8.0-alpha.2":
   version "0.8.0-alpha.2"
@@ -76,14 +63,14 @@
     isomorphic-ws "^4.0.1"
     subscriptions-transport-ws "^0.9.16"
 
-"@aragon/connect@^0.7.0-beta.3":
-  version "0.7.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@aragon/connect/-/connect-0.7.0-beta.3.tgz#08a652df71f89896aceeb38132ea809aea80b8dd"
-  integrity sha512-6Erz+Tryhr6C085igpwbhl7WI5Oy1hmXU8u8wf2kdgfPLj0Q9V6eS4Geq4MUUkJOCm/2RocEdpVejF//BWVYpQ==
+"@aragon/connect@^0.8.0-alpha.2":
+  version "0.8.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/@aragon/connect/-/connect-0.8.0-alpha.2.tgz#1d92b53561ea0938d076ad49280f3edf99589d0b"
+  integrity sha512-iokovEVm/AEbtwuH80XJ2YVgYGMf3jKm4hRXEJDnNCI3LYKLTkOwQU/8JOw1XaBjzeGVRNSG0JJdnrXFUvhJMA==
   dependencies:
-    "@aragon/connect-core" "^0.7.0-beta.3"
-    "@aragon/connect-ethereum" "^0.7.0-beta.3"
-    "@aragon/connect-thegraph" "^0.7.0-beta.3"
+    "@aragon/connect-core" "^0.8.0-alpha.2"
+    "@aragon/connect-ethereum" "^0.8.0-alpha.2"
+    "@aragon/connect-thegraph" "^0.8.0-alpha.2"
 
 "@aragon/provided-connector@^6.0.7":
   version "6.0.8"
@@ -1678,6 +1665,11 @@
     "@types/node" "*"
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
+
+"@juggle/resize-observer@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.2.0.tgz#5e0b448d27fe3091bae6216456512c5904d05661"
+  integrity sha512-fsLxt0CHx2HCV9EL8lDoVkwHffsA0snUpddYjdLyXcG5E41xaamn9ZyQqOE9TUJdrRlH8/hjIf+UdOdDeKCUgg==
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -4501,6 +4493,11 @@ deasync@^0.1.14:
   dependencies:
     bindings "^1.5.0"
     node-addon-api "^1.7.1"
+
+debounce@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/debounce/-/debounce-1.2.0.tgz#44a540abc0ea9943018dc0eaa95cce87f65cd131"
+  integrity sha512-mYtLl1xfZLi1m4RtQYlZgJUNQjl4ZxVnHzIR8nLLgi4q1YT8o/WM+MK/f8yfcc9s5Ir5zRaPZyZU6xs1Syoocg==
 
 debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.8, debug@^2.6.9:
   version "2.6.9"
@@ -10125,6 +10122,13 @@ react-spring@^8.0.1:
   dependencies:
     "@babel/runtime" "^7.3.1"
     prop-types "^15.5.8"
+
+react-use-measure@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-use-measure/-/react-use-measure-2.0.1.tgz#4f23f94c832cd4512da55acb300d1915dcbf3ae8"
+  integrity sha512-lFfHiqcXbJ2/6aUkZwt8g5YYM7EGqNVxJhMqMPqv1BVXRKp8D7jYLlmma0SvhRY4WYxxkZpCdbJvhDylb5gcEA==
+  dependencies:
+    debounce "^1.2.0"
 
 react@^16.13.1:
   version "16.13.1"

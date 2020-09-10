@@ -12,10 +12,11 @@ import {
   VOTE_STATUS_REJECTED,
 } from '../disputable-vote-statuses'
 import { addressesEqual } from '../../../lib/web3-utils'
+import { useWallet } from '../../../providers/Wallet'
 
 function DisputableActions({ status, submitter }) {
-  // TODO: get connected account
-  const connectedAccount = ''
+  const { account: connectedAccount } = useWallet()
+
   const connectedAccountIsSubmitter = addressesEqual(
     submitter,
     connectedAccount
@@ -46,9 +47,9 @@ function DisputableActions({ status, submitter }) {
       <>
         <Button
           mode="strong"
-          disabled
-          wide
           label="Challenge proposal"
+          wide
+          disabled
           css={`
             margin-bottom: ${1 * GU}px;
           `}
