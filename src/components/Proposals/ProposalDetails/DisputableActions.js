@@ -48,6 +48,7 @@ function DisputableActions({ status, submitter }) {
           mode="strong"
           label="Challenge proposal"
           wide
+          disabled
           css={`
             margin-bottom: ${1 * GU}px;
           `}
