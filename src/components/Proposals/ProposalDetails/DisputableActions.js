@@ -47,7 +47,6 @@ function DisputableActions({ status, submitter }) {
         <Button
           mode="strong"
           label="Challenge proposal"
-          disabled={!connectedAccount}
           wide
           css={`
             margin-bottom: ${1 * GU}px;
