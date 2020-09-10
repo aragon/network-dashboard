@@ -8,7 +8,7 @@ function ChallengeBalances({ onContinue }) {
 
   return (
     <>
-      <p>Continue to challenge this proposal</p>
+      <p>Challenge this proposal</p>
       <ModalButton onClick={() => onContinue(next)}>Continue</ModalButton>
     </>
   )

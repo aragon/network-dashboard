@@ -106,10 +106,7 @@ function ProposalDetails({ vote }) {
       }
       secondary={
         <>
-          <DisputableActionStatus
-            vote={vote}
-            disputableStatus={disputableStatus}
-          />
+          <DisputableActionStatus vote={vote} />
           <InfoBoxes vote={vote} disabledProgressBars={disabledProgressBars} />
         </>
       }

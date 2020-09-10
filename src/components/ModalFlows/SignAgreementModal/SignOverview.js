@@ -7,7 +7,7 @@ function SignOverview({ onContinue }) {
   const { next } = useMultiModal()
   return (
     <>
-      <p>Continue to sign this agreement</p>
+      <p>Sign this agreement</p>
       <ModalButton
         mode="strong"
         onClick={() => {

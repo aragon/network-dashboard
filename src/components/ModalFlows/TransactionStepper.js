@@ -27,7 +27,7 @@ function TransactionStepper({ transactions }) {
 
           setSuccess()
         } catch (err) {
-          console.log(err)
+          console.error(err)
           setError()
         }
       },

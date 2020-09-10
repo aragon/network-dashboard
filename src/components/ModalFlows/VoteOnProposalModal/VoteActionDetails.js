@@ -7,7 +7,7 @@ function VoteActionDetails({ onContinue }) {
   const { next } = useMultiModal()
   return (
     <>
-      <p>Continue to vote on this proposal</p>
+      <p>Vote on this proposal</p>
       <ModalButton
         onClick={() => {
           onContinue(next)
