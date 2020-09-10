@@ -63,11 +63,13 @@ function VotesLayout({ votes }) {
 
   const sortedVotes = useMemo(
     () =>
-      [...votes].sort((a, b) => {
-        const dateDiff = b.endDate - a.endDate
-        // Order by descending voteId if there's no end date difference
-        return dateDiff !== 0 ? dateDiff : b.voteId - a.voteId
-      }),
+      votes
+        ? [...votes].sort((a, b) => {
+            const dateDiff = b.endDate - a.endDate
+            // Order by descending voteId if there's no end date difference
+            return dateDiff !== 0 ? dateDiff : b.voteId - a.voteId
+          })
+        : [],
     [votes]
   )
 
