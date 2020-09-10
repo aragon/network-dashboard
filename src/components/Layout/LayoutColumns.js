@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useLayout, GU } from '@aragon/ui'
 
-function LayoutColumns({ primary, secondary }) {
+function LayoutColumns({ primary, secondary, inverted }) {
   const { layoutName } = useLayout()
   const oneColumn = layoutName === 'small' || layoutName === 'medium'
 
@@ -11,6 +11,8 @@ function LayoutColumns({ primary, secondary }) {
       css={`
         flex-grow: 1;
         min-width: 0;
+        margin-left: ${!oneColumn && inverted ? 2 * GU : 0}px;
+        margin-top: ${oneColumn && inverted ? 2 * GU : 0}px;
       `}
     >
       {primary}
@@ -23,8 +25,8 @@ function LayoutColumns({ primary, secondary }) {
         flex-shrink: 0;
         flex-grow: 0;
         width: ${oneColumn ? '100%' : `306px`};
-        margin-left: ${!oneColumn ? 2 * GU : 0}px;
-        margin-top: ${oneColumn ? 2 * GU : 0}px;
+        margin-left: ${!oneColumn && !inverted ? 2 * GU : 0}px;
+        margin-top: ${oneColumn && !inverted ? 2 * GU : 0}px;
       `}
     >
       {secondary}
@@ -37,13 +39,14 @@ function LayoutColumns({ primary, secondary }) {
         display: ${oneColumn ? 'block' : 'flex'};
       `}
     >
-      {primaryContent}
-      {secondaryContent}
+      {inverted ? secondaryContent : primaryContent}
+      {inverted ? primaryContent : secondaryContent}
     </div>
   )
 }
 
 LayoutColumns.propTypes = {
+  inverted: PropTypes.bool,
   primary: PropTypes.node,
   secondary: PropTypes.node,
 }

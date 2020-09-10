@@ -14,6 +14,7 @@ const Stake = React.memo(function Stake() {
         <LayoutColumns
           primary={<LayoutBox primary />}
           secondary={<SideBar />}
+          inverted
         />
       </LayoutLimiter>
     </LayoutGutter>
