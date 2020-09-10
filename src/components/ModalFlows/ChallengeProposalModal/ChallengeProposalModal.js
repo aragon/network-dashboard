@@ -8,7 +8,7 @@ function ChallengeProposalModal() {
 
   const challengeProposal = useCallback(async (onComplete) => {
     try {
-      setTransactions(['Mock transaction'])
+      setTransactions([])
 
       onComplete && onComplete()
     } catch (err) {

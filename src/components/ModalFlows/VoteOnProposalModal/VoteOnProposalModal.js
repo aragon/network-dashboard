@@ -8,7 +8,7 @@ function VoteOnProposalModal() {
 
   const voteOnProposal = useCallback(async (onComplete) => {
     try {
-      setTransactions(['Mock transaction'])
+      setTransactions([])
 
       onComplete && onComplete()
     } catch (err) {
