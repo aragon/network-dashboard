@@ -5,7 +5,7 @@ import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_CANCELLED,
   VOTE_STATUS_DISPUTED,
-  VOTE_STATUS_PAUSED,
+  VOTE_STATUS_CHALLENGED,
 } from './disputable-vote-statuses'
 import ProposalOption from './ProposalOption'
 import DisputableStatusLabel from './DisputableStatusLabel'
@@ -22,7 +22,7 @@ function getAttributes(status, theme) {
       borderColor: theme.border,
       disabledProgressBars: true,
     },
-    [VOTE_STATUS_PAUSED]: {
+    [VOTE_STATUS_CHALLENGED]: {
       backgroundColor: '#fefdfb',
       borderColor: theme.warning,
       disabledProgressBars: true,

@@ -19,7 +19,7 @@ import {
   VOTE_STATUS_CANCELLED,
   VOTE_STATUS_SETTLED,
   VOTE_STATUS_DISPUTED,
-  VOTE_STATUS_PAUSED,
+  VOTE_STATUS_CHALLENGED,
 } from '../disputable-vote-statuses'
 import InfoField from '../../InfoField'
 import InfoBoxes from './InfoBoxes'
@@ -50,7 +50,7 @@ function ProposalDetails({ vote }) {
         boxPresentation: 'disabled',
         disabledProgressBars: true,
       },
-      [VOTE_STATUS_PAUSED]: {
+      [VOTE_STATUS_CHALLENGED]: {
         boxPresentation: 'warning',
         disabledProgressBars: true,
       },
