@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { Transition, animated } from 'react-spring/renderprops'
-import { GU, TransactionBadge, textStyle, useTheme, RADIUS } from '@aragon/ui'
+import { TransactionBadge, textStyle, useTheme, RADIUS, GU } from '@aragon/ui'
 import Divider from './Divider'
+import { networkEnvironment } from '../../../current-environment'
 import {
   STEP_ERROR,
   STEP_PROMPTING,
@@ -11,6 +12,7 @@ import {
   STEP_WORKING,
 } from '../stepper-statuses'
 import StatusVisual from './StatusVisual'
+
 import { springs } from '../../../style/springs'
 import { useDisableAnimation } from '../../../hooks/useDisableAnimation'
 
@@ -180,7 +182,10 @@ function Step({
                     width: 100%;
                   `}
                 >
-                  <TransactionBadge transaction={currentHash} />
+                  <TransactionBadge
+                    transaction={currentHash}
+                    networkType={networkEnvironment.legacyNetworkType}
+                  />
                 </AnimatedSpan>
               ) : (
                 <AnimatedSpan
