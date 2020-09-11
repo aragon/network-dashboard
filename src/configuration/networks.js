@@ -47,7 +47,7 @@ export default new Map([
       ipfsGateway: 'https://ipfs.eth.aragon.network/ipfs',
       subgraphs: {
         organization:
-          'https://graph.backend.aragon.org/subgraphs/name/aragon/aragon-rinkeby-staging',
+          'https://api.thegraph.com/subgraphs/name/aragon/aragon-rinkeby',
         disputableVoting:
           'https://graph.backend.aragon.org/subgraphs/name/aragon/aragon-dvoting-rinkeby-staging',
         agreement:

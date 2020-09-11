@@ -19,10 +19,10 @@
     ethers "^5.0.7"
     radspec "^2.0.0-rc.2"
 
-"@aragon/connect-disputable-voting@^0.8.0-beta.1":
-  version "0.8.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-disputable-voting/-/connect-disputable-voting-0.8.0-beta.1.tgz#9fe6e14d116e2f57e71ed2e67a14e696c3d5b379"
-  integrity sha512-VN224Ey0Tw2/PM9xh2C6XMh45eROkJSUywaNnXpQKr6ZRQYpBJEJNN8SE8zl33fQ1f8+ox0XxqqlyUg/ZbMeDQ==
+"@aragon/connect-disputable-voting@^0.0.0-beta.7":
+  version "0.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-disputable-voting/-/connect-disputable-voting-0.0.0-beta.7.tgz#29ccf4fae51e15f197fbb51e3c95e6477401c000"
+  integrity sha512-Azyyokg68ClnHsT9xjv0LzuFN7pOZaWB24YhYzuIXZ9fg+Jjt701SBnr+CNM3R7yicMfyep+mldvaUtrbFK6/A==
   dependencies:
     "@aragon/connect-core" "^0.8.0-alpha.2"
     "@aragon/connect-thegraph" "^0.8.0-alpha.2"
