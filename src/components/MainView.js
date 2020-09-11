@@ -9,7 +9,7 @@ import { useOrgApps } from '../providers/OrgApps'
 const AnimatedDiv = animated.div
 
 const MainView = React.memo(function MainView({ children }) {
-  const { loading } = useOrgApps()
+  const { appsLoading } = useOrgApps()
 
   return (
     <div
@@ -19,7 +19,7 @@ const MainView = React.memo(function MainView({ children }) {
         height: 100vh;
       `}
     >
-      {!loading && (
+      {!appsLoading && (
         <div
           css={`
             display: flex;
@@ -55,14 +55,14 @@ const MainView = React.memo(function MainView({ children }) {
                 padding-bottom: ${12 * GU}px;
               `}
             >
-              {!loading && children}
+              {children}
             </main>
           </ScrollView>
         </div>
       )}
 
       <Transition
-        items={loading}
+        items={appsLoading}
         from={{ opacity: 0 }}
         enter={{ opacity: 1 }}
         leave={{ opacity: 0 }}
