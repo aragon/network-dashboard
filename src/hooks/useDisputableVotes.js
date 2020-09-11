@@ -1,69 +1,72 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import { captureErrorWithSentry } from '../sentry'
-import connectVoting from '@aragon/connect-disputable-voting'
-import { createAppHook } from '@aragon/connect-react'
-import { ProposalNotFound } from '../errors'
-import { networkEnvironment } from '../current-environment'
+
 import { useOrgApps } from '../providers/OrgApps'
 
-const SUBGRAPH_URL = networkEnvironment.subgraphs?.disputableVoting
-
-const connecterConfig = SUBGRAPH_URL && [
-  'thegraph',
-  { subgraphUrl: SUBGRAPH_URL },
-]
-
-const useDisputableVotingHook = createAppHook(connectVoting, connecterConfig)
-
 export function useDisputableVotes() {
-  const { disputableVotingApp } = useOrgApps()
-
-  const [votes, { loading }] = useDisputableVotingHook(
-    disputableVotingApp,
-    (app) => {
-      return app.votes()
-    }
-  )
-
-  const processedVotes = useMemo(
-    () => (votes ? votes.map((vote) => processVote(vote)) : null),
-    [votes]
-  )
-
-  return [processedVotes, loading]
-}
-
-export function useDisputableVote(proposalId) {
-  const { apps, disputableVotingApp } = useOrgApps()
-  const [extendedVoteLoading, setExtendedVoteLoading] = useState(true)
-  const [extendedVote, setExtendedVote] = useState(null)
-
-  const [vote, { loading: voteLoading }] = useDisputableVotingHook(
-    disputableVotingApp,
-    (app) => {
-      return app.vote(`${disputableVotingApp.address}-vote-${proposalId}`)
-    },
-
-    // Refresh vote on id change
-    [proposalId]
-  )
-
-  // Throw to error boundary if vote doesn't exist
-  useEffect(() => {
-    if (!vote && !voteLoading) {
-      throw new ProposalNotFound(proposalId)
-    }
-  }, [vote, voteLoading, proposalId])
+  const { disputableVotingApp, appsLoading } = useOrgApps()
+  const [processedVotes, setProcessedVotes] = useState([])
+  const [processedVotesLoading, setProcessedVotesLoading] = useState(true)
 
   useEffect(() => {
     let cancelled = false
 
     async function getExtendedVote() {
       if (!cancelled) {
-        setExtendedVoteLoading(true)
+        setProcessedVotesLoading(true)
       }
 
       try {
+        const votes = await disputableVotingApp.votes()
+        const processedVotes = votes
+          ? votes.map((vote) => processVote(vote))
+          : null
+
+        if (!cancelled) {
+          setProcessedVotes(processedVotes)
+          setProcessedVotesLoading(false)
+        }
+      } catch (err) {
+        captureErrorWithSentry(err)
+        console.error(err)
+
+        if (!cancelled) {
+          setProcessedVotes(null)
+          setProcessedVotesLoading(false)
+        }
+      }
+    }
+
+    if (!appsLoading && disputableVotingApp) {
+      getExtendedVote()
+    }
+
+    return () => {
+      cancelled = true
+    }
+  }, [appsLoading, disputableVotingApp])
+
+  return [processedVotes, processedVotesLoading]
+}
+
+export function useDisputableVote(proposalId) {
+  const { apps, disputableVotingApp, appsLoading } = useOrgApps()
+  const [processedVote, setProcessedVote] = useState(null)
+  const [processedVoteLoading, setProcessedVoteLoading] = useState(true)
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function getExtendedVote() {
+      if (!cancelled) {
+        setProcessedVoteLoading(true)
+      }
+
+      try {
+        const vote = await disputableVotingApp.vote(
+          `${disputableVotingApp.address}-vote-${proposalId}`
+        )
+
         const [collateral, settings] = await Promise.all([
           vote.collateralRequirement(),
           vote.setting(),
@@ -71,7 +74,7 @@ export function useDisputableVote(proposalId) {
 
         const token = await collateral.token()
 
-        const extendedVote = {
+        const processedVote = {
           ...processVote(vote),
           settings: settings,
           collateral: collateral,
@@ -79,26 +82,30 @@ export function useDisputableVote(proposalId) {
         }
 
         if (!cancelled) {
-          setExtendedVote(extendedVote)
-          setExtendedVoteLoading(false)
+          setProcessedVote(processedVote)
+          setProcessedVoteLoading(false)
         }
       } catch (err) {
         captureErrorWithSentry(err)
         console.error(err)
-        setExtendedVoteLoading(false)
+
+        if (!cancelled) {
+          setProcessedVote(null)
+          setProcessedVoteLoading(false)
+        }
       }
     }
 
-    if (!voteLoading) {
+    if (!appsLoading && disputableVotingApp) {
       getExtendedVote()
     }
 
     return () => {
       cancelled = true
     }
-  }, [apps, vote, voteLoading, disputableVotingApp])
+  }, [apps, appsLoading, disputableVotingApp, proposalId])
 
-  return [extendedVote, { loading: extendedVoteLoading }]
+  return [processedVote, processedVoteLoading]
 }
 
 function processVote(vote) {
@@ -114,5 +121,7 @@ function processVote(vote) {
     naysPct: vote.naysPct,
     yeasPct: vote.yeasPct,
     status: vote.status,
+    currentQuietEndingExtensionDuration:
+      vote.currentQuietEndingExtensionDuration,
   }
 }

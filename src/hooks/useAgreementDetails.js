@@ -1,28 +1,13 @@
 import { useEffect, useState } from 'react'
 import { utils as ethersUtils } from 'ethers'
 import { captureErrorWithSentry } from '../sentry'
-import { createAppHook } from '@aragon/connect-react'
-import connectAgreement from '@aragon/connect-agreement'
 import { getIpfsCidFromUri, ipfsGet } from '../lib/ipfs-utils'
-import { networkEnvironment } from '../current-environment'
 import { toMs } from '../utils/date-utils'
 import { useOrgApps } from '../providers/OrgApps'
 import { getAppPresentation } from '../utils/app-utils'
 
-const SUBGRAPH_URL = networkEnvironment.subgraphs?.agreement
-
-const connecterConfig = SUBGRAPH_URL && [
-  'thegraph',
-  { subgraphUrl: SUBGRAPH_URL },
-]
-
-const useAgreementHook = createAppHook(connectAgreement, connecterConfig)
-
 export function useAgreementDetails() {
-  const { apps, agreementApp } = useOrgApps()
-  const [agreement, { loading: agreementAppLoading }] = useAgreementHook(
-    agreementApp
-  )
+  const { apps, agreementApp, appsLoading } = useOrgApps()
   const [agreementDetails, setAgreementDetails] = useState(null)
   const [agreementDetailsLoading, setAgreementDetailsLoading] = useState(true)
 
@@ -36,9 +21,9 @@ export function useAgreementDetails() {
           stakingFactory,
           disputableApps,
         ] = await Promise.all([
-          agreement.currentVersion(),
-          agreement.stakingFactory(),
-          agreement.disputableApps(),
+          agreementApp.currentVersion(),
+          agreementApp.stakingFactory(),
+          agreementApp.disputableApps(),
         ])
 
         const { content, effectiveFrom, title } = currentVersion
@@ -50,7 +35,7 @@ export function useAgreementDetails() {
         ])
 
         const details = {
-          contractAddress: agreement.address,
+          contractAddress: agreementApp.address,
           content: agreementContent,
           contentIpfsUri: contentIpfsUri,
           disputableApps: extendedDisputableApps,
@@ -69,14 +54,14 @@ export function useAgreementDetails() {
       }
     }
 
-    if (!agreementAppLoading) {
+    if (!appsLoading && agreementApp) {
       getAgreementDetails()
     }
 
     return () => {
       cancelled = true
     }
-  }, [apps, agreement, agreementAppLoading])
+  }, [apps, agreementApp, appsLoading])
 
   return [agreementDetails, agreementDetailsLoading]
 }
