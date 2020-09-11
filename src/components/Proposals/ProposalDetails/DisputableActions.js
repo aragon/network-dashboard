@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Button, GU } from '@aragon/ui'
+import { Button, noop, GU } from '@aragon/ui'
 import {
   VOTE_STATUS_ACCEPTED,
   VOTE_STATUS_SCHEDULED,
@@ -14,16 +14,12 @@ import {
 import { addressesEqual } from '../../../lib/web3-utils'
 import { useWallet } from '../../../providers/Wallet'
 
-function DisputableActions({ status, submitter }) {
-  const { account: connectedAccount } = useWallet()
+function DisputableActions({ status, submitter, onChallenge }) {
+  const { account } = useWallet()
 
-  const connectedAccountIsSubmitter = addressesEqual(
-    submitter,
-    connectedAccount
-  )
+  const connectedAccountIsSubmitter = addressesEqual(submitter, account)
 
   // TODO: add claim collateral action validation
-
   if (status === VOTE_STATUS_CHALLENGED && connectedAccountIsSubmitter) {
     return (
       <>
@@ -49,7 +45,8 @@ function DisputableActions({ status, submitter }) {
           mode="strong"
           label="Challenge proposal"
           wide
-          disabled
+          disabled={!account}
+          onClick={onChallenge}
           css={`
             margin-bottom: ${1 * GU}px;
           `}
@@ -73,6 +70,11 @@ DisputableActions.propTypes = {
     VOTE_STATUS_REJECTED,
   ]),
   submitter: PropTypes.string,
+  onChallenge: PropTypes.func,
+}
+
+DisputableActions.defaultProps = {
+  onChallenge: noop,
 }
 
 export default DisputableActions
