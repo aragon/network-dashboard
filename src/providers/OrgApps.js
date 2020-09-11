@@ -41,7 +41,7 @@ const useDisputableVotingHook = createAppHook(
 )
 
 function OrgAppsProvider({ children }) {
-  const [apps, { error: appsError, loading: appsLoading }] = useApps()
+  const [apps, { error: appsError, loading: orgAppsLoading }] = useApps()
 
   const [
     agreementApp,
@@ -52,6 +52,9 @@ function OrgAppsProvider({ children }) {
     disputableVotingApp,
     { error: disputableVotingError, loading: disputableVotingAppLoading },
   ] = useDisputableVotingHook(getAppByName(apps, 'disputable-voting'))
+
+  const appsLoading =
+    agreementAppLoading || disputableVotingAppLoading || orgAppsLoading
 
   const loadingError = appsError || agreementError || disputableVotingError
 
@@ -65,17 +68,9 @@ function OrgAppsProvider({ children }) {
       apps,
       agreementApp,
       disputableVotingApp,
-      appsLoading:
-        agreementAppLoading || disputableVotingAppLoading || appsLoading,
-    }),
-    [
-      apps,
-      agreementApp,
-      agreementAppLoading,
-      disputableVotingApp,
-      disputableVotingAppLoading,
       appsLoading,
-    ]
+    }),
+    [apps, agreementApp, disputableVotingApp, appsLoading]
   )
 
   return (
