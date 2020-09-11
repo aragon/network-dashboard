@@ -26,6 +26,10 @@ export function useAgreementSign() {
       } catch (err) {
         captureErrorWithSentry(err)
         console.error(err)
+
+        if (!cancelled) {
+          setSignedStatus(null)
+        }
       }
     }
 

@@ -26,7 +26,7 @@ export function useAgreementDetails() {
           agreementApp.disputableApps(),
         ])
 
-        const { content, effectiveFrom, title, versionId } = currentVersion
+        const { content, effectiveFrom, title } = currentVersion
         const contentIpfsUri = ethersUtils.toUtf8String(content)
 
         const [extendedDisputableApps, agreementContent] = await Promise.all([
@@ -41,8 +41,6 @@ export function useAgreementDetails() {
           disputableApps: extendedDisputableApps,
           effectiveFrom: toMs(effectiveFrom),
           stakingAddress: stakingFactory,
-          sign: (accountAddress) =>
-            agreementApp.sign(accountAddress, versionId),
           title: title,
         }
 
