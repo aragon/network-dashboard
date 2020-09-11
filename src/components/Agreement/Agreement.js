@@ -37,7 +37,10 @@ const Agreement = React.memo(function Agreement() {
             }
           />
           <LoadingSection title="Loading agreement" loading={loading}>
-            <AgreementLayout agreementDetails={agreementDetails} />
+            <AgreementLayout
+              agreementDetails={agreementDetails}
+              signedAgreement={signed}
+            />
           </LoadingSection>
         </LayoutLimiter>
       </LayoutGutter>
@@ -52,7 +55,7 @@ const Agreement = React.memo(function Agreement() {
 })
 
 /* eslint-disable react/prop-types */
-function AgreementLayout({ agreementDetails }) {
+function AgreementLayout({ agreementDetails, signedAgreement }) {
   const {
     title,
     content,
@@ -74,6 +77,7 @@ function AgreementLayout({ agreementDetails }) {
               creationDate={effectiveFrom}
               ipfsUri={contentIpfsUri}
               stakingAddress={stakingAddress}
+              signedAgreement={signedAgreement}
             />
           </LayoutBox>
           <AgreementDocument content={content} />

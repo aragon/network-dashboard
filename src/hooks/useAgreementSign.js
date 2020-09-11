@@ -21,7 +21,7 @@ export function useAgreementSign() {
         const signer = await agreementApp.signer(account)
 
         if (!cancelled) {
-          setSignedStatus(signer)
+          setSignedStatus(Boolean(signer))
         }
       } catch (err) {
         captureErrorWithSentry(err)
