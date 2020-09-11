@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { Transition, animated } from 'react-spring/renderprops'
-import { GU, TransactionBadge, textStyle, useTheme, RADIUS } from '@aragon/ui'
+import { TransactionBadge, textStyle, useTheme, RADIUS, GU } from '@aragon/ui'
 import Divider from './Divider'
+import { networkEnvironment } from '../../../current-environment'
 import {
   STEP_ERROR,
   STEP_PROMPTING,
@@ -11,10 +12,11 @@ import {
   STEP_WORKING,
 } from '../stepper-statuses'
 import StatusVisual from './StatusVisual'
+
 import { springs } from '../../../style/springs'
 import { useDisableAnimation } from '../../../hooks/useDisableAnimation'
 
-const AnimatedDiv = animated.div
+const AnimatedSpan = animated.span
 
 function Step({
   title,
@@ -125,7 +127,7 @@ function Step({
             {(item) =>
               item &&
               ((transitionProps) => (
-                <AnimatedDiv
+                <AnimatedSpan
                   css={`
                     display: flex;
                     justify-content: center;
@@ -137,7 +139,7 @@ function Step({
                   style={transitionProps}
                 >
                   {item.currentDesc}
-                </AnimatedDiv>
+                </AnimatedSpan>
               ))
             }
           </Transition>
@@ -172,7 +174,7 @@ function Step({
           >
             {(currentHash) => (transitionProps) =>
               currentHash ? (
-                <AnimatedDiv
+                <AnimatedSpan
                   style={transitionProps}
                   css={`
                     display: flex;
@@ -180,10 +182,13 @@ function Step({
                     width: 100%;
                   `}
                 >
-                  <TransactionBadge transaction={currentHash} />
-                </AnimatedDiv>
+                  <TransactionBadge
+                    transaction={currentHash}
+                    networkType={networkEnvironment.legacyNetworkType}
+                  />
+                </AnimatedSpan>
               ) : (
-                <AnimatedDiv
+                <AnimatedSpan
                   style={transitionProps}
                   css={`
                     display: flex;
@@ -199,7 +204,7 @@ function Step({
                       border: 1px dashed ${theme.border};
                     `}
                   />
-                </AnimatedDiv>
+                </AnimatedSpan>
               )}
           </Transition>
         </div>
