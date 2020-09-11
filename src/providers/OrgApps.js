@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import connectAgreement from '@aragon/connect-agreement'
 import connectVoting from '@aragon/connect-disputable-voting'
 import { useApps, createAppHook } from '@aragon/connect-react'
+import { captureErrorWithSentry } from '../sentry'
 import { networkEnvironment } from '../current-environment'
 
 const AGREEMENT_SUBGRAPH_URL = networkEnvironment.subgraphs?.agreement
@@ -40,16 +41,24 @@ const useDisputableVotingHook = createAppHook(
 )
 
 function OrgAppsProvider({ children }) {
-  const [apps, { loading: orgLoading }] = useApps()
+  const [apps, { error: appsError, loading: appsLoading }] = useApps()
 
-  const [agreementApp, { loading: agreementAppLoading }] = useAgreementHook(
-    getAppByName(apps, 'agreement')
-  )
+  const [
+    agreementApp,
+    { error: agreementError, loading: agreementAppLoading },
+  ] = useAgreementHook(getAppByName(apps, 'agreement'))
 
   const [
     disputableVotingApp,
-    { loading: disputableVotingAppLoading },
+    { error: disputableVotingError, loading: disputableVotingAppLoading },
   ] = useDisputableVotingHook(getAppByName(apps, 'disputable-voting'))
+
+  const loadingError = appsError || agreementError || disputableVotingError
+
+  if (loadingError) {
+    captureErrorWithSentry(loadingError)
+    console.error(loadingError)
+  }
 
   const OrgAppState = useMemo(
     () => ({
@@ -57,7 +66,7 @@ function OrgAppsProvider({ children }) {
       agreementApp,
       disputableVotingApp,
       appsLoading:
-        agreementAppLoading || disputableVotingAppLoading || orgLoading,
+        agreementAppLoading || disputableVotingAppLoading || appsLoading,
     }),
     [
       apps,
@@ -65,7 +74,7 @@ function OrgAppsProvider({ children }) {
       agreementAppLoading,
       disputableVotingApp,
       disputableVotingAppLoading,
-      orgLoading,
+      appsLoading,
     ]
   )
 

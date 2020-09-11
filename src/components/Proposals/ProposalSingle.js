@@ -15,6 +15,7 @@ function ProposalSingle({ match }) {
   const [vote, loading] = useDisputableVote(proposalId)
 
   // Throw to boundary if vote doesn't exist
+  // TODO: Add a better check once we have access to the errors in connect
   useEffect(() => {
     if (!vote && !loading) {
       throw new ProposalNotFound(proposalId)

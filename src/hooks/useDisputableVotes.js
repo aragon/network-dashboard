@@ -37,7 +37,7 @@ export function useDisputableVotes() {
       }
     }
 
-    if (!appsLoading) {
+    if (!appsLoading && disputableVotingApp) {
       getExtendedVote()
     }
 
@@ -96,7 +96,7 @@ export function useDisputableVote(proposalId) {
       }
     }
 
-    if (!appsLoading) {
+    if (!appsLoading && disputableVotingApp) {
       getExtendedVote()
     }
 

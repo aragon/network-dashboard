@@ -56,7 +56,7 @@ export function useAgreementDetails() {
       }
     }
 
-    if (!appsLoading) {
+    if (!appsLoading && agreementApp) {
       getAgreementDetails()
     }
 
