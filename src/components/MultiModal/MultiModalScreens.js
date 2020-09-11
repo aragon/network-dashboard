@@ -9,6 +9,7 @@ import {
   useLayout,
   useTheme,
   Viewport,
+  RADIUS,
   GU,
 } from '@aragon/ui'
 import logoMarkOverlay from '../../assets/logo-mark-overlay.svg'
@@ -82,6 +83,11 @@ function MultiModalFrame({ visible, onClosed }) {
                   closeButton={false}
                   css={`
                     z-index: 2;
+
+                    /* TODO: Add radius option to Modal in @aragon/ui */
+                    & > div > div > div {
+                      border-radius: ${2 * RADIUS}px !important;
+                    }
                   `}
                 >
                   <div
@@ -161,8 +167,7 @@ const MultiModalContent = React.memo(function ModalContent({ viewportWidth }) {
                   ${theme.accentStart} 200%
                 );
 
-                margin-bottom: ${smallMode ? 2 * GU : 3 * GU}px;
-                
+                margin-bottom: ${smallMode ? 3 * GU : 5 * GU}px;
 
                 /* Soft shadow below title */
                 &::after {
