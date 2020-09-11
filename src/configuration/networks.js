@@ -43,15 +43,15 @@ export default new Map([
       endpoints: {
         ethereum: 'https://rinkeby.eth.aragon.network/',
       },
-      orgLocation: '0xfa5bae0029f0c2acffcc71ada4249bd0eaafd1f4',
+      orgLocation: '0x0db83af9517e9e68bd67e5f1e46b6fe2a3e77e77',
       ipfsGateway: 'https://ipfs.eth.aragon.network/ipfs',
       subgraphs: {
         organization:
           'https://graph.backend.aragon.org/subgraphs/name/aragon/aragon-rinkeby',
         disputableVoting:
-          'https://graph.backend.aragon.org/subgraphs/name/aragon/aragon-dvoting-rinkeby-staging',
+          'https://graph.backend.aragon.org/subgraphs/name/facuspagnuolo/an-dao-dvoting-rinkeby',
         agreement:
-          'https://graph.backend.aragon.org/subgraphs/name/aragon/aragon-agreement-rinkeby-staging',
+          'https://graph.backend.aragon.org/subgraphs/name/facuspagnuolo/an-dao-agreement-rinkeby',
       },
     },
   ],
