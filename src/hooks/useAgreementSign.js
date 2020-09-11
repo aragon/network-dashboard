@@ -1,16 +1,17 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { captureErrorWithSentry } from '../sentry'
 import { useOrgApps } from '../providers/OrgApps'
 import { useWallet } from '../providers/Wallet'
 
-export function useSignAgreement() {
+export function useAgreementSign() {
   const { apps, agreementApp } = useOrgApps()
-  const [signedStatus, setSignedStatus] = useState(null)
+  const [signed, setSignedStatus] = useState(null)
   const { account } = useWallet()
 
-  const signAgreement = useMemo(() => {
-    agreementApp.sign(account)
-  }, [agreementApp, account])
+  const signAgreement = useCallback(() => agreementApp.sign(account), [
+    agreementApp,
+    account,
+  ])
 
   useEffect(() => {
     let cancelled = false
@@ -41,5 +42,5 @@ export function useSignAgreement() {
     }
   }, [apps, agreementApp, account])
 
-  return { sign: signAgreement, signedStatus }
+  return { sign: signAgreement, signed }
 }
