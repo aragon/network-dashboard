@@ -33,7 +33,7 @@ function ProposalSingle({ match }) {
         <Bar>
           <BackButton onClick={handleBack} />
         </Bar>
-        <LoadingSection loading={loading || !vote} title="Loading proposal">
+        <LoadingSection loading={loading} title="Loading proposal">
           <ProposalDetails vote={vote} />
         </LoadingSection>
       </LayoutLimiter>
