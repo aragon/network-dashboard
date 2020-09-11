@@ -13,11 +13,13 @@ import MultiModal from '../MultiModal/MultiModal'
 import SignAgreementModal from '../ModalFlows/SignAgreementModal/SignAgreementModal'
 import { useAgreement } from '../../providers/Agreement'
 import { useWallet } from '../../providers/Wallet'
+import { useAgreementSign } from '../../hooks/useAgreementSign'
 
 const Agreement = React.memo(function Agreement() {
   const { account } = useWallet()
   const [signAgreementVisible, setSignAgreementVisible] = useState(false)
   const { agreementDetails, loading } = useAgreement()
+  const { signed } = useAgreementSign()
 
   return (
     <>
@@ -29,7 +31,7 @@ const Agreement = React.memo(function Agreement() {
               <Button
                 mode="strong"
                 label="Sign Agreement"
-                disabled={!account}
+                disabled={!account || signed}
                 onClick={() => setSignAgreementVisible(true)}
               />
             }

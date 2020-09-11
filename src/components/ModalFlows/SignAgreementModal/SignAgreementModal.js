@@ -2,20 +2,18 @@ import React, { useMemo, useState, useCallback } from 'react'
 import MultiModalScreens from '../../MultiModal/MultiModalScreens'
 import SignOverview from './SignOverview'
 import TransactionStepper, { modalWidthFromCount } from '../TransactionStepper'
-import { useAgreement } from '../../../providers/Agreement'
-import { useWallet } from '../../../providers/Wallet'
+import { useAgreementSign } from '../../../hooks/useAgreementSign'
 import { useMounted } from '../../../hooks/useMounted'
 
 function SignAgreementModal() {
   const mounted = useMounted()
-  const { account } = useWallet()
-  const { agreementDetails } = useAgreement()
+  const { sign } = useAgreementSign()
   const [transactions, setTransactions] = useState([])
 
   const signAgreement = useCallback(
     async (onComplete) => {
       try {
-        const { transactions } = await agreementDetails.sign(account)
+        const { transactions } = await sign()
 
         if (mounted()) {
           setTransactions(transactions)
@@ -26,7 +24,7 @@ function SignAgreementModal() {
         console.error(err)
       }
     },
-    [account, agreementDetails, mounted]
+    [sign, mounted]
   )
 
   const screens = useMemo(
