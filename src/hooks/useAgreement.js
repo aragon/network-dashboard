@@ -40,7 +40,7 @@ export function useAgreement() {
         ] = await Promise.all([
           processDisputableApps(apps, disputableApps),
           getAgreementIpfsContent(contentIpfsUri),
-          account ? agreementApp.signer(account, versionId) : null,
+          account ? agreementApp.signer(account) : null,
         ])
 
         if (mounted()) {
@@ -53,6 +53,7 @@ export function useAgreement() {
             stakingAddress: stakingFactory,
             signed: Boolean(signer),
             title: title,
+            versionId: versionId,
           })
           setAgreementLoading(false)
         }
