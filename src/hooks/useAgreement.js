@@ -12,7 +12,7 @@ export function useAgreement() {
   const mounted = useMounted()
   const { account } = useWallet()
   const { apps, agreementApp, appsLoading } = useOrgApps()
-  const [agreement, setAgreement] = useState({})
+  const [agreement, setAgreement] = useState(null)
   const [agreementLoading, setAgreementLoading] = useState(true)
 
   const canProcess = !appsLoading && agreementApp
