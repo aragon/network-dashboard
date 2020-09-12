@@ -1,8 +1,10 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useCallback } from 'react'
 
 // Simple hook for checking a component is mounted prior to an async state update
 export function useMounted() {
   const mounted = useRef(true)
+
+  const getMounted = useCallback(() => mounted.current, [])
 
   useEffect(() => {
     return () => {
@@ -10,5 +12,5 @@ export function useMounted() {
     }
   }, [])
 
-  return () => mounted.current
+  return getMounted
 }
