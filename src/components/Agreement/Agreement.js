@@ -19,7 +19,7 @@ const Agreement = React.memo(function Agreement() {
   const [signAgreementVisible, setSignAgreementVisible] = useState(false)
   const { agreement, loading } = useAgreementState()
 
-  const signed = agreement.signedLatest
+  const signed = agreement.signed
 
   return (
     <>

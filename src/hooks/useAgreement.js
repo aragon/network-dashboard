@@ -30,7 +30,7 @@ export function useAgreement() {
           agreementApp.disputableApps(),
         ])
 
-        const { content, effectiveFrom, title } = currentVersion
+        const { content, effectiveFrom, title, versionId } = currentVersion
         const contentIpfsUri = ethersUtils.toUtf8String(content)
 
         const [
@@ -40,7 +40,7 @@ export function useAgreement() {
         ] = await Promise.all([
           processDisputableApps(apps, disputableApps),
           getAgreementIpfsContent(contentIpfsUri),
-          account ? agreementApp.signer(account) : null,
+          account ? agreementApp.signer(account, versionId) : null,
         ])
 
         if (mounted()) {
@@ -51,7 +51,7 @@ export function useAgreement() {
             disputableApps: extendedDisputableApps,
             effectiveFrom: toMs(effectiveFrom),
             stakingAddress: stakingFactory,
-            signedLatest: Boolean(signer),
+            signed: Boolean(signer),
             title: title,
           })
           setAgreementLoading(false)
