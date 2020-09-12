@@ -11,7 +11,7 @@ function SignAgreementScreens() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    async function sign() {
+    async function getTransactions() {
       try {
         const { transactions } = await signAgreement()
 
@@ -25,7 +25,7 @@ function SignAgreementScreens() {
       }
     }
 
-    sign()
+    getTransactions()
   }, [mounted, signAgreement])
 
   const screens = useMemo(

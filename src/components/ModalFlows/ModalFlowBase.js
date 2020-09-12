@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { keyframes } from 'styled-components'
-import { noop, GU } from '@aragon/ui'
+import { GU } from '@aragon/ui'
+import LoadingSpinner from '../Loading/LoadingSpinner'
 import MultiModalScreens from '../MultiModal/MultiModalScreens'
 import Stepper from '../Stepper/Stepper'
 import { useWallet } from '../../providers/Wallet'
 import { useMultiModal } from '../MultiModal/MultiModalProvider'
-import LoadingSpinner from '../Loading/LoadingSpinner'
 
 const indexNumber = {
   0: 'First',
@@ -153,13 +153,12 @@ ModalFlowBase.propTypes = {
   frontLoad: PropTypes.bool,
   loading: PropTypes.bool,
   screens: PropTypes.array,
-  transactions: PropTypes.array.isRequired,
+  transactions: PropTypes.array,
   transactionTitle: PropTypes.string,
 }
 
 ModalFlowBase.defaultProps = {
   frontLoad: true,
-  onComplete: noop,
   transactionTitle: 'Create transaction',
 }
 
