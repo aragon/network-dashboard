@@ -10,7 +10,7 @@ function SignAgreementModal() {
   const { signAgreement } = useActions()
   const [transactions, setTransactions] = useState([])
 
-  const sign = useCallback(
+  const handleOnContinue = useCallback(
     async (onComplete) => {
       try {
         const { transactions } = await signAgreement()
@@ -32,7 +32,7 @@ function SignAgreementModal() {
       {
         title: 'Sign Agreement',
         graphicHeader: true,
-        content: <SignOverview onContinue={sign} />,
+        content: <SignOverview onContinue={handleOnContinue} />,
       },
       {
         title: 'Create transaction',
@@ -40,7 +40,7 @@ function SignAgreementModal() {
         content: <TransactionStepper transactions={transactions} />,
       },
     ],
-    [transactions, sign]
+    [transactions, handleOnContinue]
   )
   return <MultiModalScreens screens={screens} />
 }
