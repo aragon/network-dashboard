@@ -1,12 +1,11 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Info, useLayout, GU } from '@aragon/ui'
 import { useMultiModal } from '../../MultiModal/MultiModalProvider'
 import InfoField from './../../InfoField'
 import ModalButton from '../ModalButton'
 import signGraphic from '../../../assets/smart-contract.png'
 
-function SignOverview({ onContinue }) {
+function SignOverview() {
   const { layoutName } = useLayout()
   const { next } = useMultiModal()
 
@@ -43,20 +42,10 @@ function SignOverview({ onContinue }) {
         further action being taken in the organization. These proposals can be
         challenged if not adhered to this organization’s Agreement.
       </Info>
-      <ModalButton
-        mode="strong"
-        onClick={() => {
-          onContinue(next)
-        }}
-      >
+      <ModalButton mode="strong" onClick={next}>
         Sign Agreement
       </ModalButton>
     </>
   )
 }
-
-SignOverview.propTypes = {
-  onContinue: PropTypes.func.isRequired,
-}
-
 export default SignOverview

@@ -1,48 +1,49 @@
-import React, { useMemo, useState, useCallback } from 'react'
-import MultiModalScreens from '../../MultiModal/MultiModalScreens'
+import React, { useMemo, useState, useEffect } from 'react'
 import SignOverview from './SignOverview'
-import TransactionStepper, { modalWidthFromCount } from '../TransactionStepper'
 import { useActions } from '../../../hooks/useActions'
 import { useMounted } from '../../../hooks/useMounted'
+import ModalFlowBase from '../ModalFlowBase'
 
 function SignAgreementScreens() {
   const mounted = useMounted()
   const { signAgreement } = useActions()
   const [transactions, setTransactions] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  const handleOnContinue = useCallback(
-    async (onComplete) => {
+  useEffect(() => {
+    async function getTransactions() {
       try {
         const { transactions } = await signAgreement()
 
         if (mounted()) {
           setTransactions(transactions)
+          setLoading(false)
         }
-
-        onComplete()
       } catch (err) {
         console.error(err)
       }
-    },
-    [signAgreement, mounted]
-  )
+    }
+
+    getTransactions()
+  }, [mounted, signAgreement])
 
   const screens = useMemo(
     () => [
       {
         title: 'Sign Agreement',
         graphicHeader: true,
-        content: <SignOverview onContinue={handleOnContinue} />,
-      },
-      {
-        title: 'Create transaction',
-        width: modalWidthFromCount(transactions.length),
-        content: <TransactionStepper transactions={transactions} />,
+        content: <SignOverview />,
       },
     ],
-    [transactions, handleOnContinue]
+    []
   )
-  return <MultiModalScreens screens={screens} />
+  return (
+    <ModalFlowBase
+      loading={loading}
+      transactions={transactions}
+      screens={screens}
+    />
+  )
 }
 
 export default SignAgreementScreens
