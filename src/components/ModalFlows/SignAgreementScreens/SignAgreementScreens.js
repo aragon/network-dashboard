@@ -17,9 +17,8 @@ function SignAgreementScreens() {
 
         if (mounted()) {
           setTransactions(transactions)
+          setLoading(false)
         }
-
-        setLoading(false)
       } catch (err) {
         console.error(err)
       }
