@@ -214,30 +214,32 @@ const MultiModalContent = React.memo(function ModalContent({ viewportWidth }) {
               />
             </div>
           ) : (
-            <div
-              css={`
-                padding: ${smallMode ? 3 * GU : 5 * GU}px ${standardPadding}px
-                  ${smallMode ? 1.5 * GU : 2.5 * GU}px ${standardPadding}px;
-              `}
-            >
-              <h1
+            title && (
+              <div
                 css={`
-                  ${smallMode ? textStyle('title3') : textStyle('title2')};
-
-                  margin-top: -${0.5 * GU}px;
+                  padding: ${smallMode ? 3 * GU : 5 * GU}px ${standardPadding}px
+                    ${smallMode ? 1.5 * GU : 2.5 * GU}px ${standardPadding}px;
                 `}
               >
-                {title}
-              </h1>
-            </div>
+                <h1
+                  css={`
+                    ${smallMode ? textStyle('title3') : textStyle('title2')};
+
+                    margin-top: -${0.5 * GU}px;
+                  `}
+                >
+                  {title}
+                </h1>
+              </div>
+            )
           )}
 
           <div
             css={`
               /* For better performance we avoid reflowing long text between screen changes by matching the screen width with the modal width */
               width: ${Math.min(viewportWidth, width || DEFAULT_MODAL_WIDTH)}px;
-              padding: 0 ${standardPadding}px ${standardPadding}px
-                ${standardPadding}px;
+              padding: ${title ? 0 : standardPadding}px ${standardPadding}px
+                ${standardPadding}px ${standardPadding}px;
             `}
           >
             {content}

@@ -1,9 +1,12 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
+import { keyframes } from 'styled-components'
 import { noop, GU } from '@aragon/ui'
 import MultiModalScreens from '../MultiModal/MultiModalScreens'
 import Stepper from '../Stepper/Stepper'
 import { useWallet } from '../../providers/Wallet'
+import { useMultiModal } from '../MultiModal/MultiModalProvider'
+import LoadingSpinner from '../Loading/LoadingSpinner'
 
 const indexNumber = {
   0: 'First',
@@ -13,7 +16,13 @@ const indexNumber = {
   4: 'Fifth',
 }
 
-function ModalFlowBase({ transactions, transactionTitle }) {
+function ModalFlowBase({
+  frontLoad,
+  loading,
+  screens,
+  transactions,
+  transactionTitle,
+}) {
   const { ethers } = useWallet()
 
   const steps = transactions.map((transaction, index) => {
@@ -40,13 +49,9 @@ function ModalFlowBase({ transactions, transactionTitle }) {
     }
   })
 
-  const screens = useMemo(
-    () => [
-      {
-        graphicHeader: true,
-        content: <div>hello</div>,
-      },
-      ...steps,
+  const extendedScreens = useMemo(() => {
+    const allScreens = [
+      ...screens,
       {
         title: transactionTitle,
         width: modalWidthFromCount(transactions.length),
@@ -60,12 +65,68 @@ function ModalFlowBase({ transactions, transactionTitle }) {
           />
         ),
       },
-    ],
-    [transactions, steps, transactionTitle]
-  )
+    ]
 
-  return <MultiModalScreens screens={screens} />
+    if (frontLoad) {
+      allScreens.unshift({
+        disableClose: true,
+        content: <LoadingScreen loading={loading} />,
+      })
+    }
+
+    return allScreens
+  }, [transactions, screens, steps, transactionTitle, loading, frontLoad])
+
+  return <MultiModalScreens screens={extendedScreens} />
 }
+
+/* eslint-disable react/prop-types */
+function LoadingScreen({ loading }) {
+  const { next } = useMultiModal()
+
+  useEffect(() => {
+    let timeout
+
+    if (!loading) {
+      // Provide a minimum appearance duration to avoid visual confusion on very fast requests
+      timeout = setTimeout(() => {
+        next()
+      }, 100)
+    }
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [loading, next])
+
+  return (
+    <div
+      css={`
+        display: flex;
+        justify-content: center;
+        padding-top: ${16 * GU}px;
+        padding-bottom: ${16 * GU}px;
+      `}
+    >
+      <div
+        css={`
+          animation: ${keyframes`
+            from {
+              transform: scale(1.3);
+            }
+
+            to {
+              transform: scale(1);
+            }
+          `} 0.3s ease;
+        `}
+      >
+        <LoadingSpinner />
+      </div>
+    </div>
+  )
+}
+/* eslint-enable react/prop-types */
 
 function modalWidthFromCount(count) {
   if (count >= 3) {
@@ -81,11 +142,15 @@ function modalWidthFromCount(count) {
 }
 
 ModalFlowBase.propTypes = {
+  frontLoad: PropTypes.bool,
+  loading: PropTypes.bool,
+  screens: PropTypes.array,
   transactions: PropTypes.array.isRequired,
   transactionTitle: PropTypes.string,
 }
 
 ModalFlowBase.defaultProps = {
+  frontLoad: true,
   onComplete: noop,
   transactionTitle: 'Create transaction',
 }

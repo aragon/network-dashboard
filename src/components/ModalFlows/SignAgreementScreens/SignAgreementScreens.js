@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import SignOverview from './SignOverview'
 import { useActions } from '../../../hooks/useActions'
 import { useMounted } from '../../../hooks/useMounted'
@@ -8,9 +8,10 @@ function SignAgreementScreens() {
   const mounted = useMounted()
   const { signAgreement } = useActions()
   const [transactions, setTransactions] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  const handleOnContinue = useCallback(
-    async (onComplete) => {
+  useEffect(() => {
+    async function sign() {
       try {
         const { transactions } = await signAgreement()
 
@@ -18,25 +19,32 @@ function SignAgreementScreens() {
           setTransactions(transactions)
         }
 
-        onComplete()
+        setLoading(false)
       } catch (err) {
         console.error(err)
       }
-    },
-    [signAgreement, mounted]
-  )
+    }
+
+    sign()
+  }, [mounted, signAgreement])
 
   const screens = useMemo(
     () => [
       {
         title: 'Sign Agreement',
         graphicHeader: true,
-        content: <SignOverview onContinue={handleOnContinue} />,
+        content: <SignOverview />,
       },
     ],
-    [handleOnContinue]
+    []
   )
-  return <ModalFlowBase transactions={transactions} screens={screens} />
+  return (
+    <ModalFlowBase
+      loading={loading}
+      transactions={transactions}
+      screens={screens}
+    />
+  )
 }
 
 export default SignAgreementScreens
