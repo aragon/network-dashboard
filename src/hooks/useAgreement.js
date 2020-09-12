@@ -111,6 +111,7 @@ async function getAgreementIpfsContent(ipfsUri) {
   // TODO: Improve error handling, returning empty string to avoid render error
   if (error) {
     captureErrorWithSentry(error)
+    console.error(error)
 
     return ''
   }
