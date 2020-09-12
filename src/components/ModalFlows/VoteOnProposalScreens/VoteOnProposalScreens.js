@@ -4,7 +4,7 @@ import VoteActionDetails from './VoteActionDetails'
 import TransactionStepper, { modalWidthFromCount } from '../TransactionStepper'
 import { useMounted } from '../../../hooks/useMounted'
 
-function VoteOnProposalModal() {
+function VoteOnProposalScreens() {
   const mounted = useMounted()
   const [transactions, setTransactions] = useState([])
 
@@ -41,4 +41,4 @@ function VoteOnProposalModal() {
   return <MultiModalScreens screens={screens} />
 }
 
-export default VoteOnProposalModal
+export default VoteOnProposalScreens
