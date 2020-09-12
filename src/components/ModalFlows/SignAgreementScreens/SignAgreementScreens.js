@@ -1,9 +1,8 @@
 import React, { useMemo, useState, useCallback } from 'react'
-import MultiModalScreens from '../../MultiModal/MultiModalScreens'
 import SignOverview from './SignOverview'
-import TransactionStepper, { modalWidthFromCount } from '../TransactionStepper'
 import { useActions } from '../../../hooks/useActions'
 import { useMounted } from '../../../hooks/useMounted'
+import ModalFlowBase from '../ModalFlowBase'
 
 function SignAgreementScreens() {
   const mounted = useMounted()
@@ -34,15 +33,10 @@ function SignAgreementScreens() {
         graphicHeader: true,
         content: <SignOverview onContinue={handleOnContinue} />,
       },
-      {
-        title: 'Create transaction',
-        width: modalWidthFromCount(transactions.length),
-        content: <TransactionStepper transactions={transactions} />,
-      },
     ],
-    [transactions, handleOnContinue]
+    [handleOnContinue]
   )
-  return <MultiModalScreens screens={screens} />
+  return <ModalFlowBase transactions={transactions} screens={screens} />
 }
 
 export default SignAgreementScreens
