@@ -50,9 +50,24 @@ function ModalFlowBase({
   })
 
   const extendedScreens = useMemo(() => {
-    const allScreens = [
-      ...screens,
-      {
+    const allScreens = []
+
+    // Add loading screen as first item if enabled
+    if (frontLoad) {
+      allScreens.push({
+        disableClose: true,
+        content: <LoadingScreen loading={loading} />,
+      })
+    }
+
+    // Spread in our flow screens
+    if (screens) {
+      allScreens.push(...screens)
+    }
+
+    // Apply transaction singing at the end
+    if (transactions) {
+      allScreens.push({
         title: transactionTitle,
         width: modalWidthFromCount(transactions.length),
         content: (
@@ -64,13 +79,6 @@ function ModalFlowBase({
             `}
           />
         ),
-      },
-    ]
-
-    if (frontLoad) {
-      allScreens.unshift({
-        disableClose: true,
-        content: <LoadingScreen loading={loading} />,
       })
     }
 
