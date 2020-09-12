@@ -5,7 +5,7 @@ import TransactionStepper, { modalWidthFromCount } from '../TransactionStepper'
 import { useActions } from '../../../hooks/useActions'
 import { useMounted } from '../../../hooks/useMounted'
 
-function SignAgreementModal() {
+function SignAgreementScreens() {
   const mounted = useMounted()
   const { signAgreement } = useActions()
   const [transactions, setTransactions] = useState([])
@@ -45,4 +45,4 @@ function SignAgreementModal() {
   return <MultiModalScreens screens={screens} />
 }
 
-export default SignAgreementModal
+export default SignAgreementScreens

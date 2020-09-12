@@ -3,10 +3,12 @@ import { useOrganization } from '@aragon/connect-react'
 import { useOrgApps } from '../providers/OrgApps'
 import { getAppPresentation } from '../utils/app-utils'
 import { addressesEqual } from '../lib/web3-utils'
+import { useMounted } from '../hooks/useMounted'
 
 const cachedDescriptions = new Map([])
 
 export function useDescribeVote(script, voteId) {
+  const mounted = useMounted()
   const [org] = useOrganization()
   const { apps } = useOrgApps()
   const [description, setDescription] = useState(null)
@@ -28,11 +30,9 @@ export function useDescribeVote(script, voteId) {
       return
     }
 
-    let cancelled = false
-
     // Return from cache if description was previously fetched
     if (cachedDescriptions.has(voteId)) {
-      if (!cancelled) {
+      if (mounted()) {
         setDescription(cachedDescriptions.get(voteId))
         setLoading(false)
       }
@@ -44,7 +44,7 @@ export function useDescribeVote(script, voteId) {
       try {
         const { describedSteps } = await org.describeScript(script)
 
-        if (!cancelled) {
+        if (mounted()) {
           setDescription(describedSteps)
           setLoading(false)
 
@@ -57,11 +57,7 @@ export function useDescribeVote(script, voteId) {
     }
 
     describe()
-
-    return () => {
-      cancelled = true
-    }
-  }, [emptyScript, script, voteId, org])
+  }, [emptyScript, script, voteId, org, mounted])
 
   return { description, emptyScript, loading, targetApp }
 }

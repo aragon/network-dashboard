@@ -4,7 +4,7 @@ import ChallengeBalances from './ChallengeBalances'
 import TransactionStepper, { modalWidthFromCount } from '../TransactionStepper'
 import { useMounted } from '../../../hooks/useMounted'
 
-function ChallengeProposalModal() {
+function ChallengeProposalScreens() {
   const mounted = useMounted()
   const [transactions, setTransactions] = useState([])
 
@@ -41,4 +41,4 @@ function ChallengeProposalModal() {
   return <MultiModalScreens screens={screens} />
 }
 
-export default ChallengeProposalModal
+export default ChallengeProposalScreens
