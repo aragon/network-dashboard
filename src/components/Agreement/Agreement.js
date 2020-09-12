@@ -11,15 +11,15 @@ import LayoutColumns from '../Layout/LayoutColumns'
 import LoadingSection from '../Loading/LoadingSection'
 import MultiModal from '../MultiModal/MultiModal'
 import SignAgreementModal from '../ModalFlows/SignAgreementModal/SignAgreementModal'
-import { useAgreement } from '../../providers/Agreement'
+import { useAgreementState } from '../../providers/AgreementState'
 import { useWallet } from '../../providers/Wallet'
-import { useAgreementSign } from '../../hooks/useAgreementSign'
 
 const Agreement = React.memo(function Agreement() {
   const { account } = useWallet()
   const [signAgreementVisible, setSignAgreementVisible] = useState(false)
-  const { agreementDetails, loading } = useAgreement()
-  const { signed } = useAgreementSign()
+  const { agreement, loading } = useAgreementState()
+
+  const { signed } = agreement
 
   return (
     <>
@@ -37,10 +37,7 @@ const Agreement = React.memo(function Agreement() {
             }
           />
           <LoadingSection title="Loading agreement" loading={loading}>
-            <AgreementLayout
-              agreementDetails={agreementDetails}
-              signedAgreement={signed}
-            />
+            <AgreementLayout agreement={agreement} signedAgreement={signed} />
           </LoadingSection>
         </LayoutLimiter>
       </LayoutGutter>
@@ -55,7 +52,7 @@ const Agreement = React.memo(function Agreement() {
 })
 
 /* eslint-disable react/prop-types */
-function AgreementLayout({ agreementDetails, signedAgreement }) {
+function AgreementLayout({ agreement, signedAgreement }) {
   const {
     title,
     content,
@@ -64,7 +61,7 @@ function AgreementLayout({ agreementDetails, signedAgreement }) {
     effectiveFrom,
     stakingAddress,
     disputableApps,
-  } = agreementDetails
+  } = agreement
 
   return (
     <LayoutColumns
