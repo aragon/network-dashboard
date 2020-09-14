@@ -31,6 +31,7 @@ import SummaryRow from './SummaryRow'
 import StatusInfo from './StatusInfo'
 import FeedbackModule from './FeedbackModule'
 import Description from '../Description'
+import TargetAppBadge from '../TargetAppBadge'
 import { addressesEqual } from '../../../lib/web3-utils'
 import { getIpfsUrlFromUri } from '../../../lib/ipfs-utils'
 import { useDescribeVote } from '../../../hooks/useDescribeVote'
@@ -79,15 +80,17 @@ function ProposalDetails({ vote }) {
               grid-gap: ${4 * GU}px;
             `}
           >
-            {youVoted && (
-              <div
-                css={`
-                  display: flex;
-                `}
-              >
+            <div
+              css={`
+                display: flex;
+                justify-content: space-between;
+              `}
+            >
+              <TargetAppBadge vote={vote} />
+              {youVoted && (
                 <Tag icon={<IconCheck size="small" />} label="Voted" />
-              </div>
-            )}
+              )}
+            </div>
             <h1
               css={`
                 ${textStyle('title2')};

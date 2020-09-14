@@ -1,19 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { AppBadge, Card, GU, textStyle, useTheme, RADIUS } from '@aragon/ui'
+import { Card, GU, textStyle, useTheme, RADIUS } from '@aragon/ui'
 import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_CANCELLED,
   VOTE_STATUS_DISPUTED,
   VOTE_STATUS_CHALLENGED,
 } from './disputable-vote-statuses'
-import ProposalOption from './ProposalOption'
-import DisputableStatusLabel from './DisputableStatusLabel'
-import Description from './Description'
-import { getAppPresentation } from '../../utils/app-utils'
-import LoadingSkeleton from '../Loading/LoadingSkeleton'
 import { useDescribeVote } from '../../hooks/useDescribeVote'
-import { useOrgApps } from '../../providers/OrgApps'
+import Description from './Description'
+import DisputableStatusLabel from './DisputableStatusLabel'
+import LoadingSkeleton from '../Loading/LoadingSkeleton'
+import ProposalOption from './ProposalOption'
+import TargetAppBadge from './TargetAppBadge'
 
 function getAttributes(status, theme) {
   const attributes = {
@@ -49,7 +48,6 @@ function ProposalCard({ vote, onProposalClick }) {
   const {
     description,
     emptyScript,
-    targetApp,
     loading: descriptionLoading,
   } = useDescribeVote(script, vote.id)
 
@@ -88,14 +86,7 @@ function ProposalCard({ vote, onProposalClick }) {
             }
           `}
         >
-          {emptyScript ? (
-            <DefaultAppBadge />
-          ) : (
-            <AppBadgeWithSkeleton
-              targetApp={targetApp}
-              loading={descriptionLoading}
-            />
-          )}
+          <TargetAppBadge vote={vote} />
         </div>
 
         <div
@@ -160,48 +151,7 @@ ProposalCard.propTypes = {
   onProposalClick: PropTypes.func.isRequired,
 }
 
-function DefaultAppBadge() {
-  const { apps, disputableVotingApp } = useOrgApps()
-
-  const { humanName, iconSrc } = getAppPresentation(
-    apps,
-    disputableVotingApp.address
-  )
-
-  return (
-    <AppBadge
-      label={humanName}
-      appAddress={disputableVotingApp.address}
-      iconSrc={iconSrc}
-      badgeOnly
-    />
-  )
-}
-
 /* eslint-disable react/prop-types */
-function AppBadgeWithSkeleton({ targetApp, loading }) {
-  if (loading) {
-    return (
-      <LoadingSkeleton
-        css={`
-          height: ${3 * GU}px;
-          width: ${12 * GU}px;
-        `}
-      />
-    )
-  }
-
-  const { address, name, icon } = targetApp
-
-  return (
-    <AppBadge
-      label={name || address}
-      appAddress={address}
-      iconSrc={icon}
-      badgeOnly
-    />
-  )
-}
 
 function DescriptionWithSkeleton({ description, voteNumber, loading }) {
   if (loading) {
