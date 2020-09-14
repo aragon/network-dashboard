@@ -1,46 +1,51 @@
-import React, { useMemo, useState, useEffect } from 'react'
-import SignOverview from './SignOverview'
-import { useActions } from '../../../hooks/useActions'
-import { useMounted } from '../../../hooks/useMounted'
+import React, { useMemo, useState, useCallback } from 'react'
 import ModalFlowBase from '../ModalFlowBase'
+import SignOverview from './SignOverview'
+import { useMounted } from '../../../hooks/useMounted'
+import { useWallet } from '../../../providers/Wallet'
+import { useOrgApps } from '../../../providers/OrgApps'
+import { useAgreementState } from '../../../providers/AgreementState'
 
 function SignAgreementScreens() {
   const mounted = useMounted()
-  const { signAgreement } = useActions()
+  const { account } = useWallet()
+  const { agreementApp } = useOrgApps()
+  const {
+    agreement: { versionId },
+  } = useAgreementState()
   const [transactions, setTransactions] = useState([])
-  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    async function getTransactions() {
+  const getTransactions = useCallback(
+    async (onComplete) => {
       try {
-        const { transactions } = await signAgreement()
+        const { transactions } = await agreementApp.sign(account, versionId)
 
         if (mounted()) {
           setTransactions(transactions)
-          setLoading(false)
+          onComplete()
         }
       } catch (err) {
         console.error(err)
       }
-    }
-
-    getTransactions()
-  }, [mounted, signAgreement])
+    },
+    [account, agreementApp, versionId, mounted]
+  )
 
   const screens = useMemo(
     () => [
       {
         title: 'Sign Agreement',
         graphicHeader: true,
-        content: <SignOverview />,
+        content: <SignOverview getTransactions={getTransactions} />,
       },
     ],
-    []
+    [getTransactions]
   )
   return (
     <ModalFlowBase
-      loading={loading}
+      frontLoad={false}
       transactions={transactions}
+      transactionTitle="Sign Agreement"
       screens={screens}
     />
   )
