@@ -5,6 +5,7 @@ import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_SCHEDULED,
   VOTE_STATUS_CHALLENGED,
+  VOTE_STATUS_DISPUTED,
 } from '../disputable-vote-statuses'
 import DisputableActions from './DisputableActions'
 import DisputablePeriod from './DisputablePeriod'
@@ -75,8 +76,22 @@ function DisputableActionStatus({ vote }) {
           <Item heading="Dispute">
             <Link
               href={`${networkEnvironment.courtUrl}/#/disputes/${vote.disputeId}`}
+              css={`
+                text-decoration: none;
+              `}
             >
-              Dispute #{vote.disputeId}
+              Dispute #{vote.disputeId}{' '}
+              <span
+                css={`
+                  color: ${theme.surfaceContentSecondary};
+                `}
+              >
+                (
+                {disputableStatus === VOTE_STATUS_DISPUTED
+                  ? 'Drafting jury'
+                  : 'Ruling executed'}
+                )
+              </span>
             </Link>
           </Item>
         )}
