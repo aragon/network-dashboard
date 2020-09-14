@@ -1,14 +1,12 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
 import {
-  blockExplorerUrl,
   Button,
   GU,
   IconCheck,
   IconConnect,
   IconCross,
   Info,
-  Link,
   noop,
   RADIUS,
   textStyle,
@@ -22,28 +20,27 @@ export const VOTE_YEA = 'VOTE_YEA'
 export const VOTE_NAY = 'VOTE_NAY'
 const EMPTY_SCRIPT = '0x00000001'
 
+/* eslint-disable react/prop-types */
 const VoteActions = React.memo(({ vote, onVoteYes, onVoteNo, onExecute }) => {
-  const [ready, setReady] = useState(false)
   const [changeVote, setChangeVote] = useState(false)
   const theme = useTheme()
   const { account: connectedAccount } = useWallet()
   const handleChangeVote = useCallback(() => setChangeVote(true), [])
   const { snapshotBlock, startDate, hasEnded } = vote
 
-  // TODO: get real info for all this variables
+  // TODO: get real info for all this variables when connector is ready.
   const tokenSymbol = 'ANT'
   const canUserVote = !vote.hasEnded
-  const canExecute = connectedAccount ? true : false
+  const canExecute = true
   const userBalance = connectedAccount ? 1 : -1
   const userBalanceNow = connectedAccount ? 2 : -1
-  const { connectedAccountVote } = vote
   const hasVoted = false
 
   if (hasEnded) {
     return (
-      <React.Fragment>
+      <>
         {canExecute && vote.script !== EMPTY_SCRIPT && (
-          <React.Fragment>
+          <>
             <Button mode="strong" onClick={onExecute} wide>
               Enact this vote
             </Button>
@@ -52,9 +49,9 @@ const VoteActions = React.memo(({ vote, onVoteYes, onVoteNo, onExecute }) => {
               <strong>Anyone</strong> can now enact this vote to execute its
               action.
             </Info>
-          </React.Fragment>
+          </>
         )}
-      </React.Fragment>
+      </>
     )
   }
 
@@ -83,7 +80,7 @@ const VoteActions = React.memo(({ vote, onVoteYes, onVoteNo, onExecute }) => {
     return (
       <div>
         {connectedAccount ? (
-          <React.Fragment>
+          <>
             <Buttons onClickYes={onVoteYes} onClickNo={onVoteNo} />
             <TokenReference
               snapshotBlock={snapshotBlock}
@@ -92,7 +89,7 @@ const VoteActions = React.memo(({ vote, onVoteYes, onVoteNo, onExecute }) => {
               userBalance={userBalance}
               userBalanceNow={userBalanceNow}
             />
-          </React.Fragment>
+          </>
         ) : (
           <div
             css={`
@@ -209,6 +206,8 @@ const TokenReference = ({
     )}
   </Info>
 )
+
+/* eslint-disable react/prop-types */
 
 const VotingButton = styled(Button)`
   ${textStyle('body2')};

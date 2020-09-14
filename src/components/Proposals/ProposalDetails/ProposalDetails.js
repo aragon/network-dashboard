@@ -36,19 +36,12 @@ import VoteActions from './VoteActions'
 import { addressesEqual } from '../../../lib/web3-utils'
 import { getIpfsUrlFromUri } from '../../../lib/ipfs-utils'
 import { useDescribeVote } from '../../../hooks/useDescribeVote'
-import { useCastVoteInfo } from '../../../hooks/useCastVote'
+
 import LoadingSkeleton from '../../Loading/LoadingSkeleton'
 import { useWallet } from '../../../providers/Wallet'
 
 function ProposalDetails({ vote }) {
   const { voteId } = vote
-  console.log(vote)
-  const { account: connectedAccount } = useWallet()
-  const [castVoteInfo, { loading }] = useCastVoteInfo(
-    vote.id,
-    '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
-  )
-  console.log('delf cast', castVoteInfo)
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
 
   const { boxPresentation, disabledProgressBars } = useMemo(() => {
