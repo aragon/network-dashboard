@@ -14,7 +14,7 @@ function StatusInfo({ vote }) {
 
   const infoDescription = {
     [VOTE_STATUS_DISPUTED]: (
-      <InfoBox>
+      <InfoBox background="#FFEAEA" borderColor="#FF7C7C" color="#FF7C7C">
         This vote has been paused as the result of the originating action being
         challenged and raised to Aragon Court. When the dispute is resolved, if
         allowed, the voting period will be resumed for the remaining of its
@@ -53,13 +53,14 @@ StatusInfo.propTypes = {
 }
 
 /* eslint-disable react/prop-types */
-function InfoBox({ children }) {
+function InfoBox({ children, ...props }) {
   return (
     <Info
       mode="warning"
       css={`
         margin-top: ${2 * GU}px;
       `}
+      {...props}
     >
       {children}
     </Info>
