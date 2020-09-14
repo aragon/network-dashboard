@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { keyframes } from 'styled-components'
-import { GU } from '@aragon/ui'
+import { useTheme, GU } from '@aragon/ui'
 import LoadingSpinner from '../Loading/LoadingSpinner'
 import MultiModalScreens from '../MultiModal/MultiModalScreens'
 import Stepper from '../Stepper/Stepper'
@@ -90,6 +90,7 @@ function ModalFlowBase({
 
 /* eslint-disable react/prop-types */
 function LoadingScreen({ loading }) {
+  const theme = useTheme()
   const { next } = useMultiModal()
 
   useEffect(() => {
@@ -129,7 +130,11 @@ function LoadingScreen({ loading }) {
           `} 0.3s ease;
         `}
       >
-        <LoadingSpinner />
+        <LoadingSpinner
+          css={`
+            color: ${theme.accent};
+          `}
+        />
       </div>
     </div>
   )
