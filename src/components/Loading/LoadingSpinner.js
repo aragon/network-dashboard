@@ -47,7 +47,7 @@ function LoadingSpinner({ size, ...props }) {
 }
 
 LoadingSpinner.propTypes = {
-  size: PropTypes.string,
+  size: PropTypes.oneOf(['small', 'large']),
 }
 
 LoadingSpinner.defaultProps = {
