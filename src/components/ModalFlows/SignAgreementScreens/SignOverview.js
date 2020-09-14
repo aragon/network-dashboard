@@ -1,11 +1,12 @@
-import React from 'react'
-import { Info, useLayout, GU } from '@aragon/ui'
+import React, { useState } from 'react'
+import { Info, Checkbox, useLayout, GU } from '@aragon/ui'
 import { useMultiModal } from '../../MultiModal/MultiModalProvider'
 import InfoField from './../../InfoField'
 import ModalButton from '../ModalButton'
 import signGraphic from '../../../assets/smart-contract.png'
 
 function SignOverview() {
+  const [acceptedTerms, setAcceptedTerms] = useState(false)
   const { layoutName } = useLayout()
   const { next } = useMultiModal()
 
@@ -24,6 +25,28 @@ function SignOverview() {
           margin-bottom: ${5 * GU}px;
         `}
       />
+      <label
+        css={`
+          display: flex;
+          margin-bottom: ${3 * GU}px;
+        `}
+      >
+        <div
+          css={`
+            margin-left: -${0.5 * GU}px;
+            margin-right: ${1 * GU}px;
+          `}
+        >
+          <Checkbox
+            checked={acceptedTerms}
+            onChange={(checked) => {
+              setAcceptedTerms(checked)
+            }}
+          />
+        </div>
+        By signing this Agreement, you agree to Aragon Network DAO manifesto,
+        bylaws and community code of behavior.
+      </label>
       <InfoField label="Agreement action collateral">
         <p>
           In order perform or challenge actions bound by this Agreement, you
@@ -42,7 +65,7 @@ function SignOverview() {
         further action being taken in the organization. These proposals can be
         challenged if not adhered to this organization’s Agreement.
       </Info>
-      <ModalButton mode="strong" onClick={next}>
+      <ModalButton mode="strong" onClick={next} disabled={!acceptedTerms}>
         Sign Agreement
       </ModalButton>
     </>
