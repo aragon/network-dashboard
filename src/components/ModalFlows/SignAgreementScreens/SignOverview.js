@@ -24,6 +24,11 @@ function SignOverview({ getTransactions }) {
     })
   }, [getTransactions, next])
 
+  const handleAcceptTerms = useCallback(
+    (checked) => setAcceptedTerms(checked),
+    []
+  )
+
   return (
     <>
       <img
@@ -49,12 +54,7 @@ function SignOverview({ getTransactions }) {
             margin-right: ${1 * GU}px;
           `}
         >
-          <Checkbox
-            checked={acceptedTerms}
-            onChange={(checked) => {
-              setAcceptedTerms(checked)
-            }}
-          />
+          <Checkbox checked={acceptedTerms} onChange={handleAcceptTerms} />
         </div>
         By signing this Agreement, you agree to Aragon Network DAO manifesto,
         bylaws and community code of behavior.
