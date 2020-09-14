@@ -1,16 +1,28 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
+import PropTypes from 'prop-types'
 import { Info, Checkbox, useLayout, GU } from '@aragon/ui'
-import { useMultiModal } from '../../MultiModal/MultiModalProvider'
 import InfoField from './../../InfoField'
 import ModalButton from '../ModalButton'
 import signGraphic from '../../../assets/smart-contract.png'
+import { useMultiModal } from '../../MultiModal/MultiModalProvider'
 
-function SignOverview() {
+function SignOverview({ getTransactions }) {
+  const [loading, setLoading] = useState(false)
   const [acceptedTerms, setAcceptedTerms] = useState(false)
   const { layoutName } = useLayout()
   const { next } = useMultiModal()
 
   const smallMode = layoutName === 'small'
+
+  const handleSign = useCallback(() => {
+    setLoading(true)
+
+    // Proceed to the next screen after transactions have been received
+    getTransactions(() => {
+      setLoading(false)
+      next()
+    })
+  }, [getTransactions, next])
 
   return (
     <>
@@ -65,10 +77,20 @@ function SignOverview() {
         further action being taken in the organization. These proposals can be
         challenged if not adhered to this organization’s Agreement.
       </Info>
-      <ModalButton mode="strong" onClick={next} disabled={!acceptedTerms}>
+      <ModalButton
+        mode="strong"
+        loading={loading}
+        onClick={handleSign}
+        disabled={!acceptedTerms}
+      >
         Sign Agreement
       </ModalButton>
     </>
   )
 }
+
+SignOverview.propTypes = {
+  getTransactions: PropTypes.func,
+}
+
 export default SignOverview
