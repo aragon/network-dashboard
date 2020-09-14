@@ -39,7 +39,7 @@ import LoadingSkeleton from '../../Loading/LoadingSkeleton'
 import { useWallet } from '../../../providers/Wallet'
 
 function ProposalDetails({ vote }) {
-  const { voteId } = vote
+  const { voteId, id, script } = vote
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
 
   const { boxPresentation, disabledProgressBars } = useMemo(() => {
@@ -86,7 +86,7 @@ function ProposalDetails({ vote }) {
                 justify-content: space-between;
               `}
             >
-              <TargetAppBadge vote={vote} />
+              <TargetAppBadge script={script} voteId={id} />
               {youVoted && (
                 <Tag icon={<IconCheck size="small" />} label="Voted" />
               )}

@@ -44,12 +44,12 @@ function getAttributes(status, theme) {
 
 function ProposalCard({ vote, onProposalClick }) {
   const theme = useTheme()
-  const { context, voteId, script } = vote
+  const { context, voteId, script, id } = vote
   const {
     description,
     emptyScript,
     loading: descriptionLoading,
-  } = useDescribeVote(script, vote.id)
+  } = useDescribeVote(script, id)
 
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const { backgroundColor, borderColor, disabledProgressBars } = getAttributes(
@@ -86,7 +86,7 @@ function ProposalCard({ vote, onProposalClick }) {
             }
           `}
         >
-          <TargetAppBadge vote={vote} />
+          <TargetAppBadge script={script} voteId={id} />
         </div>
 
         <div

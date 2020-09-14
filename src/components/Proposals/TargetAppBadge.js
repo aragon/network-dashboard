@@ -1,27 +1,20 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { AppBadge, GU } from '@aragon/ui'
 import { useDescribeVote } from '../../hooks/useDescribeVote'
 import { useOrgApps } from '../../providers/OrgApps'
 import { getAppPresentation } from '../../utils/app-utils'
 import LoadingSkeleton from '../Loading/LoadingSkeleton'
 
-function TargetApp({ vote }) {
-  const {
-    emptyScript,
-    targetApp,
-    loading: descriptionLoading,
-  } = useDescribeVote(vote.script, vote.id)
+/* eslint-disable react/prop-types */
+function TargetAppBadge({ script, voteId }) {
+  const { emptyScript, targetApp, loading } = useDescribeVote(script, voteId)
 
   return (
     <>
       {emptyScript ? (
         <DefaultAppBadge />
       ) : (
-        <AppBadgeWithSkeleton
-          targetApp={targetApp}
-          loading={descriptionLoading}
-        />
+        <AppBadgeWithSkeleton targetApp={targetApp} loading={loading} />
       )}
     </>
   )
@@ -45,7 +38,6 @@ function DefaultAppBadge() {
   )
 }
 
-/* eslint-disable react/prop-types */
 function AppBadgeWithSkeleton({ targetApp, loading }) {
   if (loading) {
     return (
@@ -71,8 +63,4 @@ function AppBadgeWithSkeleton({ targetApp, loading }) {
 }
 /* eslint-disable react/prop-types */
 
-TargetApp.propTypes = {
-  vote: PropTypes.object.isRequired,
-}
-
-export default TargetApp
+export default TargetAppBadge
