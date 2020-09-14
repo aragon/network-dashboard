@@ -45,6 +45,7 @@ function SignAgreementScreens() {
     <ModalFlowBase
       frontLoad={false}
       transactions={transactions}
+      transactionTitle="Sign Agreement"
       screens={screens}
     />
   )
