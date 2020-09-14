@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import {
   GU,
+  Button,
   IconCheck,
   IconLock,
   IdentityBadge,
@@ -37,83 +38,120 @@ import { getIpfsUrlFromUri } from '../../../lib/ipfs-utils'
 import { useDescribeVote } from '../../../hooks/useDescribeVote'
 import LoadingSkeleton from '../../Loading/LoadingSkeleton'
 import { useWallet } from '../../../providers/Wallet'
+import MultiModal from '../../MultiModal/MultiModal'
+import VoteOnProposalScreens from '../../ModalFlows/VoteOnProposalScreens/VoteOnProposalScreens'
+
+function getDisputablePresentation(disputableStatus) {
+  const disputablePresentation = {
+    [VOTE_STATUS_CANCELLED]: {
+      boxPresentation: 'disabled',
+      disabledProgressBars: true,
+    },
+    [VOTE_STATUS_SETTLED]: {
+      boxPresentation: 'disabled',
+      disabledProgressBars: true,
+    },
+    [VOTE_STATUS_CHALLENGED]: {
+      boxPresentation: 'warning',
+      disabledProgressBars: true,
+    },
+    [VOTE_STATUS_DISPUTED]: {
+      boxPresentation: 'negative',
+      disabledProgressBars: true,
+    },
+  }
+
+  return disputablePresentation[disputableStatus] || {}
+}
 
 function ProposalDetails({ vote }) {
   const { voteId, id, script } = vote
+  const { account } = useWallet()
+  const [voteModalVisible, setVoteModalVisible] = useState(false)
+  const [voteSupported, setVoteSupported] = useState(null)
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
 
-  const { boxPresentation, disabledProgressBars } = useMemo(() => {
-    const disputablePresentation = {
-      [VOTE_STATUS_CANCELLED]: {
-        boxPresentation: 'disabled',
-        disabledProgressBars: true,
-      },
-      [VOTE_STATUS_SETTLED]: {
-        boxPresentation: 'disabled',
-        disabledProgressBars: true,
-      },
-      [VOTE_STATUS_CHALLENGED]: {
-        boxPresentation: 'warning',
-        disabledProgressBars: true,
-      },
-      [VOTE_STATUS_DISPUTED]: {
-        boxPresentation: 'negative',
-        disabledProgressBars: true,
-      },
-    }
+  const handleVoteYes = useCallback(() => {
+    setVoteModalVisible(true)
+    setVoteSupported(true)
+  }, [])
 
-    return disputablePresentation[disputableStatus] || {}
-  }, [disputableStatus])
+  const handleVoteNo = useCallback(() => {
+    setVoteModalVisible(true)
+    setVoteSupported(false)
+  }, [])
+
+  const handleModalClose = useCallback(() => {
+    setVoteModalVisible(false)
+  }, [])
+
+  const { boxPresentation, disabledProgressBars } = getDisputablePresentation(
+    disputableStatus
+  )
 
   // TODO: get youVoted flag from connector
   const youVoted = false
 
   return (
-    <LayoutColumns
-      primary={
-        <LayoutBox primary mode={boxPresentation}>
-          <div
-            css={`
-              display: grid;
-              grid-auto-flow: row;
-
-              grid-gap: ${4 * GU}px;
-            `}
-          >
+    <>
+      <LayoutColumns
+        primary={
+          <LayoutBox primary mode={boxPresentation}>
             <div
               css={`
-                display: flex;
-                justify-content: space-between;
+                display: grid;
+                grid-auto-flow: row;
+
+                grid-gap: ${4 * GU}px;
               `}
             >
-              <TargetAppBadge script={script} voteId={id} />
-              {youVoted && (
-                <Tag icon={<IconCheck size="small" />} label="Voted" />
-              )}
+              <div
+                css={`
+                  display: flex;
+                  justify-content: space-between;
+                `}
+              >
+                <TargetAppBadge script={script} voteId={id} />
+                {youVoted && (
+                  <Tag icon={<IconCheck size="small" />} label="Voted" />
+                )}
+              </div>
+              <h1
+                css={`
+                  ${textStyle('title2')};
+                  font-weight: bold;
+                `}
+              >
+                Vote #{voteId}
+              </h1>
+              <Details vote={vote} status={disputableStatus} />
+              <SummaryInfo
+                vote={vote}
+                disabledProgressBars={disabledProgressBars}
+              />
             </div>
-            <h1
-              css={`
-                ${textStyle('title2')};
-                font-weight: bold;
-              `}
-            >
-              Vote #{voteId}
-            </h1>
-            <Details vote={vote} status={disputableStatus} />
-            <SummaryInfo
+          </LayoutBox>
+        }
+        secondary={
+          <>
+            <DisputableActionStatus vote={vote} />
+            <InfoBoxes
               vote={vote}
               disabledProgressBars={disabledProgressBars}
             />
-          </div>
-        </LayoutBox>
-      }
-      secondary={
-        <>
-          <DisputableActionStatus vote={vote} />
-          <InfoBoxes vote={vote} disabledProgressBars={disabledProgressBars} />
-        </>
-      }
-    />
+          </>
+        }
+      />
+      <Button mode="strong" disabled={!account} onClick={handleVoteYes}>
+        Vote Yes
+      </Button>
+      <Button mode="strong" disabled={!account} onClick={handleVoteNo}>
+        Vote No
+      </Button>
+      <MultiModal visible={voteModalVisible} onClose={handleModalClose}>
+        <VoteOnProposalScreens voteId={voteId} voteSupported={voteSupported} />
+      </MultiModal>
+    </>
   )
 }
 
@@ -139,7 +177,6 @@ function Details({ vote, status }) {
     <div
       css={`
         display: grid;
-
         grid-template-columns: ${twoColumnMode ? `1fr ${30 * GU}px` : '1fr'};
         grid-gap: ${3 * GU}px;
       `}
