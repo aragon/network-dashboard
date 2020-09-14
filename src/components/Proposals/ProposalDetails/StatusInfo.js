@@ -5,6 +5,8 @@ import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_CANCELLED,
   VOTE_STATUS_CHALLENGED,
+  VOTE_STATUS_SETTLED,
+  VOTE_STATUS_DISPUTED,
 } from '../disputable-vote-statuses'
 
 function StatusInfo({ vote }) {
@@ -24,6 +26,37 @@ function StatusInfo({ vote }) {
       </Info>
     )
   }
+
+  if (disputableStatus === VOTE_STATUS_SETTLED) {
+    return (
+      <Info
+        mode="warning"
+        css={`
+          margin-top: ${2 * GU}px;
+        `}
+      >
+        This vote has been canceled as the result of the originating action
+        being challenged and the settlement offer being accepted.
+      </Info>
+    )
+  }
+
+  if (disputableStatus === VOTE_STATUS_DISPUTED) {
+    return (
+      <Info
+        mode="warning"
+        css={`
+          margin-top: ${2 * GU}px;
+        `}
+      >
+        This vote has been paused as the result of the originating action being
+        challenged and raised to Aragon Court. When the dispute is resolved, if
+        allowed, the voting period will be resumed for the remaining of its
+        duration time. Othersiwe, this vote will be canceled.
+      </Info>
+    )
+  }
+
   if (disputableStatus === VOTE_STATUS_CANCELLED) {
     if (vote.disputeId) {
       return (
@@ -45,8 +78,7 @@ function StatusInfo({ vote }) {
           margin-top: ${2 * GU}px;
         `}
       >
-        This vote has been canceled as the result of the originating action
-        being challenged and the settlement offer being accepted.
+        This vote has been canceled.
       </Info>
     )
   }
