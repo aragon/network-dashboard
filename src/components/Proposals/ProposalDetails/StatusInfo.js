@@ -52,6 +52,7 @@ StatusInfo.propTypes = {
   vote: PropTypes.object.isRequired,
 }
 
+/* eslint-disable react/prop-types */
 function InfoBox({ children }) {
   return (
     <Info
@@ -64,9 +65,6 @@ function InfoBox({ children }) {
     </Info>
   )
 }
-
-InfoBox.propTypes = {
-  children: PropTypes.node,
-}
+/* eslint-enable react/prop-types */
 
 export default StatusInfo
