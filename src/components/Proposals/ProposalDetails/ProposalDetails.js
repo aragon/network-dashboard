@@ -17,6 +17,7 @@ import DisputableStatusLabel from '../DisputableStatusLabel'
 import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_CANCELLED,
+  VOTE_STATUS_SCHEDULED,
   VOTE_STATUS_SETTLED,
   VOTE_STATUS_DISPUTED,
   VOTE_STATUS_CHALLENGED,
@@ -68,7 +69,7 @@ function ProposalDetails({ vote }) {
     return disputablePresentation[disputableStatus] || {}
   }, [disputableStatus])
 
-  const youVoted = voterInfo && voterInfo.hasVoted
+  const accountHasVoted = voterInfo && voterInfo.hasVoted
 
   return (
     <LayoutColumns
@@ -89,7 +90,7 @@ function ProposalDetails({ vote }) {
               `}
             >
               <TargetAppBadge script={script} voteId={id} />
-              {youVoted && (
+              {accountHasVoted && (
                 <Tag icon={<IconCheck size="small" />} label="Voted" />
               )}
             </div>
@@ -106,14 +107,16 @@ function ProposalDetails({ vote }) {
               vote={vote}
               disabledProgressBars={disabledProgressBars}
             />
-            {youVoted && (
+            {accountHasVoted && (
               <VoteCast
                 accountVote={voterInfo.hasVoted}
                 balance={voterInfo.accountBalance}
                 tokenSymbol={orgToken.symbol}
               />
             )}
-            <VoteActions vote={vote} />
+            {disputableStatus === VOTE_STATUS_SCHEDULED && (
+              <VoteActions vote={vote} />
+            )}
           </div>
         </LayoutBox>
       }
