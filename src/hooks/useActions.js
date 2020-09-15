@@ -7,7 +7,7 @@ import { useMounted } from '../hooks/useMounted'
 export function useActions() {
   const mounted = useMounted()
   const { account } = useWallet()
-  const { agreementApp } = useOrgApps()
+  const { agreementApp, disputableVotingApp } = useOrgApps()
 
   const signAgreement = useCallback(
     async ({ versionId }, onDone = noop) => {
@@ -63,13 +63,33 @@ export function useActions() {
     [account, agreementApp, mounted]
   )
 
+  const voteOnProposal = useCallback(
+    async ({ voteId, voteSupported }, onDone = noop) => {
+      try {
+        const intent = await disputableVotingApp.castVote(
+          voteId,
+          voteSupported,
+          account
+        )
+
+        if (mounted()) {
+          onDone(intent)
+        }
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    [account, disputableVotingApp, mounted]
+  )
+
   const actions = useMemo(
     () => ({
       signAgreement,
       challengeProposal,
       settleDispute,
+      voteOnProposal,
     }),
-    [signAgreement, challengeProposal, settleDispute]
+    [signAgreement, challengeProposal, settleDispute, voteOnProposal]
   )
 
   return actions
