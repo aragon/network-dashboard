@@ -1,8 +1,7 @@
-import React, { useMemo, useState, useCallback } from 'react'
+import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import {
   GU,
-  Button,
   IconCheck,
   IconLock,
   IdentityBadge,
@@ -18,6 +17,7 @@ import DisputableStatusLabel from '../DisputableStatusLabel'
 import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_CANCELLED,
+  VOTE_STATUS_SCHEDULED,
   VOTE_STATUS_SETTLED,
   VOTE_STATUS_DISPUTED,
   VOTE_STATUS_CHALLENGED,
@@ -32,16 +32,16 @@ import SummaryRow from './SummaryRow'
 import StatusInfo from './StatusInfo'
 import FeedbackModule from './FeedbackModule'
 import Description from '../Description'
+import VoteActions from './VoteActions'
+import VoteCast from './VoteCast'
 import TargetAppBadge from '../TargetAppBadge'
 import { addressesEqual } from '../../../lib/web3-utils'
 import { getIpfsUrlFromUri } from '../../../lib/ipfs-utils'
 import { useDescribeVote } from '../../../hooks/useDescribeVote'
 import LoadingSkeleton from '../../Loading/LoadingSkeleton'
 import { useWallet } from '../../../providers/Wallet'
-import MultiModal from '../../MultiModal/MultiModal'
-import VoteOnProposalScreens from '../../ModalFlows/VoteOnProposalScreens/VoteOnProposalScreens'
 
-function getDisputablePresentation(disputableStatus) {
+function getPresentation(disputableStatus) {
   const disputablePresentation = {
     [VOTE_STATUS_CANCELLED]: {
       boxPresentation: 'disabled',
@@ -65,102 +65,78 @@ function getDisputablePresentation(disputableStatus) {
 }
 
 function ProposalDetails({ vote }) {
-  const { voteId, id, script } = vote
-  const { account } = useWallet()
-  const [voteModalVisible, setVoteModalVisible] = useState(false)
-  const [voteSupported, setVoteSupported] = useState(null)
+  const { voteId, id, script, voterInfo, orgToken } = vote
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
 
-  const handleCastVote = useCallback((supported) => {
-    setVoteModalVisible(true)
-    setVoteSupported(supported)
-  }, [])
-
-  const handleModalClose = useCallback(() => {
-    setVoteModalVisible(false)
-  }, [])
-
-  const { boxPresentation, disabledProgressBars } = getDisputablePresentation(
-    disputableStatus
+  const { boxPresentation, disabledProgressBars } = useMemo(
+    () => getPresentation(disputableStatus),
+    [disputableStatus]
   )
 
-  // TODO: get youVoted flag from connector
-  const youVoted = false
+  const accountHasVoted = voterInfo && voterInfo.hasVoted
 
   return (
-    <>
-      <LayoutColumns
-        primary={
-          <LayoutBox primary mode={boxPresentation}>
+    <LayoutColumns
+      primary={
+        <LayoutBox primary mode={boxPresentation}>
+          <div
+            css={`
+              display: grid;
+              grid-auto-flow: row;
+
+              grid-gap: ${4 * GU}px;
+            `}
+          >
             <div
               css={`
-                display: grid;
-                grid-auto-flow: row;
-
-                grid-gap: ${4 * GU}px;
+                display: flex;
+                justify-content: space-between;
               `}
             >
-              <div
-                css={`
-                  display: flex;
-                  justify-content: space-between;
-                `}
-              >
-                <TargetAppBadge script={script} voteId={id} />
-                {youVoted && (
-                  <Tag icon={<IconCheck size="small" />} label="Voted" />
-                )}
-              </div>
-              <h1
-                css={`
-                  ${textStyle('title2')};
-                  font-weight: bold;
-                `}
-              >
-                Vote #{voteId}
-              </h1>
-              <Details vote={vote} status={disputableStatus} />
-              <SummaryInfo
-                vote={vote}
-                disabledProgressBars={disabledProgressBars}
-              />
+              <TargetAppBadge script={script} voteId={id} />
+              {accountHasVoted && (
+                <Tag icon={<IconCheck size="small" />} label="Voted" />
+              )}
             </div>
-          </LayoutBox>
-        }
-        secondary={
-          <>
-            <DisputableActionStatus vote={vote} />
-            <InfoBoxes
+            <h1
+              css={`
+                ${textStyle('title2')};
+                font-weight: bold;
+              `}
+            >
+              Vote #{voteId}
+            </h1>
+            <Details vote={vote} status={disputableStatus} />
+            <SummaryInfo
               vote={vote}
               disabledProgressBars={disabledProgressBars}
             />
-          </>
-        }
-      />
-      <Button
-        mode="strong"
-        disabled={!account}
-        onClick={() => handleCastVote(true)}
-      >
-        Vote Yes
-      </Button>
-      <Button
-        mode="strong"
-        disabled={!account}
-        onClick={() => handleCastVote(false)}
-      >
-        Vote No
-      </Button>
-      <MultiModal visible={voteModalVisible} onClose={handleModalClose}>
-        <VoteOnProposalScreens voteId={voteId} voteSupported={voteSupported} />
-      </MultiModal>
-    </>
+            {accountHasVoted && (
+              <VoteCast
+                accountVote={voterInfo.hasVoted}
+                balance={voterInfo.accountBalance}
+                tokenSymbol={orgToken.symbol}
+              />
+            )}
+            {disputableStatus === VOTE_STATUS_SCHEDULED && (
+              <VoteActions vote={vote} />
+            )}
+          </div>
+        </LayoutBox>
+      }
+      secondary={
+        <>
+          <DisputableActionStatus vote={vote} />
+          <InfoBoxes vote={vote} disabledProgressBars={disabledProgressBars} />
+        </>
+      }
+    />
   )
 }
 
 /* eslint-disable react/prop-types */
 function Details({ vote, status }) {
-  const { context, creator, collateral, token, script } = vote
+  const { context, creator, collateral, collateralToken, script } = vote
   const {
     description,
     emptyScript,
@@ -180,6 +156,7 @@ function Details({ vote, status }) {
     <div
       css={`
         display: grid;
+
         grid-template-columns: ${twoColumnMode ? `1fr ${30 * GU}px` : '1fr'};
         grid-gap: ${3 * GU}px;
       `}
@@ -240,10 +217,10 @@ function Details({ vote, status }) {
           `}
         >
           <TokenAmount
-            address={token.id}
+            address={collateralToken.id}
             amount={collateral.actionAmount}
-            decimals={token.decimals}
-            symbol={token.symbol}
+            decimals={collateralToken.decimals}
+            symbol={collateralToken.symbol}
           />
 
           <span
@@ -340,8 +317,8 @@ function SummaryInfo({ vote, disabledProgressBars }) {
             pct={yeasPct * 100}
             token={{
               amount: yeas,
-              symbol: 'ANT',
-              decimals: 18,
+              symbol: vote.orgToken.symbol,
+              decimals: vote.orgToken.decimals,
             }}
           />
           <SummaryRow
@@ -350,8 +327,8 @@ function SummaryInfo({ vote, disabledProgressBars }) {
             pct={naysPct * 100}
             token={{
               amount: nays,
-              symbol: 'ANT',
-              decimals: 18,
+              symbol: vote.orgToken.symbol,
+              decimals: vote.orgToken.decimals,
             }}
           />
         </div>
