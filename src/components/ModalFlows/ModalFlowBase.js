@@ -24,6 +24,7 @@ function ModalFlowBase({
   transactionTitle,
 }) {
   const { ethers } = useWallet()
+  const signer = useMemo(() => ethers.getSigner(), [ethers])
 
   const steps = transactions.map((transaction, index) => {
     const title =
@@ -34,11 +35,17 @@ function ModalFlowBase({
     return {
       // TODO: Add titles from description
       title,
-      handleSign: async ({ setSuccess, setError, setHash }) => {
+      handleSign: async ({ setSuccess, setWorking, setError, setHash }) => {
         try {
-          const tx = await ethers.getSigner().sendTransaction(transaction)
+          const tx = await signer.sendTransaction(transaction)
+
+          setWorking()
 
           setHash(tx.hash)
+
+          // We need to wait for pre-transactions to mine before asking for the next signature
+          // TODO: Provide a better user experience than waiting on all transactions
+          await tx.wait()
 
           setSuccess()
         } catch (err) {
@@ -55,7 +62,6 @@ function ModalFlowBase({
     // Add loading screen as first item if enabled
     if (frontLoad) {
       allScreens.push({
-        disableClose: true,
         content: <LoadingScreen loading={loading} />,
       })
     }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Box, GU, Info, Link, textStyle, useTheme } from '@aragon/ui'
 import {
@@ -11,8 +11,11 @@ import DisputableActions from './DisputableActions'
 import DisputablePeriod from './DisputablePeriod'
 import { durationToHours, toMs } from '../../../utils/date-utils'
 import { networkEnvironment } from '../../../current-environment'
+import MultiModal from '../../MultiModal/MultiModal'
+import ChallengeProposalScreens from '../../ModalFlows/ChallengeProposalScreens/ChallengeProposalScreens'
 
 function DisputableActionStatus({ vote }) {
+  const [challengeModalVisible, setChallengeModalVisible] = useState(false)
   const theme = useTheme()
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const challenged = disputableStatus === VOTE_STATUS_CHALLENGED
@@ -110,10 +113,18 @@ function DisputableActionStatus({ vote }) {
             <DisputableActions
               status={disputableStatus}
               submitter={vote.creator}
+              onChallenge={() => setChallengeModalVisible(true)}
             />
           </Item>
         </ul>
       </Box>
+
+      <MultiModal
+        visible={challengeModalVisible}
+        onClose={() => setChallengeModalVisible(false)}
+      >
+        <ChallengeProposalScreens actionId={vote.actionId} />
+      </MultiModal>
     </>
   )
 }
