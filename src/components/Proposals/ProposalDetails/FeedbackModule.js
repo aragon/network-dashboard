@@ -78,7 +78,7 @@ function FeedbackModule({ vote, mode }) {
               </p>
             ) : (
               <p>
-                You acccepted the setttlement offer on{' '}
+                You acccepted the setttlement offer{' '}
                 {settledAt > 0 && (
                   <>
                     on <Strong>{dateFormat(settledAt, 'standard')}</Strong>
