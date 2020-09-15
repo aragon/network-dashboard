@@ -1,25 +1,25 @@
 import React, { useState } from 'react'
 import { Button, Header } from '@aragon/ui'
-import LayoutGutter from '../Layout/LayoutGutter'
-import LayoutLimiter from '../Layout/LayoutLimiter'
 import AgreementBindingActions from './AgreementBindingActions'
 import AgreementHeader from './AgreementHeader'
 import AgreementDetails from './AgreementDetails'
 import AgreementDocument from './AgreementDocument'
+import LayoutGutter from '../Layout/LayoutGutter'
+import LayoutLimiter from '../Layout/LayoutLimiter'
 import LayoutBox from '../Layout/LayoutBox'
 import LayoutColumns from '../Layout/LayoutColumns'
 import LoadingSection from '../Loading/LoadingSection'
 import MultiModal from '../MultiModal/MultiModal'
-import SignAgreementModal from '../ModalFlows/SignAgreementModal/SignAgreementModal'
-import { useAgreement } from '../../providers/Agreement'
+import SignAgreementScreens from '../ModalFlows/SignAgreementScreens/SignAgreementScreens'
+import { useAgreementState } from '../../providers/AgreementState'
 import { useWallet } from '../../providers/Wallet'
-import { useAgreementSign } from '../../hooks/useAgreementSign'
 
 const Agreement = React.memo(function Agreement() {
   const { account } = useWallet()
-  const [signAgreementVisible, setSignAgreementVisible] = useState(false)
-  const { agreementDetails, loading } = useAgreement()
-  const { signed } = useAgreementSign()
+  const [signModalVisible, setSignModalVisible] = useState(false)
+  const { agreement, loading } = useAgreementState()
+
+  const signed = agreement.signed
 
   return (
     <>
@@ -32,30 +32,27 @@ const Agreement = React.memo(function Agreement() {
                 mode="strong"
                 label="Sign Agreement"
                 disabled={!account || signed}
-                onClick={() => setSignAgreementVisible(true)}
+                onClick={() => setSignModalVisible(true)}
               />
             }
           />
           <LoadingSection title="Loading agreement" loading={loading}>
-            <AgreementLayout
-              agreementDetails={agreementDetails}
-              signedAgreement={signed}
-            />
+            <AgreementLayout agreement={agreement} signedAgreement={signed} />
           </LoadingSection>
         </LayoutLimiter>
       </LayoutGutter>
       <MultiModal
-        visible={signAgreementVisible}
-        onClose={() => setSignAgreementVisible(false)}
+        visible={signModalVisible}
+        onClose={() => setSignModalVisible(false)}
       >
-        <SignAgreementModal />
+        <SignAgreementScreens />
       </MultiModal>
     </>
   )
 })
 
 /* eslint-disable react/prop-types */
-function AgreementLayout({ agreementDetails, signedAgreement }) {
+function AgreementLayout({ agreement, signedAgreement }) {
   const {
     title,
     content,
@@ -64,7 +61,7 @@ function AgreementLayout({ agreementDetails, signedAgreement }) {
     effectiveFrom,
     stakingAddress,
     disputableApps,
-  } = agreementDetails
+  } = agreement
 
   return (
     <LayoutColumns

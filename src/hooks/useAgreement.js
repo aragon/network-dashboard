@@ -5,16 +5,20 @@ import { getIpfsCidFromUri, ipfsGet } from '../lib/ipfs-utils'
 import { toMs } from '../utils/date-utils'
 import { useOrgApps } from '../providers/OrgApps'
 import { getAppPresentation } from '../utils/app-utils'
+import { useMounted } from './useMounted'
+import { useWallet } from '../providers/Wallet'
 
-export function useAgreementDetails() {
+export function useAgreement() {
+  const mounted = useMounted()
+  const { account } = useWallet()
   const { apps, agreementApp, appsLoading } = useOrgApps()
-  const [agreementDetails, setAgreementDetails] = useState(null)
-  const [agreementDetailsLoading, setAgreementDetailsLoading] = useState(true)
+  const [agreement, setAgreement] = useState({})
+  const [agreementLoading, setAgreementLoading] = useState(true)
+
+  const canProcess = !appsLoading && agreementApp
 
   useEffect(() => {
-    let cancelled = false
-
-    async function getAgreementDetails() {
+    async function processAgreementDetails() {
       try {
         const [
           currentVersion,
@@ -26,27 +30,32 @@ export function useAgreementDetails() {
           agreementApp.disputableApps(),
         ])
 
-        const { content, effectiveFrom, title } = currentVersion
+        const { content, effectiveFrom, title, versionId } = currentVersion
         const contentIpfsUri = ethersUtils.toUtf8String(content)
 
-        const [extendedDisputableApps, agreementContent] = await Promise.all([
+        const [
+          extendedDisputableApps,
+          agreementContent,
+          signer,
+        ] = await Promise.all([
           processDisputableApps(apps, disputableApps),
-          getAgreementContent(contentIpfsUri),
+          getAgreementIpfsContent(contentIpfsUri),
+          account ? agreementApp.signer(account) : null,
         ])
 
-        const details = {
-          contractAddress: agreementApp.address,
-          content: agreementContent,
-          contentIpfsUri: contentIpfsUri,
-          disputableApps: extendedDisputableApps,
-          effectiveFrom: toMs(effectiveFrom),
-          stakingAddress: stakingFactory,
-          title: title,
-        }
-
-        if (!cancelled) {
-          setAgreementDetails(details)
-          setAgreementDetailsLoading(false)
+        if (mounted()) {
+          setAgreement({
+            contractAddress: agreementApp.address,
+            content: agreementContent,
+            contentIpfsUri: contentIpfsUri,
+            disputableApps: extendedDisputableApps,
+            effectiveFrom: toMs(effectiveFrom),
+            stakingAddress: stakingFactory,
+            signed: Boolean(signer),
+            title: title,
+            versionId: versionId,
+          })
+          setAgreementLoading(false)
         }
       } catch (err) {
         captureErrorWithSentry(err)
@@ -54,16 +63,12 @@ export function useAgreementDetails() {
       }
     }
 
-    if (!appsLoading && agreementApp) {
-      getAgreementDetails()
+    if (canProcess) {
+      processAgreementDetails()
     }
+  }, [apps, agreementApp, canProcess, mounted, account])
 
-    return () => {
-      cancelled = true
-    }
-  }, [apps, agreementApp, appsLoading])
-
-  return [agreementDetails, agreementDetailsLoading]
+  return [agreement, agreementLoading]
 }
 
 async function processDisputableApps(apps, disputableApps) {
@@ -101,7 +106,7 @@ async function processDisputableApps(apps, disputableApps) {
   return extendedDisputableApps
 }
 
-async function getAgreementContent(ipfsUri) {
+async function getAgreementIpfsContent(ipfsUri) {
   const { data, error } = await ipfsGet(getIpfsCidFromUri(ipfsUri))
 
   // TODO: Improve error handling, returning empty string to avoid render error

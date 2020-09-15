@@ -3,17 +3,17 @@ import { captureErrorWithSentry } from '../sentry'
 import { useOrgApps } from '../providers/OrgApps'
 import { useWallet } from '../providers/Wallet'
 import { formatTokenAmount } from '@aragon/ui'
+import { useMounted } from '../hooks/useMounted'
 
 export function useDisputableVotes() {
+  const mounted = useMounted()
   const { disputableVotingApp, appsLoading } = useOrgApps()
   const [processedVotes, setProcessedVotes] = useState([])
   const [processedVotesLoading, setProcessedVotesLoading] = useState(true)
 
   useEffect(() => {
-    let cancelled = false
-
     async function getExtendedVote() {
-      if (!cancelled) {
+      if (mounted()) {
         setProcessedVotesLoading(true)
       }
 
@@ -23,7 +23,7 @@ export function useDisputableVotes() {
           ? votes.map((vote) => processVote(vote))
           : null
 
-        if (!cancelled) {
+        if (mounted()) {
           setProcessedVotes(processedVotes)
           setProcessedVotesLoading(false)
         }
@@ -31,7 +31,7 @@ export function useDisputableVotes() {
         captureErrorWithSentry(err)
         console.error(err)
 
-        if (!cancelled) {
+        if (mounted()) {
           setProcessedVotes(null)
           setProcessedVotesLoading(false)
         }
@@ -41,26 +41,21 @@ export function useDisputableVotes() {
     if (!appsLoading && disputableVotingApp) {
       getExtendedVote()
     }
-
-    return () => {
-      cancelled = true
-    }
-  }, [appsLoading, disputableVotingApp])
+  }, [appsLoading, disputableVotingApp, mounted])
 
   return [processedVotes, processedVotesLoading]
 }
 
 export function useDisputableVote(proposalId) {
+  const mounted = useMounted()
   const { apps, disputableVotingApp, appsLoading } = useOrgApps()
   const { account } = useWallet()
   const [processedVote, setProcessedVote] = useState(null)
   const [processedVoteLoading, setProcessedVoteLoading] = useState(true)
 
   useEffect(() => {
-    let cancelled = false
-
     async function getExtendedVote() {
-      if (!cancelled) {
+      if (mounted()) {
         setProcessedVoteLoading(true)
       }
 
@@ -98,7 +93,7 @@ export function useDisputableVote(proposalId) {
           orgToken: orgToken,
         }
 
-        if (!cancelled) {
+        if (mounted()) {
           setProcessedVote(processedVote)
           setProcessedVoteLoading(false)
         }
@@ -106,7 +101,7 @@ export function useDisputableVote(proposalId) {
         captureErrorWithSentry(err)
         console.error(err)
 
-        if (!cancelled) {
+        if (mounted()) {
           setProcessedVote(null)
           setProcessedVoteLoading(false)
         }
@@ -116,11 +111,7 @@ export function useDisputableVote(proposalId) {
     if (!appsLoading && disputableVotingApp) {
       getExtendedVote()
     }
-
-    return () => {
-      cancelled = true
-    }
-  }, [apps, appsLoading, disputableVotingApp, proposalId, account])
+  }, [apps, appsLoading, disputableVotingApp, proposalId, mounted, account])
 
   return [processedVote, processedVoteLoading]
 }
