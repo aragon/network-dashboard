@@ -14,7 +14,7 @@ import { dateFormat, toMs } from '../../../utils/date-utils'
 
 function FeedbackModule({ vote, mode }) {
   const theme = useTheme()
-  const { collateralToken, submitterFee, challengerFee } = vote
+  const { collateralToken, challengerFee } = vote
   const pausedAt = toMs(vote.pausedAt)
   const settledAt = toMs(vote.settledAt)
 
@@ -78,7 +78,7 @@ function FeedbackModule({ vote, mode }) {
               </p>
             ) : (
               <p>
-                You acccepted the setttlement offer{' '}
+                You accepted the settlement offer{' '}
                 {settledAt > 0 && (
                   <>
                     on <Strong>{dateFormat(settledAt, 'standard')}</Strong>
@@ -87,10 +87,11 @@ function FeedbackModule({ vote, mode }) {
                 and your action collateral has been slashed{' '}
                 <Strong>
                   -
-                  {formatTokenAmount(
+                  {/* TODO: Fix this amount, it's returning null from connector */}
+                  {/* {formatTokenAmount(
                     submitterFee.amount,
                     submitterFee.tokenDecimals
-                  )}{' '}
+                  )}{' '} */}
                   {collateralToken.symbol}
                 </Strong>
                 . You can manage your deposit balances in{' '}
