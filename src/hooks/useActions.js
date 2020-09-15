@@ -11,15 +11,13 @@ export function useActions() {
 
   const signAgreement = useCallback(
     async ({ versionId }, onDone = noop) => {
-      try {
+      catchErrors(async () => {
         const intent = await agreementApp.sign(account, versionId)
 
         if (mounted()) {
           onDone(intent)
         }
-      } catch (err) {
-        console.error(err)
-      }
+      })
     },
     [account, agreementApp, mounted]
   )
@@ -29,7 +27,7 @@ export function useActions() {
       { actionId, settlementOffer, finishedEvidence, context },
       onDone = noop
     ) => {
-      try {
+      catchErrors(async () => {
         const intent = await agreementApp.challenge(
           actionId,
           settlementOffer,
@@ -41,31 +39,27 @@ export function useActions() {
         if (mounted()) {
           onDone(intent)
         }
-      } catch (err) {
-        console.error(err)
-      }
+      })
     },
     [account, agreementApp, mounted]
   )
 
   const settleDispute = useCallback(
     async ({ actionId }, onDone = noop) => {
-      try {
+      catchErrors(async () => {
         const intent = await agreementApp.settle(actionId, account)
 
         if (mounted()) {
           onDone(intent)
         }
-      } catch (err) {
-        console.error(err)
-      }
+      })
     },
     [account, agreementApp, mounted]
   )
 
   const voteOnProposal = useCallback(
     async ({ voteId, voteSupported }, onDone = noop) => {
-      try {
+      catchErrors(async () => {
         const intent = await disputableVotingApp.castVote(
           voteId,
           voteSupported,
@@ -75,9 +69,7 @@ export function useActions() {
         if (mounted()) {
           onDone(intent)
         }
-      } catch (err) {
-        console.error(err)
-      }
+      })
     },
     [account, disputableVotingApp, mounted]
   )
@@ -93,4 +85,12 @@ export function useActions() {
   )
 
   return actions
+}
+
+async function catchErrors(cb) {
+  try {
+    await cb()
+  } catch (err) {
+    console.error(err)
+  }
 }
