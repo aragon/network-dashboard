@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { captureErrorWithSentry } from '../sentry'
 import { useOrgApps } from '../providers/OrgApps'
+import { useWallet } from '../providers/Wallet'
+import { formatTokenAmount } from '@aragon/ui'
 import { useMounted } from '../hooks/useMounted'
 
 export function useDisputableVotes() {
@@ -47,6 +49,7 @@ export function useDisputableVotes() {
 export function useDisputableVote(proposalId) {
   const mounted = useMounted()
   const { apps, disputableVotingApp, appsLoading } = useOrgApps()
+  const { account } = useWallet()
   const [processedVote, setProcessedVote] = useState(null)
   const [processedVoteLoading, setProcessedVoteLoading] = useState(true)
 
@@ -61,18 +64,56 @@ export function useDisputableVote(proposalId) {
           `${disputableVotingApp.address}-vote-${proposalId}`
         )
 
-        const [collateral, settings] = await Promise.all([
+        const [
+          collateral,
+          settings,
+          orgToken,
+          submitterFee,
+          challengerFee,
+        ] = await Promise.all([
           vote.collateralRequirement(),
           vote.setting(),
+          vote.token(),
+          vote.submitterArbitratorFee(),
+          vote.challengerArbitratorFee(),
         ])
 
-        const token = await collateral.token()
+        const collateralToken = await collateral.token()
+
+        let voterInfo
+        if (account) {
+          const [
+            balance,
+            accountBalance,
+            hasVoted,
+            canExecute,
+            canVote,
+          ] = await Promise.all([
+            orgToken.balance(account),
+            vote.formattedVotingPower(account),
+            vote.castVote(account),
+            vote.canExecute(account),
+            vote.canVote(account),
+          ])
+
+          voterInfo = {
+            accountBalanceNow: formatTokenAmount(balance, orgToken.decimals),
+            accountBalance: accountBalance,
+            hasVoted: hasVoted,
+            canExecute: canExecute,
+            canVote: canVote,
+          }
+        }
 
         const processedVote = {
           ...processVote(vote),
+          voterInfo: voterInfo,
           settings: settings,
           collateral: collateral,
-          token: token,
+          collateralToken: collateralToken,
+          orgToken: orgToken,
+          submitterFee: submitterFee,
+          challengerFee: challengerFee,
         }
 
         if (mounted()) {
@@ -93,7 +134,7 @@ export function useDisputableVote(proposalId) {
     if (!appsLoading && disputableVotingApp) {
       getExtendedVote()
     }
-  }, [apps, appsLoading, disputableVotingApp, proposalId, mounted])
+  }, [apps, appsLoading, disputableVotingApp, proposalId, mounted, account])
 
   return [processedVote, processedVoteLoading]
 }

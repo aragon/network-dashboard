@@ -17,6 +17,7 @@ import DisputableStatusLabel from '../DisputableStatusLabel'
 import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_CANCELLED,
+  VOTE_STATUS_SCHEDULED,
   VOTE_STATUS_SETTLED,
   VOTE_STATUS_DISPUTED,
   VOTE_STATUS_CHALLENGED,
@@ -31,6 +32,8 @@ import SummaryRow from './SummaryRow'
 import StatusInfo from './StatusInfo'
 import FeedbackModule from './FeedbackModule'
 import Description from '../Description'
+import VoteActions from './VoteActions'
+import VoteCast from './VoteCast'
 import TargetAppBadge from '../TargetAppBadge'
 import { addressesEqual } from '../../../lib/web3-utils'
 import { getIpfsUrlFromUri } from '../../../lib/ipfs-utils'
@@ -39,9 +42,8 @@ import LoadingSkeleton from '../../Loading/LoadingSkeleton'
 import { useWallet } from '../../../providers/Wallet'
 
 function ProposalDetails({ vote }) {
-  const { voteId, id, script } = vote
+  const { voteId, id, script, voterInfo, orgToken } = vote
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
-
   const { boxPresentation, disabledProgressBars } = useMemo(() => {
     const disputablePresentation = {
       [VOTE_STATUS_CANCELLED]: {
@@ -65,8 +67,7 @@ function ProposalDetails({ vote }) {
     return disputablePresentation[disputableStatus] || {}
   }, [disputableStatus])
 
-  // TODO: get youVoted flag from connector
-  const youVoted = false
+  const accountHasVoted = voterInfo && voterInfo.hasVoted
 
   return (
     <LayoutColumns
@@ -87,7 +88,7 @@ function ProposalDetails({ vote }) {
               `}
             >
               <TargetAppBadge script={script} voteId={id} />
-              {youVoted && (
+              {accountHasVoted && (
                 <Tag icon={<IconCheck size="small" />} label="Voted" />
               )}
             </div>
@@ -104,6 +105,16 @@ function ProposalDetails({ vote }) {
               vote={vote}
               disabledProgressBars={disabledProgressBars}
             />
+            {accountHasVoted && (
+              <VoteCast
+                accountVote={voterInfo.hasVoted}
+                balance={voterInfo.accountBalance}
+                tokenSymbol={orgToken.symbol}
+              />
+            )}
+            {disputableStatus === VOTE_STATUS_SCHEDULED && (
+              <VoteActions vote={vote} />
+            )}
           </div>
         </LayoutBox>
       }
@@ -119,7 +130,7 @@ function ProposalDetails({ vote }) {
 
 /* eslint-disable react/prop-types */
 function Details({ vote, status }) {
-  const { context, creator, collateral, token, script } = vote
+  const { context, creator, collateral, collateralToken, script } = vote
   const {
     description,
     emptyScript,
@@ -200,10 +211,10 @@ function Details({ vote, status }) {
           `}
         >
           <TokenAmount
-            address={token.id}
+            address={collateralToken.id}
             amount={collateral.actionAmount}
-            decimals={token.decimals}
-            symbol={token.symbol}
+            decimals={collateralToken.decimals}
+            symbol={collateralToken.symbol}
           />
 
           <span
@@ -300,8 +311,8 @@ function SummaryInfo({ vote, disabledProgressBars }) {
             pct={yeasPct * 100}
             token={{
               amount: yeas,
-              symbol: 'ANT',
-              decimals: 18,
+              symbol: vote.orgToken.symbol,
+              decimals: vote.orgToken.decimals,
             }}
           />
           <SummaryRow
@@ -310,8 +321,8 @@ function SummaryInfo({ vote, disabledProgressBars }) {
             pct={naysPct * 100}
             token={{
               amount: nays,
-              symbol: 'ANT',
-              decimals: 18,
+              symbol: vote.orgToken.symbol,
+              decimals: vote.orgToken.decimals,
             }}
           />
         </div>
