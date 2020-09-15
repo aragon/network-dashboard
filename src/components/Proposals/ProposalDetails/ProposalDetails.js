@@ -43,8 +43,6 @@ import { useWallet } from '../../../providers/Wallet'
 
 function ProposalDetails({ vote }) {
   const { voteId, id, script, voterInfo, orgToken } = vote
-
-  console.log(vote)
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const { boxPresentation, disabledProgressBars } = useMemo(() => {
     const disputablePresentation = {
