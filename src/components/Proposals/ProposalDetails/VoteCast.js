@@ -1,9 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { GU, IconCheck, RADIUS, textStyle, useTheme } from '@aragon/ui'
-const VOTE_YEA = 'VOTE_YEA'
 
-function VoteCast({ accountVote, balance, tokenSymbol }) {
+function VoteCast({ voteSupported, balance, tokenSymbol }) {
   const theme = useTheme()
 
   return (
@@ -65,7 +64,7 @@ function VoteCast({ accountVote, balance, tokenSymbol }) {
                 text-transform: uppercase;
               `}
             >
-              {accountVote === VOTE_YEA ? 'yes' : 'no'}
+              {voteSupported ? 'yes' : 'no'}
             </span>{' '}
             with{' '}
             <span
@@ -85,7 +84,7 @@ function VoteCast({ accountVote, balance, tokenSymbol }) {
 }
 
 VoteCast.propTypes = {
-  accountVote: PropTypes.node,
+  voteSupported: PropTypes.bool,
   balance: PropTypes.string,
   tokenSymbol: PropTypes.string,
 }
