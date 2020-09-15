@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { captureErrorWithSentry } from '../sentry'
-
 import { useOrgApps } from '../providers/OrgApps'
+import { useWallet } from '../providers/Wallet'
+import { formatTokenAmount } from '@aragon/ui'
 
 export function useDisputableVotes() {
   const { disputableVotingApp, appsLoading } = useOrgApps()
@@ -51,6 +52,7 @@ export function useDisputableVotes() {
 
 export function useDisputableVote(proposalId) {
   const { apps, disputableVotingApp, appsLoading } = useOrgApps()
+  const { account } = useWallet()
   const [processedVote, setProcessedVote] = useState(null)
   const [processedVoteLoading, setProcessedVoteLoading] = useState(true)
 
@@ -67,18 +69,33 @@ export function useDisputableVote(proposalId) {
           `${disputableVotingApp.address}-vote-${proposalId}`
         )
 
-        const [collateral, settings] = await Promise.all([
+        const [collateral, settings, orgToken] = await Promise.all([
           vote.collateralRequirement(),
           vote.setting(),
+          vote.token(),
         ])
 
         const token = await collateral.token()
 
+        let voterInfo
+        if (account) {
+          const balance = await token.balance(account)
+          voterInfo = {
+            accountBalanceNow: formatTokenAmount(balance, orgToken.decimals),
+            accountBalance: await vote.formattedVotingPower(account),
+            hasVoted: await vote.castVote(account),
+            canExecute: await vote.canExecute(account),
+            canVote: await vote.canVote(account),
+          }
+        }
+
         const processedVote = {
           ...processVote(vote),
+          voterInfo: voterInfo,
           settings: settings,
           collateral: collateral,
           token: token,
+          orgToken: orgToken,
         }
 
         if (!cancelled) {
@@ -103,7 +120,7 @@ export function useDisputableVote(proposalId) {
     return () => {
       cancelled = true
     }
-  }, [apps, appsLoading, disputableVotingApp, proposalId])
+  }, [apps, appsLoading, disputableVotingApp, proposalId, account])
 
   return [processedVote, processedVoteLoading]
 }

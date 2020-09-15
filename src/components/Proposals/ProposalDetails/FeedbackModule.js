@@ -63,17 +63,17 @@ function FeedbackModule({ vote, mode }) {
               <p>
                 You challenged this action on{' '}
                 <Strong>{dateFormat(toMs(vote.pausedAt), 'standard')}</Strong>{' '}
-                and locked <Strong>100 ANT</Strong> as the action challenge
-                collateral. You can manage your deposit balances in{' '}
-                <Link href="">Stake Management</Link>.
+                and locked <Strong>100 {vote.orgToken.symbol}</Strong> as the
+                action challenge collateral. You can manage your deposit
+                balances in <Link href="">Stake Management</Link>.
               </p>
             ) : (
               <p>
                 You acccepted the setttlement offer on on{' '}
                 <Strong>2020/03/20, 5:30 PM (CET)</Strong>
                 and your action collateral has been slashed{' '}
-                <Strong>-100 ANT</Strong>. You can manage your deposit balances
-                in <Link href="">Stake Management</Link>.
+                <Strong>-100 {vote.orgToken.symbol}</Strong>. You can manage
+                your deposit balances in <Link href="">Stake Management</Link>.
               </p>
             )}
           </div>

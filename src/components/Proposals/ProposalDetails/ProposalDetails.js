@@ -33,6 +33,7 @@ import StatusInfo from './StatusInfo'
 import FeedbackModule from './FeedbackModule'
 import Description from '../Description'
 import VoteActions from './VoteActions'
+import VoteCast from './VoteCast'
 import { addressesEqual } from '../../../lib/web3-utils'
 import { getIpfsUrlFromUri } from '../../../lib/ipfs-utils'
 import { useDescribeVote } from '../../../hooks/useDescribeVote'
@@ -40,9 +41,8 @@ import LoadingSkeleton from '../../Loading/LoadingSkeleton'
 import { useWallet } from '../../../providers/Wallet'
 
 function ProposalDetails({ vote }) {
-  const { voteId } = vote
+  const { voteId, voterInfo, orgToken } = vote
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
-
   const { boxPresentation, disabledProgressBars } = useMemo(() => {
     const disputablePresentation = {
       [VOTE_STATUS_CANCELLED]: {
@@ -66,8 +66,7 @@ function ProposalDetails({ vote }) {
     return disputablePresentation[disputableStatus] || {}
   }, [disputableStatus])
 
-  // TODO: get youVoted flag from connector
-  const youVoted = false
+  const youVoted = voterInfo && voterInfo.hasVoted
 
   return (
     <LayoutColumns
@@ -103,6 +102,13 @@ function ProposalDetails({ vote }) {
               vote={vote}
               disabledProgressBars={disabledProgressBars}
             />
+            {youVoted && (
+              <VoteCast
+                accountVote={voterInfo.hasVoted}
+                balance={voterInfo.accountBalance}
+                tokenSymbol={orgToken.symbol}
+              />
+            )}
             <VoteActions
               vote={vote}
               onVoteYes={noop}
@@ -305,8 +311,8 @@ function SummaryInfo({ vote, disabledProgressBars }) {
             pct={yeasPct * 100}
             token={{
               amount: yeas,
-              symbol: 'ANT',
-              decimals: 18,
+              symbol: vote.orgToken.symbol,
+              decimals: vote.orgToken.decimals,
             }}
           />
           <SummaryRow
@@ -315,8 +321,8 @@ function SummaryInfo({ vote, disabledProgressBars }) {
             pct={naysPct * 100}
             token={{
               amount: nays,
-              symbol: 'ANT',
-              decimals: 18,
+              symbol: vote.orgToken.symbol,
+              decimals: vote.orgToken.decimals,
             }}
           />
         </div>
