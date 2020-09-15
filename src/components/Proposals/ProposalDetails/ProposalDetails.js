@@ -40,6 +40,7 @@ import { getIpfsUrlFromUri } from '../../../lib/ipfs-utils'
 import { useDescribeVote } from '../../../hooks/useDescribeVote'
 import LoadingSkeleton from '../../Loading/LoadingSkeleton'
 import { useWallet } from '../../../providers/Wallet'
+import { toMs } from '../../../utils/date-utils'
 
 function getPresentation(disputableStatus) {
   const disputablePresentation = {
@@ -288,7 +289,10 @@ function SummaryInfo({ vote, disabledProgressBars }) {
     mode = 'challenger'
   }
 
-  if (addressesEqual(vote.creator, connectedAccount)) {
+  if (
+    addressesEqual(vote.creator, connectedAccount) &&
+    toMs(vote.settledAt) > 0
+  ) {
     mode = 'submitter'
   }
 
