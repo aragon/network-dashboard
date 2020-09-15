@@ -14,7 +14,7 @@ import {
 import { addressesEqual } from '../../../lib/web3-utils'
 import { useWallet } from '../../../providers/Wallet'
 
-function DisputableActions({ status, submitter, onChallenge }) {
+function DisputableActions({ status, submitter, onChallenge, onSettle }) {
   const { account } = useWallet()
 
   const connectedAccountIsSubmitter = addressesEqual(submitter, account)
@@ -28,7 +28,8 @@ function DisputableActions({ status, submitter, onChallenge }) {
             margin-bottom: ${2 * GU}px;
           `}
           mode="strong"
-          disabled
+          disabled={!account}
+          onClick={onSettle}
           wide
           label="Accept settlement"
         />
@@ -71,10 +72,12 @@ DisputableActions.propTypes = {
   ]),
   submitter: PropTypes.string,
   onChallenge: PropTypes.func,
+  onSettle: PropTypes.func,
 }
 
 DisputableActions.defaultProps = {
   onChallenge: noop,
+  onSettle: noop,
 }
 
 export default DisputableActions

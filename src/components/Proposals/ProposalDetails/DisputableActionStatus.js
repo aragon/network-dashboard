@@ -6,15 +6,16 @@ import {
   VOTE_STATUS_SCHEDULED,
   VOTE_STATUS_CHALLENGED,
 } from '../disputable-vote-statuses'
+import ChallengeProposalScreens from '../../ModalFlows/ChallengeProposalScreens/ChallengeProposalScreens'
 import DisputableActions from './DisputableActions'
 import DisputablePeriod from './DisputablePeriod'
 import { durationToHours, toMs } from '../../../utils/date-utils'
-import { networkEnvironment } from '../../../current-environment'
 import MultiModal from '../../MultiModal/MultiModal'
-import ChallengeProposalScreens from '../../ModalFlows/ChallengeProposalScreens/ChallengeProposalScreens'
+import { networkEnvironment } from '../../../current-environment'
+import SettleProposalScreens from '../../ModalFlows/SettleProposalScreens/SettleProposalScreens'
 
 function DisputableActionStatus({ vote }) {
-  const [challengeModalVisible, setChallengeModalVisible] = useState(false)
+  const [modalMode, setModalMode] = useState(null)
   const theme = useTheme()
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const challenged = disputableStatus === VOTE_STATUS_CHALLENGED
@@ -97,17 +98,24 @@ function DisputableActionStatus({ vote }) {
             <DisputableActions
               status={disputableStatus}
               submitter={vote.creator}
-              onChallenge={() => setChallengeModalVisible(true)}
+              onChallenge={() => setModalMode('challenge')}
+              onSettle={() => setModalMode('settle')}
             />
           </Item>
         </ul>
       </Box>
 
       <MultiModal
-        visible={challengeModalVisible}
-        onClose={() => setChallengeModalVisible(false)}
+        visible={Boolean(modalMode)}
+        onClose={() => setModalMode(null)}
       >
-        <ChallengeProposalScreens actionId={vote.actionId} />
+        {modalMode === 'challenge' && (
+          <ChallengeProposalScreens actionId={vote.actionId} />
+        )}
+
+        {modalMode === 'settle' && (
+          <SettleProposalScreens actionId={vote.actionId} />
+        )}
       </MultiModal>
     </>
   )
