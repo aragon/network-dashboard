@@ -78,7 +78,7 @@ function FeedbackModule({ vote, mode }) {
               </p>
             ) : (
               <p>
-                You acccepted the setttlement offer on{' '}
+                You accepted the settlement offer on{' '}
                 <Strong>{dateFormat(settledAt, 'standard')}</Strong>
                 and your action collateral has been slashed{' '}
                 <Strong>
