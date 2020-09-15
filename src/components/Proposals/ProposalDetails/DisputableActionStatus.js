@@ -5,6 +5,7 @@ import {
   DISPUTABLE_VOTE_STATUSES,
   VOTE_STATUS_SCHEDULED,
   VOTE_STATUS_CHALLENGED,
+  VOTE_STATUS_DISPUTED,
 } from '../disputable-vote-statuses'
 import DisputableActions from './DisputableActions'
 import DisputablePeriod from './DisputablePeriod'
@@ -21,6 +22,7 @@ function DisputableActionStatus({ vote }) {
   const scheduled = disputableStatus === VOTE_STATUS_SCHEDULED
   const challengeEndDate = toMs(vote.challengeEndDate)
   const pausedAt = toMs(vote.pausedAt)
+  const settledAt = toMs(vote.settledAt)
   const voteEndDate = toMs(vote.endDate)
   const extendedPeriod = toMs(vote.currentQuietEndingExtensionDuration)
 
@@ -38,7 +40,7 @@ function DisputableActionStatus({ vote }) {
           {challengeEndDate !== 0 && (
             <Item heading="Settlement period">
               <DisputablePeriod
-                endDate={challengeEndDate}
+                endDate={settledAt > 0 ? settledAt : challengeEndDate}
                 paused={!challenged && challengeEndDate}
                 label={!challenged && 'Ended'}
               />
@@ -74,8 +76,22 @@ function DisputableActionStatus({ vote }) {
             <Item heading="Dispute">
               <Link
                 href={`${networkEnvironment.courtUrl}/#/disputes/${vote.disputeId}`}
+                css={`
+                  text-decoration: none;
+                `}
               >
-                Dispute #{vote.disputeId}
+                Dispute #{vote.disputeId}{' '}
+                <span
+                  css={`
+                    color: ${theme.surfaceContentSecondary};
+                  `}
+                >
+                  (
+                  {disputableStatus === VOTE_STATUS_DISPUTED
+                    ? 'Drafting jury'
+                    : 'Ruling executed'}
+                  )
+                </span>
               </Link>
             </Item>
           )}
