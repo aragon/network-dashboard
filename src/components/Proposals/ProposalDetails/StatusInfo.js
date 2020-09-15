@@ -14,7 +14,13 @@ function StatusInfo({ vote }) {
 
   const infoDescription = {
     [VOTE_STATUS_DISPUTED]: (
-      <InfoBox background="#FFEAEA" borderColor="#FF7C7C" color="#FF7C7C">
+      <InfoBox
+        css={`
+          background-color: #ffeaea;
+          color: #ff7c7c;
+          border-color: #ff7c7c;
+        `}
+      >
         This vote has been paused as the result of the originating action being
         challenged and raised to Aragon Court. When the dispute is resolved, if
         allowed, the voting period will be resumed for the remaining of its

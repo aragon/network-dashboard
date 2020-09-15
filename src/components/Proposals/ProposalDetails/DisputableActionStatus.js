@@ -14,12 +14,12 @@ import { networkEnvironment } from '../../../current-environment'
 
 function DisputableActionStatus({ vote }) {
   const theme = useTheme()
-  console.log(vote)
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const challenged = disputableStatus === VOTE_STATUS_CHALLENGED
   const scheduled = disputableStatus === VOTE_STATUS_SCHEDULED
   const challengeEndDate = toMs(vote.challengeEndDate)
   const pausedAt = toMs(vote.pausedAt)
+  const settledAt = toMs(vote.settledAt)
   const voteEndDate = toMs(vote.endDate)
   const extendedPeriod = toMs(vote.currentQuietEndingExtensionDuration)
 
@@ -36,11 +36,7 @@ function DisputableActionStatus({ vote }) {
         {challengeEndDate !== 0 && (
           <Item heading="Settlement period">
             <DisputablePeriod
-              endDate={
-                toMs(vote.settledAt) > 0
-                  ? toMs(vote.settledAt)
-                  : challengeEndDate
-              }
+              endDate={settledAt > 0 ? settledAt : challengeEndDate}
               paused={!challenged && challengeEndDate}
               label={!challenged && 'Ended'}
             />
