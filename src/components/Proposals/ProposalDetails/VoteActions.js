@@ -150,7 +150,7 @@ const VoteActions = React.memo(
 )
 
 /* eslint-disable react/prop-types */
-const Buttons = ({ onClickYes = noop, onClickNo = noop, disabled = false }) => (
+const Buttons = ({ onClickYes, onClickNo, disabled = false }) => (
   <div
     css={`
       display: flex;
@@ -239,6 +239,13 @@ VoteActions.propTypes = {
   onVoteNo: PropTypes.func,
   onExecute: PropTypes.func,
   onChangeVote: PropTypes.func,
+}
+
+VoteActions.defaultProps = {
+  onVoteYes: noop,
+  onVoteNo: noop,
+  onExecute: noop,
+  onChangeVote: noop,
 }
 
 export default VoteActions

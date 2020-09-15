@@ -11,7 +11,6 @@ import {
   textStyle,
   useLayout,
   useTheme,
-  noop,
 } from '@aragon/ui'
 import DisputableActionStatus from './DisputableActionStatus'
 import DisputableStatusLabel from '../DisputableStatusLabel'
@@ -109,12 +108,7 @@ function ProposalDetails({ vote }) {
                 tokenSymbol={orgToken.symbol}
               />
             )}
-            <VoteActions
-              vote={vote}
-              onVoteYes={noop}
-              onVoteNo={noop}
-              onExecute={noop}
-            />
+            <VoteActions vote={vote} />
           </div>
         </LayoutBox>
       }
