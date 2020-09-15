@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { Box, GU, Info, Link, textStyle, useTheme } from '@aragon/ui'
 import {
@@ -15,6 +15,7 @@ import { networkEnvironment } from '../../../current-environment'
 import SettleProposalScreens from '../../ModalFlows/SettleProposalScreens/SettleProposalScreens'
 
 function DisputableActionStatus({ vote }) {
+  const [modalVisible, setModalVisible] = useState(false)
   const [modalMode, setModalMode] = useState(null)
   const theme = useTheme()
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
@@ -24,6 +25,11 @@ function DisputableActionStatus({ vote }) {
   const pausedAt = toMs(vote.pausedAt)
   const voteEndDate = toMs(vote.endDate)
   const extendedPeriod = toMs(vote.currentQuietEndingExtensionDuration)
+
+  const handleShowModal = useCallback((mode) => {
+    setModalVisible(true)
+    setModalMode(mode)
+  }, [])
 
   return (
     <>
@@ -98,16 +104,17 @@ function DisputableActionStatus({ vote }) {
             <DisputableActions
               status={disputableStatus}
               submitter={vote.creator}
-              onChallenge={() => setModalMode('challenge')}
-              onSettle={() => setModalMode('settle')}
+              onChallenge={() => handleShowModal('challenge')}
+              onSettle={() => handleShowModal('settle')}
             />
           </Item>
         </ul>
       </Box>
 
       <MultiModal
-        visible={Boolean(modalMode)}
-        onClose={() => setModalMode(null)}
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onClosed={() => setModalMode(null)}
       >
         {modalMode === 'challenge' && (
           <ChallengeProposalScreens actionId={vote.actionId} />
