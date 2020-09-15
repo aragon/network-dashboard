@@ -64,17 +64,25 @@ export function useDisputableVote(proposalId) {
           `${disputableVotingApp.address}-vote-${proposalId}`
         )
 
-        const [collateral, settings, orgToken] = await Promise.all([
+        const [
+          collateral,
+          settings,
+          orgToken,
+          submitterFee,
+          challengerFee,
+        ] = await Promise.all([
           vote.collateralRequirement(),
           vote.setting(),
           vote.token(),
+          vote.submitterArbitratorFee(),
+          vote.challengerArbitratorFee(),
         ])
 
-        const token = await collateral.token()
+        const collateralToken = await collateral.token()
 
         let voterInfo
         if (account) {
-          const balance = await token.balance(account)
+          const balance = await orgToken.balance(account)
           voterInfo = {
             accountBalanceNow: formatTokenAmount(balance, orgToken.decimals),
             accountBalance: await vote.formattedVotingPower(account),
@@ -89,8 +97,10 @@ export function useDisputableVote(proposalId) {
           voterInfo: voterInfo,
           settings: settings,
           collateral: collateral,
-          token: token,
+          collateralToken: collateralToken,
           orgToken: orgToken,
+          submitterFee: submitterFee,
+          challengerFee: challengerFee,
         }
 
         if (mounted()) {

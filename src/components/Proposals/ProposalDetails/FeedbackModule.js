@@ -8,12 +8,15 @@ import {
   RADIUS,
   textStyle,
   useTheme,
+  formatTokenAmount,
 } from '@aragon/ui'
 import { dateFormat, toMs } from '../../../utils/date-utils'
 
 function FeedbackModule({ vote, mode }) {
-  // TODO: Replace dates and amounts with real data
   const theme = useTheme()
+  const { collateralToken, submitterFee, challengerFee } = vote
+  const pausedAt = toMs(vote.pausedAt)
+  const settledAt = toMs(vote.settledAt)
 
   return (
     <div
@@ -62,18 +65,36 @@ function FeedbackModule({ vote, mode }) {
             {mode === 'challenger' ? (
               <p>
                 You challenged this action on{' '}
-                <Strong>{dateFormat(toMs(vote.pausedAt), 'standard')}</Strong>{' '}
-                and locked <Strong>100 {vote.orgToken.symbol}</Strong> as the
-                action challenge collateral. You can manage your deposit
+                <Strong>{dateFormat(pausedAt, 'standard')}</Strong> and locked{' '}
+                <Strong>
+                  {formatTokenAmount(
+                    challengerFee.amount,
+                    challengerFee.tokenDecimals
+                  )}{' '}
+                  {collateralToken.symbol}
+                </Strong>{' '}
+                as the action challenge collateral. You can manage your deposit
                 balances in <Link href="">Stake Management</Link>.
               </p>
             ) : (
               <p>
-                You acccepted the setttlement offer on on{' '}
-                <Strong>2020/03/20, 5:30 PM (CET)</Strong>
+                You acccepted the setttlement offer on{' '}
+                {settledAt > 0 && (
+                  <>
+                    on <Strong>{dateFormat(settledAt, 'standard')}</Strong>
+                  </>
+                )}
                 and your action collateral has been slashed{' '}
-                <Strong>-100 {vote.orgToken.symbol}</Strong>. You can manage
-                your deposit balances in <Link href="">Stake Management</Link>.
+                <Strong>
+                  -
+                  {formatTokenAmount(
+                    submitterFee.amount,
+                    submitterFee.tokenDecimals
+                  )}{' '}
+                  {collateralToken.symbol}
+                </Strong>
+                . You can manage your deposit balances in{' '}
+                <Link href="">Stake Management</Link>.
               </p>
             )}
           </div>
