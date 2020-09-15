@@ -43,6 +43,8 @@ import { useWallet } from '../../../providers/Wallet'
 import { toMs } from '../../../utils/date-utils'
 import MultiModal from '../../MultiModal/MultiModal'
 import VoteOnProposalScreens from '../../ModalFlows/VoteOnProposalScreens/VoteOnProposalScreens'
+import ChallengeProposalScreens from '../../ModalFlows/ChallengeProposalScreens/ChallengeProposalScreens'
+import SettleProposalScreens from '../../ModalFlows/SettleProposalScreens/SettleProposalScreens'
 
 function getPresentation(disputableStatus) {
   const disputablePresentation = {
@@ -68,9 +70,10 @@ function getPresentation(disputableStatus) {
 }
 
 function ProposalDetails({ vote }) {
-  const [voteModalVisible, setVoteModalVisible] = useState(false)
+  const [modalVisible, setModalVisible] = useState(false)
+  const [modalMode, setModalMode] = useState(null)
   const [voteSupported, setVoteSupported] = useState(false)
-  const { voteId, id, script, voterInfo, orgToken } = vote
+  const { actionId, voteId, id, script, voterInfo, orgToken } = vote
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
 
   const { boxPresentation, disabledProgressBars } = useMemo(
@@ -78,10 +81,18 @@ function ProposalDetails({ vote }) {
     [disputableStatus]
   )
 
-  const handleCastVote = useCallback((supports) => {
-    setVoteModalVisible(true)
-    setVoteSupported(supports)
+  const handleShowModal = useCallback((mode) => {
+    setModalVisible(true)
+    setModalMode(mode)
   }, [])
+
+  const handleCastVote = useCallback(
+    (supports) => {
+      handleShowModal('vote')
+      setVoteSupported(supports)
+    },
+    [handleShowModal]
+  )
 
   const accountHasVoted = voterInfo && voterInfo.hasVoted
   const showVoteActions =
@@ -143,7 +154,11 @@ function ProposalDetails({ vote }) {
         }
         secondary={
           <>
-            <DisputableActionStatus vote={vote} />
+            <DisputableActionStatus
+              vote={vote}
+              onSettle={() => handleShowModal('settle')}
+              onChallenge={() => handleShowModal('challenge')}
+            />
             <InfoBoxes
               vote={vote}
               disabledProgressBars={disabledProgressBars}
@@ -152,10 +167,24 @@ function ProposalDetails({ vote }) {
         }
       />
       <MultiModal
-        visible={voteModalVisible}
-        onClose={() => setVoteModalVisible(false)}
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onClosed={() => setModalMode(null)}
       >
-        <VoteOnProposalScreens voteId={voteId} voteSupported={voteSupported} />
+        {modalMode === 'vote' && (
+          <VoteOnProposalScreens
+            voteId={voteId}
+            voteSupported={voteSupported}
+          />
+        )}
+
+        {modalMode === 'challenge' && (
+          <ChallengeProposalScreens actionId={actionId} />
+        )}
+
+        {modalMode === 'settle' && (
+          <SettleProposalScreens actionId={actionId} />
+        )}
       </MultiModal>
     </>
   )

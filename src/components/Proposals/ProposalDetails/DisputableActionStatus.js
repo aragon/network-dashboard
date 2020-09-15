@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { Box, GU, Info, Link, textStyle, useTheme } from '@aragon/ui'
 import {
@@ -7,17 +7,12 @@ import {
   VOTE_STATUS_CHALLENGED,
   VOTE_STATUS_DISPUTED,
 } from '../disputable-vote-statuses'
-import ChallengeProposalScreens from '../../ModalFlows/ChallengeProposalScreens/ChallengeProposalScreens'
 import DisputableActions from './DisputableActions'
 import DisputablePeriod from './DisputablePeriod'
 import { durationToHours, toMs } from '../../../utils/date-utils'
-import MultiModal from '../../MultiModal/MultiModal'
 import { networkEnvironment } from '../../../current-environment'
-import SettleProposalScreens from '../../ModalFlows/SettleProposalScreens/SettleProposalScreens'
 
-function DisputableActionStatus({ vote }) {
-  const [modalVisible, setModalVisible] = useState(false)
-  const [modalMode, setModalMode] = useState(null)
+function DisputableActionStatus({ vote, onChallenge, onSettle }) {
   const theme = useTheme()
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const challenged = disputableStatus === VOTE_STATUS_CHALLENGED
@@ -28,119 +23,98 @@ function DisputableActionStatus({ vote }) {
   const voteEndDate = toMs(vote.endDate)
   const extendedPeriod = toMs(vote.currentQuietEndingExtensionDuration)
 
-  const handleShowModal = useCallback((mode) => {
-    setModalVisible(true)
-    setModalMode(mode)
-  }, [])
-
   return (
-    <>
-      <Box heading="Disputable Action Status">
-        <ul>
-          <Item heading="Challenge period">
+    <Box heading="Disputable Action Status">
+      <ul>
+        <Item heading="Challenge period">
+          <DisputablePeriod
+            endDate={voteEndDate}
+            paused={pausedAt !== 0 && pausedAt}
+            label={pausedAt !== 0 && 'Paused'}
+          />
+        </Item>
+        {challengeEndDate !== 0 && (
+          <Item heading="Settlement period">
             <DisputablePeriod
-              endDate={voteEndDate}
-              paused={pausedAt !== 0 && pausedAt}
-              label={pausedAt !== 0 && 'Paused'}
+              endDate={settledAt > 0 ? settledAt : challengeEndDate}
+              paused={!challenged && challengeEndDate}
+              label={!challenged && 'Ended'}
             />
           </Item>
-          {challengeEndDate !== 0 && (
-            <Item heading="Settlement period">
-              <DisputablePeriod
-                endDate={settledAt > 0 ? settledAt : challengeEndDate}
-                paused={!challenged && challengeEndDate}
-                label={!challenged && 'Ended'}
-              />
-            </Item>
-          )}
-          {scheduled && vote.settings.quietEndingPeriod && (
-            <Item heading="Quiet ending period">
-              <span>
-                Last {durationToHours(toMs(vote.settings.quietEndingPeriod))}{' '}
-              </span>
+        )}
+        {scheduled && vote.settings.quietEndingPeriod && (
+          <Item heading="Quiet ending period">
+            <span>
+              Last {durationToHours(toMs(vote.settings.quietEndingPeriod))}{' '}
+            </span>
+            <span
+              css={`
+                color: ${theme.surfaceContentSecondary};
+              `}
+            >
+              Hours
+            </span>
+          </Item>
+        )}
+        {scheduled && extendedPeriod > 0 && (
+          <Item heading="Quiet ending extension">
+            <span>{durationToHours(extendedPeriod)} </span>
+            <span
+              css={`
+                color: ${theme.surfaceContentSecondary};
+              `}
+            >
+              Hours
+            </span>
+          </Item>
+        )}
+        {vote.disputeId && (
+          <Item heading="Dispute">
+            <Link
+              href={`${networkEnvironment.courtUrl}/#/disputes/${vote.disputeId}`}
+              css={`
+                text-decoration: none;
+              `}
+            >
+              Dispute #{vote.disputeId}{' '}
               <span
                 css={`
                   color: ${theme.surfaceContentSecondary};
                 `}
               >
-                Hours
+                (
+                {disputableStatus === VOTE_STATUS_DISPUTED
+                  ? 'Drafting jury'
+                  : 'Ruling executed'}
+                )
               </span>
-            </Item>
-          )}
-          {scheduled && extendedPeriod > 0 && (
-            <Item heading="Quiet ending extension">
-              <span>{durationToHours(extendedPeriod)} </span>
-              <span
-                css={`
-                  color: ${theme.surfaceContentSecondary};
-                `}
-              >
-                Hours
-              </span>
-            </Item>
-          )}
-          {vote.disputeId && (
-            <Item heading="Dispute">
-              <Link
-                href={`${networkEnvironment.courtUrl}/#/disputes/${vote.disputeId}`}
-                css={`
-                  text-decoration: none;
-                `}
-              >
-                Dispute #{vote.disputeId}{' '}
-                <span
-                  css={`
-                    color: ${theme.surfaceContentSecondary};
-                  `}
-                >
-                  (
-                  {disputableStatus === VOTE_STATUS_DISPUTED
-                    ? 'Drafting jury'
-                    : 'Ruling executed'}
-                  )
-                </span>
-              </Link>
-            </Item>
-          )}
-          {scheduled && (
-            <Item>
-              {parseInt(vote.pausedAt, 10) === 0 ? (
-                <Info>
-                  The proposed action will be automatically executed if nobody
-                  challenges it during the challenge period and the result of
-                  the vote is cast with majority support.
-                </Info>
-              ) : (
-                <Info>The proposed action cannot longer be challenged.</Info>
-              )}
-            </Item>
-          )}
-
+            </Link>
+          </Item>
+        )}
+        {scheduled && (
           <Item>
-            <DisputableActions
-              status={disputableStatus}
-              submitter={vote.creator}
-              onChallenge={() => handleShowModal('challenge')}
-              onSettle={() => handleShowModal('settle')}
-            />
+            {parseInt(vote.pausedAt, 10) === 0 ? (
+              <Info>
+                The proposed action will be automatically executed if nobody
+                challenges it during the challenge period and the result of the
+                vote is cast with majority support.
+              </Info>
+            ) : (
+              <Info>The proposed action cannot longer be challenged.</Info>
+            )}
           </Item>
-        </ul>
-      </Box>
-
-      <MultiModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        onClosed={() => setModalMode(null)}
-      >
-        {modalMode === 'challenge' && (
-          <ChallengeProposalScreens actionId={vote.actionId} />
         )}
 
-        {modalMode === 'settle' && (
-          <SettleProposalScreens actionId={vote.actionId} />
-        )}
-      </MultiModal>
-    </>
+        <Item>
+          <DisputableActions
+            status={disputableStatus}
+            submitter={vote.creator}
+            onChallenge={onChallenge}
+            onSettle={onSettle}
+          />
+        </Item>
+      </ul>
+    </Box>
   )
 }
 
@@ -176,6 +150,8 @@ function Item({ heading, children }) {
 
 DisputableActionStatus.propTypes = {
   vote: PropTypes.object.isRequired,
+  onChallenge: PropTypes.func.isRequired,
+  onSettle: PropTypes.func.isRequired,
 }
 
 export default DisputableActionStatus
