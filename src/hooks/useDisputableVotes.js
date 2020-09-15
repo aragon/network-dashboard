@@ -82,13 +82,26 @@ export function useDisputableVote(proposalId) {
 
         let voterInfo
         if (account) {
-          const balance = await orgToken.balance(account)
+          const [
+            balance,
+            accountBalance,
+            hasVoted,
+            canExecute,
+            canVote,
+          ] = await Promise.all([
+            orgToken.balance(account),
+            vote.formattedVotingPower(account),
+            vote.castVote(account),
+            vote.canExecute(account),
+            vote.canVote(account),
+          ])
+
           voterInfo = {
             accountBalanceNow: formatTokenAmount(balance, orgToken.decimals),
-            accountBalance: await vote.formattedVotingPower(account),
-            hasVoted: await vote.castVote(account),
-            canExecute: await vote.canExecute(account),
-            canVote: await vote.canVote(account),
+            accountBalance: accountBalance,
+            hasVoted: hasVoted,
+            canExecute: canExecute,
+            canVote: canVote,
           }
         }
 

@@ -20,7 +20,7 @@ function VoteActions({ vote, onVoteYes, onVoteNo, onExecute, onChangeVote }) {
   const { account } = useWallet()
   const { snapshotBlock, startDate, hasEnded, voterInfo, orgToken } = vote
 
-  if (!account) {
+  if (!account || !voterInfo) {
     return (
       <div
         css={`
