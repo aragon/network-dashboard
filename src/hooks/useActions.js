@@ -9,7 +9,6 @@ export function useActions() {
   const { account } = useWallet()
   const { agreementApp } = useOrgApps()
 
-  // Sign the Agreement
   const signAgreement = useCallback(
     async ({ versionId }, onDone = noop) => {
       try {
@@ -25,8 +24,7 @@ export function useActions() {
     [account, agreementApp, mounted]
   )
 
-  // Challenge a proposal
-  const challenge = useCallback(
+  const challengeProposal = useCallback(
     async (
       { actionId, settlementOffer, finishedEvidence, context },
       onDone = noop
@@ -50,12 +48,28 @@ export function useActions() {
     [account, agreementApp, mounted]
   )
 
+  const settleDispute = useCallback(
+    async ({ actionId }, onDone = noop) => {
+      try {
+        const intent = await agreementApp.settle(actionId, account)
+
+        if (mounted()) {
+          onDone(intent)
+        }
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    [account, agreementApp, mounted]
+  )
+
   const actions = useMemo(
     () => ({
       signAgreement,
-      challenge,
+      challengeProposal,
+      settleDispute,
     }),
-    [signAgreement, challenge]
+    [signAgreement, challengeProposal, settleDispute]
   )
 
   return actions

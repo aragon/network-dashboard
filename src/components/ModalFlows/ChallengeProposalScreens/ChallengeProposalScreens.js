@@ -4,14 +4,14 @@ import ModalFlowBase from '../ModalFlowBase'
 import { useActions } from '../../../hooks/useActions'
 
 function ChallengeProposalScreens({ actionId }) {
-  const { challenge } = useActions()
+  const { challengeProposal } = useActions()
   const [transactions, setTransactions] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function getTransactions() {
       // TODO: Replace happy path defaults
-      await challenge(
+      await challengeProposal(
         {
           actionId: actionId,
           settlementOffer: '0',
@@ -26,7 +26,7 @@ function ChallengeProposalScreens({ actionId }) {
     }
 
     getTransactions()
-  }, [actionId, challenge])
+  }, [actionId, challengeProposal])
 
   return (
     <ModalFlowBase
