@@ -73,7 +73,7 @@ function ProposalDetails({ vote }) {
   const [modalVisible, setModalVisible] = useState(false)
   const [modalMode, setModalMode] = useState(null)
   const [voteSupported, setVoteSupported] = useState(false)
-  const { voteId, id, script, voterInfo, orgToken } = vote
+  const { actionId, voteId, id, script, voterInfo, orgToken } = vote
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
 
   const { boxPresentation, disabledProgressBars } = useMemo(
@@ -179,11 +179,11 @@ function ProposalDetails({ vote }) {
         )}
 
         {modalMode === 'challenge' && (
-          <ChallengeProposalScreens actionId={vote.actionId} />
+          <ChallengeProposalScreens actionId={actionId} />
         )}
 
         {modalMode === 'settle' && (
-          <SettleProposalScreens actionId={vote.actionId} />
+          <SettleProposalScreens actionId={actionId} />
         )}
       </MultiModal>
     </>
