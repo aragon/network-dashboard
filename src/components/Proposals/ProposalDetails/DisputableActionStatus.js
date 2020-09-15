@@ -24,95 +24,97 @@ function DisputableActionStatus({ vote }) {
   const extendedPeriod = toMs(vote.currentQuietEndingExtensionDuration)
 
   return (
-    <Box heading="Disputable Action Status">
-      <ul>
-        <Item heading="Challenge period">
-          <DisputablePeriod
-            endDate={voteEndDate}
-            paused={pausedAt !== 0 && pausedAt}
-            label={pausedAt !== 0 && 'Paused'}
-          />
-        </Item>
-        {challengeEndDate !== 0 && (
-          <Item heading="Settlement period">
+    <>
+      <Box heading="Disputable Action Status">
+        <ul>
+          <Item heading="Challenge period">
             <DisputablePeriod
-              endDate={settledAt > 0 ? settledAt : challengeEndDate}
-              paused={!challenged && challengeEndDate}
-              label={!challenged && 'Ended'}
+              endDate={voteEndDate}
+              paused={pausedAt !== 0 && pausedAt}
+              label={pausedAt !== 0 && 'Paused'}
             />
           </Item>
-        )}
-        {scheduled && vote.settings.quietEndingPeriod && (
-          <Item heading="Quiet ending period">
-            <span>
-              Last {durationToHours(toMs(vote.settings.quietEndingPeriod))}{' '}
-            </span>
-            <span
-              css={`
-                color: ${theme.surfaceContentSecondary};
-              `}
-            >
-              Hours
-            </span>
-          </Item>
-        )}
-        {scheduled && extendedPeriod > 0 && (
-          <Item heading="Quiet ending extension">
-            <span>{durationToHours(extendedPeriod)} </span>
-            <span
-              css={`
-                color: ${theme.surfaceContentSecondary};
-              `}
-            >
-              Hours
-            </span>
-          </Item>
-        )}
-        {vote.disputeId && (
-          <Item heading="Dispute">
-            <Link
-              href={`${networkEnvironment.courtUrl}/#/disputes/${vote.disputeId}`}
-              css={`
-                text-decoration: none;
-              `}
-            >
-              Dispute #{vote.disputeId}{' '}
+          {challengeEndDate !== 0 && (
+            <Item heading="Settlement period">
+              <DisputablePeriod
+                endDate={settledAt > 0 ? settledAt : challengeEndDate}
+                paused={!challenged && challengeEndDate}
+                label={!challenged && 'Ended'}
+              />
+            </Item>
+          )}
+          {scheduled && vote.settings.quietEndingPeriod && (
+            <Item heading="Quiet ending period">
+              <span>
+                Last {durationToHours(toMs(vote.settings.quietEndingPeriod))}{' '}
+              </span>
               <span
                 css={`
                   color: ${theme.surfaceContentSecondary};
                 `}
               >
-                (
-                {disputableStatus === VOTE_STATUS_DISPUTED
-                  ? 'Drafting jury'
-                  : 'Ruling executed'}
-                )
+                Hours
               </span>
-            </Link>
-          </Item>
-        )}
-        {scheduled && (
-          <Item>
-            {parseInt(vote.pausedAt, 10) === 0 ? (
-              <Info>
-                The proposed action will be automatically executed if nobody
-                challenges it during the challenge period and the result of the
-                vote is cast with majority support.
-              </Info>
-            ) : (
-              <Info>The proposed action cannot longer be challenged.</Info>
-            )}
-          </Item>
-        )}
+            </Item>
+          )}
+          {scheduled && extendedPeriod > 0 && (
+            <Item heading="Quiet ending extension">
+              <span>{durationToHours(extendedPeriod)} </span>
+              <span
+                css={`
+                  color: ${theme.surfaceContentSecondary};
+                `}
+              >
+                Hours
+              </span>
+            </Item>
+          )}
+          {vote.disputeId && (
+            <Item heading="Dispute">
+              <Link
+                href={`${networkEnvironment.courtUrl}/#/disputes/${vote.disputeId}`}
+                css={`
+                  text-decoration: none;
+                `}
+              >
+                Dispute #{vote.disputeId}{' '}
+                <span
+                  css={`
+                    color: ${theme.surfaceContentSecondary};
+                  `}
+                >
+                  (
+                  {disputableStatus === VOTE_STATUS_DISPUTED
+                    ? 'Drafting jury'
+                    : 'Ruling executed'}
+                  )
+                </span>
+              </Link>
+            </Item>
+          )}
+          {scheduled && (
+            <Item>
+              {parseInt(vote.pausedAt, 10) === 0 ? (
+                <Info>
+                  The proposed action will be automatically executed if nobody
+                  challenges it during the challenge period and the result of
+                  the vote is cast with majority support.
+                </Info>
+              ) : (
+                <Info>The proposed action cannot longer be challenged.</Info>
+              )}
+            </Item>
+          )}
 
-        <Item>
-          <DisputableActions
-            status={disputableStatus}
-            submitter={vote.creator}
-          />
-        </Item>
-      </ul>
-    </Box>
+          <Item>
+            <DisputableActions
+              status={disputableStatus}
+              submitter={vote.creator}
+            />
+          </Item>
+        </ul>
+      </Box>
+    </>
   )
 }
 
