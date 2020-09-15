@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { noop } from '@aragon/ui'
 import { Inside } from 'use-inside'
 
-function MultiModal({ visible, onClose, children }) {
+function MultiModal({ visible, onClose, onClosed, children }) {
   const [render, setRender] = useState(visible)
 
   useEffect(() => {
@@ -14,8 +14,11 @@ function MultiModal({ visible, onClose, children }) {
 
   const handleOnClosed = useCallback(() => {
     // Ensure react-spring has properly cleaned up state prior to unmount
-    setTimeout(() => setRender(false))
-  }, [setRender])
+    setTimeout(() => {
+      onClosed()
+      setRender(false)
+    })
+  }, [setRender, onClosed])
 
   return (
     <>
@@ -30,12 +33,14 @@ function MultiModal({ visible, onClose, children }) {
 
 MultiModal.propTypes = {
   onClose: PropTypes.func,
+  onClosed: PropTypes.func,
   visible: PropTypes.bool,
   children: PropTypes.node,
 }
 
 MultiModal.defaultProps = {
   onClose: noop,
+  onClosed: noop,
 }
 
 export default MultiModal

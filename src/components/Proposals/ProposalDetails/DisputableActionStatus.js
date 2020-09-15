@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { Box, GU, Info, Link, textStyle, useTheme } from '@aragon/ui'
 import {
@@ -7,15 +7,17 @@ import {
   VOTE_STATUS_CHALLENGED,
   VOTE_STATUS_DISPUTED,
 } from '../disputable-vote-statuses'
+import ChallengeProposalScreens from '../../ModalFlows/ChallengeProposalScreens/ChallengeProposalScreens'
 import DisputableActions from './DisputableActions'
 import DisputablePeriod from './DisputablePeriod'
 import { durationToHours, toMs } from '../../../utils/date-utils'
-import { networkEnvironment } from '../../../current-environment'
 import MultiModal from '../../MultiModal/MultiModal'
-import ChallengeProposalScreens from '../../ModalFlows/ChallengeProposalScreens/ChallengeProposalScreens'
+import { networkEnvironment } from '../../../current-environment'
+import SettleProposalScreens from '../../ModalFlows/SettleProposalScreens/SettleProposalScreens'
 
 function DisputableActionStatus({ vote }) {
-  const [challengeModalVisible, setChallengeModalVisible] = useState(false)
+  const [modalVisible, setModalVisible] = useState(false)
+  const [modalMode, setModalMode] = useState(null)
   const theme = useTheme()
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const challenged = disputableStatus === VOTE_STATUS_CHALLENGED
@@ -25,6 +27,11 @@ function DisputableActionStatus({ vote }) {
   const settledAt = toMs(vote.settledAt)
   const voteEndDate = toMs(vote.endDate)
   const extendedPeriod = toMs(vote.currentQuietEndingExtensionDuration)
+
+  const handleShowModal = useCallback((mode) => {
+    setModalVisible(true)
+    setModalMode(mode)
+  }, [])
 
   return (
     <>
@@ -113,17 +120,25 @@ function DisputableActionStatus({ vote }) {
             <DisputableActions
               status={disputableStatus}
               submitter={vote.creator}
-              onChallenge={() => setChallengeModalVisible(true)}
+              onChallenge={() => handleShowModal('challenge')}
+              onSettle={() => handleShowModal('settle')}
             />
           </Item>
         </ul>
       </Box>
 
       <MultiModal
-        visible={challengeModalVisible}
-        onClose={() => setChallengeModalVisible(false)}
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onClosed={() => setModalMode(null)}
       >
-        <ChallengeProposalScreens actionId={vote.actionId} />
+        {modalMode === 'challenge' && (
+          <ChallengeProposalScreens actionId={vote.actionId} />
+        )}
+
+        {modalMode === 'settle' && (
+          <SettleProposalScreens actionId={vote.actionId} />
+        )}
       </MultiModal>
     </>
   )
