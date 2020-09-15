@@ -13,7 +13,7 @@ function SignAgreementScreens() {
 
   const getTransactions = useCallback(
     async (onComplete) => {
-      await signAgreement(versionId, (intent) => {
+      await signAgreement({ versionId }, (intent) => {
         setTransactions(intent.transactions)
         onComplete()
       })
