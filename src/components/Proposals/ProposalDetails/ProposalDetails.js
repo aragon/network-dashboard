@@ -71,14 +71,9 @@ function ProposalDetails({ vote }) {
   const [voteSupported, setVoteSupported] = useState(null)
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
 
-  const handleVoteYes = useCallback(() => {
+  const handleCastVote = useCallback((supported) => {
     setVoteModalVisible(true)
-    setVoteSupported(true)
-  }, [])
-
-  const handleVoteNo = useCallback(() => {
-    setVoteModalVisible(true)
-    setVoteSupported(false)
+    setVoteSupported(supported)
   }, [])
 
   const handleModalClose = useCallback(() => {
@@ -142,10 +137,18 @@ function ProposalDetails({ vote }) {
           </>
         }
       />
-      <Button mode="strong" disabled={!account} onClick={handleVoteYes}>
+      <Button
+        mode="strong"
+        disabled={!account}
+        onClick={() => handleCastVote(true)}
+      >
         Vote Yes
       </Button>
-      <Button mode="strong" disabled={!account} onClick={handleVoteNo}>
+      <Button
+        mode="strong"
+        disabled={!account}
+        onClick={() => handleCastVote(false)}
+      >
         Vote No
       </Button>
       <MultiModal visible={voteModalVisible} onClose={handleModalClose}>

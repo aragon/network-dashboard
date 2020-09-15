@@ -38,11 +38,18 @@ function ModalFlowBase({
             return {
               // TODO: Add titles from description
               title,
-              handleSign: async ({ setSuccess, setError, setHash }) => {
+              handleSign: async ({
+                setSuccess,
+                setWorking,
+                setError,
+                setHash,
+              }) => {
                 try {
                   const tx = await signer.sendTransaction(transaction)
 
                   setHash(tx.hash)
+
+                  setWorking()
 
                   // We need to wait for pre-transactions to mine before asking for the next signature
                   // TODO: Provide a better user experience than waiting on all transactions
