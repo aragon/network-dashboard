@@ -36,7 +36,9 @@ function VotesSubscriptionProvider({ children }) {
 
   const VotesSubscriptionState = useMemo(() => {
     return { votes, loading }
+    /* eslint-disable react-hooks/exhaustive-deps */
   }, [votesDependency, loading])
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   return (
     <VotesSubscriptionContext.Provider value={VotesSubscriptionState}>
