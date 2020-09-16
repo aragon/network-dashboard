@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { useHistory } from 'react-router-dom'
 import { BackButton, Bar, Header } from '@aragon/ui'
@@ -6,24 +6,13 @@ import LayoutGutter from '../Layout/LayoutGutter'
 import LayoutLimiter from '../Layout/LayoutLimiter'
 import LoadingSection from '../Loading/LoadingSection'
 import ProposalDetails from './ProposalDetails/ProposalDetails'
-import { useSingleVote } from '../../hooks/useSingleVote'
-import { ProposalNotFound } from '../../errors'
+import { useVoteSingle } from '../../hooks/useVoteSingle'
 
 const ProposalSingle = React.memo(function ProposalSingle({ match }) {
   const { id: proposalId } = match.params
   const history = useHistory()
 
-  console.log('hello')
-
-  const [vote, loading] = useSingleVote(proposalId)
-
-  // Throw to boundary if vote doesn't exist
-  // TODO: Add a better check once we have access to the errors in connect
-  useEffect(() => {
-    if (!vote && !loading) {
-      throw new ProposalNotFound(proposalId)
-    }
-  }, [proposalId, vote, loading])
+  const [vote, loading] = useVoteSingle(proposalId)
 
   const handleBack = useCallback(() => {
     history.push(`/proposals`)

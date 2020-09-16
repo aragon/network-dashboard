@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { networkEnvironment } from '../current-environment'
 import { createAppHook, useApp } from '@aragon/connect-react'
 import { formatTokenAmount } from '@aragon/ui'
 import connectVoting from '@aragon/connect-disputable-voting'
 import { useWallet } from '../providers/Wallet'
 import { useMounted } from '../hooks/useMounted'
+import { ProposalNotFound } from '../errors'
 
 const VOTING_SUBGRAPH_URL = networkEnvironment.subgraphs?.disputableVoting
 
@@ -13,48 +14,53 @@ const votingConnecterConfig = VOTING_SUBGRAPH_URL && [
   { subgraphUrl: VOTING_SUBGRAPH_URL },
 ]
 
-const useDisputableVoting = createAppHook(connectVoting, votingConnecterConfig)
+const useVoting = createAppHook(connectVoting, votingConnecterConfig)
 
-export function useSingleVote(proposalId) {
-  const mounted = useMounted()
+function useVoteSubscription(proposalId) {
   const { account } = useWallet()
-  const [votingApp, votingAppStatus] = useApp('disputable-voting')
-  const [vote, votesStatus] = useDisputableVoting(
+  const [votingApp] = useApp('disputable-voting')
+  const [
+    vote,
+    { loading: voteLoading, error: voteError },
+  ] = useVoting(
     votingApp,
     (app) => app.onVote(`${votingApp.address}-vote-${proposalId}`),
     [proposalId]
   )
 
-  const [processedVote, setProcessedVote] = useState()
-  const [processedVoteLoading, setProcessedVoteLoading] = useState(true)
+  // This is a workaround for receiving the latest vote after an update.
+  // Currently just listening for a vote change isn't enough to get all of the latest changes
+  // so we use a subscription to castVote which correctly triggers on a full update
+  // and use the return value as a dependency when passing down the vote.
+  const [castVote, { error: castVoteError }] = useVoting(
+    votingApp,
+    () => (vote && account ? vote.onCastVote(account) : null),
+    [account, JSON.stringify(vote)]
+  )
+  const castVoteDependency = JSON.stringify(castVote)
 
-  const loading =
-    votingAppStatus.loading || votesStatus.loading || processedVoteLoading
-  const error = votingAppStatus.error || votesStatus.error
+  /* eslint-disable react-hooks/exhaustive-deps */
+  const updatedVote = useMemo(() => vote, [castVoteDependency])
+  /* eslint-enable react-hooks/exhaustive-deps */
+
+  const error = voteError || castVoteError
 
   if (error) {
     console.error(error)
   }
 
-  // We must pass votes as value to avoid repeated re-renders on every poll
-  const voteDependency = JSON.stringify(vote)
+  return [updatedVote, { error: voteError, loading: voteLoading }]
+}
 
-  const [castedVote] = useDisputableVoting(
-    votingApp,
-    () => (vote && account ? vote.onCastVote(account) : null),
-    [account, voteDependency]
-  )
+export function useVoteSingle(proposalId) {
+  const mounted = useMounted()
+  const { account } = useWallet()
+  const [vote, { loading, error }] = useVoteSubscription(proposalId)
 
-  const castedVoteDependency = JSON.stringify(castedVote)
-
-  useEffect(() => {
-    if (mounted()) {
-      setProcessedVoteLoading(true)
-    }
-  }, [proposalId, mounted])
+  const [processedVote, setProcessedVote] = useState(null)
+  const [processedVoteLoading, setProcessedVoteLoading] = useState(true)
 
   useEffect(() => {
-    console.log('process vote')
     async function getExtendedVote() {
       try {
         const processedVote = await processVote(vote, account)
@@ -63,31 +69,47 @@ export function useSingleVote(proposalId) {
           setProcessedVote(processedVote)
           setProcessedVoteLoading(false)
         }
-      } catch {
-        setProcessedVoteLoading(false)
+      } catch (err) {
+        console.error(err)
+        if (mounted()) {
+          setProcessedVoteLoading(false)
+        }
       }
     }
 
-    if (vote) {
+    if (vote && !loading) {
       getExtendedVote()
     }
+  }, [vote, account, mounted, loading])
 
-    /* eslint-disable react-hooks/exhaustive-deps */
-  }, [voteDependency, castedVoteDependency, account])
-  /* eslint-enable react-hooks/exhaustive-deps */
+  // Flip back to the loading state when updating proposalId via the address bar
+  useEffect(() => {
+    if (mounted()) {
+      setProcessedVoteLoading(true)
+    }
+  }, [proposalId, mounted])
 
-  return [processedVote, loading]
+  // Throw to boundary if vote doesn't exist
+  // TODO: This is super hacky because we can't tell the type of error that occurs
+  // We can improve this as soon as we have typed errors from conncet
+  useEffect(() => {
+    if (!vote && !loading && error) {
+      throw new ProposalNotFound(proposalId)
+    }
+  }, [vote, loading, proposalId, error])
+
+  return [processedVote, processedVoteLoading]
 }
 
 async function processVote(vote, account) {
-  const [settings, orgToken, feeInfo, collateralInfo] = await Promise.all([
+  const orgToken = await vote.token()
+
+  const [settings, feeInfo, collateralInfo, voterInfo] = await Promise.all([
     vote.setting(),
-    vote.token(),
     getFeeInfo(vote),
     getCollateralInfo(vote),
+    account ? getVoterInfo(vote, orgToken, account) : {},
   ])
-
-  const voterInfo = account ? await getVoterInfo(vote, orgToken, account) : {}
 
   const processedVote = {
     ...vote,
@@ -104,8 +126,6 @@ async function processVote(vote, account) {
     orgToken: orgToken,
     fees: feeInfo,
   }
-
-  console.log(processedVote)
 
   return processedVote
 }
