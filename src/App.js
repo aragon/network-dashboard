@@ -8,8 +8,8 @@ import { ConnectProvider as Connect } from './providers/Connect'
 import GlobalErrorHandler from './GlobalErrorHandler'
 import MainView from './components/MainView'
 import { OrgAppsProvider } from './providers/OrgApps'
-import { VotesProvider } from './providers/Votes'
 import { WalletProvider } from './providers/Wallet'
+import { VotesSubscriptionProvider } from './providers/VotesSubscription'
 
 import Routes from './Routes'
 
@@ -19,7 +19,7 @@ function App() {
       <Connect>
         <WalletProvider>
           <OrgAppsProvider>
-            <VotesProvider>
+            <VotesSubscriptionProvider>
               <AgreementStateProvider>
                 <ViewportProvider>
                   <LayoutProvider breakpoints={breakpoints}>
@@ -31,7 +31,7 @@ function App() {
                   </LayoutProvider>
                 </ViewportProvider>
               </AgreementStateProvider>
-            </VotesProvider>
+            </VotesSubscriptionProvider>
           </OrgAppsProvider>
         </WalletProvider>
       </Connect>
