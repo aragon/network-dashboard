@@ -98,8 +98,6 @@ function ProposalDetails({ vote }) {
   const showVoteActions =
     disputableStatus === VOTE_STATUS_SCHEDULED && !accountHasVoted
 
-  console.log('accountHasVoted', { accountHasVoted, voterInfo })
-
   return (
     <>
       <LayoutColumns

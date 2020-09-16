@@ -38,6 +38,18 @@ export function useSingleVote(proposalId) {
   // We must pass votes as value to avoid repeated re-renders on every poll
   const voteDependency = JSON.stringify(vote)
 
+  const [castedVote] = useDisputableVoting(
+    votingApp,
+    () => vote.onCastVote(account),
+    [account, voteDependency]
+  )
+
+  const castedVoteDependency = JSON.stringify(castedVote)
+
+  useEffect(() => {
+    console.log('testing casted vote', castedVote)
+  }, [castedVoteDependency, mounted])
+
   useEffect(() => {
     if (mounted()) {
       setProcessedVoteLoading(true)
@@ -60,7 +72,7 @@ export function useSingleVote(proposalId) {
     }
 
     /* eslint-disable react-hooks/exhaustive-deps */
-  }, [voteDependency, account, mounted])
+  }, [voteDependency, castedVoteDependency, account, mounted])
   /* eslint-enable react-hooks/exhaustive-deps */
 
   return [processedVote, loading || processedVoteLoading]
@@ -98,8 +110,6 @@ async function processVote(vote, account) {
       vote.canExecute(account),
       vote.canVote(account),
     ])
-
-    console.log('update voter info', account, hasVoted)
 
     voterInfo = {
       accountBalanceNow: formatTokenAmount(balance, orgToken.decimals),
