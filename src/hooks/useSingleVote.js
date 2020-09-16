@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import { networkEnvironment } from '../current-environment'
 import { createAppHook, useApp } from '@aragon/connect-react'
 import { formatTokenAmount } from '@aragon/ui'
@@ -72,7 +72,7 @@ export function useSingleVote(proposalId) {
     }
 
     /* eslint-disable react-hooks/exhaustive-deps */
-  }, [voteDependency, castedVoteDependency, account, mounted])
+  }, [castedVoteDependency, account, mounted])
   /* eslint-enable react-hooks/exhaustive-deps */
 
   return [processedVote, loading]
@@ -93,9 +93,10 @@ async function processVote(vote, account) {
     vote.challengerArbitratorFee(),
   ])
 
-  const collateralToken = await collateral.token()
-
-  const voterInfo = account ? getVoterInfo(orgToken, vote, account) : null
+  const [collateralToken, voterInfo] = await Promise.all([
+    collateral.token(),
+    account ? getVoterInfo(vote, orgToken, account) : {},
+  ])
 
   const processedVote = {
     ...vote,
