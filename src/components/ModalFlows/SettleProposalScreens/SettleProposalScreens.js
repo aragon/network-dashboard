@@ -1,36 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import ModalFlowBase from '../ModalFlowBase'
-import { useMounted } from '../../../hooks/useMounted'
-import { useOrgApps } from '../../../providers/OrgApps'
-import { useWallet } from '../../../providers/Wallet'
+import { useActions } from '../../../hooks/useActions'
 
 function SettleProposalScreens({ actionId }) {
-  const mounted = useMounted()
-  const { agreementApp } = useOrgApps()
-  const { account } = useWallet()
+  const { settleDispute } = useActions()
   const [transactions, setTransactions] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function getTransactions() {
-      try {
-        // actionNumber
-        // signerAddress
-        // TODO: Replace these defaults with args for user provided values
-        const { transactions } = await agreementApp.settle(actionId, account)
-
-        if (mounted()) {
-          setTransactions(transactions)
-          setLoading(false)
-        }
-      } catch (err) {
-        console.error(err)
-      }
+      await settleDispute({ actionId }, (intent) => {
+        setTransactions(intent.transactions)
+        setLoading(false)
+      })
     }
 
     getTransactions()
-  }, [mounted, actionId, agreementApp, account])
+  }, [actionId, settleDispute])
 
   return (
     <ModalFlowBase

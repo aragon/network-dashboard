@@ -80,31 +80,6 @@ function VoteActions({ vote, onVoteYes, onVoteNo, onExecute, onChangeVote }) {
     )
   }
 
-  if (
-    !hasEnded &&
-    voterInfo.hasVoted &&
-    parseInt(voterInfo.accountBalance) > 0
-  ) {
-    return (
-      <>
-        <Button
-          mode="strong"
-          onClick={onChangeVote}
-          wide
-          css={`
-            margin-bottom: ${2 * GU}px;
-          `}
-        >
-          Change my vote
-        </Button>
-        <Info>
-          While the voting period is open, you can{' '}
-          <strong>change your vote</strong> as many times as you wish.
-        </Info>
-      </>
-    )
-  }
-
   if (voterInfo.canVote) {
     return (
       <>

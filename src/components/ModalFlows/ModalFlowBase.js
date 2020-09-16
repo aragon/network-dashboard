@@ -26,35 +26,46 @@ function ModalFlowBase({
   const { ethers } = useWallet()
   const signer = useMemo(() => ethers.getSigner(), [ethers])
 
-  const steps = transactions.map((transaction, index) => {
-    const title =
-      transactions.length === 1
-        ? 'Sign transaction'
-        : `${indexNumber[index]} transaction`
+  const transactionSteps = useMemo(
+    () =>
+      transactions
+        ? transactions.map((transaction, index) => {
+            const title =
+              transactions.length === 1
+                ? 'Sign transaction'
+                : `${indexNumber[index]} transaction`
 
-    return {
-      // TODO: Add titles from description
-      title,
-      handleSign: async ({ setSuccess, setWorking, setError, setHash }) => {
-        try {
-          const tx = await signer.sendTransaction(transaction)
+            return {
+              // TODO: Add titles from description
+              title,
+              handleSign: async ({
+                setSuccess,
+                setWorking,
+                setError,
+                setHash,
+              }) => {
+                try {
+                  const tx = await signer.sendTransaction(transaction)
 
-          setWorking()
+                  setHash(tx.hash)
 
-          setHash(tx.hash)
+                  setWorking()
 
-          // We need to wait for pre-transactions to mine before asking for the next signature
-          // TODO: Provide a better user experience than waiting on all transactions
-          await tx.wait()
+                  // We need to wait for pre-transactions to mine before asking for the next signature
+                  // TODO: Provide a better user experience than waiting on all transactions
+                  await tx.wait()
 
-          setSuccess()
-        } catch (err) {
-          console.error(err)
-          setError()
-        }
-      },
-    }
-  })
+                  setSuccess()
+                } catch (err) {
+                  console.error(err)
+                  setError()
+                }
+              },
+            }
+          })
+        : null,
+    [signer, transactions]
+  )
 
   const extendedScreens = useMemo(() => {
     const allScreens = []
@@ -72,13 +83,13 @@ function ModalFlowBase({
     }
 
     // Apply transaction singing at the end
-    if (transactions) {
+    if (transactionSteps) {
       allScreens.push({
         title: transactionTitle,
         width: modalWidthFromCount(transactions.length),
         content: (
           <Stepper
-            steps={steps}
+            steps={transactionSteps}
             css={`
               margin-top: ${3.25 * GU}px;
               margin-bottom: ${5.5 * GU}px;
@@ -89,7 +100,14 @@ function ModalFlowBase({
     }
 
     return allScreens
-  }, [transactions, screens, steps, transactionTitle, loading, frontLoad])
+  }, [
+    transactions,
+    screens,
+    transactionSteps,
+    transactionTitle,
+    loading,
+    frontLoad,
+  ])
 
   return <MultiModalScreens screens={extendedScreens} />
 }

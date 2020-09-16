@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import {
   GU,
@@ -41,91 +41,152 @@ import { useDescribeVote } from '../../../hooks/useDescribeVote'
 import LoadingSkeleton from '../../Loading/LoadingSkeleton'
 import { useWallet } from '../../../providers/Wallet'
 import { toMs } from '../../../utils/date-utils'
+import MultiModal from '../../MultiModal/MultiModal'
+import VoteOnProposalScreens from '../../ModalFlows/VoteOnProposalScreens/VoteOnProposalScreens'
+import ChallengeProposalScreens from '../../ModalFlows/ChallengeProposalScreens/ChallengeProposalScreens'
+import SettleProposalScreens from '../../ModalFlows/SettleProposalScreens/SettleProposalScreens'
+
+function getPresentation(disputableStatus) {
+  const disputablePresentation = {
+    [VOTE_STATUS_CANCELLED]: {
+      boxPresentation: 'disabled',
+      disabledProgressBars: true,
+    },
+    [VOTE_STATUS_SETTLED]: {
+      boxPresentation: 'disabled',
+      disabledProgressBars: true,
+    },
+    [VOTE_STATUS_CHALLENGED]: {
+      boxPresentation: 'warning',
+      disabledProgressBars: true,
+    },
+    [VOTE_STATUS_DISPUTED]: {
+      boxPresentation: 'negative',
+      disabledProgressBars: true,
+    },
+  }
+
+  return disputablePresentation[disputableStatus] || {}
+}
 
 function ProposalDetails({ vote }) {
-  const { voteId, id, script, voterInfo, orgToken } = vote
+  const [modalVisible, setModalVisible] = useState(false)
+  const [modalMode, setModalMode] = useState(null)
+  const [voteSupported, setVoteSupported] = useState(false)
+  const { actionId, voteId, id, script, voterInfo, orgToken } = vote
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
-  const { boxPresentation, disabledProgressBars } = useMemo(() => {
-    const disputablePresentation = {
-      [VOTE_STATUS_CANCELLED]: {
-        boxPresentation: 'disabled',
-        disabledProgressBars: true,
-      },
-      [VOTE_STATUS_SETTLED]: {
-        boxPresentation: 'disabled',
-        disabledProgressBars: true,
-      },
-      [VOTE_STATUS_CHALLENGED]: {
-        boxPresentation: 'warning',
-        disabledProgressBars: true,
-      },
-      [VOTE_STATUS_DISPUTED]: {
-        boxPresentation: 'negative',
-        disabledProgressBars: true,
-      },
-    }
 
-    return disputablePresentation[disputableStatus] || {}
-  }, [disputableStatus])
+  const { boxPresentation, disabledProgressBars } = useMemo(
+    () => getPresentation(disputableStatus),
+    [disputableStatus]
+  )
+
+  const handleShowModal = useCallback((mode) => {
+    setModalVisible(true)
+    setModalMode(mode)
+  }, [])
+
+  const handleCastVote = useCallback(
+    (supports) => {
+      handleShowModal('vote')
+      setVoteSupported(supports)
+    },
+    [handleShowModal]
+  )
 
   const accountHasVoted = voterInfo && voterInfo.hasVoted
+  const showVoteActions =
+    disputableStatus === VOTE_STATUS_SCHEDULED && !accountHasVoted
 
   return (
-    <LayoutColumns
-      primary={
-        <LayoutBox primary mode={boxPresentation}>
-          <div
-            css={`
-              display: grid;
-              grid-auto-flow: row;
-
-              grid-gap: ${4 * GU}px;
-            `}
-          >
+    <>
+      <LayoutColumns
+        primary={
+          <LayoutBox primary mode={boxPresentation}>
             <div
               css={`
-                display: flex;
-                justify-content: space-between;
+                display: grid;
+                grid-auto-flow: row;
+
+                grid-gap: ${4 * GU}px;
               `}
             >
-              <TargetAppBadge script={script} voteId={id} />
+              <div
+                css={`
+                  display: flex;
+                  justify-content: space-between;
+                `}
+              >
+                <TargetAppBadge script={script} voteId={id} />
+                {accountHasVoted && (
+                  <Tag icon={<IconCheck size="small" />} label="Voted" />
+                )}
+              </div>
+              <h1
+                css={`
+                  ${textStyle('title2')};
+                  font-weight: bold;
+                `}
+              >
+                Vote #{voteId}
+              </h1>
+              <Details vote={vote} status={disputableStatus} />
+              <SummaryInfo
+                vote={vote}
+                disabledProgressBars={disabledProgressBars}
+              />
               {accountHasVoted && (
-                <Tag icon={<IconCheck size="small" />} label="Voted" />
+                <VoteCast
+                  voteSupported={accountHasVoted.supports}
+                  balance={voterInfo.accountBalance}
+                  tokenSymbol={orgToken.symbol}
+                />
+              )}
+              {showVoteActions && (
+                <VoteActions
+                  vote={vote}
+                  onVoteYes={() => handleCastVote(true)}
+                  onVoteNo={() => handleCastVote(false)}
+                />
               )}
             </div>
-            <h1
-              css={`
-                ${textStyle('title2')};
-                font-weight: bold;
-              `}
-            >
-              Vote #{voteId}
-            </h1>
-            <Details vote={vote} status={disputableStatus} />
-            <SummaryInfo
+          </LayoutBox>
+        }
+        secondary={
+          <>
+            <DisputableActionStatus
+              vote={vote}
+              onSettle={() => handleShowModal('settle')}
+              onChallenge={() => handleShowModal('challenge')}
+            />
+            <InfoBoxes
               vote={vote}
               disabledProgressBars={disabledProgressBars}
             />
-            {accountHasVoted && (
-              <VoteCast
-                accountVote={voterInfo.hasVoted}
-                balance={voterInfo.accountBalance}
-                tokenSymbol={orgToken.symbol}
-              />
-            )}
-            {disputableStatus === VOTE_STATUS_SCHEDULED && (
-              <VoteActions vote={vote} />
-            )}
-          </div>
-        </LayoutBox>
-      }
-      secondary={
-        <>
-          <DisputableActionStatus vote={vote} />
-          <InfoBoxes vote={vote} disabledProgressBars={disabledProgressBars} />
-        </>
-      }
-    />
+          </>
+        }
+      />
+      <MultiModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onClosed={() => setModalMode(null)}
+      >
+        {modalMode === 'vote' && (
+          <VoteOnProposalScreens
+            voteId={voteId}
+            voteSupported={voteSupported}
+          />
+        )}
+
+        {modalMode === 'challenge' && (
+          <ChallengeProposalScreens actionId={actionId} />
+        )}
+
+        {modalMode === 'settle' && (
+          <SettleProposalScreens actionId={actionId} />
+        )}
+      </MultiModal>
+    </>
   )
 }
 
