@@ -54,6 +54,7 @@ export function useSingleVote(proposalId) {
   }, [proposalId, mounted])
 
   useEffect(() => {
+    console.log('process vote')
     async function getExtendedVote() {
       try {
         const processedVote = await processVote(vote, account)
@@ -72,31 +73,21 @@ export function useSingleVote(proposalId) {
     }
 
     /* eslint-disable react-hooks/exhaustive-deps */
-  }, [castedVoteDependency, account, mounted])
+  }, [voteDependency, castedVoteDependency, account])
   /* eslint-enable react-hooks/exhaustive-deps */
 
   return [processedVote, loading]
 }
 
 async function processVote(vote, account) {
-  const [
-    collateral,
-    settings,
-    orgToken,
-    submitterFee,
-    challengerFee,
-  ] = await Promise.all([
-    vote.collateralRequirement(),
+  const [settings, orgToken, feeInfo, collateralInfo] = await Promise.all([
     vote.setting(),
     vote.token(),
-    vote.submitterArbitratorFee(),
-    vote.challengerArbitratorFee(),
+    getFeeInfo(vote),
+    getCollateralInfo(vote),
   ])
 
-  const [collateralToken, voterInfo] = await Promise.all([
-    collateral.token(),
-    account ? getVoterInfo(vote, orgToken, account) : {},
-  ])
+  const voterInfo = account ? await getVoterInfo(vote, orgToken, account) : {}
 
   const processedVote = {
     ...vote,
@@ -109,16 +100,36 @@ async function processVote(vote, account) {
       vote.currentQuietEndingExtensionDuration,
     voterInfo: voterInfo,
     settings: settings,
-    collateral: {
-      ...collateral,
-      token: collateralToken,
-    },
+    collateral: collateralInfo,
     orgToken: orgToken,
-    submitterFee: submitterFee,
-    challengerFee: challengerFee,
+    fees: feeInfo,
   }
 
+  console.log(processedVote)
+
   return processedVote
+}
+
+async function getFeeInfo(vote) {
+  const [submitterFee, challengerFee] = await Promise.all([
+    vote.submitterArbitratorFee(),
+    vote.challengerArbitratorFee(),
+  ])
+
+  return {
+    submitter: submitterFee,
+    challenger: challengerFee,
+  }
+}
+
+async function getCollateralInfo(vote) {
+  const collateral = await vote.collateralRequirement()
+  const collateralToken = await collateral.token()
+
+  return {
+    ...collateral,
+    token: collateralToken,
+  }
 }
 
 async function getVoterInfo(vote, orgToken, account) {
