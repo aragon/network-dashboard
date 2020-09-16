@@ -3,6 +3,7 @@ import { HashRouter as Router } from 'react-router-dom'
 import { ViewportProvider } from 'use-viewport'
 import { LayoutProvider } from '@aragon/ui'
 import { AgreementStateProvider } from './providers/AgreementState'
+import { StakingProvider } from './providers/Staking'
 import { breakpoints } from './style/breakpoints'
 import { ConnectProvider as Connect } from './providers/Connect'
 import GlobalErrorHandler from './GlobalErrorHandler'
@@ -20,17 +21,19 @@ function App() {
         <WalletProvider>
           <OrgAppsProvider>
             <VotesProvider>
-              <AgreementStateProvider>
-                <ViewportProvider>
-                  <LayoutProvider breakpoints={breakpoints}>
-                    <Router>
-                      <MainView>
-                        <Routes />
-                      </MainView>
-                    </Router>
-                  </LayoutProvider>
-                </ViewportProvider>
-              </AgreementStateProvider>
+              <StakingProvider>
+                <AgreementStateProvider>
+                  <ViewportProvider>
+                    <LayoutProvider breakpoints={breakpoints}>
+                      <Router>
+                        <MainView>
+                          <Routes />
+                        </MainView>
+                      </Router>
+                    </LayoutProvider>
+                  </ViewportProvider>
+                </AgreementStateProvider>
+              </StakingProvider>
             </VotesProvider>
           </OrgAppsProvider>
         </WalletProvider>
