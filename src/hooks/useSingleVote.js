@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { networkEnvironment } from '../current-environment'
 import { createAppHook, useApp } from '@aragon/connect-react'
 import { formatTokenAmount } from '@aragon/ui'
@@ -28,7 +28,8 @@ export function useSingleVote(proposalId) {
   const [processedVote, setProcessedVote] = useState()
   const [processedVoteLoading, setProcessedVoteLoading] = useState(true)
 
-  const loading = votingAppStatus.loading || votesStatus.loading
+  const loading =
+    votingAppStatus.loading || votesStatus.loading || processedVoteLoading
   const error = votingAppStatus.error || votesStatus.error
 
   if (error) {
@@ -40,15 +41,11 @@ export function useSingleVote(proposalId) {
 
   const [castedVote] = useDisputableVoting(
     votingApp,
-    () => vote.onCastVote(account),
+    () => (vote && account ? vote.onCastVote(account) : null),
     [account, voteDependency]
   )
 
   const castedVoteDependency = JSON.stringify(castedVote)
-
-  useEffect(() => {
-    console.log('testing casted vote', castedVote)
-  }, [castedVoteDependency, mounted])
 
   useEffect(() => {
     if (mounted()) {
@@ -58,11 +55,14 @@ export function useSingleVote(proposalId) {
 
   useEffect(() => {
     async function getExtendedVote() {
-      console.log('process vote')
-      const processedVote = await processVote(vote, account)
+      try {
+        const processedVote = await processVote(vote, account)
 
-      if (mounted()) {
-        setProcessedVote(processedVote)
+        if (mounted()) {
+          setProcessedVote(processedVote)
+          setProcessedVoteLoading(false)
+        }
+      } catch {
         setProcessedVoteLoading(false)
       }
     }
@@ -75,7 +75,7 @@ export function useSingleVote(proposalId) {
   }, [voteDependency, castedVoteDependency, account, mounted])
   /* eslint-enable react-hooks/exhaustive-deps */
 
-  return [processedVote, loading || processedVoteLoading]
+  return [processedVote, loading]
 }
 
 async function processVote(vote, account) {
@@ -95,37 +95,23 @@ async function processVote(vote, account) {
 
   const collateralToken = await collateral.token()
 
-  let voterInfo
-  if (account) {
-    const [
-      balance,
-      accountBalance,
-      hasVoted,
-      canExecute,
-      canVote,
-    ] = await Promise.all([
-      orgToken.balance(account),
-      vote.formattedVotingPower(account),
-      vote.hasVoted(account),
-      vote.canExecute(account),
-      vote.canVote(account),
-    ])
-
-    voterInfo = {
-      accountBalanceNow: formatTokenAmount(balance, orgToken.decimals),
-      accountBalance: accountBalance,
-      hasVoted: hasVoted,
-      canExecute: canExecute,
-      canVote: canVote,
-    }
-  }
+  const voterInfo = account ? getVoterInfo(orgToken, vote, account) : null
 
   const processedVote = {
-    ...processVoteAgain(vote),
+    ...vote,
+    endDate: vote.endDate,
+    hasEnded: vote.hasEnded,
+    naysPct: vote.naysPct,
+    yeasPct: vote.yeasPct,
+    status: vote.status,
+    currentQuietEndingExtensionDuration:
+      vote.currentQuietEndingExtensionDuration,
     voterInfo: voterInfo,
     settings: settings,
-    collateral: collateral,
-    collateralToken: collateralToken,
+    collateral: {
+      ...collateral,
+      token: collateralToken,
+    },
     orgToken: orgToken,
     submitterFee: submitterFee,
     challengerFee: challengerFee,
@@ -134,20 +120,26 @@ async function processVote(vote, account) {
   return processedVote
 }
 
-function processVoteAgain(vote) {
+async function getVoterInfo(vote, orgToken, account) {
+  const [
+    balance,
+    accountBalance,
+    hasVoted,
+    canExecute,
+    canVote,
+  ] = await Promise.all([
+    orgToken.balance(account),
+    vote.formattedVotingPower(account),
+    vote.hasVoted(account),
+    vote.canExecute(account),
+    vote.canVote(account),
+  ])
+
   return {
-    ...vote,
-    endDate: vote.endDate,
-    formattedNays: vote.formattedNays,
-    formattedNaysPct: vote.formattedNaysPct,
-    formattedTotalPower: vote.formattedTotalPower,
-    formattedYeas: vote.formattedYeas,
-    formattedYeasPct: vote.formattedYeasPct,
-    hasEnded: vote.hasEnded,
-    naysPct: vote.naysPct,
-    yeasPct: vote.yeasPct,
-    status: vote.status,
-    currentQuietEndingExtensionDuration:
-      vote.currentQuietEndingExtensionDuration,
+    accountBalanceNow: formatTokenAmount(balance, orgToken.decimals),
+    accountBalance: accountBalance,
+    hasVoted: hasVoted,
+    canExecute: canExecute,
+    canVote: canVote,
   }
 }

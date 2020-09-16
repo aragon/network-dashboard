@@ -9,9 +9,11 @@ import ProposalDetails from './ProposalDetails/ProposalDetails'
 import { useSingleVote } from '../../hooks/useSingleVote'
 import { ProposalNotFound } from '../../errors'
 
-function ProposalSingle({ match }) {
+const ProposalSingle = React.memo(function ProposalSingle({ match }) {
   const { id: proposalId } = match.params
   const history = useHistory()
+
+  console.log('hello')
 
   const [vote, loading] = useSingleVote(proposalId)
 
@@ -40,7 +42,7 @@ function ProposalSingle({ match }) {
       </LayoutLimiter>
     </LayoutGutter>
   )
-}
+})
 
 ProposalSingle.propTypes = {
   match: PropTypes.shape({

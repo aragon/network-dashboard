@@ -192,7 +192,7 @@ function ProposalDetails({ vote }) {
 
 /* eslint-disable react/prop-types */
 function Details({ vote, status }) {
-  const { context, creator, collateral, collateralToken, script } = vote
+  const { context, creator, collateral, script } = vote
   const {
     description,
     emptyScript,
@@ -273,10 +273,10 @@ function Details({ vote, status }) {
           `}
         >
           <TokenAmount
-            address={collateralToken.id}
+            address={collateral.token.id}
             amount={collateral.actionAmount}
-            decimals={collateralToken.decimals}
-            symbol={collateralToken.symbol}
+            decimals={collateral.token.decimals}
+            symbol={collateral.token.symbol}
           />
 
           <span
