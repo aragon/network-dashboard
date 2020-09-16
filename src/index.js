@@ -7,11 +7,6 @@ import { theme } from './style/theme'
 
 initializeSentry()
 
-// Enable hot module replacement
-if (module.hot) {
-  module.hot.accept()
-}
-
 ReactDOM.render(
   // Due to an issue with styled-components v5, global styles must be applied outside of <React.StrictMode/> to avoid duplicate styles inside the head.
   // As <Main/> provides us with some globals we need to ensure it sits outside.
