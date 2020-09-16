@@ -6,13 +6,14 @@ import LayoutGutter from '../Layout/LayoutGutter'
 import LayoutLimiter from '../Layout/LayoutLimiter'
 import LoadingSection from '../Loading/LoadingSection'
 import ProposalDetails from './ProposalDetails/ProposalDetails'
-import { useDisputableVote } from '../../hooks/useDisputableVotes'
+import { useSingleVote } from '../../hooks/useSingleVote'
 import { ProposalNotFound } from '../../errors'
 
 function ProposalSingle({ match }) {
   const { id: proposalId } = match.params
   const history = useHistory()
-  const [vote, loading] = useDisputableVote(proposalId)
+
+  const [vote, loading] = useSingleVote(proposalId)
 
   // Throw to boundary if vote doesn't exist
   // TODO: Add a better check once we have access to the errors in connect
