@@ -37,6 +37,7 @@ function useVoteSubscription(proposalId) {
     () => (vote && account ? vote.onCastVote(account) : null),
     [account, JSON.stringify(vote)]
   )
+
   const castVoteDependency = JSON.stringify(castVote)
 
   /* eslint-disable react-hooks/exhaustive-deps */
@@ -58,34 +59,34 @@ export function useVoteSingle(proposalId) {
   const [vote, { loading, error }] = useVoteSubscription(proposalId)
 
   const [processedVote, setProcessedVote] = useState(null)
-  const [processedVoteLoading, setProcessedVoteLoading] = useState(true)
+  const [processing, setProcessing] = useState(true)
 
   useEffect(() => {
-    async function getExtendedVote() {
+    async function getProcessedVote() {
       try {
         const processedVote = await processVote(vote, account)
 
         if (mounted()) {
           setProcessedVote(processedVote)
-          setProcessedVoteLoading(false)
+          setProcessing(false)
         }
       } catch (err) {
         console.error(err)
         if (mounted()) {
-          setProcessedVoteLoading(false)
+          setProcessing(false)
         }
       }
     }
 
     if (vote && !loading) {
-      getExtendedVote()
+      getProcessedVote()
     }
   }, [vote, account, mounted, loading])
 
   // Flip back to the loading state when updating proposalId via the address bar
   useEffect(() => {
     if (mounted()) {
-      setProcessedVoteLoading(true)
+      setProcessing(true)
     }
   }, [proposalId, mounted])
 
@@ -98,7 +99,7 @@ export function useVoteSingle(proposalId) {
     }
   }, [vote, loading, proposalId, error])
 
-  return [processedVote, processedVoteLoading]
+  return [processedVote, processing]
 }
 
 async function processVote(vote, account) {
@@ -111,6 +112,7 @@ async function processVote(vote, account) {
     account ? getVoterInfo(vote, orgToken, account) : {},
   ])
 
+  // Call getters to fill properties on the processed vote and apply fetched values
   const processedVote = {
     ...vote,
     endDate: vote.endDate,
@@ -168,6 +170,7 @@ async function getVoterInfo(vote, orgToken, account) {
   ])
 
   return {
+    account: account,
     accountBalanceNow: formatTokenAmount(balance, orgToken.decimals),
     accountBalance: accountBalance,
     hasVoted: hasVoted,
