@@ -1,5 +1,4 @@
 import { useEffect, useState, useMemo } from 'react'
-import { useOrganization } from '@aragon/connect-react'
 import { useOrgApps } from '../providers/OrgApps'
 import { getAppPresentation } from '../utils/app-utils'
 import { addressesEqual } from '../lib/web3-utils'
@@ -9,8 +8,7 @@ const cachedDescriptions = new Map([])
 
 export function useDescribeVote(script, voteId) {
   const mounted = useMounted()
-  const [org] = useOrganization()
-  const { apps } = useOrgApps()
+  const { apps, org } = useOrgApps()
   const [description, setDescription] = useState(null)
   const [loading, setLoading] = useState(true)
 
