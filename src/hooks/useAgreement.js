@@ -6,45 +6,35 @@ import { toMs } from '../utils/date-utils'
 import { useOrgApps } from '../providers/OrgApps'
 import { getAppPresentation } from '../utils/app-utils'
 import { useMounted } from './useMounted'
-import { useWallet } from '../providers/Wallet'
+import { useAgreementSubscription } from '../providers/AgreementSubscription'
 
 export function useAgreement() {
   const mounted = useMounted()
-  const { account } = useWallet()
-  const { apps, agreementApp, appsLoading } = useOrgApps()
-  const [agreement, setAgreement] = useState({})
+  const { apps, agreementApp } = useOrgApps()
+  const [processedAgreement, setProcessedAgreement] = useState({})
   const [agreementLoading, setAgreementLoading] = useState(true)
-
-  const canProcess = !appsLoading && agreementApp
+  const agreement = useAgreementSubscription()
 
   useEffect(() => {
     async function processAgreementDetails() {
       try {
-        const [
-          currentVersion,
-          stakingFactory,
-          disputableApps,
-        ] = await Promise.all([
-          agreementApp.currentVersion(),
-          agreementApp.stakingFactory(),
-          agreementApp.disputableApps(),
-        ])
-
+        const { currentVersion, disputableApps, signer } = agreement
         const { content, effectiveFrom, title, versionId } = currentVersion
+
         const contentIpfsUri = ethersUtils.toUtf8String(content)
 
         const [
+          stakingFactory,
           extendedDisputableApps,
           agreementContent,
-          signer,
         ] = await Promise.all([
+          agreementApp.stakingFactory(),
           processDisputableApps(apps, disputableApps),
           getAgreementIpfsContent(contentIpfsUri),
-          account ? agreementApp.signer(account) : null,
         ])
 
         if (mounted()) {
-          setAgreement({
+          setProcessedAgreement({
             contractAddress: agreementApp.address,
             content: agreementContent,
             contentIpfsUri: contentIpfsUri,
@@ -63,12 +53,12 @@ export function useAgreement() {
       }
     }
 
-    if (canProcess) {
+    if (agreement && !agreement.loading) {
       processAgreementDetails()
     }
-  }, [apps, agreementApp, canProcess, mounted, account])
+  }, [apps, agreementApp, mounted, agreement])
 
-  return [agreement, agreementLoading]
+  return [processedAgreement, agreementLoading]
 }
 
 async function processDisputableApps(apps, disputableApps) {
