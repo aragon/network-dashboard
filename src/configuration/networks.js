@@ -43,7 +43,7 @@ export default new Map([
       endpoints: {
         ethereum: 'https://rinkeby.eth.aragon.network/',
       },
-      orgLocation: 'ancashdao.aragonid.eth',
+      orgLocation: '0xfa5bae0029f0c2acffcc71ada4249bd0eaafd1f4',
       ipfsGateway: 'https://ipfs.eth.aragon.network/ipfs',
       subgraphs: {
         organization:
