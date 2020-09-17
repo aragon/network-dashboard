@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useCallback } from 'react'
+import { useRouteMatch, useHistory } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {
   GU,
@@ -8,6 +9,7 @@ import {
   RADIUS,
   textStyle,
   useTheme,
+  unselectable,
   formatTokenAmount,
 } from '@aragon/ui'
 import { dateFormat, toMs } from '../../../utils/date-utils'
@@ -17,6 +19,11 @@ function FeedbackModule({ vote, mode }) {
   const { collateralToken, collateral } = vote
   const pausedAt = toMs(vote.pausedAt)
   const settledAt = toMs(vote.settledAt)
+  const history = useHistory()
+
+  const handleClickStakeManagement = useCallback(() => {
+    history.push('/stake-managment')
+  }, [history])
 
   return (
     <div
@@ -74,7 +81,11 @@ function FeedbackModule({ vote, mode }) {
                   {collateralToken.symbol}
                 </Strong>{' '}
                 as the action challenge collateral. You can manage your deposit
-                balances in <Link href="">Stake Management</Link>.
+                balances in{' '}
+                <InternalLink to="/stake-management">
+                  Stake management
+                </InternalLink>
+                .
               </p>
             ) : (
               <p>
@@ -90,7 +101,10 @@ function FeedbackModule({ vote, mode }) {
                   {collateralToken.symbol}
                 </Strong>
                 . You can manage your deposit balances in{' '}
-                <Link href="">Stake Management</Link>.
+                <InternalLink to="/stake-management">
+                  Stake management
+                </InternalLink>
+                .
               </p>
             )}
           </div>
@@ -113,6 +127,30 @@ function Strong({ children }) {
     </strong>
   )
 }
+
+/* eslint-disable react/prop-types */
+function InternalLink({ to, children }) {
+  const history = useHistory()
+  const theme = useTheme()
+  const active = useRouteMatch(to) !== null
+
+  const handlePageRequest = useCallback(() => {
+    history.push(to)
+  }, [history, to])
+
+  return (
+    <Link
+      onClick={handlePageRequest}
+      css={`
+        ${unselectable};
+        text-decoration: none;
+      `}
+    >
+      {children}
+    </Link>
+  )
+}
+/* eslint-enable react/prop-types */
 
 FeedbackModule.propTypes = {
   vote: PropTypes.object.isRequired,

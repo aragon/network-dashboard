@@ -34,7 +34,7 @@
     ]
   },
   "dependencies": {
-    "@aragon/connect-agreement": "^0.0.0-beta.10",
+    "@aragon/connect-agreement": "^0.0.0-beta.11",
     "@aragon/connect-disputable-voting": "^0.0.0-beta.10",
     "@aragon/connect-react": "^0.8.0-alpha.5",
     "@aragon/ui": "^1.7.0",

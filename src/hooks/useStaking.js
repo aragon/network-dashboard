@@ -1,53 +1,77 @@
 import { useEffect, useState } from 'react'
-import { utils as ethersUtils } from 'ethers'
-import { captureErrorWithSentry } from '../sentry'
-import { getIpfsCidFromUri, ipfsGet } from '../lib/ipfs-utils'
-import { toMs } from '../utils/date-utils'
-import { useOrgApps } from '../providers/OrgApps'
-import { getAppPresentation } from '../utils/app-utils'
 import { useMounted } from './useMounted'
+import { useOrgApps } from '../providers/OrgApps'
 import { useWallet } from '../providers/Wallet'
 
 export function useStaking() {
   const mounted = useMounted()
   const { account } = useWallet()
-  const { apps, agreementApp, appsLoading } = useOrgApps()
-  const [staking, setStaking] = useState({})
-  const [stakingLoading, setStakingLoading] = useState(true)
-
-  const canProcess = !appsLoading && agreementApp
+  const { agreementApp } = useOrgApps()
+  const [stakeManagement, setStakeManagement] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function getStakingInformation() {
       try {
-        const [staking, stakingMovements] = await Promise.all([
-          agreementApp.staking(
-            '0x9a8eab8a356b8af4fa6ea5be983539ce97a258fb',
-            account
-          ),
-          agreementApp.staking(
-            '0x3af6b2f907f0c55f279e0ed65751984e6cdc4a42',
-            account
-          ),
-        ])
+        if (account) {
+          const defaultValues = {
+            available: '0',
+            challenged: '0',
+            locked: '0',
+            tokenDecimals: 1,
+            total: '0',
+          }
 
-        if (mounted()) {
-          setStaking({
-            staking: staking,
-            stakingCollateral: stakingMovements,
-          })
-          setStakingLoading(false)
+          const disputableApps = await agreementApp.disputableApps()
+          const allRequirements = await Promise.all(
+            disputableApps.map((app) => app.collateralRequirement())
+          )
+          const allTokens = await Promise.all(
+            allRequirements.map((collateral) => collateral.token())
+          )
+
+          const staking = await agreementApp.staking(
+            allTokens[0].id,
+            '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
+          )
+          const stakingMovements = await agreementApp.stakingMovements(
+            allTokens[0].id,
+            '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
+          )
+
+          if (mounted()) {
+            setStakeManagement({
+              token: allTokens[0],
+              staking: staking ? staking : defaultValues,
+              stakingMovements: stakingMovements,
+            })
+
+            setLoading(false)
+          }
+        } else {
+          setStakeManagement(null)
+          setLoading(false)
         }
       } catch (err) {
-        captureErrorWithSentry(err)
+        setStakeManagement({
+          staking: {
+            available: '0',
+            challenged: '0',
+            locked: '0',
+            tokenDecimals: 1,
+            total: '0',
+          },
+          stakingMovements: null,
+        })
+        setLoading(false)
         console.error(err)
       }
     }
 
-    if (canProcess && account) {
+    if (agreementApp && account) {
       getStakingInformation()
     }
-  }, [apps, agreementApp, canProcess, mounted, account])
+  }, [agreementApp, mounted, account])
 
-  return [staking, stakingLoading]
+  return [stakeManagement, loading]
 }

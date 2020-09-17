@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@aragon/connect-agreement@^0.0.0-beta.10":
-  version "0.0.0-beta.10"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-agreement/-/connect-agreement-0.0.0-beta.10.tgz#44fb4652be3949d26335c399828a31c2052625e7"
-  integrity sha512-XIjnekm30XMFcXShcIjt8sra5kEC9UJQ394nWJr2x6hxgk7boB7NTjjjt3FAbsDCqGQ53IXl3Iu3IADJD7EBbQ==
+"@aragon/connect-agreement@^0.0.0-beta.11":
+  version "0.0.0-beta.11"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-agreement/-/connect-agreement-0.0.0-beta.11.tgz#b26fe691519d66242567dc06ecf2460f2ebc0e1e"
+  integrity sha512-P5iGFGPuuu2AsXOQueg9wv18as8j7+Jp7ekKXSQ41UQcJdqUMjt4wG84xn0unNOhYfSEOM1Mo+Yv8tFSN/Bv2w==
   dependencies:
     "@aragon/connect-core" "^0.8.0-alpha.5"
     "@aragon/connect-thegraph" "^0.8.0-alpha.5"

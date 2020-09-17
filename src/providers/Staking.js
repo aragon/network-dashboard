@@ -8,14 +8,14 @@ const StakingContext = React.createContext({
 })
 
 function StakingProvider({ children }) {
-  const [staking, loading] = useStaking()
+  const [stakeManagement, loading] = useStaking()
 
   const Staking = useMemo(
     () => ({
-      staking,
+      stakeManagement,
       loading,
     }),
-    [staking, loading]
+    [stakeManagement, loading]
   )
 
   return (

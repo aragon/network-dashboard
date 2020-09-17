@@ -1,10 +1,18 @@
 import React from 'react'
-import { Button, Card, GU, textStyle, useTheme } from '@aragon/ui'
+import {
+  Button,
+  Card,
+  GU,
+  formatTokenAmount,
+  textStyle,
+  useTheme,
+} from '@aragon/ui'
 import tokenIcon from './assets/tokenIcon.svg'
 
-function BalanceCard() {
+function BalanceCard({ total, tokenDecimals, tokenSymbol }) {
   const theme = useTheme()
-
+  // TODO: rreplace token icon and usd amount
+  
   return (
     <Card
       css={`
@@ -28,14 +36,14 @@ function BalanceCard() {
           ${textStyle('title4')};
         `}
       >
-        17,746.21
+        {formatTokenAmount(total, tokenDecimals)}
       </h2>
       <h1
         css={`
           margin: ${0.5 * GU}px 0;
         `}
       >
-        Total ANT
+        Total {tokenSymbol}
       </h1>
       <p
         css={`

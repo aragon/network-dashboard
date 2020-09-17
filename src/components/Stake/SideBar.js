@@ -1,12 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { GU, textStyle, useTheme } from '@aragon/ui'
+import { GU, formatTokenAmount, textStyle, useTheme } from '@aragon/ui'
 import BalanceCard from './BalanceCard'
 import ExpandableCard from './ExpandableCard'
 import coin from './assets/coin.svg'
 import wallet from './assets/wallet.svg'
 
-function Sidebar() {
+function Sidebar({ staking, token }) {
+  const { available, challenged, locked, total } = staking
   return (
     <div
       css={`
@@ -16,43 +17,51 @@ function Sidebar() {
         grid-gap: ${2 * GU}px;
       `}
     >
-      <BalanceCard />
+      <BalanceCard
+        total={total}
+        tokenDecimals={token.decimals}
+        tokenSymbol={token.symbol}
+      />
       <ExpandableCard
         content={
           <CardContent
-            amount="72,243.47"
+            amount={formatTokenAmount(available, token.decimals)}
             icon={wallet}
-            title="Available ANT"
-            tokenAmount="11,278.04"
+            title={`Available ${token.symbol}`}
+            tokenAmount={formatTokenAmount(available, token.decimals)}
           />
         }
-        expansion="I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. ANT holders in equal measure."
+        expansion="This is the part of your collateral balance that has not been locked in any action yet. You may permissionlessly withdraw it at any time."
       />
       <ExpandableCard
         content={
           <CardContent
             amount="40,319.701"
             icon={coin}
-            title="Locked ANT"
-            tokenAmount="6,684.60"
+            title={`Locked ${token.symbol}`}
+            tokenAmount={formatTokenAmount(locked, token.decimals)}
           />
         }
-        expansion="I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. ANT holders in equal measure."
+        expansion="This is the part of your collateral balance that is backing a particular action. This Locked amount will move back to Available after the action is able to be enacted."
       />
       <ExpandableCard
         content={
           <CardContent
             amount="-555.57"
             icon={coin}
-            title="Slashed ANT"
-            tokenAmount="83.39"
+            title={`Slashed ${token.symbol}`}
+            tokenAmount={formatTokenAmount(challenged, token.decimals)}
             negative
           />
         }
-        expansion="I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. ANT holders in equal measure."
+        expansion="This is the part of your collateral balance that is backing a particular action that has been challenged or disputed in Aragon Court. Part of this amount could be slashed (transferred to the challenger’s account) if the challenge or dispute outcome results in canceling the action."
       />
     </div>
   )
+}
+
+Sidebar.propTypes = {
+  staking: PropTypes.node,
 }
 
 function CardContent({ icon, title, tokenAmount, amount, negative }) {
