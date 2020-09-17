@@ -11,15 +11,9 @@ export function useVotes() {
   return [processedVotes, loading]
 }
 
+// Placeholder for adding additional properties to votes
 function processVote(vote) {
   return {
     ...vote,
-    endDate: vote.endDate,
-    hasEnded: vote.hasEnded,
-    naysPct: vote.naysPct,
-    yeasPct: vote.yeasPct,
-    status: vote.status,
-    currentQuietEndingExtensionDuration:
-      vote.currentQuietEndingExtensionDuration,
   }
 }

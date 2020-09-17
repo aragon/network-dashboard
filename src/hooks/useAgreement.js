@@ -62,6 +62,7 @@ export function useAgreement() {
 }
 
 async function processDisputableApps(apps, disputableApps) {
+  // Concurrently request collateral and token requirements
   const allRequirements = await Promise.all(
     disputableApps.map((app) => app.collateralRequirement())
   )
@@ -70,7 +71,8 @@ async function processDisputableApps(apps, disputableApps) {
     allRequirements.map((collateral) => collateral.token())
   )
 
-  const extendedDisputableApps = disputableApps.map((disputableApp) => {
+  // Add collateral requirements and app presentation information
+  const processedDisputableApps = disputableApps.map((disputableApp) => {
     const { iconSrc, humanName } = getAppPresentation(
       apps,
       disputableApp.address
@@ -93,7 +95,7 @@ async function processDisputableApps(apps, disputableApps) {
     }
   })
 
-  return extendedDisputableApps
+  return processedDisputableApps
 }
 
 async function getAgreementIpfsContent(ipfsUri) {

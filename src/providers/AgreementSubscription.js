@@ -1,6 +1,7 @@
 import React, { useContext, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import connectAgreement from '@aragon/connect-agreement'
+import { captureErrorWithSentry } from '../sentry'
 import { createAppHook, useApp } from '@aragon/connect-react'
 import { networkEnvironment } from '../current-environment'
 import { useWallet } from '../providers/Wallet'
@@ -38,7 +39,7 @@ function AgreementSubscriptionProvider({ children }) {
     [account]
   )
 
-  // We must pass as values to avoid repeated re-renders on every poll
+  // We must stringify the returned values for use as dependencies to avoid repeated re-renders on every poll
   const currentVersionDependency = JSON.stringify(currentVersion)
   const disputableAppsDependency = JSON.stringify(disputableApps)
   const signerDependency = JSON.stringify(signer)
@@ -58,9 +59,11 @@ function AgreementSubscriptionProvider({ children }) {
     stakingFactoryStatus.error
 
   if (error) {
+    captureErrorWithSentry(error)
     console.error(error)
   }
 
+  // Only update the subscription state object when values have actually changed
   const AgreementSubscriptionState = useMemo(() => {
     return { currentVersion, stakingFactory, disputableApps, signer, loading }
     /* eslint-disable react-hooks/exhaustive-deps */
