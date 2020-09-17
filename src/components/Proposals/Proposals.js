@@ -11,7 +11,7 @@ import { useOrgApps } from '../../providers/OrgApps'
 import { useVotes } from '../../hooks/useVotes'
 
 const Proposals = React.memo(function Proposals() {
-  const [votes, { loading }] = useVotes()
+  const [votes, loading] = useVotes()
 
   const [bannerClosed, setBannerClosed] = useState(
     localStorage.getItem('bannerClosed') === 'true'

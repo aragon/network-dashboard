@@ -2,6 +2,7 @@ import React, { useContext, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import connectVoting from '@aragon/connect-disputable-voting'
 import { createAppHook, useApp } from '@aragon/connect-react'
+import { captureErrorWithSentry } from '../sentry'
 import { connector } from '../current-environment'
 
 const { disputableVoting } = connector
@@ -22,6 +23,7 @@ function VotesSubscriptionProvider({ children }) {
   const error = votingAppStatus.error || votesStatus.error
 
   if (error) {
+    captureErrorWithSentry(error)
     console.error(error)
   }
 
@@ -29,7 +31,7 @@ function VotesSubscriptionProvider({ children }) {
   const votesDependency = JSON.stringify(votes)
 
   const VotesSubscriptionState = useMemo(() => {
-    return [votes, { loading, error }]
+    return [votes, loading]
     /* eslint-disable react-hooks/exhaustive-deps */
   }, [votesDependency, loading])
   /* eslint-enable react-hooks/exhaustive-deps */

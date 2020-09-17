@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useVotesSubscription } from '../providers/VotesSubscription'
 
 export function useVotes() {
-  const [votes, { loading }] = useVotesSubscription()
+  const [votes, loading] = useVotesSubscription()
 
   const processedVotes = useMemo(() => {
     return votes ? votes.map((vote) => processVote(vote)) : []
