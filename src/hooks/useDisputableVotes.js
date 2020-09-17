@@ -5,47 +5,6 @@ import { useWallet } from '../providers/Wallet'
 import { formatTokenAmount } from '@aragon/ui'
 import { useMounted } from '../hooks/useMounted'
 
-export function useDisputableVotes() {
-  const mounted = useMounted()
-  const { disputableVotingApp, appsLoading } = useOrgApps()
-  const [processedVotes, setProcessedVotes] = useState([])
-  const [processedVotesLoading, setProcessedVotesLoading] = useState(true)
-
-  useEffect(() => {
-    async function getExtendedVote() {
-      if (mounted()) {
-        setProcessedVotesLoading(true)
-      }
-
-      try {
-        const votes = await disputableVotingApp.votes()
-        const processedVotes = votes
-          ? votes.map((vote) => processVote(vote))
-          : null
-
-        if (mounted()) {
-          setProcessedVotes(processedVotes)
-          setProcessedVotesLoading(false)
-        }
-      } catch (err) {
-        captureErrorWithSentry(err)
-        console.error(err)
-
-        if (mounted()) {
-          setProcessedVotes(null)
-          setProcessedVotesLoading(false)
-        }
-      }
-    }
-
-    if (!appsLoading && disputableVotingApp) {
-      getExtendedVote()
-    }
-  }, [appsLoading, disputableVotingApp, mounted])
-
-  return [processedVotes, processedVotesLoading]
-}
-
 export function useDisputableVote(proposalId) {
   const mounted = useMounted()
   const { apps, disputableVotingApp, appsLoading } = useOrgApps()
