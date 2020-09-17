@@ -16,43 +16,6 @@ const votingConnecterConfig = VOTING_SUBGRAPH_URL && [
 
 const useVoting = createAppHook(connectVoting, votingConnecterConfig)
 
-function useVoteSubscription(proposalId) {
-  const { account } = useWallet()
-  const [votingApp] = useApp('disputable-voting')
-  const [
-    vote,
-    { loading: voteLoading, error: voteError },
-  ] = useVoting(
-    votingApp,
-    (app) => app.onVote(`${votingApp.address}-vote-${proposalId}`),
-    [proposalId]
-  )
-
-  // This is a workaround for receiving the latest vote after an update.
-  // Currently just listening for a vote change isn't enough to get all of the latest changes
-  // so we use a subscription to castVote which correctly triggers on a full update
-  // and use the return value as a dependency when passing down the vote.
-  const [castVote, { error: castVoteError }] = useVoting(
-    votingApp,
-    () => (vote && account ? vote.onCastVote(account) : null),
-    [account, JSON.stringify(vote)]
-  )
-
-  const castVoteDependency = JSON.stringify(castVote)
-
-  /* eslint-disable react-hooks/exhaustive-deps */
-  const updatedVote = useMemo(() => vote, [castVoteDependency])
-  /* eslint-enable react-hooks/exhaustive-deps */
-
-  const error = voteError || castVoteError
-
-  if (error) {
-    console.error(error)
-  }
-
-  return [updatedVote, { error: voteError, loading: voteLoading }]
-}
-
 export function useVoteSingle(proposalId) {
   const mounted = useMounted()
   const { account } = useWallet()
@@ -130,6 +93,43 @@ async function processVote(vote, account) {
   }
 
   return processedVote
+}
+
+function useVoteSubscription(proposalId) {
+  const { account } = useWallet()
+  const [votingApp] = useApp('disputable-voting')
+  const [
+    vote,
+    { loading: voteLoading, error: voteError },
+  ] = useVoting(
+    votingApp,
+    (app) => app.onVote(`${votingApp.address}-vote-${proposalId}`),
+    [proposalId]
+  )
+
+  // This is a workaround for receiving the latest vote after an update.
+  // Currently just listening for a vote change isn't enough to get all of the latest changes
+  // so we use a subscription to castVote which correctly triggers on a full update
+  // and use the return value as a dependency when passing down the vote.
+  const [castVote, { error: castVoteError }] = useVoting(
+    votingApp,
+    () => (vote && account ? vote.onCastVote(account) : null),
+    [account, JSON.stringify(vote)]
+  )
+
+  const castVoteDependency = JSON.stringify(castVote)
+
+  /* eslint-disable react-hooks/exhaustive-deps */
+  const updatedVote = useMemo(() => vote, [castVoteDependency])
+  /* eslint-enable react-hooks/exhaustive-deps */
+
+  const error = voteError || castVoteError
+
+  if (error) {
+    console.error(error)
+  }
+
+  return [updatedVote, { error: voteError, loading: voteLoading }]
 }
 
 async function getFeeInfo(vote) {
