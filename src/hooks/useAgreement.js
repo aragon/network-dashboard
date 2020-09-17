@@ -18,17 +18,17 @@ export function useAgreement() {
   useEffect(() => {
     async function processAgreementDetails() {
       try {
-        const { currentVersion, disputableApps, signer } = agreement
+        const {
+          currentVersion,
+          disputableApps,
+          signer,
+          stakingFactory,
+        } = agreement
         const { content, effectiveFrom, title, versionId } = currentVersion
 
         const contentIpfsUri = ethersUtils.toUtf8String(content)
 
-        const [
-          stakingFactory,
-          extendedDisputableApps,
-          agreementContent,
-        ] = await Promise.all([
-          agreementApp.stakingFactory(),
+        const [extendedDisputableApps, agreementContent] = await Promise.all([
           processDisputableApps(apps, disputableApps),
           getAgreementIpfsContent(contentIpfsUri),
         ])

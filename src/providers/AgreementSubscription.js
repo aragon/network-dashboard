@@ -20,16 +20,19 @@ function AgreementSubscriptionProvider({ children }) {
   const { account } = useWallet()
 
   const [agreementApp, agreementAppStatus] = useApp('agreement')
+
   const [currentVersion, currentVersionStatus] = useAgreement(
     agreementApp,
     (app) => app.onCurrentVersion()
   )
-
   const [disputableApps, disputableAppsStatus] = useAgreement(
     agreementApp,
     (app) => app.onDisputableApps()
   )
-
+  const [stakingFactory, stakingFactoryStatus] = useAgreement(
+    agreementApp,
+    (app) => app.stakingFactory()
+  )
   const [signer, signerStatus] = useAgreement(
     agreementApp,
     (app) => (account ? app.onSigner(account) : null),
@@ -40,12 +43,15 @@ function AgreementSubscriptionProvider({ children }) {
     agreementAppStatus.loading ||
     currentVersionStatus.loading ||
     disputableAppsStatus.loading ||
-    signerStatus.loading
+    signerStatus.loading ||
+    stakingFactoryStatus.loading
+
   const error =
     agreementAppStatus.error ||
     currentVersionStatus.error ||
     disputableAppsStatus.error ||
-    signerStatus.error
+    signerStatus.error ||
+    stakingFactoryStatus.error
 
   if (error) {
     console.error(error)
@@ -57,11 +63,12 @@ function AgreementSubscriptionProvider({ children }) {
   const signerDependency = JSON.stringify(signer)
 
   const AgreementSubscriptionState = useMemo(() => {
-    return { currentVersion, disputableApps, signer, loading }
+    return { currentVersion, stakingFactory, disputableApps, signer, loading }
     /* eslint-disable react-hooks/exhaustive-deps */
   }, [
     currentVersionDependency,
     disputableAppsDependency,
+    stakingFactory,
     signerDependency,
     loading,
   ])
