@@ -11,13 +11,13 @@ import LayoutColumns from '../Layout/LayoutColumns'
 import LoadingSection from '../Loading/LoadingSection'
 import MultiModal from '../MultiModal/MultiModal'
 import SignAgreementScreens from '../ModalFlows/SignAgreementScreens/SignAgreementScreens'
-import { useAgreementState } from '../../providers/AgreementState'
+import { useAgreement } from '../../hooks/useAgreement'
 import { useWallet } from '../../providers/Wallet'
 
 const Agreement = React.memo(function Agreement() {
   const { account } = useWallet()
   const [signModalVisible, setSignModalVisible] = useState(false)
-  const { agreement, loading } = useAgreementState()
+  const [agreement, loading] = useAgreement()
 
   const signed = agreement.signed
 
@@ -45,7 +45,7 @@ const Agreement = React.memo(function Agreement() {
         visible={signModalVisible}
         onClose={() => setSignModalVisible(false)}
       >
-        <SignAgreementScreens />
+        <SignAgreementScreens versionId={agreement.versionId} />
       </MultiModal>
     </>
   )

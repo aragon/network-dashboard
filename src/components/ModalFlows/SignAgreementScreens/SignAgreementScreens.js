@@ -1,13 +1,10 @@
 import React, { useMemo, useState, useCallback } from 'react'
+import PropTypes from 'prop-types'
 import ModalFlowBase from '../ModalFlowBase'
 import SignOverview from './SignOverview'
-import { useAgreementState } from '../../../providers/AgreementState'
 import { useActions } from '../../../hooks/useActions'
 
-function SignAgreementScreens() {
-  const {
-    agreement: { versionId },
-  } = useAgreementState()
+function SignAgreementScreens({ versionId }) {
   const { signAgreement } = useActions()
   const [transactions, setTransactions] = useState([])
 
@@ -39,6 +36,10 @@ function SignAgreementScreens() {
       screens={screens}
     />
   )
+}
+
+SignAgreementScreens.propTypes = {
+  versionId: PropTypes.string,
 }
 
 export default SignAgreementScreens
