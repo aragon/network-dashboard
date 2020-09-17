@@ -13,7 +13,6 @@ const agreementConnectorConfig = AGREEMENT_SUBGRAPH_URL && [
 ]
 
 const useAgreement = createAppHook(connectAgreement, agreementConnectorConfig)
-
 const AgreementSubscriptionContext = React.createContext()
 
 function AgreementSubscriptionProvider({ children }) {
@@ -39,6 +38,11 @@ function AgreementSubscriptionProvider({ children }) {
     [account]
   )
 
+  // We must pass as values to avoid repeated re-renders on every poll
+  const currentVersionDependency = JSON.stringify(currentVersion)
+  const disputableAppsDependency = JSON.stringify(disputableApps)
+  const signerDependency = JSON.stringify(signer)
+
   const loading =
     agreementAppStatus.loading ||
     currentVersionStatus.loading ||
@@ -56,11 +60,6 @@ function AgreementSubscriptionProvider({ children }) {
   if (error) {
     console.error(error)
   }
-
-  // We must pass as values to avoid repeated re-renders on every poll
-  const currentVersionDependency = JSON.stringify(currentVersion)
-  const disputableAppsDependency = JSON.stringify(disputableApps)
-  const signerDependency = JSON.stringify(signer)
 
   const AgreementSubscriptionState = useMemo(() => {
     return { currentVersion, stakingFactory, disputableApps, signer, loading }
