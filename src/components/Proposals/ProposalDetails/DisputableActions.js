@@ -12,15 +12,18 @@ import {
   VOTE_STATUS_REJECTED,
 } from '../disputable-vote-statuses'
 import { addressesEqual } from '../../../lib/web3-utils'
-import { useWallet } from '../../../providers/Wallet'
 
-function DisputableActions({ status, submitter, onChallenge, onSettle }) {
-  const { account } = useWallet()
-
-  const connectedAccountIsSubmitter = addressesEqual(submitter, account)
+function DisputableActions({
+  voterAccount,
+  status,
+  submitter,
+  onChallenge,
+  onSettle,
+}) {
+  const voterAccountIsSubmitter = addressesEqual(submitter, voterAccount)
 
   // TODO: add claim collateral action validation
-  if (status === VOTE_STATUS_CHALLENGED && connectedAccountIsSubmitter) {
+  if (status === VOTE_STATUS_CHALLENGED && voterAccountIsSubmitter) {
     return (
       <>
         <Button
@@ -28,7 +31,7 @@ function DisputableActions({ status, submitter, onChallenge, onSettle }) {
             margin-bottom: ${2 * GU}px;
           `}
           mode="strong"
-          disabled={!account}
+          disabled={!voterAccount}
           onClick={onSettle}
           wide
           label="Accept settlement"
@@ -38,7 +41,7 @@ function DisputableActions({ status, submitter, onChallenge, onSettle }) {
     )
   }
   if (status === VOTE_STATUS_SCHEDULED) {
-    return connectedAccountIsSubmitter ? (
+    return voterAccountIsSubmitter ? (
       <Button mode="strong" disabled wide label="Cancel proposal" />
     ) : (
       <>
@@ -46,7 +49,7 @@ function DisputableActions({ status, submitter, onChallenge, onSettle }) {
           mode="strong"
           label="Challenge proposal"
           wide
-          disabled={!account}
+          disabled={!voterAccount}
           onClick={onChallenge}
           css={`
             margin-bottom: ${1 * GU}px;
@@ -70,6 +73,7 @@ DisputableActions.propTypes = {
     VOTE_STATUS_CHALLENGED,
     VOTE_STATUS_REJECTED,
   ]),
+  voterAccount: PropTypes.string,
   submitter: PropTypes.string,
   onChallenge: PropTypes.func,
   onSettle: PropTypes.func,

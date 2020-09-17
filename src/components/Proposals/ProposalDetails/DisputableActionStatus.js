@@ -107,6 +107,7 @@ function DisputableActionStatus({ vote, onChallenge, onSettle }) {
 
         <Item>
           <DisputableActions
+            voterAccount={vote.voterInfo.account}
             status={disputableStatus}
             submitter={vote.creator}
             onChallenge={onChallenge}
