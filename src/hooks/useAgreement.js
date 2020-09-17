@@ -23,25 +23,24 @@ export function useAgreement() {
       try {
         const {
           currentVersion,
-          disputableApps,
+          appsWithRequirements,
           signer,
           stakingFactory,
         } = rawAgreement
         const { content, effectiveFrom, title, versionId } = currentVersion
 
+        // TODO: Move this to the document component level
         const contentIpfsUri = ethersUtils.toUtf8String(content)
+        const agreementContent = await getAgreementIpfsContent(contentIpfsUri)
 
-        const [extendedDisputableApps, agreementContent] = await Promise.all([
-          processDisputableApps(apps, disputableApps),
-          getAgreementIpfsContent(contentIpfsUri),
-        ])
+        const disputableApps = processDisputableApps(apps, appsWithRequirements)
 
         if (mounted()) {
           setProcessedAgreement({
             contractAddress: agreementApp.address,
             content: agreementContent,
             contentIpfsUri: contentIpfsUri,
-            disputableApps: extendedDisputableApps,
+            disputableApps: disputableApps,
             effectiveFrom: toMs(effectiveFrom),
             stakingAddress: stakingFactory,
             signed: Boolean(signer),
@@ -64,37 +63,19 @@ export function useAgreement() {
   return [processedAgreement, processing]
 }
 
-async function processDisputableApps(apps, disputableApps) {
-  // Concurrently request collateral and token requirements
-  const allRequirements = await Promise.all(
-    disputableApps.map((app) => app.collateralRequirement())
-  )
-
-  const allTokens = await Promise.all(
-    allRequirements.map((collateral) => collateral.token())
-  )
-
+function processDisputableApps(apps, disputableApps) {
   // Add collateral requirements and app presentation information
   const processedDisputableApps = disputableApps.map((disputableApp) => {
     const { iconSrc, humanName } = getAppPresentation(
       apps,
-      disputableApp.address
+      disputableApp.appAddress
     )
-
-    const collateral = allRequirements.find(
-      ({ id }) => id === disputableApp.currentCollateralRequirementId
-    )
-
-    const token = allTokens.find(({ id }) => id === collateral.tokenId)
 
     return {
+      ...disputableApp,
       appName: humanName,
-      appAddress: disputableApp.address,
-      challengeAmount: collateral.challengeAmount,
-      actionAmount: collateral.actionAmount,
       iconSrc: iconSrc,
-      token: token,
-      challengeDuration: toMs(collateral.challengeDuration),
+      challengeDuration: toMs(disputableApp.challengeDuration),
     }
   })
 
