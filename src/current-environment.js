@@ -25,3 +25,24 @@ function getNetworkEnvironment(environment) {
 export const networkEnvironment = getNetworkEnvironment(
   env('NETWORK_ENVIRONMENT')
 )
+
+const agreementSubgraphUrl = networkEnvironment.subgraphs?.agreement
+const disputableVotingSubgraphUrl =
+  networkEnvironment.subgraphs?.disputableVoting
+
+export const connector = {
+  agreement: {
+    name: 'agreement',
+    connectorConfig: agreementSubgraphUrl && [
+      'thegraph',
+      { subgraphUrl: agreementSubgraphUrl },
+    ],
+  },
+  disputableVoting: {
+    name: 'disputable-voting',
+    connectorConfig: disputableVotingSubgraphUrl && [
+      'thegraph',
+      { subgraphUrl: disputableVotingSubgraphUrl },
+    ],
+  },
+}

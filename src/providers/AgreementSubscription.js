@@ -3,24 +3,17 @@ import PropTypes from 'prop-types'
 import connectAgreement from '@aragon/connect-agreement'
 import { captureErrorWithSentry } from '../sentry'
 import { createAppHook, useApp } from '@aragon/connect-react'
-import { networkEnvironment } from '../current-environment'
+import { connector } from '../current-environment'
 import { useWallet } from '../providers/Wallet'
 
-const AGREEMENT_SUBGRAPH_URL = networkEnvironment.subgraphs?.agreement
+const { agreement } = connector
 
-const agreementConnectorConfig = AGREEMENT_SUBGRAPH_URL && [
-  'thegraph',
-  { subgraphUrl: AGREEMENT_SUBGRAPH_URL },
-]
-
-const useAgreement = createAppHook(connectAgreement, agreementConnectorConfig)
+const useAgreement = createAppHook(connectAgreement, agreement.connectorConfig)
 const AgreementSubscriptionContext = React.createContext()
 
 function AgreementSubscriptionProvider({ children }) {
   const { account } = useWallet()
-
-  const [agreementApp, agreementAppStatus] = useApp('agreement')
-
+  const [agreementApp, agreementAppStatus] = useApp(agreement.name)
   const [currentVersion, currentVersionStatus] = useAgreement(
     agreementApp,
     (app) => app.onCurrentVersion()

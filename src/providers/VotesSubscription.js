@@ -2,20 +2,18 @@ import React, { useContext, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import connectVoting from '@aragon/connect-disputable-voting'
 import { createAppHook, useApp } from '@aragon/connect-react'
-import { networkEnvironment } from '../current-environment'
+import { connector } from '../current-environment'
 
-const VOTING_SUBGRAPH_URL = networkEnvironment.subgraphs?.disputableVoting
+const { disputableVoting } = connector
 
-const votingConnecterConfig = VOTING_SUBGRAPH_URL && [
-  'thegraph',
-  { subgraphUrl: VOTING_SUBGRAPH_URL },
-]
-
-const useDisputableVoting = createAppHook(connectVoting, votingConnecterConfig)
+const useDisputableVoting = createAppHook(
+  connectVoting,
+  disputableVoting.connectorConfig
+)
 const VotesSubscriptionContext = React.createContext()
 
 function VotesSubscriptionProvider({ children }) {
-  const [votingApp, votingAppStatus] = useApp('disputable-voting')
+  const [votingApp, votingAppStatus] = useApp(disputableVoting.name)
   const [votes, votesStatus] = useDisputableVoting(votingApp, (app) =>
     app.onVotes()
   )
