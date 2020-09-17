@@ -11,9 +11,12 @@ import { useAgreementSubscription } from '../providers/AgreementSubscription'
 export function useAgreement() {
   const mounted = useMounted()
   const { apps, agreementApp } = useOrgApps()
+  const [
+    rawAgreement,
+    { loading: rawAgreementLoading },
+  ] = useAgreementSubscription()
   const [processedAgreement, setProcessedAgreement] = useState({})
-  const [agreementLoading, setAgreementLoading] = useState(true)
-  const agreement = useAgreementSubscription()
+  const [processing, setProcessing] = useState(true)
 
   useEffect(() => {
     async function processAgreementDetails() {
@@ -23,7 +26,7 @@ export function useAgreement() {
           disputableApps,
           signer,
           stakingFactory,
-        } = agreement
+        } = rawAgreement
         const { content, effectiveFrom, title, versionId } = currentVersion
 
         const contentIpfsUri = ethersUtils.toUtf8String(content)
@@ -45,7 +48,7 @@ export function useAgreement() {
             title: title,
             versionId: versionId,
           })
-          setAgreementLoading(false)
+          setProcessing(false)
         }
       } catch (err) {
         captureErrorWithSentry(err)
@@ -53,12 +56,12 @@ export function useAgreement() {
       }
     }
 
-    if (agreement && !agreement.loading) {
+    if (rawAgreement && !rawAgreementLoading) {
       processAgreementDetails()
     }
-  }, [apps, agreementApp, mounted, agreement])
+  }, [apps, rawAgreement, agreementApp, mounted, rawAgreementLoading])
 
-  return [processedAgreement, agreementLoading]
+  return [processedAgreement, processing]
 }
 
 async function processDisputableApps(apps, disputableApps) {

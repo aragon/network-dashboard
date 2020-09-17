@@ -65,7 +65,10 @@ function AgreementSubscriptionProvider({ children }) {
 
   // Only update the subscription state object when values have actually changed
   const AgreementSubscriptionState = useMemo(() => {
-    return { currentVersion, stakingFactory, disputableApps, signer, loading }
+    return [
+      { currentVersion, stakingFactory, disputableApps, signer },
+      { loading, error },
+    ]
     /* eslint-disable react-hooks/exhaustive-deps */
   }, [
     currentVersionDependency,
@@ -73,6 +76,7 @@ function AgreementSubscriptionProvider({ children }) {
     stakingFactory,
     signerDependency,
     loading,
+    error,
   ])
   /* eslint-enable react-hooks/exhaustive-deps */
 

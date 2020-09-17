@@ -12,11 +12,7 @@ const votingConnecterConfig = VOTING_SUBGRAPH_URL && [
 ]
 
 const useDisputableVoting = createAppHook(connectVoting, votingConnecterConfig)
-
-const VotesSubscriptionContext = React.createContext({
-  votes: [],
-  loading: true,
-})
+const VotesSubscriptionContext = React.createContext()
 
 function VotesSubscriptionProvider({ children }) {
   const [votingApp, votingAppStatus] = useApp('disputable-voting')
@@ -35,7 +31,7 @@ function VotesSubscriptionProvider({ children }) {
   const votesDependency = JSON.stringify(votes)
 
   const VotesSubscriptionState = useMemo(() => {
-    return { votes, loading }
+    return [votes, { loading, error }]
     /* eslint-disable react-hooks/exhaustive-deps */
   }, [votesDependency, loading])
   /* eslint-enable react-hooks/exhaustive-deps */
