@@ -1,3 +1,4 @@
+import { addressesEqual } from '../lib/web3-utils'
 import { getIpfsUrlFromUri } from '../lib/ipfs-utils'
 import iconAcl from '../assets/icon-acl.svg'
 import iconKernel from '../assets/icon-kernel.svg'
@@ -29,19 +30,17 @@ export const KNOWN_SYSTEM_APPS = new Map([
   ],
 ])
 
-export function getAppPresentation(apps, appAddress) {
-  const { contentUri, manifest, appId } = apps.find(
-    ({ address }) => address === appAddress
-  )
+export function getAppPresentation(app) {
+  const { contentUri, manifest, appId } = app
 
   // Get human readable name and icon from manifest if available
-  if (manifest && manifest.name && manifest.icons) {
+  if (manifest && contentUri) {
     const { name, icons } = manifest
-    const iconPath = icons[0].src
+    const iconPath = icons && icons[0].src
 
     return {
       humanName: name,
-      iconSrc: getIpfsUrlFromUri(contentUri) + iconPath,
+      iconSrc: iconPath ? getIpfsUrlFromUri(contentUri) + iconPath : null,
     }
   }
 

@@ -1,17 +1,14 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { AppBadge, GU } from '@aragon/ui'
-import { useDescribeVote } from '../../hooks/useDescribeVote'
 import { useOrgApps } from '../../providers/OrgApps'
 import { getAppPresentation } from '../../utils/app-utils'
 import LoadingSkeleton from '../Loading/LoadingSkeleton'
 
-/* eslint-disable react/prop-types */
-function TargetAppBadge({ script, voteId }) {
-  const { emptyScript, targetApp, loading } = useDescribeVote(script, voteId)
-
+function TargetAppBadge({ useDefaultBadge, targetApp, loading }) {
   return (
     <>
-      {emptyScript ? (
+      {useDefaultBadge ? (
         <DefaultAppBadge />
       ) : (
         <AppBadgeWithSkeleton targetApp={targetApp} loading={loading} />
@@ -20,13 +17,11 @@ function TargetAppBadge({ script, voteId }) {
   )
 }
 
+/* eslint-disable react/prop-types */
 function DefaultAppBadge() {
-  const { apps, disputableVotingApp } = useOrgApps()
+  const { disputableVotingApp } = useOrgApps()
 
-  const { humanName, iconSrc } = getAppPresentation(
-    apps,
-    disputableVotingApp.address
-  )
+  const { humanName, iconSrc } = getAppPresentation(disputableVotingApp)
 
   return (
     <AppBadge
@@ -62,5 +57,11 @@ function AppBadgeWithSkeleton({ targetApp, loading }) {
   )
 }
 /* eslint-disable react/prop-types */
+
+TargetAppBadge.propTypes = {
+  useDefaultBadge: PropTypes.bool,
+  targetApp: PropTypes.object,
+  loading: PropTypes.bool,
+}
 
 export default TargetAppBadge

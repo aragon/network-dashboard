@@ -7,7 +7,7 @@ import {
   VOTE_STATUS_DISPUTED,
   VOTE_STATUS_CHALLENGED,
 } from './disputable-vote-statuses'
-import { useDescribeVote } from '../../hooks/useDescribeVote'
+import { useDescribeScript } from '../../hooks/useDescribeScript'
 import Description from './Description'
 import DisputableStatusLabel from './DisputableStatusLabel'
 import LoadingSkeleton from '../Loading/LoadingSkeleton'
@@ -45,11 +45,7 @@ function getAttributes(status, theme) {
 function ProposalCard({ vote, onProposalClick }) {
   const theme = useTheme()
   const { context, voteId, script, id } = vote
-  const {
-    description,
-    emptyScript,
-    loading: descriptionLoading,
-  } = useDescribeVote(script, id)
+  const { description, targetApp, status } = useDescribeScript(script, id)
 
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const { backgroundColor, borderColor, disabledProgressBars } = getAttributes(
@@ -86,7 +82,11 @@ function ProposalCard({ vote, onProposalClick }) {
             }
           `}
         >
-          <TargetAppBadge script={script} voteId={id} />
+          <TargetAppBadge
+            useDefaultBadge={status.emptyScript}
+            targetApp={targetApp}
+            loading={status.loading}
+          />
         </div>
 
         <div
@@ -105,7 +105,7 @@ function ProposalCard({ vote, onProposalClick }) {
           overflow: hidden;
         `}
         >
-          {emptyScript ? (
+          {status.emptyScript ? (
             <p>
               <strong css="font-weight: bold">#{voteId}: </strong>
               {context || 'No description provided'}
@@ -113,7 +113,7 @@ function ProposalCard({ vote, onProposalClick }) {
           ) : (
             <DescriptionWithSkeleton
               description={description}
-              loading={descriptionLoading}
+              loading={status.loading}
               voteNumber={voteId}
             />
           )}

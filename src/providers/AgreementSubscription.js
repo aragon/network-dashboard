@@ -2,10 +2,11 @@ import React, { useContext, useMemo, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import connectAgreement from '@aragon/connect-agreement'
 import { captureErrorWithSentry } from '../sentry'
-import { createAppHook, useApp } from '@aragon/connect-react'
+import { createAppHook } from '@aragon/connect-react'
 import { connector } from '../current-environment'
 import { useWallet } from '../providers/Wallet'
 import { useMounted } from '../hooks/useMounted'
+import { useOrgApps } from '../providers/OrgApps'
 
 const { agreement } = connector
 
@@ -14,7 +15,8 @@ const AgreementSubscriptionContext = React.createContext()
 
 function AgreementSubscriptionProvider({ children }) {
   const { account } = useWallet()
-  const [agreementApp, agreementAppStatus] = useApp(agreement.appName)
+  const { agreementApp } = useOrgApps()
+
   const [currentVersion, currentVersionStatus] = useAgreement(
     agreementApp,
     (app) => app.onCurrentVersion()
@@ -43,7 +45,6 @@ function AgreementSubscriptionProvider({ children }) {
 
   // TODO: Tidy this once we have an improved connect-react api
   const loading =
-    agreementAppStatus.loading ||
     currentVersionStatus.loading ||
     disputableAppsStatus.loading ||
     signerStatus.loading ||
@@ -51,7 +52,6 @@ function AgreementSubscriptionProvider({ children }) {
     appsWithRequirementsLoading
 
   const error =
-    agreementAppStatus.error ||
     currentVersionStatus.error ||
     disputableAppsStatus.error ||
     signerStatus.error ||

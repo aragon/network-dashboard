@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import connectAgreement from '@aragon/connect-agreement'
 import connectVoting from '@aragon/connect-disputable-voting'
-import { useApps, createAppHook } from '@aragon/connect-react'
+import { useApps, createAppHook, useOrganization } from '@aragon/connect-react'
 import { captureErrorWithSentry } from '../sentry'
 import { connector } from '../current-environment'
 
@@ -25,22 +25,33 @@ const useDisputableVotingHook = createAppHook(
 )
 
 function OrgAppsProvider({ children }) {
-  const [apps, { error: appsError, loading: orgAppsLoading }] = useApps()
+  const [apps, { loading: orgAppsLoading, error: appsError }] = useApps()
+  const [org, { loading: orgLoading, error: orgError }] = useOrganization()
+
+  const agreementApp = getAppByName(apps, agreement.appName)
+  const disputableVotingApp = getAppByName(apps, disputableVoting.appName)
 
   const [
-    agreementApp,
+    connectedAgreementApp,
     { error: agreementError, loading: agreementAppLoading },
-  ] = useAgreementHook(getAppByName(apps, agreement.appName))
+  ] = useAgreementHook(agreementApp)
 
   const [
-    disputableVotingApp,
-    { error: disputableVotingError, loading: disputableVotingAppLoading },
-  ] = useDisputableVotingHook(getAppByName(apps, disputableVoting.appName))
+    connectedDisputableVotingApp,
+    {
+      error: disputableVotingError,
+      loading: connectedDisputableVotingAppLoading,
+    },
+  ] = useDisputableVotingHook(disputableVotingApp)
 
   const appsLoading =
-    agreementAppLoading || disputableVotingAppLoading || orgAppsLoading
+    agreementAppLoading ||
+    connectedDisputableVotingAppLoading ||
+    orgAppsLoading ||
+    orgLoading
 
-  const loadingError = appsError || agreementError || disputableVotingError
+  const loadingError =
+    appsError || agreementError || disputableVotingError || orgError
 
   if (loadingError) {
     captureErrorWithSentry(loadingError)
@@ -50,11 +61,22 @@ function OrgAppsProvider({ children }) {
   const OrgAppState = useMemo(
     () => ({
       apps,
+      org,
+      connectedAgreementApp,
+      connectedDisputableVotingApp,
       agreementApp,
       disputableVotingApp,
       appsLoading,
     }),
-    [apps, agreementApp, disputableVotingApp, appsLoading]
+    [
+      apps,
+      org,
+      connectedAgreementApp,
+      connectedDisputableVotingApp,
+      agreementApp,
+      disputableVotingApp,
+      appsLoading,
+    ]
   )
 
   return (

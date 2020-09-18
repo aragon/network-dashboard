@@ -7,7 +7,7 @@ import { useMounted } from '../hooks/useMounted'
 
 export function useDisputableVote(proposalId) {
   const mounted = useMounted()
-  const { apps, disputableVotingApp, appsLoading } = useOrgApps()
+  const { apps, connectedDisputableVotingApp, appsLoading } = useOrgApps()
   const { account } = useWallet()
   const [processedVote, setProcessedVote] = useState(null)
   const [processedVoteLoading, setProcessedVoteLoading] = useState(true)
@@ -19,8 +19,8 @@ export function useDisputableVote(proposalId) {
       }
 
       try {
-        const vote = await disputableVotingApp.vote(
-          `${disputableVotingApp.address}-vote-${proposalId}`
+        const vote = await connectedDisputableVotingApp.vote(
+          `${connectedDisputableVotingApp.address}-vote-${proposalId}`
         )
 
         const [
@@ -90,10 +90,17 @@ export function useDisputableVote(proposalId) {
       }
     }
 
-    if (!appsLoading && disputableVotingApp) {
+    if (!appsLoading && connectedDisputableVotingApp) {
       getExtendedVote()
     }
-  }, [apps, appsLoading, disputableVotingApp, proposalId, mounted, account])
+  }, [
+    apps,
+    appsLoading,
+    connectedDisputableVotingApp,
+    proposalId,
+    mounted,
+    account,
+  ])
 
   return [processedVote, processedVoteLoading]
 }
