@@ -12,12 +12,7 @@ function getAppByName(apps, appName) {
   return apps.find(({ name }) => name === appName) || null
 }
 
-const OrgAppsContext = React.createContext({
-  apps: null,
-  agreementApp: null,
-  disputableVotingApp: null,
-  appsLoading: true,
-})
+const OrgAppsContext = React.createContext()
 
 const useAgreementHook = createAppHook(
   connectAgreement,

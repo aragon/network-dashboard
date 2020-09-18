@@ -64,18 +64,17 @@ export function useAgreement() {
 }
 
 function processDisputableApps(apps, disputableApps) {
-  // Add collateral requirements and app presentation information
+  // Add presentation information for each disputable app
   const processedDisputableApps = disputableApps.map((disputableApp) => {
-    const { iconSrc, humanName } = getAppPresentation(
-      apps,
-      disputableApp.appAddress
-    )
+    const { address, challengeDuration } = disputableApp
+
+    const { iconSrc, humanName } = getAppPresentation(apps, address)
 
     return {
       ...disputableApp,
       appName: humanName,
       iconSrc: iconSrc,
-      challengeDuration: toMs(disputableApp.challengeDuration),
+      challengeDuration: toMs(challengeDuration),
     }
   })
 

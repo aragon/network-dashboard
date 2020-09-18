@@ -37,10 +37,11 @@ function AgreementSubscriptionProvider({ children }) {
     { loading: appsWithRequirementsLoading, error: appsWithRequirementsError },
   ] = useAppsWithRequirements(disputableApps)
 
-  // We must stringify the returned values for use as dependencies to avoid repeated re-renders on every poll
-  const currentVersionDependency = JSON.stringify(currentVersion)
-  const signerDependency = JSON.stringify(signer)
+  // Objects as values to avoid repeated updates on every poll
+  const currentVersionUpdateValue = JSON.stringify(currentVersion)
+  const signerUpdateValue = JSON.stringify(signer)
 
+  // TODO: Tidy this once we have an improved connect-react api
   const loading =
     agreementAppStatus.loading ||
     currentVersionStatus.loading ||
@@ -62,7 +63,7 @@ function AgreementSubscriptionProvider({ children }) {
     console.error(error)
   }
 
-  // Only update the subscription state object when values have actually changed
+  // Only update the subscription state object when values have changed
   const AgreementSubscriptionState = useMemo(() => {
     return [
       {
@@ -75,10 +76,10 @@ function AgreementSubscriptionProvider({ children }) {
     ]
     /* eslint-disable react-hooks/exhaustive-deps */
   }, [
-    currentVersionDependency,
+    currentVersionUpdateValue,
     appsWithRequirements,
     stakingFactory,
-    signerDependency,
+    signerUpdateValue,
     loading,
     error,
   ])
@@ -98,16 +99,15 @@ AgreementSubscriptionProvider.propTypes = {
 function useAppsWithRequirements(disputableApps) {
   const mounted = useMounted()
   const [appsWithRequirements, setAppsWithRequirements] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [status, setStatus] = useState({ loading: true, error: null })
 
-  // We must stringify the apps list to avoid repeated re-renders on every poll
-  const disputableAppsDependency = JSON.stringify(disputableApps)
+  // Convert to value for use as dependency to avoid updates every poll
+  const disputableAppsUpdateValue = JSON.stringify(disputableApps)
 
   useEffect(() => {
-    async function applyAppRequirements() {
+    async function processAppRequirements() {
       if (mounted()) {
-        setLoading(true)
+        setStatus({ loading: true, error: null })
       }
 
       try {
@@ -120,43 +120,49 @@ function useAppsWithRequirements(disputableApps) {
           allRequirements.map((collateral) => collateral.token())
         )
 
-        // Add collateral requirements and app presentation information
-        const appsWithRequirements = disputableApps.map((disputableApp) => {
-          const collateral = allRequirements.find(
-            ({ id }) => id === disputableApp.currentCollateralRequirementId
-          )
+        // Apply requirements to the disputableApps list
+        const appsWithRequirements = disputableApps.map(
+          ({ address, currentCollateralRequirementId }) => {
+            const {
+              challengeAmount,
+              actionAmount,
+              challengeDuration,
+              tokenId,
+            } = allRequirements.find(
+              ({ id }) => id === currentCollateralRequirementId
+            )
 
-          const token = allTokens.find(({ id }) => id === collateral.tokenId)
+            const token = allTokens.find(({ id }) => id === tokenId)
 
-          return {
-            appAddress: disputableApp.address,
-            challengeAmount: collateral.challengeAmount,
-            actionAmount: collateral.actionAmount,
-            token: token,
-            challengeDuration: collateral.challengeDuration,
+            return {
+              address: address,
+              challengeAmount: challengeAmount,
+              actionAmount: actionAmount,
+              token: token,
+              challengeDuration: challengeDuration,
+            }
           }
-        })
+        )
 
         if (mounted()) {
           setAppsWithRequirements(appsWithRequirements)
-          setLoading(false)
+          setStatus({ loading: false, error: null })
         }
       } catch (err) {
         if (mounted()) {
-          setError(err)
-          setLoading(false)
+          setStatus({ loading: false, error: err })
         }
       }
     }
 
     if (disputableApps) {
-      applyAppRequirements()
+      processAppRequirements()
     }
     /* eslint-disable react-hooks/exhaustive-deps */
-  }, [disputableAppsDependency])
+  }, [disputableAppsUpdateValue])
   /* eslint-enable react-hooks/exhaustive-deps */
 
-  return [appsWithRequirements, { loading, error }]
+  return [appsWithRequirements, status]
 }
 
 function useAgreementSubscription() {
