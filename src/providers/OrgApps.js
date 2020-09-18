@@ -30,12 +30,12 @@ function OrgAppsProvider({ children }) {
   const [
     agreementApp,
     { error: agreementError, loading: agreementAppLoading },
-  ] = useAgreementHook(getAppByName(apps, agreement.name))
+  ] = useAgreementHook(getAppByName(apps, agreement.appName))
 
   const [
     disputableVotingApp,
     { error: disputableVotingError, loading: disputableVotingAppLoading },
-  ] = useDisputableVotingHook(getAppByName(apps, disputableVoting.name))
+  ] = useDisputableVotingHook(getAppByName(apps, disputableVoting.appName))
 
   const appsLoading =
     agreementAppLoading || disputableVotingAppLoading || orgAppsLoading
