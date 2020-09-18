@@ -6,56 +6,48 @@ import { toMs } from '../utils/date-utils'
 import { useOrgApps } from '../providers/OrgApps'
 import { getAppPresentation } from '../utils/app-utils'
 import { useMounted } from './useMounted'
-import { useWallet } from '../providers/Wallet'
+import { useAgreementSubscription } from '../providers/AgreementSubscription'
 
 export function useAgreement() {
   const mounted = useMounted()
-  const { account } = useWallet()
-  const { apps, agreementApp, appsLoading } = useOrgApps()
-  const [agreement, setAgreement] = useState({})
-  const [agreementLoading, setAgreementLoading] = useState(true)
-
-  const canProcess = !appsLoading && agreementApp
+  const { apps, agreementApp } = useOrgApps()
+  const [agreement, { loading: agreementLoading }] = useAgreementSubscription()
+  const [processedAgreement, setProcessedAgreement] = useState({})
+  const [processing, setProcessing] = useState(true)
 
   useEffect(() => {
     async function processAgreementDetails() {
       try {
-        const [
+        const {
           currentVersion,
-          stakingFactory,
-          disputableApps,
-        ] = await Promise.all([
-          agreementApp.currentVersion(),
-          agreementApp.stakingFactory(),
-          agreementApp.disputableApps(),
-        ])
-
-        const { content, effectiveFrom, title, versionId } = currentVersion
-        const contentIpfsUri = ethersUtils.toUtf8String(content)
-
-        const [
-          extendedDisputableApps,
-          agreementContent,
+          appsWithRequirements,
           signer,
-        ] = await Promise.all([
-          processDisputableApps(apps, disputableApps),
-          getAgreementIpfsContent(contentIpfsUri),
-          account ? agreementApp.signer(account) : null,
-        ])
+          stakingFactory,
+        } = agreement
+        const { content, effectiveFrom, title, versionId } = currentVersion
+
+        // TODO: Move this to the document component level
+        const contentIpfsUri = ethersUtils.toUtf8String(content)
+        const agreementContent = await getAgreementIpfsContent(contentIpfsUri)
+
+        const disputableAppsWithRequirements = processDisputableApps(
+          apps,
+          appsWithRequirements
+        )
 
         if (mounted()) {
-          setAgreement({
+          setProcessedAgreement({
             contractAddress: agreementApp.address,
             content: agreementContent,
             contentIpfsUri: contentIpfsUri,
-            disputableApps: extendedDisputableApps,
+            disputableApps: disputableAppsWithRequirements,
             effectiveFrom: toMs(effectiveFrom),
             stakingAddress: stakingFactory,
             signed: Boolean(signer),
             title: title,
             versionId: versionId,
           })
-          setAgreementLoading(false)
+          setProcessing(false)
         }
       } catch (err) {
         captureErrorWithSentry(err)
@@ -63,47 +55,30 @@ export function useAgreement() {
       }
     }
 
-    if (canProcess) {
+    if (agreement && !agreementLoading) {
       processAgreementDetails()
     }
-  }, [apps, agreementApp, canProcess, mounted, account])
+  }, [apps, agreement, agreementApp, mounted, agreementLoading])
 
-  return [agreement, agreementLoading]
+  return [processedAgreement, processing]
 }
 
-async function processDisputableApps(apps, disputableApps) {
-  const allRequirements = await Promise.all(
-    disputableApps.map((app) => app.collateralRequirement())
-  )
+function processDisputableApps(apps, disputableApps) {
+  // Add presentation information and value formatting for each app
+  const processedDisputableApps = disputableApps.map((disputableApp) => {
+    const { address, challengeDuration } = disputableApp
 
-  const allTokens = await Promise.all(
-    allRequirements.map((collateral) => collateral.token())
-  )
-
-  const extendedDisputableApps = disputableApps.map((disputableApp) => {
-    const { iconSrc, humanName } = getAppPresentation(
-      apps,
-      disputableApp.address
-    )
-
-    const collateral = allRequirements.find(
-      ({ id }) => id === disputableApp.currentCollateralRequirementId
-    )
-
-    const token = allTokens.find(({ id }) => id === collateral.tokenId)
+    const { iconSrc, humanName } = getAppPresentation(apps, address)
 
     return {
+      ...disputableApp,
       appName: humanName,
-      appAddress: disputableApp.address,
-      challengeAmount: collateral.challengeAmount,
-      actionAmount: collateral.actionAmount,
       iconSrc: iconSrc,
-      token: token,
-      challengeDuration: toMs(collateral.challengeDuration),
+      challengeDuration: toMs(challengeDuration),
     }
   })
 
-  return extendedDisputableApps
+  return processedDisputableApps
 }
 
 async function getAgreementIpfsContent(ipfsUri) {
