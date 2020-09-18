@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { utils as ethersUtils } from 'ethers'
 import { captureErrorWithSentry } from '../sentry'
-import { getIpfsCidFromUri, ipfsGet } from '../lib/ipfs-utils'
 import { toMs } from '../utils/date-utils'
 import { useOrgApps } from '../providers/OrgApps'
 import { getAppPresentation } from '../utils/app-utils'
@@ -26,10 +25,6 @@ export function useAgreement() {
         } = agreement
         const { content, effectiveFrom, title, versionId } = currentVersion
 
-        // TODO: Move this to the document component level
-        const contentIpfsUri = ethersUtils.toUtf8String(content)
-        const agreementContent = await getAgreementIpfsContent(contentIpfsUri)
-
         const disputableAppsWithRequirements = processDisputableApps(
           apps,
           appsWithRequirements
@@ -38,8 +33,7 @@ export function useAgreement() {
         if (mounted()) {
           setProcessedAgreement({
             contractAddress: agreementApp.address,
-            content: agreementContent,
-            contentIpfsUri: contentIpfsUri,
+            contentIpfsUri: ethersUtils.toUtf8String(content),
             disputableApps: disputableAppsWithRequirements,
             effectiveFrom: toMs(effectiveFrom),
             stakingAddress: stakingFactory,
@@ -79,18 +73,4 @@ function processDisputableApps(apps, disputableApps) {
   })
 
   return processedDisputableApps
-}
-
-async function getAgreementIpfsContent(ipfsUri) {
-  const { data, error } = await ipfsGet(getIpfsCidFromUri(ipfsUri))
-
-  // TODO: Improve error handling, returning empty string to avoid render error
-  if (error) {
-    captureErrorWithSentry(error)
-    console.error(error)
-
-    return ''
-  }
-
-  return data
 }
