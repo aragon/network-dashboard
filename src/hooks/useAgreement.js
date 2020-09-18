@@ -11,10 +11,7 @@ import { useAgreementSubscription } from '../providers/AgreementSubscription'
 export function useAgreement() {
   const mounted = useMounted()
   const { apps, agreementApp } = useOrgApps()
-  const [
-    rawAgreement,
-    { loading: rawAgreementLoading },
-  ] = useAgreementSubscription()
+  const [agreement, { loading: agreementLoading }] = useAgreementSubscription()
   const [processedAgreement, setProcessedAgreement] = useState({})
   const [processing, setProcessing] = useState(true)
 
@@ -26,21 +23,24 @@ export function useAgreement() {
           appsWithRequirements,
           signer,
           stakingFactory,
-        } = rawAgreement
+        } = agreement
         const { content, effectiveFrom, title, versionId } = currentVersion
 
         // TODO: Move this to the document component level
         const contentIpfsUri = ethersUtils.toUtf8String(content)
         const agreementContent = await getAgreementIpfsContent(contentIpfsUri)
 
-        const disputableApps = processDisputableApps(apps, appsWithRequirements)
+        const disputableAppsWithRequirements = processDisputableApps(
+          apps,
+          appsWithRequirements
+        )
 
         if (mounted()) {
           setProcessedAgreement({
             contractAddress: agreementApp.address,
             content: agreementContent,
             contentIpfsUri: contentIpfsUri,
-            disputableApps: disputableApps,
+            disputableApps: disputableAppsWithRequirements,
             effectiveFrom: toMs(effectiveFrom),
             stakingAddress: stakingFactory,
             signed: Boolean(signer),
@@ -55,16 +55,16 @@ export function useAgreement() {
       }
     }
 
-    if (rawAgreement && !rawAgreementLoading) {
+    if (agreement && !agreementLoading) {
       processAgreementDetails()
     }
-  }, [apps, rawAgreement, agreementApp, mounted, rawAgreementLoading])
+  }, [apps, agreement, agreementApp, mounted, agreementLoading])
 
   return [processedAgreement, processing]
 }
 
 function processDisputableApps(apps, disputableApps) {
-  // Add presentation information for each disputable app
+  // Add presentation information and value formatting for each app
   const processedDisputableApps = disputableApps.map((disputableApp) => {
     const { address, challengeDuration } = disputableApp
 
