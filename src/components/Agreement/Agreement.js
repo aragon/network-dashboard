@@ -55,7 +55,6 @@ const Agreement = React.memo(function Agreement() {
 function AgreementLayout({ agreement, signedAgreement }) {
   const {
     title,
-    content,
     contractAddress,
     contentIpfsUri,
     effectiveFrom,
@@ -77,7 +76,7 @@ function AgreementLayout({ agreement, signedAgreement }) {
               signedAgreement={signedAgreement}
             />
           </LayoutBox>
-          <AgreementDocument content={content} />
+          <AgreementDocument ipfsUri={contentIpfsUri} />
         </>
       }
       secondary={<AgreementBindingActions disputableApps={disputableApps} />}

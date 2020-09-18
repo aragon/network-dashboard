@@ -1,17 +1,44 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Box, Markdown, textStyle, useTheme, useLayout, GU } from '@aragon/ui'
+import { useMounted } from '../../hooks/useMounted'
 
-function AgreementDocument({ content }) {
+import { Box, Markdown, textStyle, useTheme, useLayout, GU } from '@aragon/ui'
+import { getIpfsCidFromUri, ipfsGet } from '../../lib/ipfs-utils'
+
+function AgreementDocument({ ipfsUri }) {
+  const mounted = useMounted()
   const { layoutName } = useLayout()
+  const [markdownContent, setMarkdownContent] = useState('')
   const theme = useTheme()
   const compactMode = layoutName === 'small'
+
+  useEffect(() => {
+    // TODO: Add loading state if data size becomes large enough to be a problem
+    async function getAgreementIpfsContent() {
+      const { data, error } = await ipfsGet(getIpfsCidFromUri(ipfsUri))
+
+      if (error && mounted()) {
+        // Fail gracefully on error and render just the empty component
+        setMarkdownContent('')
+
+        return
+      }
+
+      if (mounted()) {
+        setMarkdownContent(data)
+      }
+    }
+
+    if (ipfsUri) {
+      getAgreementIpfsContent()
+    }
+  }, [ipfsUri, mounted])
 
   return (
     <Box padding={0}>
       <Article theme={theme} compact={compactMode}>
-        <Markdown content={content} />
+        <Markdown content={markdownContent} />
       </Article>
     </Box>
   )
@@ -95,7 +122,7 @@ const Article = styled.article`
 `
 
 AgreementDocument.propTypes = {
-  content: PropTypes.string.isRequired,
+  ipfsUri: PropTypes.string.isRequired,
 }
 
 export default AgreementDocument
