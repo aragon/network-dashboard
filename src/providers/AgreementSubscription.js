@@ -14,7 +14,7 @@ const AgreementSubscriptionContext = React.createContext()
 
 function AgreementSubscriptionProvider({ children }) {
   const { account } = useWallet()
-  const [agreementApp, agreementAppStatus] = useApp(agreement.name)
+  const [agreementApp, agreementAppStatus] = useApp(agreement.appName)
   const [currentVersion, currentVersionStatus] = useAgreement(
     agreementApp,
     (app) => app.onCurrentVersion()

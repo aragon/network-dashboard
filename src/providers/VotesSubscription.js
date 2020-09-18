@@ -14,7 +14,7 @@ const useDisputableVoting = createAppHook(
 const VotesSubscriptionContext = React.createContext()
 
 function VotesSubscriptionProvider({ children }) {
-  const [votingApp, votingAppStatus] = useApp(disputableVoting.name)
+  const [votingApp, votingAppStatus] = useApp(disputableVoting.appName)
   const [votes, votesStatus] = useDisputableVoting(votingApp, (app) =>
     app.onVotes()
   )
