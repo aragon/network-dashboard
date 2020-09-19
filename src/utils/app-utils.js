@@ -1,4 +1,3 @@
-import { addressesEqual } from '../lib/web3-utils'
 import { getIpfsUrlFromUri } from '../lib/ipfs-utils'
 import iconAcl from '../assets/icon-acl.svg'
 import iconKernel from '../assets/icon-kernel.svg'
