@@ -199,14 +199,12 @@ VoteActions.propTypes = {
   onVoteYes: PropTypes.func,
   onVoteNo: PropTypes.func,
   onExecute: PropTypes.func,
-  onChangeVote: PropTypes.func,
 }
 
 VoteActions.defaultProps = {
   onVoteYes: noop,
   onVoteNo: noop,
   onExecute: noop,
-  onChangeVote: noop,
 }
 
 export default VoteActions
