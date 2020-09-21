@@ -57,6 +57,23 @@ export function useActions() {
     [account, connectedAgreementApp, mounted]
   )
 
+  const raiseDispute = useCallback(
+    async ({ actionId, finishedEvidence }, onDone = noop) => {
+      catchErrors(async () => {
+        const intent = await connectedAgreementApp.dispute(
+          actionId,
+          finishedEvidence,
+          account
+        )
+
+        if (mounted()) {
+          onDone(intent)
+        }
+      })
+    },
+    [account, connectedAgreementApp, mounted]
+  )
+
   const voteOnProposal = useCallback(
     async ({ voteId, voteSupported }, onDone = noop) => {
       catchErrors(async () => {
@@ -80,8 +97,15 @@ export function useActions() {
       challengeProposal,
       settleDispute,
       voteOnProposal,
+      raiseDispute,
     }),
-    [signAgreement, challengeProposal, settleDispute, voteOnProposal]
+    [
+      signAgreement,
+      challengeProposal,
+      settleDispute,
+      voteOnProposal,
+      raiseDispute,
+    ]
   )
 
   return actions
