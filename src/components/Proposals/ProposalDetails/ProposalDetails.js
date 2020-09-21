@@ -141,7 +141,7 @@ function ProposalDetails({ vote }) {
                 status={disputableStatus}
                 emptyScript={status.emptyScript}
                 description={description}
-                loading={status.loading}
+                descriptionLoading={status.loading}
               />
               <SummaryInfo
                 vote={vote}
@@ -203,7 +203,13 @@ function ProposalDetails({ vote }) {
 }
 
 /* eslint-disable react/prop-types */
-function Details({ vote, status, loading, emptyScript, description }) {
+function Details({
+  vote,
+  disputableStatus,
+  descriptionLoading,
+  emptyScript,
+  description,
+}) {
   const { context, creator, collateral, collateralToken } = vote
 
   const { layoutName } = useLayout()
@@ -219,7 +225,6 @@ function Details({ vote, status, loading, emptyScript, description }) {
     <div
       css={`
         display: grid;
-
         grid-template-columns: ${twoColumnMode ? `1fr ${30 * GU}px` : '1fr'};
         grid-gap: ${3 * GU}px;
       `}
@@ -233,7 +238,7 @@ function Details({ vote, status, loading, emptyScript, description }) {
           <InfoField label="Description">
             <DescriptionWithSkeleton
               description={description}
-              loading={loading}
+              loading={descriptionLoading}
             />
           </InfoField>
 
@@ -269,7 +274,7 @@ function Details({ vote, status, loading, emptyScript, description }) {
       )}
 
       <InfoField label="Status">
-        <DisputableStatusLabel status={status} />
+        <DisputableStatusLabel status={disputableStatus} />
       </InfoField>
 
       <InfoField label="Action collateral">
