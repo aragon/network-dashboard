@@ -1,61 +1,48 @@
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { utils as ethersUtils } from 'ethers'
 import { addressesEqual } from '../lib/web3-utils'
-import { captureErrorWithSentry } from '../sentry'
 import { toMs } from '../utils/date-utils'
 import { useOrgApps } from '../providers/OrgApps'
 import { getAppPresentation } from '../utils/app-utils'
-import { useMounted } from './useMounted'
 import { useAgreementSubscription } from '../providers/AgreementSubscription'
 
 export function useAgreement() {
-  const mounted = useMounted()
   const { apps, agreementApp } = useOrgApps()
   const [agreement, { loading: agreementLoading }] = useAgreementSubscription()
-  const [processedAgreement, setProcessedAgreement] = useState({})
-  const [processing, setProcessing] = useState(true)
 
-  useEffect(() => {
-    async function processAgreementDetails() {
-      try {
-        const {
-          currentVersion,
-          appsWithRequirements,
-          signer,
-          stakingFactory,
-        } = agreement
-        const { content, effectiveFrom, title, versionId } = currentVersion
+  const processedAgreement = useMemo(() => {
+    return agreement && !agreementLoading
+      ? processAgreement(agreement, apps, agreementApp)
+      : {}
+  }, [agreement, apps, agreementApp, agreementLoading])
 
-        const disputableAppsWithRequirements = processDisputableApps(
-          apps,
-          appsWithRequirements
-        )
+  return [processedAgreement, agreementLoading]
+}
 
-        if (mounted()) {
-          setProcessedAgreement({
-            contractAddress: agreementApp.address,
-            contentIpfsUri: ethersUtils.toUtf8String(content),
-            disputableApps: disputableAppsWithRequirements,
-            effectiveFrom: toMs(effectiveFrom),
-            stakingAddress: stakingFactory,
-            signed: Boolean(signer),
-            title: title,
-            versionId: versionId,
-          })
-          setProcessing(false)
-        }
-      } catch (err) {
-        captureErrorWithSentry(err)
-        console.error(err)
-      }
-    }
+function processAgreement(agreement, apps, agreementApp) {
+  const {
+    currentVersion,
+    appsWithRequirements,
+    signer,
+    stakingFactory,
+  } = agreement
+  const { content, effectiveFrom, title, versionId } = currentVersion
 
-    if (agreement && !agreementLoading) {
-      processAgreementDetails()
-    }
-  }, [apps, agreement, agreementApp, mounted, agreementLoading])
+  const disputableAppsWithRequirements = processDisputableApps(
+    apps,
+    appsWithRequirements
+  )
 
-  return [processedAgreement, processing]
+  return {
+    contractAddress: agreementApp.address,
+    contentIpfsUri: ethersUtils.toUtf8String(content),
+    disputableApps: disputableAppsWithRequirements,
+    effectiveFrom: toMs(effectiveFrom),
+    stakingAddress: stakingFactory,
+    signed: Boolean(signer),
+    title: title,
+    versionId: versionId,
+  }
 }
 
 function processDisputableApps(apps, disputableApps) {
