@@ -14,7 +14,13 @@ import {
 import { addressesEqual } from '../../../lib/web3-utils'
 import { useWallet } from '../../../providers/Wallet'
 
-function DisputableActions({ status, submitter, onChallenge, onSettle }) {
+function DisputableActions({
+  status,
+  submitter,
+  onChallenge,
+  onSettle,
+  onRaise,
+}) {
   const { account } = useWallet()
 
   const connectedAccountIsSubmitter = addressesEqual(submitter, account)
@@ -33,7 +39,14 @@ function DisputableActions({ status, submitter, onChallenge, onSettle }) {
           wide
           label="Accept settlement"
         />
-        <Button mode="normal" disabled wide label="Raise dispute to court" />
+
+        <Button
+          mode="normal"
+          disabled={!account}
+          onClick={onRaise}
+          wide
+          label="Raise to Aragon Court"
+        />
       </>
     )
   }
@@ -73,11 +86,13 @@ DisputableActions.propTypes = {
   submitter: PropTypes.string,
   onChallenge: PropTypes.func,
   onSettle: PropTypes.func,
+  onRaise: PropTypes.func,
 }
 
 DisputableActions.defaultProps = {
   onChallenge: noop,
   onSettle: noop,
+  onRaise: noop,
 }
 
 export default DisputableActions

@@ -45,6 +45,7 @@ import MultiModal from '../../MultiModal/MultiModal'
 import VoteOnProposalScreens from '../../ModalFlows/VoteOnProposalScreens/VoteOnProposalScreens'
 import ChallengeProposalScreens from '../../ModalFlows/ChallengeProposalScreens/ChallengeProposalScreens'
 import SettleProposalScreens from '../../ModalFlows/SettleProposalScreens/SettleProposalScreens'
+import RaiseDisputeScreens from '../../ModalFlows/RaiseDisputeScreens/RaiseDisputeScreens'
 
 function getPresentation(disputableStatus) {
   const disputablePresentation = {
@@ -170,6 +171,7 @@ function ProposalDetails({ vote }) {
               vote={vote}
               onSettle={() => handleShowModal('settle')}
               onChallenge={() => handleShowModal('challenge')}
+              onRaise={() => handleShowModal('raise')}
             />
             <InfoBoxes
               vote={vote}
@@ -197,6 +199,8 @@ function ProposalDetails({ vote }) {
         {modalMode === 'settle' && (
           <SettleProposalScreens actionId={actionId} />
         )}
+
+        {modalMode === 'raise' && <RaiseDisputeScreens actionId={actionId} />}
       </MultiModal>
     </>
   )

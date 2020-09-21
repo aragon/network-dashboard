@@ -12,7 +12,7 @@ import DisputablePeriod from './DisputablePeriod'
 import { durationToHours, toMs } from '../../../utils/date-utils'
 import { networkEnvironment } from '../../../current-environment'
 
-function DisputableActionStatus({ vote, onChallenge, onSettle }) {
+function DisputableActionStatus({ vote, onChallenge, onSettle, onRaise }) {
   const theme = useTheme()
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const challenged = disputableStatus === VOTE_STATUS_CHALLENGED
@@ -111,6 +111,7 @@ function DisputableActionStatus({ vote, onChallenge, onSettle }) {
             submitter={vote.creator}
             onChallenge={onChallenge}
             onSettle={onSettle}
+            onRaise={onRaise}
           />
         </Item>
       </ul>
@@ -152,6 +153,7 @@ DisputableActionStatus.propTypes = {
   vote: PropTypes.object.isRequired,
   onChallenge: PropTypes.func.isRequired,
   onSettle: PropTypes.func.isRequired,
+  onRaise: PropTypes.func.isRequired,
 }
 
 export default DisputableActionStatus
