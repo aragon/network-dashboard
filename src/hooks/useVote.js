@@ -56,7 +56,7 @@ function useVoteSubscription(proposalId) {
   const [
     extendedVote,
     { loading: extendedVoteLoading, error: extendedVoteError },
-  ] = useExtendVote(latestVote)
+  ] = useExtendVote(latestVote, proposalId)
 
   const error = voteError || castVoteError || extendedVoteError
 
@@ -76,9 +76,9 @@ function useVoteSubscription(proposalId) {
   return [extendedVote, extendedVoteLoading]
 }
 
-function useExtendVote(vote) {
-  const { account } = useWallet()
+function useExtendVote(vote, proposalId) {
   const mounted = useMounted()
+  const { account } = useWallet()
   const [extendedVote, setExtendedVote] = useState({})
   const [status, setStatus] = useState({ loading: true, error: null })
 
@@ -87,10 +87,6 @@ function useExtendVote(vote) {
 
   useEffect(() => {
     async function processAppRequirements() {
-      if (mounted()) {
-        setStatus({ loading: true, error: null })
-      }
-
       try {
         const orgToken = await vote.token()
 
@@ -135,8 +131,15 @@ function useExtendVote(vote) {
       processAppRequirements()
     }
     /* eslint-disable react-hooks/exhaustive-deps */
-  }, [voteUpdateValue])
+  }, [voteUpdateValue, account])
   /* eslint-enable react-hooks/exhaustive-deps */
+
+  // Flip back to the loading state when updating route via the address bar
+  useEffect(() => {
+    if (mounted()) {
+      setStatus({ loading: true, error: null })
+    }
+  }, [proposalId, mounted])
 
   return [extendedVote, status]
 }
