@@ -39,7 +39,7 @@ export function getAppPresentation(app) {
 
     return {
       humanName: name,
-      iconSrc: iconPath ? getIpfsUrlFromUri(contentUri) + iconPath : null,
+      iconSrc: iconPath ? getIpfsUrlFromUri(contentUri) + iconPath : '',
     }
   }
 

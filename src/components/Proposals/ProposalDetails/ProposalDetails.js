@@ -138,7 +138,7 @@ function ProposalDetails({ vote }) {
               </h1>
               <Details
                 vote={vote}
-                status={disputableStatus}
+                disputableStatus={disputableStatus}
                 emptyScript={status.emptyScript}
                 description={description}
                 descriptionLoading={status.loading}
