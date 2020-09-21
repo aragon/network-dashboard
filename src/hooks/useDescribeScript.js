@@ -1,18 +1,17 @@
 import { useEffect, useState, useMemo } from 'react'
-import { useOrganization } from '@aragon/connect-react'
-import { useOrgApps } from '../providers/OrgApps'
 import { getAppPresentation } from '../utils/app-utils'
 import { addressesEqual } from '../lib/web3-utils'
 import { useMounted } from '../hooks/useMounted'
+import { useOrgApps } from '../providers/OrgApps'
 
 const cachedDescriptions = new Map([])
 
-export function useDescribeVote(script, voteId) {
+export function useDescribeScript(script, key) {
   const mounted = useMounted()
-  const [org] = useOrganization()
-  const { apps } = useOrgApps()
+  const { apps, org } = useOrgApps()
   const [description, setDescription] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   const emptyScript = script === '0x00000001'
 
@@ -27,47 +26,69 @@ export function useDescribeVote(script, voteId) {
 
   useEffect(() => {
     if (emptyScript) {
-      return
-    }
-
-    // Return from cache if description was previously fetched
-    if (cachedDescriptions.has(voteId)) {
       if (mounted()) {
-        setDescription(cachedDescriptions.get(voteId))
+        setDescription(null)
         setLoading(false)
       }
 
       return
     }
 
-    async function describe() {
+    // Return from cache if description was previously fetched
+    if (cachedDescriptions.has(key)) {
+      if (mounted()) {
+        setDescription(cachedDescriptions.get(key))
+        setLoading(false)
+      }
+
+      return
+    }
+
+    async function getDescribedSteps() {
       try {
-        const { describedSteps } = await org.describeScript(script)
+        const described = await org.describeScript(script)
+
+        // Cache vote description to avoid unnecessary future call
+        cachedDescriptions.set(key, described.describedSteps)
 
         if (mounted()) {
-          setDescription(describedSteps)
+          setDescription(described.describedSteps)
           setLoading(false)
-
-          // Cache vote description to avoid unnecessary future call
-          cachedDescriptions.set(voteId, describedSteps)
         }
       } catch (err) {
         console.error(err)
+
+        if (mounted()) {
+          setError(err)
+          setLoading(false)
+        }
       }
     }
 
-    describe()
-  }, [emptyScript, script, voteId, org, mounted])
+    getDescribedSteps()
+  }, [script, key, org, mounted, emptyScript])
 
-  return { description, emptyScript, loading, targetApp }
+  return {
+    description,
+    targetApp,
+    status: {
+      loading,
+      error,
+      emptyScript,
+    },
+  }
 }
 
 function targetDataFromTransactionRequest(apps, transactionRequest) {
   const { to: targetAppAddress, name, identifier } = transactionRequest
 
+  const targetApp = apps.find(({ address }) =>
+    addressesEqual(address, targetAppAddress)
+  )
+
   // Populate details via our apps list if it's available
-  if (apps.some(({ address }) => addressesEqual(address, targetAppAddress))) {
-    const { humanName, iconSrc } = getAppPresentation(apps, targetAppAddress)
+  if (targetApp) {
+    const { humanName, iconSrc } = getAppPresentation(targetApp)
     return {
       address: targetAppAddress,
       name: humanName,

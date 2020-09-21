@@ -37,7 +37,7 @@ import VoteCast from './VoteCast'
 import TargetAppBadge from '../TargetAppBadge'
 import { addressesEqual } from '../../../lib/web3-utils'
 import { getIpfsUrlFromUri } from '../../../lib/ipfs-utils'
-import { useDescribeVote } from '../../../hooks/useDescribeVote'
+import { useDescribeScript } from '../../../hooks/useDescribeScript'
 import LoadingSkeleton from '../../Loading/LoadingSkeleton'
 import { useWallet } from '../../../providers/Wallet'
 import { toMs } from '../../../utils/date-utils'
@@ -75,6 +75,8 @@ function ProposalDetails({ vote }) {
   const [voteSupported, setVoteSupported] = useState(false)
   const { actionId, voteId, id, script, voterInfo, orgToken } = vote
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
+
+  const { description, targetApp, status } = useDescribeScript(script, id)
 
   const { boxPresentation, disabledProgressBars } = useMemo(
     () => getPresentation(disputableStatus),
@@ -117,7 +119,11 @@ function ProposalDetails({ vote }) {
                   justify-content: space-between;
                 `}
               >
-                <TargetAppBadge script={script} voteId={id} />
+                <TargetAppBadge
+                  useDefaultBadge={status.emptyScript}
+                  targetApp={targetApp}
+                  loading={status.loading}
+                />
                 {accountHasVoted && (
                   <Tag icon={<IconCheck size="small" />} label="Voted" />
                 )}
@@ -130,7 +136,13 @@ function ProposalDetails({ vote }) {
               >
                 Vote #{voteId}
               </h1>
-              <Details vote={vote} status={disputableStatus} />
+              <Details
+                vote={vote}
+                disputableStatus={disputableStatus}
+                emptyScript={status.emptyScript}
+                description={description}
+                descriptionLoading={status.loading}
+              />
               <SummaryInfo
                 vote={vote}
                 disabledProgressBars={disabledProgressBars}
@@ -191,13 +203,14 @@ function ProposalDetails({ vote }) {
 }
 
 /* eslint-disable react/prop-types */
-function Details({ vote, status }) {
-  const { context, creator, collateral, collateralToken, script } = vote
-  const {
-    description,
-    emptyScript,
-    loading: descriptionLoading,
-  } = useDescribeVote(script, vote.id)
+function Details({
+  vote,
+  disputableStatus,
+  descriptionLoading,
+  emptyScript,
+  description,
+}) {
+  const { context, creator, collateral, collateralToken } = vote
 
   const { layoutName } = useLayout()
 
@@ -212,7 +225,6 @@ function Details({ vote, status }) {
     <div
       css={`
         display: grid;
-
         grid-template-columns: ${twoColumnMode ? `1fr ${30 * GU}px` : '1fr'};
         grid-gap: ${3 * GU}px;
       `}
@@ -262,7 +274,7 @@ function Details({ vote, status }) {
       )}
 
       <InfoField label="Status">
-        <DisputableStatusLabel status={status} />
+        <DisputableStatusLabel status={disputableStatus} />
       </InfoField>
 
       <InfoField label="Action collateral">

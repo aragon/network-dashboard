@@ -1,27 +1,23 @@
 import React, { useContext, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import connectVoting from '@aragon/connect-disputable-voting'
-import { createAppHook, useApp } from '@aragon/connect-react'
+import { createAppHook } from '@aragon/connect-react'
 import { captureErrorWithSentry } from '../sentry'
-import { connector } from '../current-environment'
-
-const { disputableVoting } = connector
+import { connectorConfig } from '../current-environment'
+import { useOrgApps } from '../providers/OrgApps'
 
 const useDisputableVoting = createAppHook(
   connectVoting,
-  disputableVoting.connectorConfig
+  connectorConfig.disputableVoting
 )
 const VotesSubscriptionContext = React.createContext()
 
 function VotesSubscriptionProvider({ children }) {
-  const [votingApp, votingAppStatus] = useApp(disputableVoting.appName)
-  const [votes, votesStatus] = useDisputableVoting(votingApp, (app) =>
-    app.onVotes()
+  const { disputableVotingApp } = useOrgApps()
+  const [votes, { loading, error }] = useDisputableVoting(
+    disputableVotingApp,
+    (app) => app.onVotes()
   )
-
-  const loading = votingAppStatus.loading || votesStatus.loading
-  const error = votingAppStatus.error || votesStatus.error
-
   if (error) {
     captureErrorWithSentry(error)
     console.error(error)

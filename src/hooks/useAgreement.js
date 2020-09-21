@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { utils as ethersUtils } from 'ethers'
+import { addressesEqual } from '../lib/web3-utils'
 import { captureErrorWithSentry } from '../sentry'
 import { toMs } from '../utils/date-utils'
 import { useOrgApps } from '../providers/OrgApps'
@@ -60,9 +61,13 @@ export function useAgreement() {
 function processDisputableApps(apps, disputableApps) {
   // Add presentation information and value formatting for each app
   const processedDisputableApps = disputableApps.map((disputableApp) => {
-    const { address, challengeDuration } = disputableApp
+    const { address: disputableAppAddress, challengeDuration } = disputableApp
 
-    const { iconSrc, humanName } = getAppPresentation(apps, address)
+    const app = apps.find(({ address }) =>
+      addressesEqual(address, disputableAppAddress)
+    )
+
+    const { iconSrc, humanName } = getAppPresentation(app)
 
     return {
       ...disputableApp,
