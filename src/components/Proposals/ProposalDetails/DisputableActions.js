@@ -45,7 +45,7 @@ function DisputableActions({
           disabled={!account}
           onClick={onRaise}
           wide
-          label="Raise dispute to court"
+          label="Raise to Aragon Court"
         />
       </>
     )

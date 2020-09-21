@@ -24,7 +24,7 @@ function RaiseDisputeScreens({ actionId }) {
     <ModalFlowBase
       loading={loading}
       transactions={transactions}
-      transactionTitle="Raise dispute"
+      transactionTitle="Raise to Aragon Court"
     />
   )
 }
