@@ -4,9 +4,7 @@ import connectAgreement from '@aragon/connect-agreement'
 import connectVoting from '@aragon/connect-disputable-voting'
 import { useApps, createAppHook, useOrganization } from '@aragon/connect-react'
 import { captureErrorWithSentry } from '../sentry'
-import { connector } from '../current-environment'
-
-const { agreement, disputableVoting } = connector
+import { connectorConfig } from '../current-environment'
 
 function getAppByName(apps, appName) {
   return apps.find(({ name }) => name === appName) || null
@@ -16,20 +14,20 @@ const OrgAppsContext = React.createContext()
 
 const useAgreementHook = createAppHook(
   connectAgreement,
-  agreement.connectorConfig
+  connectorConfig.agreement
 )
 
 const useDisputableVotingHook = createAppHook(
   connectVoting,
-  disputableVoting.connectorConfig
+  connectorConfig.disputableVoting
 )
 
 function OrgAppsProvider({ children }) {
   const [apps, { loading: orgAppsLoading, error: appsError }] = useApps()
   const [org, { loading: orgLoading, error: orgError }] = useOrganization()
 
-  const agreementApp = getAppByName(apps, agreement.appName)
-  const disputableVotingApp = getAppByName(apps, disputableVoting.appName)
+  const agreementApp = getAppByName(apps, 'agreement')
+  const disputableVotingApp = getAppByName(apps, 'disputable-voting')
 
   const [
     connectedAgreementApp,
@@ -38,15 +36,12 @@ function OrgAppsProvider({ children }) {
 
   const [
     connectedDisputableVotingApp,
-    {
-      error: disputableVotingError,
-      loading: connectedDisputableVotingAppLoading,
-    },
+    { error: disputableVotingError, loading: disputableVotingLoading },
   ] = useDisputableVotingHook(disputableVotingApp)
 
   const appsLoading =
     agreementAppLoading ||
-    connectedDisputableVotingAppLoading ||
+    disputableVotingLoading ||
     orgAppsLoading ||
     orgLoading
 

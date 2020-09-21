@@ -1,9 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Connect } from '@aragon/connect-react'
-import { connector, networkEnvironment } from '../current-environment'
-
-const { org } = connector
+import { connectorConfig, networkEnvironment } from '../current-environment'
 
 function ConnectProvider({ children }) {
   const { chainId, orgLocation } = networkEnvironment
@@ -11,7 +9,7 @@ function ConnectProvider({ children }) {
   return (
     <Connect
       location={orgLocation}
-      connector={org.connectorConfig || 'thegraph'}
+      connector={connectorConfig.org || 'thegraph'}
       options={{
         network: chainId,
       }}

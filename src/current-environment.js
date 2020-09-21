@@ -30,25 +30,15 @@ const agreementSubgraph = networkEnvironment.subgraphs?.agreement
 const disputableVotingSubgraph = networkEnvironment.subgraphs?.disputableVoting
 const orgSubgraph = networkEnvironment.subgraphs?.organization
 
-export const connector = {
-  org: {
-    connectorConfig: orgSubgraph && [
-      'thegraph',
-      { orgSubgraphUrl: orgSubgraph },
-    ],
-  },
-  agreement: {
-    appName: 'agreement',
-    connectorConfig: agreementSubgraph && [
-      'thegraph',
-      { subgraphUrl: agreementSubgraph },
-    ],
-  },
-  disputableVoting: {
-    appName: 'disputable-voting',
-    connectorConfig: disputableVotingSubgraph && [
-      'thegraph',
-      { subgraphUrl: disputableVotingSubgraph },
-    ],
-  },
+export const connectorConfig = {
+  org: orgSubgraph && ['thegraph', { orgSubgraphUrl: orgSubgraph }],
+  agreement: agreementSubgraph && [
+    'thegraph',
+    { subgraphUrl: agreementSubgraph },
+  ],
+
+  disputableVoting: disputableVotingSubgraph && [
+    'thegraph',
+    { subgraphUrl: disputableVotingSubgraph },
+  ],
 }

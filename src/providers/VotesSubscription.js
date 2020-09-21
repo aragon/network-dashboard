@@ -3,14 +3,12 @@ import PropTypes from 'prop-types'
 import connectVoting from '@aragon/connect-disputable-voting'
 import { createAppHook } from '@aragon/connect-react'
 import { captureErrorWithSentry } from '../sentry'
-import { connector } from '../current-environment'
+import { connectorConfig } from '../current-environment'
 import { useOrgApps } from '../providers/OrgApps'
-
-const { disputableVoting } = connector
 
 const useDisputableVoting = createAppHook(
   connectVoting,
-  disputableVoting.connectorConfig
+  connectorConfig.disputableVoting
 )
 const VotesSubscriptionContext = React.createContext()
 

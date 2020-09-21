@@ -3,14 +3,12 @@ import PropTypes from 'prop-types'
 import connectAgreement from '@aragon/connect-agreement'
 import { captureErrorWithSentry } from '../sentry'
 import { createAppHook } from '@aragon/connect-react'
-import { connector } from '../current-environment'
+import { connectorConfig } from '../current-environment'
 import { useWallet } from '../providers/Wallet'
 import { useMounted } from '../hooks/useMounted'
 import { useOrgApps } from '../providers/OrgApps'
 
-const { agreement } = connector
-
-const useAgreement = createAppHook(connectAgreement, agreement.connectorConfig)
+const useAgreement = createAppHook(connectAgreement, connectorConfig.agreement)
 const AgreementSubscriptionContext = React.createContext()
 
 function AgreementSubscriptionProvider({ children }) {
