@@ -214,7 +214,7 @@ function Details({
   emptyScript,
   description,
 }) {
-  const { context, creator, collateral, collateralToken } = vote
+  const { context, creator, collateral } = vote
 
   const { layoutName } = useLayout()
 
@@ -289,10 +289,10 @@ function Details({
           `}
         >
           <TokenAmount
-            address={collateralToken.id}
+            address={collateral.token.id}
             amount={collateral.actionAmount}
-            decimals={collateralToken.decimals}
-            symbol={collateralToken.symbol}
+            decimals={collateral.token.decimals}
+            symbol={collateral.token.symbol}
           />
 
           <span

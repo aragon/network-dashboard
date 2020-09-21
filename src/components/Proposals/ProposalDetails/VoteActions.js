@@ -13,14 +13,12 @@ import {
   useTheme,
 } from '@aragon/ui'
 import { dateFormat, toMs } from '../../../utils/date-utils'
-import { useWallet } from '../../../providers/Wallet'
 
-function VoteActions({ vote, onVoteYes, onVoteNo, onExecute, onChangeVote }) {
+function VoteActions({ vote, onVoteYes, onVoteNo, onExecute }) {
   const theme = useTheme()
-  const { account } = useWallet()
   const { snapshotBlock, startDate, hasEnded, voterInfo, orgToken } = vote
 
-  if (!account || !voterInfo) {
+  if (!voterInfo.account) {
     return (
       <div
         css={`
