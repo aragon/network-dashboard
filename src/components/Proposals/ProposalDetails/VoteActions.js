@@ -16,7 +16,7 @@ import { dateFormat, toMs } from '../../../utils/date-utils'
 
 function VoteActions({ vote, onVoteYes, onVoteNo, onExecute }) {
   const theme = useTheme()
-  const { snapshotBlock, startDate, hasEnded, voterInfo, orgToken } = vote
+  const { snapshotBlock, startDate, hasEnded, voterInfo, votingToken } = vote
 
   if (!voterInfo.account) {
     return (
@@ -85,7 +85,7 @@ function VoteActions({ vote, onVoteYes, onVoteNo, onExecute }) {
         <TokenReference
           snapshotBlock={snapshotBlock}
           startDate={startDate}
-          tokenSymbol={orgToken.symbol}
+          tokenSymbol={votingToken.symbol}
           accountBalance={voterInfo.accountBalance}
           accountBalanceNow={voterInfo.accountBalanceNow}
         />
@@ -100,10 +100,10 @@ function VoteActions({ vote, onVoteYes, onVoteNo, onExecute }) {
         {voterInfo.accountBalanceNow > 0
           ? 'Although the currently connected account holds tokens, it'
           : 'The currently connected account'}{' '}
-        did not hold any <strong>{orgToken.symbol}</strong> tokens when this
+        did not hold any <strong>{votingToken.symbol}</strong> tokens when this
         vote began ({dateFormat(toMs(startDate))}) and therefore cannot
         participate in this vote. Make sure your accounts are holding{' '}
-        <strong>{orgToken.symbol}</strong> at the time a vote begins if you'd
+        <strong>{votingToken.symbol}</strong> at the time a vote begins if you'd
         like to vote using this Voting app.
       </Info>
     </div>

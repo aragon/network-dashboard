@@ -124,7 +124,7 @@ function useExtendVote(vote, proposalId) {
   }, [vote])
 
   const getVoterInfo = useCallback(
-    async (orgToken) => {
+    async (votingToken) => {
       if (!account) {
         return {}
       }
@@ -136,7 +136,7 @@ function useExtendVote(vote, proposalId) {
         canExecute,
         canVote,
       ] = await Promise.all([
-        orgToken.balance(account),
+        votingToken.balance(account),
         vote.formattedVotingPower(account),
         vote.hasVoted(account),
         vote.canExecute(account),
@@ -145,7 +145,7 @@ function useExtendVote(vote, proposalId) {
 
       return {
         account: account,
-        accountBalanceNow: formatTokenAmount(balance, orgToken.decimals),
+        accountBalanceNow: formatTokenAmount(balance, votingToken.decimals),
         accountBalance: accountBalance,
         hasVoted: hasVoted,
         canExecute: canExecute,
@@ -156,9 +156,9 @@ function useExtendVote(vote, proposalId) {
   )
 
   useEffect(() => {
-    async function processAppRequirements() {
+    async function getExtendedVote() {
       try {
-        const orgToken = await vote.token()
+        const votingToken = await vote.token()
 
         const [
           settings,
@@ -169,23 +169,16 @@ function useExtendVote(vote, proposalId) {
           vote.setting(),
           getFeeInfo(),
           getCollateralInfo(),
-          getVoterInfo(orgToken),
+          getVoterInfo(votingToken),
         ])
 
         if (mounted()) {
           setExtendedVote({
-            ...vote,
-            endDate: vote.endDate,
-            hasEnded: vote.hasEnded,
-            naysPct: vote.naysPct,
-            yeasPct: vote.yeasPct,
-            status: vote.status,
-            currentQuietEndingExtensionDuration:
-              vote.currentQuietEndingExtensionDuration,
+            baseVote: vote,
             voterInfo: voterInfo,
             settings: settings,
             collateral: collateralInfo,
-            orgToken: orgToken,
+            votingToken: votingToken,
             fees: feeInfo,
           })
           setStatus({ loading: false, error: null })
@@ -198,7 +191,7 @@ function useExtendVote(vote, proposalId) {
     }
 
     if (vote) {
-      processAppRequirements()
+      getExtendedVote()
     }
   }, [vote, getFeeInfo, getCollateralInfo, getVoterInfo, mounted])
 

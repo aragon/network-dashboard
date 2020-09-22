@@ -11,7 +11,7 @@ export function useVotes() {
   return [processedVotes, loading]
 }
 
-// Placehold for adding additional properties to votes
+// Get and format values from getters
 function processVote(vote) {
   return {
     ...vote,
