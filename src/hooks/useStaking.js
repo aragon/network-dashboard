@@ -34,7 +34,6 @@ export function useStaking() {
             allTokens[0].id,
             account
           )
-          
 
           if (mounted()) {
             setStakeManagement({

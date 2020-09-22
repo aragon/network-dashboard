@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Button,
   Card,
@@ -12,7 +13,7 @@ import tokenIcon from './assets/tokenIcon.svg'
 function BalanceCard({ total, tokenDecimals, tokenSymbol }) {
   const theme = useTheme()
   // TODO: rreplace token icon and usd amount
-  
+
   return (
     <Card
       css={`
@@ -64,6 +65,12 @@ function BalanceCard({ total, tokenDecimals, tokenSymbol }) {
       <Button mode="strong" wide label="Deposit" />
     </Card>
   )
+}
+
+BalanceCard.propTypes = {
+  total: PropTypes.object,
+  tokenSymbol: PropTypes.string,
+  tokenDecimals: PropTypes.number,
 }
 
 export default BalanceCard

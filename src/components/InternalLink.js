@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { useRouteMatch, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { Link } from '@aragon/ui'
 
 function InternalLink({ to, children, ...props }) {
@@ -20,8 +20,6 @@ function InternalLink({ to, children, ...props }) {
 InternalLink.propTypes = {
   to: PropTypes.string,
   children: PropTypes.node,
-
 }
-
 
 export default InternalLink

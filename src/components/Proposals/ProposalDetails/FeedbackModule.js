@@ -1,29 +1,22 @@
-import React, { useCallback } from 'react'
-import { useRouteMatch, useHistory } from 'react-router-dom'
+import React from 'react'
 import PropTypes from 'prop-types'
 import {
   GU,
   IconAttention,
   IconCoin,
-  Link,
   RADIUS,
   textStyle,
   useTheme,
-  unselectable,
   formatTokenAmount,
 } from '@aragon/ui'
 import { dateFormat, toMs } from '../../../utils/date-utils'
+import InternalLink from '../../InternalLink'
 
 function FeedbackModule({ vote, mode }) {
   const theme = useTheme()
   const { collateralToken, collateral } = vote
   const pausedAt = toMs(vote.pausedAt)
   const settledAt = toMs(vote.settledAt)
-  const history = useHistory()
-
-  const handleClickStakeManagement = useCallback(() => {
-    history.push('/stake-managment')
-  }, [history])
 
   return (
     <div
@@ -127,30 +120,6 @@ function Strong({ children }) {
     </strong>
   )
 }
-
-/* eslint-disable react/prop-types */
-function InternalLink({ to, children }) {
-  const history = useHistory()
-  const theme = useTheme()
-  const active = useRouteMatch(to) !== null
-
-  const handlePageRequest = useCallback(() => {
-    history.push(to)
-  }, [history, to])
-
-  return (
-    <Link
-      onClick={handlePageRequest}
-      css={`
-        ${unselectable};
-        text-decoration: none;
-      `}
-    >
-      {children}
-    </Link>
-  )
-}
-/* eslint-enable react/prop-types */
 
 FeedbackModule.propTypes = {
   vote: PropTypes.object.isRequired,
