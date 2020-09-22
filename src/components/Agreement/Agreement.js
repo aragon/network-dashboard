@@ -11,13 +11,13 @@ import LayoutColumns from '../Layout/LayoutColumns'
 import LoadingSection from '../Loading/LoadingSection'
 import MultiModal from '../MultiModal/MultiModal'
 import SignAgreementScreens from '../ModalFlows/SignAgreementScreens/SignAgreementScreens'
-import { useAgreementState } from '../../providers/AgreementState'
+import { useAgreement } from '../../hooks/useAgreement'
 import { useWallet } from '../../providers/Wallet'
 
 const Agreement = React.memo(function Agreement() {
   const { account } = useWallet()
   const [signModalVisible, setSignModalVisible] = useState(false)
-  const { agreement, loading } = useAgreementState()
+  const [agreement, loading] = useAgreement()
 
   const signed = agreement.signed
 
@@ -45,7 +45,7 @@ const Agreement = React.memo(function Agreement() {
         visible={signModalVisible}
         onClose={() => setSignModalVisible(false)}
       >
-        <SignAgreementScreens />
+        <SignAgreementScreens versionId={agreement.versionId} />
       </MultiModal>
     </>
   )
@@ -55,7 +55,6 @@ const Agreement = React.memo(function Agreement() {
 function AgreementLayout({ agreement, signedAgreement }) {
   const {
     title,
-    content,
     contractAddress,
     contentIpfsUri,
     effectiveFrom,
@@ -77,7 +76,7 @@ function AgreementLayout({ agreement, signedAgreement }) {
               signedAgreement={signedAgreement}
             />
           </LayoutBox>
-          <AgreementDocument content={content} />
+          <AgreementDocument ipfsUri={contentIpfsUri} />
         </>
       }
       secondary={<AgreementBindingActions disputableApps={disputableApps} />}

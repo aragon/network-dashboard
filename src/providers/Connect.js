@@ -1,24 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Connect } from '@aragon/connect-react'
-import { networkEnvironment } from '../current-environment'
-
-const ORG_SUBGRAPH_URL = networkEnvironment.subgraphs?.organization
-
-const connecterConfig = ORG_SUBGRAPH_URL && [
-  'thegraph',
-  { orgSubgraphUrl: ORG_SUBGRAPH_URL },
-]
+import { connectorConfig, networkEnvironment } from '../current-environment'
 
 function ConnectProvider({ children }) {
-  const { legacyNetworkType, chainId, orgLocation } = networkEnvironment
+  const { chainId, orgLocation } = networkEnvironment
 
   return (
     <Connect
       location={orgLocation}
-      connector={connecterConfig || 'thegraph'}
+      connector={connectorConfig.org || 'thegraph'}
       options={{
-        name: legacyNetworkType,
         network: chainId,
       }}
     >

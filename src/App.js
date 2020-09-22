@@ -2,14 +2,14 @@ import React from 'react'
 import { HashRouter as Router } from 'react-router-dom'
 import { ViewportProvider } from 'use-viewport'
 import { LayoutProvider } from '@aragon/ui'
-import { AgreementStateProvider } from './providers/AgreementState'
+import { AgreementSubscriptionProvider } from './providers/AgreementSubscription'
 import { StakingProvider } from './providers/Staking'
 import { breakpoints } from './style/breakpoints'
 import { ConnectProvider as Connect } from './providers/Connect'
 import GlobalErrorHandler from './GlobalErrorHandler'
 import MainView from './components/MainView'
 import { OrgAppsProvider } from './providers/OrgApps'
-import { VotesProvider } from './providers/Votes'
+import { VotesSubscriptionProvider } from './providers/VotesSubscription'
 import { WalletProvider } from './providers/Wallet'
 
 import Routes from './Routes'
@@ -20,9 +20,9 @@ function App() {
       <Connect>
         <WalletProvider>
           <OrgAppsProvider>
-            <VotesProvider>
-              <StakingProvider>
-                <AgreementStateProvider>
+            <StakingProvider>
+              <VotesSubscriptionProvider>
+                <AgreementSubscriptionProvider>
                   <ViewportProvider>
                     <LayoutProvider breakpoints={breakpoints}>
                       <Router>
@@ -32,9 +32,9 @@ function App() {
                       </Router>
                     </LayoutProvider>
                   </ViewportProvider>
-                </AgreementStateProvider>
-              </StakingProvider>
-            </VotesProvider>
+                </AgreementSubscriptionProvider>
+              </VotesSubscriptionProvider>
+            </StakingProvider>
           </OrgAppsProvider>
         </WalletProvider>
       </Connect>

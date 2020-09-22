@@ -37,7 +37,7 @@ import VoteCast from './VoteCast'
 import TargetAppBadge from '../TargetAppBadge'
 import { addressesEqual } from '../../../lib/web3-utils'
 import { getIpfsUrlFromUri } from '../../../lib/ipfs-utils'
-import { useDescribeVote } from '../../../hooks/useDescribeVote'
+import { useDescribeScript } from '../../../hooks/useDescribeScript'
 import LoadingSkeleton from '../../Loading/LoadingSkeleton'
 import { useWallet } from '../../../providers/Wallet'
 import { toMs } from '../../../utils/date-utils'
@@ -45,6 +45,7 @@ import MultiModal from '../../MultiModal/MultiModal'
 import VoteOnProposalScreens from '../../ModalFlows/VoteOnProposalScreens/VoteOnProposalScreens'
 import ChallengeProposalScreens from '../../ModalFlows/ChallengeProposalScreens/ChallengeProposalScreens'
 import SettleProposalScreens from '../../ModalFlows/SettleProposalScreens/SettleProposalScreens'
+import RaiseDisputeScreens from '../../ModalFlows/RaiseDisputeScreens/RaiseDisputeScreens'
 
 function getPresentation(disputableStatus) {
   const disputablePresentation = {
@@ -73,8 +74,10 @@ function ProposalDetails({ vote }) {
   const [modalVisible, setModalVisible] = useState(false)
   const [modalMode, setModalMode] = useState(null)
   const [voteSupported, setVoteSupported] = useState(false)
-  const { actionId, voteId, id, script, voterInfo, orgToken } = vote
+  const { actionId, voteId, id, script, voterInfo, votingToken } = vote
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
+
+  const { description, targetApp, status } = useDescribeScript(script, id)
 
   const { boxPresentation, disabledProgressBars } = useMemo(
     () => getPresentation(disputableStatus),
@@ -117,7 +120,11 @@ function ProposalDetails({ vote }) {
                   justify-content: space-between;
                 `}
               >
-                <TargetAppBadge script={script} voteId={id} />
+                <TargetAppBadge
+                  useDefaultBadge={status.emptyScript}
+                  targetApp={targetApp}
+                  loading={status.loading}
+                />
                 {accountHasVoted && (
                   <Tag icon={<IconCheck size="small" />} label="Voted" />
                 )}
@@ -130,7 +137,13 @@ function ProposalDetails({ vote }) {
               >
                 Vote #{voteId}
               </h1>
-              <Details vote={vote} status={disputableStatus} />
+              <Details
+                vote={vote}
+                disputableStatus={disputableStatus}
+                emptyScript={status.emptyScript}
+                description={description}
+                descriptionLoading={status.loading}
+              />
               <SummaryInfo
                 vote={vote}
                 disabledProgressBars={disabledProgressBars}
@@ -139,7 +152,7 @@ function ProposalDetails({ vote }) {
                 <VoteCast
                   voteSupported={accountHasVoted.supports}
                   balance={voterInfo.accountBalance}
-                  tokenSymbol={orgToken.symbol}
+                  tokenSymbol={votingToken.symbol}
                 />
               )}
               {showVoteActions && (
@@ -158,6 +171,7 @@ function ProposalDetails({ vote }) {
               vote={vote}
               onSettle={() => handleShowModal('settle')}
               onChallenge={() => handleShowModal('challenge')}
+              onRaise={() => handleShowModal('raise')}
             />
             <InfoBoxes
               vote={vote}
@@ -185,19 +199,22 @@ function ProposalDetails({ vote }) {
         {modalMode === 'settle' && (
           <SettleProposalScreens actionId={actionId} />
         )}
+
+        {modalMode === 'raise' && <RaiseDisputeScreens actionId={actionId} />}
       </MultiModal>
     </>
   )
 }
 
 /* eslint-disable react/prop-types */
-function Details({ vote, status }) {
-  const { context, creator, collateral, collateralToken, script } = vote
-  const {
-    description,
-    emptyScript,
-    loading: descriptionLoading,
-  } = useDescribeVote(script, vote.id)
+function Details({
+  vote,
+  disputableStatus,
+  descriptionLoading,
+  emptyScript,
+  description,
+}) {
+  const { context, creator, collateral } = vote
 
   const { layoutName } = useLayout()
 
@@ -212,7 +229,6 @@ function Details({ vote, status }) {
     <div
       css={`
         display: grid;
-
         grid-template-columns: ${twoColumnMode ? `1fr ${30 * GU}px` : '1fr'};
         grid-gap: ${3 * GU}px;
       `}
@@ -262,7 +278,7 @@ function Details({ vote, status }) {
       )}
 
       <InfoField label="Status">
-        <DisputableStatusLabel status={status} />
+        <DisputableStatusLabel status={disputableStatus} />
       </InfoField>
 
       <InfoField label="Action collateral">
@@ -273,10 +289,10 @@ function Details({ vote, status }) {
           `}
         >
           <TokenAmount
-            address={collateralToken.id}
+            address={collateral.token.id}
             amount={collateral.actionAmount}
-            decimals={collateralToken.decimals}
-            symbol={collateralToken.symbol}
+            decimals={collateral.token.decimals}
+            symbol={collateral.token.symbol}
           />
 
           <span
@@ -376,8 +392,8 @@ function SummaryInfo({ vote, disabledProgressBars }) {
             pct={yeasPct * 100}
             token={{
               amount: yeas,
-              symbol: vote.orgToken.symbol,
-              decimals: vote.orgToken.decimals,
+              symbol: vote.votingToken.symbol,
+              decimals: vote.votingToken.decimals,
             }}
           />
           <SummaryRow
@@ -386,8 +402,8 @@ function SummaryInfo({ vote, disabledProgressBars }) {
             pct={naysPct * 100}
             token={{
               amount: nays,
-              symbol: vote.orgToken.symbol,
-              decimals: vote.orgToken.decimals,
+              symbol: vote.votingToken.symbol,
+              decimals: vote.votingToken.decimals,
             }}
           />
         </div>

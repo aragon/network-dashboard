@@ -12,12 +12,16 @@ import {
   VOTE_STATUS_REJECTED,
 } from '../disputable-vote-statuses'
 import { addressesEqual } from '../../../lib/web3-utils'
-import { useWallet } from '../../../providers/Wallet'
 
-function DisputableActions({ status, submitter, onChallenge, onSettle }) {
-  const { account } = useWallet()
-
-  const connectedAccountIsSubmitter = addressesEqual(submitter, account)
+function DisputableActions({
+  voterAccount,
+  status,
+  submitter,
+  onChallenge,
+  onSettle,
+  onRaise,
+}) {
+  const connectedAccountIsSubmitter = addressesEqual(submitter, voterAccount)
 
   // TODO: add claim collateral action validation
   if (status === VOTE_STATUS_CHALLENGED && connectedAccountIsSubmitter) {
@@ -28,12 +32,19 @@ function DisputableActions({ status, submitter, onChallenge, onSettle }) {
             margin-bottom: ${2 * GU}px;
           `}
           mode="strong"
-          disabled={!account}
+          disabled={!voterAccount}
           onClick={onSettle}
           wide
           label="Accept settlement"
         />
-        <Button mode="normal" disabled wide label="Raise dispute to court" />
+
+        <Button
+          mode="normal"
+          disabled={!voterAccount}
+          onClick={onRaise}
+          wide
+          label="Raise to Aragon Court"
+        />
       </>
     )
   }
@@ -46,7 +57,7 @@ function DisputableActions({ status, submitter, onChallenge, onSettle }) {
           mode="strong"
           label="Challenge proposal"
           wide
-          disabled={!account}
+          disabled={!voterAccount}
           onClick={onChallenge}
           css={`
             margin-bottom: ${1 * GU}px;
@@ -70,14 +81,17 @@ DisputableActions.propTypes = {
     VOTE_STATUS_CHALLENGED,
     VOTE_STATUS_REJECTED,
   ]),
+  voterAccount: PropTypes.string,
   submitter: PropTypes.string,
   onChallenge: PropTypes.func,
   onSettle: PropTypes.func,
+  onRaise: PropTypes.func,
 }
 
 DisputableActions.defaultProps = {
   onChallenge: noop,
   onSettle: noop,
+  onRaise: noop,
 }
 
 export default DisputableActions

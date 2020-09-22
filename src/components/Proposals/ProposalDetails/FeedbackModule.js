@@ -14,7 +14,7 @@ import InternalLink from '../../InternalLink'
 
 function FeedbackModule({ vote, mode }) {
   const theme = useTheme()
-  const { collateralToken, collateral } = vote
+  const { collateral } = vote
   const pausedAt = toMs(vote.pausedAt)
   const settledAt = toMs(vote.settledAt)
 
@@ -69,9 +69,9 @@ function FeedbackModule({ vote, mode }) {
                 <Strong>
                   {formatTokenAmount(
                     collateral.challengeAmount,
-                    collateralToken.decimals
+                    collateral.token.decimals
                   )}{' '}
-                  {collateralToken.symbol}
+                  {collateral.token.symbol}
                 </Strong>{' '}
                 as the action challenge collateral. You can manage your deposit
                 balances in{' '}
@@ -89,9 +89,9 @@ function FeedbackModule({ vote, mode }) {
                   -
                   {formatTokenAmount(
                     collateral.actionAmount,
-                    collateralToken.decimals
+                    collateral.token.decimals
                   )}{' '}
-                  {collateralToken.symbol}
+                  {collateral.token.symbol}
                 </Strong>
                 . You can manage your deposit balances in{' '}
                 <InternalLink to="/stake-management">
