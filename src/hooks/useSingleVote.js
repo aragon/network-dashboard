@@ -11,7 +11,7 @@ export function useSingleVote() {
   return [processedVote, loading]
 }
 
-// Get and format values from getters
+// Get and format values
 function processVote(voteInfo) {
   const { baseVote } = voteInfo
 

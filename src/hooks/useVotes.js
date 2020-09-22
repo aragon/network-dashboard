@@ -11,7 +11,7 @@ export function useVotes() {
   return [processedVotes, loading]
 }
 
-// Get and format values from getters
+// Get and format values
 function processVote(vote) {
   return {
     ...vote,
