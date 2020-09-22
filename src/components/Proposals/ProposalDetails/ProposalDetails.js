@@ -74,7 +74,7 @@ function ProposalDetails({ vote }) {
   const [modalVisible, setModalVisible] = useState(false)
   const [modalMode, setModalMode] = useState(null)
   const [voteSupported, setVoteSupported] = useState(false)
-  const { actionId, voteId, id, script, voterInfo, orgToken } = vote
+  const { actionId, voteId, id, script, voterInfo, votingToken } = vote
   const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
 
   const { description, targetApp, status } = useDescribeScript(script, id)
@@ -152,7 +152,7 @@ function ProposalDetails({ vote }) {
                 <VoteCast
                   voteSupported={accountHasVoted.supports}
                   balance={voterInfo.accountBalance}
-                  tokenSymbol={orgToken.symbol}
+                  tokenSymbol={votingToken.symbol}
                 />
               )}
               {showVoteActions && (
@@ -214,7 +214,7 @@ function Details({
   emptyScript,
   description,
 }) {
-  const { context, creator, collateral, collateralToken } = vote
+  const { context, creator, collateral } = vote
 
   const { layoutName } = useLayout()
 
@@ -289,10 +289,10 @@ function Details({
           `}
         >
           <TokenAmount
-            address={collateralToken.id}
+            address={collateral.token.id}
             amount={collateral.actionAmount}
-            decimals={collateralToken.decimals}
-            symbol={collateralToken.symbol}
+            decimals={collateral.token.decimals}
+            symbol={collateral.token.symbol}
           />
 
           <span
@@ -392,8 +392,8 @@ function SummaryInfo({ vote, disabledProgressBars }) {
             pct={yeasPct * 100}
             token={{
               amount: yeas,
-              symbol: vote.orgToken.symbol,
-              decimals: vote.orgToken.decimals,
+              symbol: vote.votingToken.symbol,
+              decimals: vote.votingToken.decimals,
             }}
           />
           <SummaryRow
@@ -402,8 +402,8 @@ function SummaryInfo({ vote, disabledProgressBars }) {
             pct={naysPct * 100}
             token={{
               amount: nays,
-              symbol: vote.orgToken.symbol,
-              decimals: vote.orgToken.decimals,
+              symbol: vote.votingToken.symbol,
+              decimals: vote.votingToken.decimals,
             }}
           />
         </div>

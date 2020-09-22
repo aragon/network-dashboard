@@ -31,7 +31,10 @@ const disputableVotingSubgraph = networkEnvironment.subgraphs?.disputableVoting
 const orgSubgraph = networkEnvironment.subgraphs?.organization
 
 export const connectorConfig = {
-  org: orgSubgraph && ['thegraph', { orgSubgraphUrl: orgSubgraph }],
+  org: orgSubgraph && [
+    'thegraph',
+    { orgSubgraphUrl: orgSubgraph, pollInterval: 4000 },
+  ],
   agreement: agreementSubgraph && [
     'thegraph',
     { subgraphUrl: agreementSubgraph },

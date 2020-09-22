@@ -12,18 +12,16 @@ import {
   VOTE_STATUS_REJECTED,
 } from '../disputable-vote-statuses'
 import { addressesEqual } from '../../../lib/web3-utils'
-import { useWallet } from '../../../providers/Wallet'
 
 function DisputableActions({
+  voterAccount,
   status,
   submitter,
   onChallenge,
   onSettle,
   onRaise,
 }) {
-  const { account } = useWallet()
-
-  const connectedAccountIsSubmitter = addressesEqual(submitter, account)
+  const connectedAccountIsSubmitter = addressesEqual(submitter, voterAccount)
 
   // TODO: add claim collateral action validation
   if (status === VOTE_STATUS_CHALLENGED && connectedAccountIsSubmitter) {
@@ -34,7 +32,7 @@ function DisputableActions({
             margin-bottom: ${2 * GU}px;
           `}
           mode="strong"
-          disabled={!account}
+          disabled={!voterAccount}
           onClick={onSettle}
           wide
           label="Accept settlement"
@@ -42,7 +40,7 @@ function DisputableActions({
 
         <Button
           mode="normal"
-          disabled={!account}
+          disabled={!voterAccount}
           onClick={onRaise}
           wide
           label="Raise to Aragon Court"
@@ -59,7 +57,7 @@ function DisputableActions({
           mode="strong"
           label="Challenge proposal"
           wide
-          disabled={!account}
+          disabled={!voterAccount}
           onClick={onChallenge}
           css={`
             margin-bottom: ${1 * GU}px;
@@ -83,6 +81,7 @@ DisputableActions.propTypes = {
     VOTE_STATUS_CHALLENGED,
     VOTE_STATUS_REJECTED,
   ]),
+  voterAccount: PropTypes.string,
   submitter: PropTypes.string,
   onChallenge: PropTypes.func,
   onSettle: PropTypes.func,

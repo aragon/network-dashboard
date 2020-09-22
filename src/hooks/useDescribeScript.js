@@ -26,11 +26,6 @@ export function useDescribeScript(script, key) {
 
   useEffect(() => {
     if (emptyScript) {
-      if (mounted()) {
-        setDescription(null)
-        setLoading(false)
-      }
-
       return
     }
 
