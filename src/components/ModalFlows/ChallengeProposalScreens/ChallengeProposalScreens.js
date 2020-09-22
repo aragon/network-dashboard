@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useMemo, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import ModalFlowBase from '../ModalFlowBase'
 import { useActions } from '../../../hooks/useActions'
+import ChallengeRequirements from './ChallengeRequirements'
 
 function ChallengeProposalScreens({ actionId }) {
   const { challengeProposal } = useActions()
   const [transactions, setTransactions] = useState([])
-  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    async function getTransactions() {
-      // TODO: Replace happy path defaults
+  const getTransactions = useCallback(
+    async (onComplete) => {
       await challengeProposal(
         {
           actionId: actionId,
@@ -20,19 +19,29 @@ function ChallengeProposalScreens({ actionId }) {
         },
         (intent) => {
           setTransactions(intent.transactions)
-          setLoading(false)
+          onComplete()
         }
       )
-    }
+    },
+    [actionId, challengeProposal]
+  )
 
-    getTransactions()
-  }, [actionId, challengeProposal])
+  const screens = useMemo(
+    () => [
+      {
+        title: 'Challenge action requirements',
+        content: <ChallengeRequirements getTransactions={getTransactions} />,
+      },
+    ],
+    [getTransactions]
+  )
 
   return (
     <ModalFlowBase
-      loading={loading}
+      frontLoad={false}
       transactions={transactions}
       transactionTitle="Challenge proposal"
+      screens={screens}
     />
   )
 }

@@ -14,59 +14,59 @@ import {
 } from '@aragon/ui'
 import IconDisputed from './IconDisputed'
 import {
-  VOTE_STATUS_ACCEPTED,
-  VOTE_STATUS_SCHEDULED,
-  VOTE_STATUS_CANCELLED,
-  VOTE_STATUS_SETTLED,
-  VOTE_STATUS_DISPUTED,
-  VOTE_STATUS_EXECUTED,
-  VOTE_STATUS_CHALLENGED,
-  VOTE_STATUS_REJECTED,
-} from './disputable-vote-statuses'
+  VOTE_ACCEPTED,
+  VOTE_SCHEDULED,
+  VOTE_CANCELLED,
+  VOTE_SETTLED,
+  VOTE_DISPUTED,
+  VOTE_EXECUTED,
+  VOTE_CHALLENGED,
+  VOTE_REJECTED,
+} from '../../types/disputable-statuses'
 
 function getAttributes(status, theme) {
   const attributes = {
-    [VOTE_STATUS_SCHEDULED]: {
+    [VOTE_SCHEDULED]: {
       label: 'Scheduled',
       Icon: IconClock,
     },
-    [VOTE_STATUS_ACCEPTED]: {
+    [VOTE_ACCEPTED]: {
       background: theme.surface,
       label: 'Passed',
       Icon: IconCheck,
       color: theme.positive,
     },
-    [VOTE_STATUS_CANCELLED]: {
+    [VOTE_CANCELLED]: {
       background: theme.surfaceUnder,
       label: 'Cancelled',
       Icon: IconClose,
       color: theme.disabledContent,
     },
-    [VOTE_STATUS_SETTLED]: {
+    [VOTE_SETTLED]: {
       background: theme.surfaceUnder,
       label: 'Settled',
       Icon: IconClose,
       color: theme.disabledContent,
     },
-    [VOTE_STATUS_DISPUTED]: {
+    [VOTE_DISPUTED]: {
       background: '#FFEAEA',
       label: 'Disputed',
       Icon: IconDisputed,
       color: '#FF7C7C',
     },
-    [VOTE_STATUS_EXECUTED]: {
+    [VOTE_EXECUTED]: {
       background: '#CADFAB',
       label: 'Passed (enacted)',
       Icon: IconInfo,
       color: '#749C47',
     },
-    [VOTE_STATUS_CHALLENGED]: {
+    [VOTE_CHALLENGED]: {
       background: theme.warningSurface,
       label: 'Challenged',
       Icon: IconAttention,
       color: theme.warningSurfaceContent,
     },
-    [VOTE_STATUS_REJECTED]: {
+    [VOTE_REJECTED]: {
       background: theme.surface,
       label: 'Rejected',
       Icon: IconCross,
@@ -82,9 +82,9 @@ function DisputableStatusLabel({ status }) {
   const { Icon, background, color, label } = getAttributes(status, theme)
 
   if (
-    status === VOTE_STATUS_ACCEPTED ||
-    status === VOTE_STATUS_EXECUTED ||
-    status === VOTE_STATUS_REJECTED
+    status === VOTE_ACCEPTED ||
+    status === VOTE_EXECUTED ||
+    status === VOTE_REJECTED
   ) {
     return (
       <div
@@ -121,14 +121,14 @@ function DisputableStatusLabel({ status }) {
 
 DisputableStatusLabel.propTypes = {
   status: PropTypes.oneOf([
-    VOTE_STATUS_ACCEPTED,
-    VOTE_STATUS_SCHEDULED,
-    VOTE_STATUS_CANCELLED,
-    VOTE_STATUS_SETTLED,
-    VOTE_STATUS_DISPUTED,
-    VOTE_STATUS_EXECUTED,
-    VOTE_STATUS_CHALLENGED,
-    VOTE_STATUS_REJECTED,
+    VOTE_ACCEPTED,
+    VOTE_SCHEDULED,
+    VOTE_CANCELLED,
+    VOTE_SETTLED,
+    VOTE_DISPUTED,
+    VOTE_EXECUTED,
+    VOTE_CHALLENGED,
+    VOTE_REJECTED,
   ]),
 }
 

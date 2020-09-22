@@ -15,13 +15,12 @@ import {
 import DisputableActionStatus from './DisputableActionStatus'
 import DisputableStatusLabel from '../DisputableStatusLabel'
 import {
-  DISPUTABLE_VOTE_STATUSES,
-  VOTE_STATUS_CANCELLED,
-  VOTE_STATUS_SCHEDULED,
-  VOTE_STATUS_SETTLED,
-  VOTE_STATUS_DISPUTED,
-  VOTE_STATUS_CHALLENGED,
-} from '../disputable-vote-statuses'
+  VOTE_CANCELLED,
+  VOTE_SCHEDULED,
+  VOTE_SETTLED,
+  VOTE_DISPUTED,
+  VOTE_CHALLENGED,
+} from '../../../types/disputable-statuses'
 import InfoField from '../../InfoField'
 import InfoBoxes from './InfoBoxes'
 import LayoutColumns from '../../Layout/LayoutColumns'
@@ -40,7 +39,6 @@ import { getIpfsUrlFromUri } from '../../../lib/ipfs-utils'
 import { useDescribeScript } from '../../../hooks/useDescribeScript'
 import LoadingSkeleton from '../../Loading/LoadingSkeleton'
 import { useWallet } from '../../../providers/Wallet'
-import { toMs } from '../../../utils/date-utils'
 import MultiModal from '../../MultiModal/MultiModal'
 import VoteOnProposalScreens from '../../ModalFlows/VoteOnProposalScreens/VoteOnProposalScreens'
 import ChallengeProposalScreens from '../../ModalFlows/ChallengeProposalScreens/ChallengeProposalScreens'
@@ -49,19 +47,19 @@ import RaiseDisputeScreens from '../../ModalFlows/RaiseDisputeScreens/RaiseDispu
 
 function getPresentation(disputableStatus) {
   const disputablePresentation = {
-    [VOTE_STATUS_CANCELLED]: {
+    [VOTE_CANCELLED]: {
       boxPresentation: 'disabled',
       disabledProgressBars: true,
     },
-    [VOTE_STATUS_SETTLED]: {
+    [VOTE_SETTLED]: {
       boxPresentation: 'disabled',
       disabledProgressBars: true,
     },
-    [VOTE_STATUS_CHALLENGED]: {
+    [VOTE_CHALLENGED]: {
       boxPresentation: 'warning',
       disabledProgressBars: true,
     },
-    [VOTE_STATUS_DISPUTED]: {
+    [VOTE_DISPUTED]: {
       boxPresentation: 'negative',
       disabledProgressBars: true,
     },
@@ -71,11 +69,19 @@ function getPresentation(disputableStatus) {
 }
 
 function ProposalDetails({ vote }) {
-  const [modalVisible, setModalVisible] = useState(false)
-  const [modalMode, setModalMode] = useState(null)
+  const [modalVisible, setModalVisible] = useState(true)
+  const [modalMode, setModalMode] = useState('challenge')
   const [voteSupported, setVoteSupported] = useState(false)
-  const { actionId, voteId, id, script, voterInfo, votingToken } = vote
-  const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
+  const {
+    actionId,
+    voteId,
+    id,
+    script,
+    voterInfo,
+    votingToken,
+    disputableStatus,
+    challengeEndDate,
+  } = vote
 
   const { description, targetApp, status } = useDescribeScript(script, id)
 
@@ -99,7 +105,7 @@ function ProposalDetails({ vote }) {
 
   const accountHasVoted = voterInfo && voterInfo.hasVoted
   const showVoteActions =
-    disputableStatus === VOTE_STATUS_SCHEDULED && !accountHasVoted
+    disputableStatus === VOTE_SCHEDULED && !accountHasVoted
 
   return (
     <>
@@ -193,7 +199,10 @@ function ProposalDetails({ vote }) {
         )}
 
         {modalMode === 'challenge' && (
-          <ChallengeProposalScreens actionId={actionId} />
+          <ChallengeProposalScreens
+            settlementPeriod={challengeEndDate}
+            actionId={actionId}
+          />
         )}
 
         {modalMode === 'settle' && (
@@ -349,7 +358,7 @@ function SummaryInfo({ vote, disabledProgressBars }) {
   const { account: connectedAccount } = useWallet()
   const theme = useTheme()
 
-  const { yeas, nays } = vote
+  const { yeas, nays, settledAt } = vote
   const totalVotes = parseFloat(yeas) + parseFloat(nays)
   const yeasPct = safeDiv(parseFloat(yeas), totalVotes)
   const naysPct = safeDiv(parseFloat(nays), totalVotes)
@@ -360,10 +369,7 @@ function SummaryInfo({ vote, disabledProgressBars }) {
     mode = 'challenger'
   }
 
-  if (
-    addressesEqual(vote.creator, connectedAccount) &&
-    toMs(vote.settledAt) > 0
-  ) {
+  if (addressesEqual(vote.creator, connectedAccount) && settledAt > 0) {
     mode = 'submitter'
   }
 
