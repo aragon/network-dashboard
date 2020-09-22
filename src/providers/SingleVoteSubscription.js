@@ -1,11 +1,19 @@
-import { useEffect, useState, useMemo } from 'react'
-import { connectorConfig } from '../current-environment'
+import React, {
+  useContext,
+  useMemo,
+  useState,
+  useEffect,
+  useCallback,
+} from 'react'
+import PropTypes from 'prop-types'
 import { createAppHook } from '@aragon/connect-react'
-import { formatTokenAmount } from '@aragon/ui'
 import connectVoting from '@aragon/connect-disputable-voting'
+import { formatTokenAmount } from '@aragon/ui'
+import { captureErrorWithSentry } from '../sentry'
+import { connectorConfig } from '../current-environment'
+import { ProposalNotFound } from '../errors'
 import { useWallet } from '../providers/Wallet'
 import { useMounted } from '../hooks/useMounted'
-import { ProposalNotFound } from '../errors'
 import { useOrgApps } from '../providers/OrgApps'
 
 const useDisputableVoting = createAppHook(
@@ -13,12 +21,9 @@ const useDisputableVoting = createAppHook(
   connectorConfig.disputableVoting
 )
 
-export function useVote(proposalId) {
-  const [vote, loading] = useVoteSubscription(proposalId)
-  return [vote, loading]
-}
+const SingleVoteSubscriptionContext = React.createContext()
 
-function useVoteSubscription(proposalId) {
+function SingleVoteSubscriptionProvider({ proposalId, children }) {
   const { account } = useWallet()
   const { disputableVotingApp } = useOrgApps()
 
@@ -70,10 +75,24 @@ function useVoteSubscription(proposalId) {
   }, [vote, voteLoading, proposalId, voteError])
 
   if (error) {
+    captureErrorWithSentry(error)
     console.error(error)
   }
 
-  return [extendedVote, extendedVoteLoading]
+  const SingleVoteSubscriptionState = useMemo(() => {
+    return [extendedVote, extendedVoteLoading]
+  }, [extendedVote, extendedVoteLoading])
+
+  return (
+    <SingleVoteSubscriptionContext.Provider value={SingleVoteSubscriptionState}>
+      {children}
+    </SingleVoteSubscriptionContext.Provider>
+  )
+}
+
+SingleVoteSubscriptionProvider.propTypes = {
+  proposalId: PropTypes.string,
+  children: PropTypes.node,
 }
 
 function useExtendVote(vote, proposalId) {
@@ -82,8 +101,59 @@ function useExtendVote(vote, proposalId) {
   const [extendedVote, setExtendedVote] = useState({})
   const [status, setStatus] = useState({ loading: true, error: null })
 
-  // Convert to value for use as dependency to avoid updates every poll
-  const voteUpdateValue = JSON.stringify(vote)
+  const getFeeInfo = useCallback(async () => {
+    const [submitterFee, challengerFee] = await Promise.all([
+      vote.submitterArbitratorFee(),
+      vote.challengerArbitratorFee(),
+    ])
+
+    return {
+      submitter: submitterFee,
+      challenger: challengerFee,
+    }
+  }, [vote])
+
+  const getCollateralInfo = useCallback(async () => {
+    const collateral = await vote.collateralRequirement()
+    const collateralToken = await collateral.token()
+
+    return {
+      ...collateral,
+      token: collateralToken,
+    }
+  }, [vote])
+
+  const getVoterInfo = useCallback(
+    async (orgToken) => {
+      if (!account) {
+        return {}
+      }
+
+      const [
+        balance,
+        accountBalance,
+        hasVoted,
+        canExecute,
+        canVote,
+      ] = await Promise.all([
+        orgToken.balance(account),
+        vote.formattedVotingPower(account),
+        vote.hasVoted(account),
+        vote.canExecute(account),
+        vote.canVote(account),
+      ])
+
+      return {
+        account: account,
+        accountBalanceNow: formatTokenAmount(balance, orgToken.decimals),
+        accountBalance: accountBalance,
+        hasVoted: hasVoted,
+        canExecute: canExecute,
+        canVote: canVote,
+      }
+    },
+    [vote, account]
+  )
 
   useEffect(() => {
     async function processAppRequirements() {
@@ -97,9 +167,9 @@ function useExtendVote(vote, proposalId) {
           voterInfo,
         ] = await Promise.all([
           vote.setting(),
-          getFeeInfo(vote),
-          getCollateralInfo(vote),
-          account ? getVoterInfo(vote, orgToken, account) : {},
+          getFeeInfo(),
+          getCollateralInfo(),
+          getVoterInfo(orgToken),
         ])
 
         if (mounted()) {
@@ -130,11 +200,9 @@ function useExtendVote(vote, proposalId) {
     if (vote) {
       processAppRequirements()
     }
-    /* eslint-disable react-hooks/exhaustive-deps */
-  }, [voteUpdateValue, account])
-  /* eslint-enable react-hooks/exhaustive-deps */
+  }, [vote, getFeeInfo, getCollateralInfo, getVoterInfo, mounted])
 
-  // Flip back to the loading state when updating route via the address bar
+  // Force loading state when updating route via the address bar
   useEffect(() => {
     if (mounted()) {
       setStatus({ loading: true, error: null })
@@ -144,49 +212,8 @@ function useExtendVote(vote, proposalId) {
   return [extendedVote, status]
 }
 
-async function getFeeInfo(vote) {
-  const [submitterFee, challengerFee] = await Promise.all([
-    vote.submitterArbitratorFee(),
-    vote.challengerArbitratorFee(),
-  ])
-
-  return {
-    submitter: submitterFee,
-    challenger: challengerFee,
-  }
+function useSingleVoteSubscription() {
+  return useContext(SingleVoteSubscriptionContext)
 }
 
-async function getCollateralInfo(vote) {
-  const collateral = await vote.collateralRequirement()
-  const collateralToken = await collateral.token()
-
-  return {
-    ...collateral,
-    token: collateralToken,
-  }
-}
-
-async function getVoterInfo(vote, orgToken, account) {
-  const [
-    balance,
-    accountBalance,
-    hasVoted,
-    canExecute,
-    canVote,
-  ] = await Promise.all([
-    orgToken.balance(account),
-    vote.formattedVotingPower(account),
-    vote.hasVoted(account),
-    vote.canExecute(account),
-    vote.canVote(account),
-  ])
-
-  return {
-    account: account,
-    accountBalanceNow: formatTokenAmount(balance, orgToken.decimals),
-    accountBalance: accountBalance,
-    hasVoted: hasVoted,
-    canExecute: canExecute,
-    canVote: canVote,
-  }
-}
+export { SingleVoteSubscriptionProvider, useSingleVoteSubscription }
