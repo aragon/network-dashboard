@@ -37,29 +37,29 @@ function StakingMovements({ stakingMovements, token }) {
         disputableActionId,
       }) => {
         const actionAttributes = {
-          ['Scheduled']: {
+          Scheduled: {
             background: theme.infoSurface,
             color: theme.tagIndicatorContent,
             icon: <IconClock size="small" />,
           },
-          ['Challenged']: {
+          Challenged: {
             background: theme.warningSurface,
             color: theme.warningSurfaceContent,
             icon: <IconAttention size="small" />,
           },
-          ['Completed']: {
+          Completed: {
             background: theme.positiveSurface,
             color: theme.positiveSurfaceContent,
             icon: <IconCheck size="small" />,
           },
-          ['Cancelled']: {
+          Cancelled: {
             background: theme.surfaceUnder,
             color: theme.contentSecondary,
             icon: <IconCross size="small" />,
           },
         }
         const amountAttributes = {
-          ['Locked']: {
+          Locked: {
             color: theme.surfaceOpened,
             icon: (
               <IconLock
@@ -70,7 +70,7 @@ function StakingMovements({ stakingMovements, token }) {
               />
             ),
           },
-          ['Challenged']: {
+          Challenged: {
             color: theme.surfaceOpened,
             icon: (
               <IconLock
@@ -81,10 +81,10 @@ function StakingMovements({ stakingMovements, token }) {
               />
             ),
           },
-          ['Available']: {
+          Available: {
             color: theme.content,
           },
-          ['Slashed']: {
+          Slashed: {
             color: theme.negative,
           },
         }
@@ -134,7 +134,8 @@ function StakingMovements({ stakingMovements, token }) {
 }
 
 StakingMovements.propTypes = {
-  staking: PropTypes.node,
+  stakingMovements: PropTypes.array,
+  token: PropTypes.object,
 }
 
 export default StakingMovements

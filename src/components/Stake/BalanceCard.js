@@ -68,7 +68,7 @@ function BalanceCard({ total, tokenDecimals, tokenSymbol }) {
 }
 
 BalanceCard.propTypes = {
-  total: PropTypes.object,
+  total: PropTypes.string,
   tokenSymbol: PropTypes.string,
   tokenDecimals: PropTypes.number,
 }

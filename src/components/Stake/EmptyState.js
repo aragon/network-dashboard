@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Box, GU, textStyle, Link, useLayout, useTheme } from '@aragon/ui'
+import { Box, GU, textStyle, useLayout, useTheme } from '@aragon/ui'
 
-export default function EmptyState({ icon, title, paragraph, link }) {
+export default function EmptyState({ icon, title, paragraph }) {
   const theme = useTheme()
   const { layoutName } = useLayout()
   const compactMode = layoutName === 'small'
@@ -49,15 +49,17 @@ export default function EmptyState({ icon, title, paragraph, link }) {
         >
           {paragraph}
         </div>
-        {link && <Link onClick={link.action}>{link.text}</Link>}
       </div>
     </Box>
   )
 }
 
 EmptyState.propTypes = {
-  icon: PropTypes.object,
-  title: PropTypes.object,
-  paragraph: PropTypes.object,
-  link: PropTypes.object,
+  icon: PropTypes.string,
+  title: PropTypes.string,
+  paragraph: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+    PropTypes.object,
+  ]),
 }
