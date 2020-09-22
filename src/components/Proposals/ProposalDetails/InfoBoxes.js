@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Box, Help, textStyle, useLayout, useTheme, GU } from '@aragon/ui'
+import { Box, textStyle, useLayout, useTheme, GU } from '@aragon/ui'
+import HelpTip from '../../HelpTip'
 
 import { round, safeDiv } from '../../../lib/math-utils'
 import SummaryBar from './SummaryBar'
@@ -18,12 +19,7 @@ function InfoBoxes({ vote, disabledProgressBars }) {
         heading={
           <>
             Support %
-            <Help hint="What is Support?">
-              <strong>Support</strong> is the relative percentage of tokens that
-              are required to vote “Yes” for a proposal to be approved. For
-              example, if “Support” is set to 50%, then more than 50% of the
-              tokens used to vote on a proposal must vote “Yes” for it to pass.
-            </Help>
+            <HelpTip type="support-percentage" />
           </>
         }
         padding={(compactMode ? 2 : 3) * GU}
@@ -38,13 +34,7 @@ function InfoBoxes({ vote, disabledProgressBars }) {
         heading={
           <>
             Minimum Approval %
-            <Help hint="What is Minimum Approval?">
-              <strong>Minimum Approval</strong> is the percentage of the total
-              token supply that is required to vote “Yes” on a proposal before
-              it can be approved. For example, if the “Minimum Approval” is set
-              to 20%, then more than 20% of the outstanding token supply must
-              vote “Yes” on a proposal for it to pass.
-            </Help>
+            <HelpTip type="minimum-approval" />
           </>
         }
         padding={(compactMode ? 2 : 3) * GU}
