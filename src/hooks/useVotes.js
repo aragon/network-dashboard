@@ -1,3 +1,4 @@
+import { DisputableStatusType } from '../types/disputable-statuses'
 import { useMemo } from 'react'
 import { useVotesSubscription } from '../providers/VotesSubscription'
 
@@ -15,12 +16,6 @@ export function useVotes() {
 function processVote(vote) {
   return {
     ...vote,
-    endDate: vote.endDate,
-    hasEnded: vote.hasEnded,
-    naysPct: vote.naysPct,
-    yeasPct: vote.yeasPct,
-    status: vote.status,
-    currentQuietEndingExtensionDuration:
-      vote.currentQuietEndingExtensionDuration,
+    disputableStatus: DisputableStatusType[vote.status],
   }
 }

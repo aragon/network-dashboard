@@ -2,11 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Card, GU, textStyle, useTheme, RADIUS } from '@aragon/ui'
 import {
-  DISPUTABLE_VOTE_STATUSES,
-  VOTE_STATUS_CANCELLED,
-  VOTE_STATUS_DISPUTED,
-  VOTE_STATUS_CHALLENGED,
-} from './disputable-vote-statuses'
+  VOTE_CANCELLED,
+  VOTE_DISPUTED,
+  VOTE_CHALLENGED,
+} from '../../types/disputable-statuses'
 import { useDescribeScript } from '../../hooks/useDescribeScript'
 import Description from './Description'
 import DisputableStatusLabel from './DisputableStatusLabel'
@@ -16,17 +15,17 @@ import TargetAppBadge from './TargetAppBadge'
 
 function getAttributes(status, theme) {
   const attributes = {
-    [VOTE_STATUS_CANCELLED]: {
+    [VOTE_CANCELLED]: {
       backgroundColor: theme.surfacePressed,
       borderColor: theme.border,
       disabledProgressBars: true,
     },
-    [VOTE_STATUS_CHALLENGED]: {
+    [VOTE_CHALLENGED]: {
       backgroundColor: '#fefdfb',
       borderColor: theme.warning,
       disabledProgressBars: true,
     },
-    [VOTE_STATUS_DISPUTED]: {
+    [VOTE_DISPUTED]: {
       backgroundColor: '#FFFAFA',
       borderColor: '#FF7C7C',
       disabledProgressBars: true,
@@ -44,10 +43,8 @@ function getAttributes(status, theme) {
 
 function ProposalCard({ vote, onProposalClick }) {
   const theme = useTheme()
-  const { context, voteId, script, id } = vote
+  const { context, voteId, script, id, disputableStatus } = vote
   const { description, targetApp, status } = useDescribeScript(script, id)
-
-  const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
   const { backgroundColor, borderColor, disabledProgressBars } = getAttributes(
     disputableStatus,
     theme
@@ -137,9 +134,7 @@ function ProposalCard({ vote, onProposalClick }) {
             margin-top: ${2 * GU}px;
           `}
         >
-          <DisputableStatusLabel
-            status={DISPUTABLE_VOTE_STATUSES.get(vote.status)}
-          />
+          <DisputableStatusLabel status={disputableStatus} />
         </div>
       </div>
     </Card>

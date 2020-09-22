@@ -2,15 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Button, noop, GU } from '@aragon/ui'
 import {
-  VOTE_STATUS_ACCEPTED,
-  VOTE_STATUS_SCHEDULED,
-  VOTE_STATUS_CANCELLED,
-  VOTE_STATUS_SETTLED,
-  VOTE_STATUS_DISPUTED,
-  VOTE_STATUS_EXECUTED,
-  VOTE_STATUS_CHALLENGED,
-  VOTE_STATUS_REJECTED,
-} from '../disputable-vote-statuses'
+  VOTE_ACCEPTED,
+  VOTE_SCHEDULED,
+  VOTE_CANCELLED,
+  VOTE_SETTLED,
+  VOTE_DISPUTED,
+  VOTE_EXECUTED,
+  VOTE_CHALLENGED,
+  VOTE_REJECTED,
+} from '../../../types/disputable-statuses'
 import { addressesEqual } from '../../../lib/web3-utils'
 
 function DisputableActions({
@@ -24,7 +24,7 @@ function DisputableActions({
   const connectedAccountIsSubmitter = addressesEqual(submitter, voterAccount)
 
   // TODO: add claim collateral action validation
-  if (status === VOTE_STATUS_CHALLENGED && connectedAccountIsSubmitter) {
+  if (status === VOTE_CHALLENGED && connectedAccountIsSubmitter) {
     return (
       <>
         <Button
@@ -48,7 +48,7 @@ function DisputableActions({
       </>
     )
   }
-  if (status === VOTE_STATUS_SCHEDULED) {
+  if (status === VOTE_SCHEDULED) {
     return connectedAccountIsSubmitter ? (
       <Button mode="strong" disabled wide label="Cancel proposal" />
     ) : (
@@ -72,14 +72,14 @@ function DisputableActions({
 
 DisputableActions.propTypes = {
   status: PropTypes.oneOf([
-    VOTE_STATUS_ACCEPTED,
-    VOTE_STATUS_SCHEDULED,
-    VOTE_STATUS_CANCELLED,
-    VOTE_STATUS_SETTLED,
-    VOTE_STATUS_DISPUTED,
-    VOTE_STATUS_EXECUTED,
-    VOTE_STATUS_CHALLENGED,
-    VOTE_STATUS_REJECTED,
+    VOTE_ACCEPTED,
+    VOTE_SCHEDULED,
+    VOTE_CANCELLED,
+    VOTE_SETTLED,
+    VOTE_DISPUTED,
+    VOTE_EXECUTED,
+    VOTE_CHALLENGED,
+    VOTE_REJECTED,
   ]),
   voterAccount: PropTypes.string,
   submitter: PropTypes.string,
