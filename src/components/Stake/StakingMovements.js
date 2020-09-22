@@ -8,12 +8,12 @@ import {
   IconCross,
   IconLock,
   formatTokenAmount,
-  Link,
   Tag,
   useTheme,
   DataView,
 } from '@aragon/ui'
 import { dateFormat, toMs } from '../../utils/date-utils'
+import InternalLink from '../InternalLink'
 
 function StakingMovements({ stakingMovements, token }) {
   const theme = useTheme()
@@ -34,6 +34,7 @@ function StakingMovements({ stakingMovements, token }) {
         actionState,
         collateralState,
         tokenDecimals,
+        disputableActionId,
       }) => {
         const actionAttributes = {
           ['Scheduled']: {
@@ -110,7 +111,9 @@ function StakingMovements({ stakingMovements, token }) {
             />
           </div>,
           <div>
-            <Link>Proposal link</Link>
+            <InternalLink to={`/proposals/${disputableActionId}`}>
+              Proposal #{disputableActionId}
+            </InternalLink>
           </div>,
           <div>{collateralState}</div>,
           <span

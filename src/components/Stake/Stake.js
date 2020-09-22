@@ -10,7 +10,7 @@ import StakingMovements from './StakingMovements'
 import noAccount from './assets/noAccount.svg'
 
 const Stake = React.memo(function Stake() {
-  const { stakeManagement, loading } = useStakingState()
+  const { stakeManagement } = useStakingState()
 
   if (!stakeManagement) {
     return (
@@ -26,7 +26,7 @@ const Stake = React.memo(function Stake() {
       </LayoutGutter>
     )
   }
-  console.log(stakeManagement)
+
   return (
     <LayoutGutter>
       <LayoutLimiter>

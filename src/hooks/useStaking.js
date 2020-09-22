@@ -12,16 +12,15 @@ export function useStaking() {
 
   useEffect(() => {
     async function getStakingInformation() {
+      const defaultValues = {
+        available: '0',
+        challenged: '0',
+        locked: '0',
+        tokenDecimals: 1,
+        total: '0',
+      }
       try {
         if (account) {
-          const defaultValues = {
-            available: '0',
-            challenged: '0',
-            locked: '0',
-            tokenDecimals: 1,
-            total: '0',
-          }
-
           const disputableApps = await agreementApp.disputableApps()
           const allRequirements = await Promise.all(
             disputableApps.map((app) => app.collateralRequirement())
@@ -30,19 +29,17 @@ export function useStaking() {
             allRequirements.map((collateral) => collateral.token())
           )
 
-          const staking = await agreementApp.staking(
-            allTokens[0].id,
-            '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
-          )
+          const staking = await agreementApp.staking(allTokens[0].id, account)
           const stakingMovements = await agreementApp.stakingMovements(
             allTokens[0].id,
-            '0x0090aed150056316e37fe6dfa10dc63e79d173b6'
+            account
           )
+          
 
           if (mounted()) {
             setStakeManagement({
               token: allTokens[0],
-              staking: staking ? staking : defaultValues,
+              staking: staking || defaultValues,
               stakingMovements: stakingMovements,
             })
 
@@ -54,13 +51,7 @@ export function useStaking() {
         }
       } catch (err) {
         setStakeManagement({
-          staking: {
-            available: '0',
-            challenged: '0',
-            locked: '0',
-            tokenDecimals: 1,
-            total: '0',
-          },
+          staking: defaultValues,
           stakingMovements: null,
         })
         setLoading(false)

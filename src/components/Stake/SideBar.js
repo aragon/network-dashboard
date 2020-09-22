@@ -61,7 +61,8 @@ function Sidebar({ staking, token }) {
 }
 
 Sidebar.propTypes = {
-  staking: PropTypes.node,
+  staking: PropTypes.object,
+  token: PropTypes.object,
 }
 
 function CardContent({ icon, title, tokenAmount, amount, negative }) {
