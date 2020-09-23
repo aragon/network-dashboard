@@ -3,7 +3,6 @@ import { utils as ethersUtils } from 'ethers'
 import { addressesEqual } from '../lib/web3-utils'
 import { toMs, durationToHours } from '../utils/date-utils'
 import { getAppPresentation } from '../utils/app-utils'
-import { round } from '../lib/math-utils'
 import { useOrgApps } from '../providers/OrgApps'
 import { useMounted } from './useMounted'
 import { useAgreementSubscription } from '../providers/AgreementSubscription'
@@ -13,7 +12,7 @@ export function useAgreement() {
   const { apps, agreementApp } = useOrgApps()
   const [agreement, { loading: agreementLoading }] = useAgreementSubscription()
   const [processedAgreement, setProcessedAgreement] = useState({})
-  const [processing, setProcessing] = useState(true)
+  const [initialProcessing, setInitialProcessing] = useState(true)
 
   useEffect(() => {
     function processAgreementDetails() {
@@ -41,7 +40,10 @@ export function useAgreement() {
           title: title,
           versionId: versionId,
         })
-        setProcessing(false)
+
+        // We only want to trigger the loading state on first pass
+        // any further updates will replace in place without triggering the loading flag
+        setInitialProcessing(false)
       }
     }
 
@@ -50,7 +52,7 @@ export function useAgreement() {
     }
   }, [apps, agreement, agreementApp, mounted, agreementLoading])
 
-  return [processedAgreement, processing]
+  return [processedAgreement, initialProcessing]
 }
 
 function processDisputableApps(apps, disputableApps) {
@@ -75,7 +77,7 @@ function processDisputableApps(apps, disputableApps) {
       appName: humanName,
       actionAmount: actionAmount,
       challengeAmount: challengeAmount,
-      settlementPeriodHours: round(durationToHours(toMs(challengeDuration))),
+      settlementPeriodHours: durationToHours(toMs(challengeDuration)),
       iconSrc: iconSrc,
       token: token,
     }
