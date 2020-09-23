@@ -16,7 +16,7 @@ const Stake = React.memo(function Stake() {
     return (
       <LayoutGutter>
         <LayoutLimiter>
-          <Header primary="Stake management" />
+          <Header primary="Stake Management" />
           <EmptyState
             icon={noAccount}
             title="Enable your account"

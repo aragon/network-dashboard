@@ -57,9 +57,5 @@ export default function EmptyState({ icon, title, paragraph }) {
 EmptyState.propTypes = {
   icon: PropTypes.string,
   title: PropTypes.string,
-  paragraph: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-    PropTypes.object,
-  ]),
+  paragraph: PropTypes.node,
 }

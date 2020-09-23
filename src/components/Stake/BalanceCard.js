@@ -12,7 +12,7 @@ import tokenIcon from './assets/tokenIcon.svg'
 
 function BalanceCard({ total, tokenDecimals, tokenSymbol }) {
   const theme = useTheme()
-  // TODO: rreplace token icon and usd amount
+  // TODO: Replace token icon and usd amount
 
   return (
     <Card
