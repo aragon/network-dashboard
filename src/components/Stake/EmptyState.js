@@ -23,7 +23,7 @@ export default function EmptyState({ icon, title, paragraph }) {
           css={`
             display: block;
             width: 100%;
-            max-width: ${(compactMode ? 12 : 30) * GU}px;
+            max-width: ${(compactMode ? 21 : 30) * GU}px;
             height: auto;
             margin: ${4 * GU}px 0;
           `}
@@ -42,7 +42,7 @@ export default function EmptyState({ icon, title, paragraph }) {
             ${textStyle('body2')};
             color: ${theme.surfaceContentSecondary};
             margin-top: ${1.5 * GU}px;
-            width: ${(compactMode ? 25 : 55) * GU}px;
+            width: ${(compactMode ? 35 : 55) * GU}px;
             display: flex;
             text-align: center;
           `}

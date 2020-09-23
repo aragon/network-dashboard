@@ -21,11 +21,11 @@ function StakingMovements({ stakingMovements, token }) {
   return (
     <DataView
       fields={[
-        { label: 'Date', priority: 1 },
-        { label: 'Status', priority: 1 },
-        { label: 'Action', priority: 3 },
-        { label: 'Collateral state', priority: 1 },
-        { label: 'Amount', priority: 1 },
+        { label: 'Date' },
+        { label: 'Status' },
+        { label: 'Action' },
+        { label: 'Collateral state', align: 'end' },
+        { label: 'Amount', align: 'end' },
       ]}
       entries={stakingMovements}
       renderEntry={({

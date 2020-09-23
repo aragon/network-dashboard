@@ -6,7 +6,7 @@ import LayoutGutter from '../Layout/LayoutGutter'
 import LayoutLimiter from '../Layout/LayoutLimiter'
 import SideBar from './SideBar'
 import StakingMovements from './StakingMovements'
-import stakingEmpty from './assets/staking-empty.svg'
+import stakingEmpty from './assets/staking-empty.png'
 import { useStakingState } from '../../providers/Staking'
 
 const StakeManagement = React.memo(function StakeManagement() {
