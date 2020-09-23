@@ -19,8 +19,8 @@ function App() {
       <Connect>
         <WalletProvider>
           <OrgAppsProvider>
-            <VotesSubscriptionProvider>
-              <AgreementSubscriptionProvider>
+            <AgreementSubscriptionProvider>
+              <VotesSubscriptionProvider>
                 <ViewportProvider>
                   <LayoutProvider breakpoints={breakpoints}>
                     <Router>
@@ -30,8 +30,8 @@ function App() {
                     </Router>
                   </LayoutProvider>
                 </ViewportProvider>
-              </AgreementSubscriptionProvider>
-            </VotesSubscriptionProvider>
+              </VotesSubscriptionProvider>
+            </AgreementSubscriptionProvider>
           </OrgAppsProvider>
         </WalletProvider>
       </Connect>

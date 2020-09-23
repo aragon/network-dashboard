@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { utils as ethersUtils } from 'ethers'
 import { addressesEqual } from '../lib/web3-utils'
-import { toMs } from '../utils/date-utils'
-import { useOrgApps } from '../providers/OrgApps'
+import { toMs, durationToHours } from '../utils/date-utils'
 import { getAppPresentation } from '../utils/app-utils'
+import { round } from '../lib/math-utils'
+import { useOrgApps } from '../providers/OrgApps'
 import { useMounted } from './useMounted'
 import { useAgreementSubscription } from '../providers/AgreementSubscription'
 
@@ -33,7 +34,7 @@ export function useAgreement() {
         setProcessedAgreement({
           contractAddress: agreementApp.address,
           contentIpfsUri: ethersUtils.toUtf8String(content),
-          disputableApps: disputableAppsWithRequirements,
+          disputableAppsWithRequirements: disputableAppsWithRequirements,
           effectiveFrom: toMs(effectiveFrom),
           stakingAddress: stakingFactory,
           signed: Boolean(signer),
@@ -55,19 +56,28 @@ export function useAgreement() {
 function processDisputableApps(apps, disputableApps) {
   // Add presentation information and value formatting for each app
   const processedDisputableApps = disputableApps.map((disputableApp) => {
-    const { address: disputableAppAddress, challengeDuration } = disputableApp
+    const {
+      address: disputableAppAddress,
+      challengeDuration,
+      actionAmount,
+      challengeAmount,
+      token,
+    } = disputableApp
 
-    const app = apps.find(({ address }) =>
+    const targetApp = apps.find(({ address }) =>
       addressesEqual(address, disputableAppAddress)
     )
 
-    const { iconSrc, humanName } = getAppPresentation(app)
+    const { iconSrc, humanName } = getAppPresentation(targetApp)
 
     return {
-      ...disputableApp,
+      address: disputableAppAddress,
       appName: humanName,
+      actionAmount: actionAmount,
+      challengeAmount: challengeAmount,
+      settlementPeriodHours: round(durationToHours(toMs(challengeDuration))),
       iconSrc: iconSrc,
-      challengeDuration: toMs(challengeDuration),
+      token: token,
     }
   })
 
