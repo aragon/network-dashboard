@@ -6,7 +6,7 @@ import { useWallet } from '../providers/Wallet'
 export function useStaking() {
   const mounted = useMounted()
   const { account } = useWallet()
-  const { agreementApp } = useOrgApps()
+  const { connectedAgreementApp } = useOrgApps()
   const [stakeManagement, setStakeManagement] = useState(null)
   const [loading, setLoading] = useState(true)
 
@@ -21,7 +21,7 @@ export function useStaking() {
       }
       try {
         if (account) {
-          const disputableApps = await agreementApp.disputableApps()
+          const disputableApps = await connectedAgreementApp.disputableApps()
           const allRequirements = await Promise.all(
             disputableApps.map((app) => app.collateralRequirement())
           )
@@ -29,8 +29,11 @@ export function useStaking() {
             allRequirements.map((collateral) => collateral.token())
           )
 
-          const staking = await agreementApp.staking(allTokens[0].id, account)
-          const stakingMovements = await agreementApp.stakingMovements(
+          const staking = await connectedAgreementApp.staking(
+            allTokens[0].id,
+            account
+          )
+          const stakingMovements = await connectedAgreementApp.stakingMovements(
             allTokens[0].id,
             account
           )
@@ -58,10 +61,10 @@ export function useStaking() {
       }
     }
 
-    if (agreementApp && account) {
+    if (connectedAgreementApp && account) {
       getStakingInformation()
     }
-  }, [agreementApp, mounted, account])
+  }, [connectedAgreementApp, mounted, account])
 
   return [stakeManagement, loading]
 }
