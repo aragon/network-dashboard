@@ -29,15 +29,15 @@ export default function EmptyState({ icon, title, paragraph }) {
           `}
         />
 
-        <span
+        <h1
           css={`
             ${textStyle(compactMode ? 'title4' : 'title2')};
             text-align: center;
           `}
         >
           {title}
-        </span>
-        <div
+        </h1>
+        <p
           css={`
             ${textStyle('body2')};
             color: ${theme.surfaceContentSecondary};
@@ -48,7 +48,7 @@ export default function EmptyState({ icon, title, paragraph }) {
           `}
         >
           {paragraph}
-        </div>
+        </p>
       </div>
     </Box>
   )

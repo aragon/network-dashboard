@@ -8,6 +8,8 @@ import wallet from './assets/wallet.svg'
 
 function Sidebar({ staking, token }) {
   const { available, challenged, locked, total } = staking
+  // TODO: Replace usd values with the real rate.
+
   return (
     <div
       css={`
