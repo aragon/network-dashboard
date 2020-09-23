@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useSingleVoteSubscription } from '../providers/SingleVoteSubscription'
-import { toMs } from '../utils/date-utils'
+import { durationToHours, toMs } from '../utils/date-utils'
 import { DisputableStatusType } from '../types/disputable-statuses'
 
 export function useSingleVote() {
@@ -15,21 +15,37 @@ export function useSingleVote() {
 
 // Get and format values
 function processVote(voteInfo) {
-  const { baseVote, settings } = voteInfo
+  const {
+    baseVote,
+    collateral,
+    fees,
+    settings,
+    voterInfo,
+    votingToken,
+  } = voteInfo
+
+  const { challengeDuration } = collateral
 
   return {
     ...baseVote,
-    ...voteInfo,
+    collateral: {
+      ...collateral,
+      settlementPeriodHours: durationToHours(toMs(challengeDuration)),
+    },
     challengeEndDate: toMs(baseVote.challengeEndDate),
     disputableStatus: DisputableStatusType[baseVote.status],
-    pausedAt: toMs(baseVote.pausedAt),
-    settledAt: toMs(baseVote.settledAt),
-    startDate: toMs(baseVote.startDate),
     endDate: toMs(baseVote.endDate),
+    extendedPeriod: toMs(baseVote.currentQuietEndingExtensionDuration),
+    fees: fees,
     hasEnded: baseVote.hasEnded,
     naysPct: baseVote.naysPct,
-    yeasPct: baseVote.yeasPct,
-    extendedPeriod: toMs(baseVote.currentQuietEndingExtensionDuration),
+    pausedAt: toMs(baseVote.pausedAt),
     quietEndingPeriod: toMs(settings.quietEndingPeriod),
+    settings: settings,
+    settledAt: toMs(baseVote.settledAt),
+    startDate: toMs(baseVote.startDate),
+    voterInfo: voterInfo,
+    votingToken: votingToken,
+    yeasPct: baseVote.yeasPct,
   }
 }
