@@ -5,10 +5,11 @@ import BalanceCard from './BalanceCard'
 import ExpandableCard from './ExpandableCard'
 import coin from './assets/coin.svg'
 import wallet from './assets/wallet.svg'
+import { useConvertRate } from '../../hooks/useConvertRate'
 
 function Sidebar({ staking, token }) {
   const { available, challenged, locked, total } = staking
-  // TODO: Replace usd values with the real rate.
+  const tokenRate = useConvertRate([token.symbol])
 
   return (
     <div
@@ -27,7 +28,7 @@ function Sidebar({ staking, token }) {
       <ExpandableCard
         content={
           <CardContent
-            amount={formatTokenAmount(available, token.decimals)}
+            amount={formatTokenAmount(available * tokenRate, token.decimals)}
             icon={wallet}
             title={`Available ${token.symbol}`}
             tokenAmount={formatTokenAmount(available, token.decimals)}
@@ -38,10 +39,11 @@ function Sidebar({ staking, token }) {
       <ExpandableCard
         content={
           <CardContent
-            amount="40,319.701"
+            amount={formatTokenAmount(locked * tokenRate, token.decimals)}
             icon={coin}
             title={`Locked ${token.symbol}`}
             tokenAmount={formatTokenAmount(locked, token.decimals)}
+            secondary
           />
         }
         expansion="This is the part of your collateral balance that is backing a particular action. This Locked amount will move back to Available after the action is able to be enacted."
@@ -49,11 +51,11 @@ function Sidebar({ staking, token }) {
       <ExpandableCard
         content={
           <CardContent
-            amount="-555.57"
+            amount={formatTokenAmount(challenged * tokenRate, token.decimals)}
             icon={coin}
-            title={`Slashed ${token.symbol}`}
+            title={`Challenged ${token.symbol}`}
             tokenAmount={formatTokenAmount(challenged, token.decimals)}
-            negative
+            secondary
           />
         }
         expansion="This is the part of your collateral balance that is backing a particular action that has been challenged or disputed in Aragon Court. Part of this amount could be slashed (transferred to the challenger’s account) if the challenge or dispute outcome results in canceling the action."
@@ -67,7 +69,7 @@ Sidebar.propTypes = {
   token: PropTypes.object,
 }
 
-function CardContent({ icon, title, tokenAmount, amount, negative }) {
+function CardContent({ icon, title, tokenAmount, amount, secondary }) {
   const theme = useTheme()
   return (
     <div
@@ -93,13 +95,14 @@ function CardContent({ icon, title, tokenAmount, amount, negative }) {
       <h1
         css={`
           margin: ${0.5 * GU}px 0;
+          color: ${theme.contentSecondary};
         `}
       >
         {title}
       </h1>
       <p
         css={`
-          color: ${negative ? theme.negative : theme.positive};
+          color: ${secondary ? theme.contentSecondary : theme.positive};
         `}
       >
         $ {amount}
@@ -113,7 +116,7 @@ CardContent.propTypes = {
   tokenAmount: PropTypes.string,
   amount: PropTypes.string,
   title: PropTypes.string,
-  negative: PropTypes.bool,
+  secondary: PropTypes.bool,
 }
 
 export default Sidebar

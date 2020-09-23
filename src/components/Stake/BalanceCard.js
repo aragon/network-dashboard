@@ -9,10 +9,12 @@ import {
   useTheme,
 } from '@aragon/ui'
 import tokenIcon from './assets/tokenIcon.svg'
+import { useConvertRate } from '../../hooks/useConvertRate'
 
 function BalanceCard({ total, tokenDecimals, tokenSymbol }) {
   const theme = useTheme()
-  // TODO: Replace token icon and usd amount
+  const tokenRate = useConvertRate([tokenSymbol])
+  // TODO: Replace token icon
 
   return (
     <Card
@@ -51,7 +53,7 @@ function BalanceCard({ total, tokenDecimals, tokenSymbol }) {
           color: ${theme.positive};
         `}
       >
-        $ 113,070.85
+        $ {formatTokenAmount(total * tokenRate, tokenDecimals)}
       </p>
       <Button
         mode="normal"
