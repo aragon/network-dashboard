@@ -9,7 +9,7 @@ import StakingMovements from './StakingMovements'
 import stakingEmpty from './assets/staking-empty.svg'
 import { useStakingState } from '../../providers/Staking'
 
-const Stake = React.memo(function Stake() {
+const StakeManagement = React.memo(function StakeManagement() {
   const { stakeManagement } = useStakingState()
 
   return (
@@ -52,4 +52,4 @@ const Stake = React.memo(function Stake() {
   )
 })
 
-export default Stake
+export default StakeManagement
