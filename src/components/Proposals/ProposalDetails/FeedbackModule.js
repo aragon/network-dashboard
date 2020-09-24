@@ -4,13 +4,13 @@ import {
   GU,
   IconAttention,
   IconCoin,
-  Link,
   RADIUS,
   textStyle,
   useTheme,
   formatTokenAmount,
 } from '@aragon/ui'
 import { dateFormat } from '../../../utils/date-utils'
+import InternalLink from '../../InternalLink'
 
 function FeedbackModule({ vote, mode }) {
   const theme = useTheme()
@@ -73,7 +73,11 @@ function FeedbackModule({ vote, mode }) {
                   {collateral.token.symbol}
                 </Strong>{' '}
                 as the action challenge collateral. You can manage your deposit
-                balances in <Link href="">Stake Management</Link>.
+                balances in{' '}
+                <InternalLink to="/stake-management">
+                  Stake management
+                </InternalLink>
+                .
               </p>
             ) : (
               <p>
@@ -89,7 +93,10 @@ function FeedbackModule({ vote, mode }) {
                   {collateral.token.symbol}
                 </Strong>
                 . You can manage your deposit balances in{' '}
-                <Link href="">Stake Management</Link>.
+                <InternalLink to="/stake-management">
+                  Stake management
+                </InternalLink>
+                .
               </p>
             )}
           </div>

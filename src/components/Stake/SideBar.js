@@ -1,12 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { GU, textStyle, useTheme } from '@aragon/ui'
+import { GU, formatTokenAmount, textStyle, useTheme } from '@aragon/ui'
 import BalanceCard from './BalanceCard'
 import ExpandableCard from './ExpandableCard'
 import coin from './assets/coin.svg'
 import wallet from './assets/wallet.svg'
+import { useConvertRate } from '../../hooks/useConvertRate'
 
-function Sidebar() {
+function Sidebar({ staking, token }) {
+  const { available, challenged, locked, total } = staking
+  const tokenRate = useConvertRate([token.symbol])
+
   return (
     <div
       css={`
@@ -16,46 +20,56 @@ function Sidebar() {
         grid-gap: ${2 * GU}px;
       `}
     >
-      <BalanceCard />
+      <BalanceCard
+        total={total}
+        tokenDecimals={token.decimals}
+        tokenSymbol={token.symbol}
+      />
       <ExpandableCard
         content={
           <CardContent
-            amount="72,243.47"
+            amount={formatTokenAmount(available * tokenRate, token.decimals)}
             icon={wallet}
-            title="Available ANT"
-            tokenAmount="11,278.04"
+            title={`Available ${token.symbol}`}
+            tokenAmount={formatTokenAmount(available, token.decimals)}
           />
         }
-        expansion="I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. ANT holders in equal measure."
+        expansion="This is the part of your collateral balance that has not been locked in any action yet. You may permissionlessly withdraw it at any time."
       />
       <ExpandableCard
         content={
           <CardContent
-            amount="40,319.701"
+            amount={formatTokenAmount(locked * tokenRate, token.decimals)}
             icon={coin}
-            title="Locked ANT"
-            tokenAmount="6,684.60"
+            title={`Locked ${token.symbol}`}
+            tokenAmount={formatTokenAmount(locked, token.decimals)}
+            secondary
           />
         }
-        expansion="I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. ANT holders in equal measure."
+        expansion="This is the part of your collateral balance that is backing a particular action. This Locked amount will move back to Available after the action is able to be enacted."
       />
       <ExpandableCard
         content={
           <CardContent
-            amount="-555.57"
+            amount={formatTokenAmount(challenged * tokenRate, token.decimals)}
             icon={coin}
-            title="Slashed ANT"
-            tokenAmount="83.39"
-            negative
+            title={`Challenged ${token.symbol}`}
+            tokenAmount={formatTokenAmount(challenged, token.decimals)}
+            secondary
           />
         }
-        expansion="I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. I'm disputing this proposal because I believe that it was not made in good faith and will not benefit all ANT holders in equal measure. ANT holders in equal measure."
+        expansion="This is the part of your collateral balance that is backing a particular action that has been challenged or disputed in Aragon Court. Part of this amount could be slashed (transferred to the challenger’s account) if the challenge or dispute outcome results in canceling the action."
       />
     </div>
   )
 }
 
-function CardContent({ icon, title, tokenAmount, amount, negative }) {
+Sidebar.propTypes = {
+  staking: PropTypes.object,
+  token: PropTypes.object,
+}
+
+function CardContent({ icon, title, tokenAmount, amount, secondary }) {
   const theme = useTheme()
   return (
     <div
@@ -81,13 +95,14 @@ function CardContent({ icon, title, tokenAmount, amount, negative }) {
       <h1
         css={`
           margin: ${0.5 * GU}px 0;
+          color: ${theme.contentSecondary};
         `}
       >
         {title}
       </h1>
       <p
         css={`
-          color: ${negative ? theme.negative : theme.positive};
+          color: ${secondary ? theme.contentSecondary : theme.positive};
         `}
       >
         $ {amount}
@@ -101,7 +116,7 @@ CardContent.propTypes = {
   tokenAmount: PropTypes.string,
   amount: PropTypes.string,
   title: PropTypes.string,
-  negative: PropTypes.bool,
+  secondary: PropTypes.bool,
 }
 
 export default Sidebar
