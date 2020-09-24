@@ -1,20 +1,34 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
-import { TextInput, Field, TokenAmount, useTheme, GU } from '@aragon/ui'
+import {
+  TextInput,
+  formatTokenAmount,
+  Field,
+  TokenAmount,
+  textStyle,
+  useTheme,
+  GU,
+} from '@aragon/ui'
+import InfoField from '../../InfoField'
 import ModalButton from '../ModalButton'
 import { useMultiModal } from '../../MultiModal/MultiModalProvider'
-import InfoField from '../../InfoField'
 import { useSingleVote } from '../../../hooks/useSingleVote'
 
 function ChallengeRequirements({ getTransactions }) {
   const theme = useTheme()
   const [{ collateral }] = useSingleVote()
+  const { settlementPeriodHours, token, challengeAmount } = collateral
+
   const [argument, setArgument] = useState('')
-  const [settlementAmount, setSettlementAmount] = useState(10)
   const [loading, setLoading] = useState(false)
   const { next } = useMultiModal()
 
-  const { settlementPeriodHours, token } = collateral
+  const maxChallengeAmount = useMemo(
+    () => formatTokenAmount(challengeAmount, token.decimals),
+    [challengeAmount, token.decimals]
+  )
+
+  const [settlementAmount, setSettlementAmount] = useState(maxChallengeAmount)
 
   console.log(collateral)
 
@@ -49,57 +63,76 @@ function ChallengeRequirements({ getTransactions }) {
           margin-bottom: ${3.5 * GU}px;
         `}
       >
-        <p>{settlementPeriodHours} Hours</p>
+        <p>
+          {settlementPeriodHours}{' '}
+          <span
+            css={`
+              color: ${theme.surfaceContentSecondary};
+            `}
+          >
+            Hours
+          </span>
+        </p>
       </InfoField>
+
       <Field
         label="Settlement offer"
         css={`
           margin-bottom: ${3.5 * GU}px;
         `}
       >
-        <div>
-          <TextInput
-            value={settlementAmount}
-            min="1"
-            max="10"
-            wide
-            type="number"
-            adornment={
-              <TokenAmount
-                address={token.id}
-                symbol={token.symbol}
-                css={`
-                  padding: ${0.5 * GU}px;
-                  padding-right: ${1 * GU}px;
-                  background-color: ${theme.surface};
-                `}
-              />
-            }
-            onChange={handleSettlementChange}
-            adornmentPosition="end"
-            adornmentSettings={{ padding: 0.5 * GU }}
-            required
-          />
-        </div>
+        <TextInput
+          value={settlementAmount}
+          min="1"
+          max={maxChallengeAmount}
+          wide
+          type="number"
+          adornment={
+            <TokenAmount
+              address={token.id}
+              symbol={token.symbol}
+              css={`
+                padding: ${0.5 * GU}px;
+                padding-right: ${1 * GU}px;
+                background-color: ${theme.surface};
+              `}
+            />
+          }
+          onChange={handleSettlementChange}
+          adornmentPosition="end"
+          adornmentSettings={{ padding: 0.5 * GU }}
+          required
+        />
+        <p
+          css={`
+            margin-top: ${1 * GU}px;
+            color: ${theme.surfaceContentSecondary};
+            ${textStyle('body3')};
+          `}
+        >
+          This amount cannot be greater than the stake locked for the action
+          submmission: {maxChallengeAmount} {token.symbol}.
+        </p>
       </Field>
-      <Field label="Argument in favour of cancelling action">
+
+      <Field
+        label="Argument in favour of cancelling action"
+        css={`
+          margin-bottom: 0px;
+        `}
+      >
         <TextInput
           multiline
           value={argument}
           wide
           onChange={handleArgumentChange}
           required
+          css={`
+            min-height: ${15 * GU}px;
+          `}
         />
       </Field>
-      <p
-        css={`
-          margin-top: ${2 * GU}px;
-          margin-bottom: ${2.5 * GU}px;
-        `}
-      >
-        You meet all the requirements to challenge this disputable action
-      </p>
-      <ModalButton mode="strong" loading={loading} type="submit">
+      <ModalButton mode="strong" type="submit" loading={loading}>
         Create transaction
       </ModalButton>
     </form>
