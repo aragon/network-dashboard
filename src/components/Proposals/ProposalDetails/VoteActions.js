@@ -12,7 +12,7 @@ import {
   textStyle,
   useTheme,
 } from '@aragon/ui'
-import { dateFormat, toMs } from '../../../utils/date-utils'
+import { dateFormat } from '../../../utils/date-utils'
 
 function VoteActions({ vote, onVoteYes, onVoteNo, onExecute }) {
   const theme = useTheme()
@@ -101,8 +101,8 @@ function VoteActions({ vote, onVoteYes, onVoteNo, onExecute }) {
           ? 'Although the currently connected account holds tokens, it'
           : 'The currently connected account'}{' '}
         did not hold any <strong>{votingToken.symbol}</strong> tokens when this
-        vote began ({dateFormat(toMs(startDate))}) and therefore cannot
-        participate in this vote. Make sure your accounts are holding{' '}
+        vote began ({dateFormat(startDate)}) and therefore cannot participate in
+        this vote. Make sure your accounts are holding{' '}
         <strong>{votingToken.symbol}</strong> at the time a vote begins if you'd
         like to vote using this Voting app.
       </Info>
@@ -177,7 +177,7 @@ const TokenReference = ({
     </strong>{' '}
     . This was your balance when the vote started (block{' '}
     <strong>{snapshotBlock}</strong>, mined at{' '}
-    <strong>{dateFormat(toMs(startDate))}</strong>).{' '}
+    <strong>{dateFormat(startDate)}</strong>).{' '}
     {accountBalance !== accountBalanceNow ? (
       <span>
         Your current balance is{' '}

@@ -9,14 +9,13 @@ import {
   useTheme,
   formatTokenAmount,
 } from '@aragon/ui'
-import { dateFormat, toMs } from '../../../utils/date-utils'
+import { dateFormat } from '../../../utils/date-utils'
 import InternalLink from '../../InternalLink'
 
 function FeedbackModule({ vote, mode }) {
   const theme = useTheme()
-  const { collateral } = vote
-  const pausedAt = toMs(vote.pausedAt)
-  const settledAt = toMs(vote.settledAt)
+
+  const { collateral, pausedAt, settledAt } = vote
 
   return (
     <div
