@@ -47,6 +47,16 @@ const KNOWN_HELP_DESCRIPTIONS = {
       settlement offer or by raising the dispute to Aragon Court.
     </>,
   ],
+  'settlement-offer': [
+    'Settlement Offer',
+    <>
+      The <strong>Settlement Offer</strong> is the amount of tokens that the
+      challenger offers to the proposal submitter in an attempt to cancel the
+      action and resolve the challenge without having to raise it to Aragon
+      Court. This amount cannot be greater than the collateral locked for the
+      action but can be zero.
+    </>,
+  ],
 }
 
 function HelpTip({ type }) {

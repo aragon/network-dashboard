@@ -14,6 +14,7 @@ import ModalButton from '../ModalButton'
 import { useActions } from '../../../hooks/useActions'
 import { useMultiModal } from '../../MultiModal/MultiModalProvider'
 import { useSingleVote } from '../../../hooks/useSingleVote'
+import HelpTip from '../../HelpTip'
 
 function ChallengeRequirements({ handleSetTransactions }) {
   const theme = useTheme()
@@ -74,7 +75,12 @@ function ChallengeRequirements({ handleSetTransactions }) {
   return (
     <form onSubmit={handleSubmit}>
       <InfoField
-        label="Settlement period"
+        label={
+          <>
+            Settlement Period
+            <HelpTip type="settlement-period" />
+          </>
+        }
         css={`
           margin-top: ${1 * GU}px;
           margin-bottom: ${3.5 * GU}px;
@@ -93,14 +99,19 @@ function ChallengeRequirements({ handleSetTransactions }) {
       </InfoField>
 
       <Field
-        label="Settlement offer"
+        label={
+          <>
+            Settlement Offer
+            <HelpTip type="settlement-offer" />
+          </>
+        }
         css={`
           margin-bottom: ${3.5 * GU}px;
         `}
       >
         <TextInput
           value={settlementAmount}
-          min="1"
+          min="0"
           max={maxChallengeAmount}
           type="number"
           wide
