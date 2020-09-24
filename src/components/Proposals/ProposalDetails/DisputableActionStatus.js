@@ -2,33 +2,41 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Box, GU, Info, Link, textStyle, useTheme } from '@aragon/ui'
 import {
-  DISPUTABLE_VOTE_STATUSES,
-  VOTE_STATUS_SCHEDULED,
-  VOTE_STATUS_CHALLENGED,
-  VOTE_STATUS_DISPUTED,
-} from '../disputable-vote-statuses'
+  VOTE_SCHEDULED,
+  VOTE_CHALLENGED,
+  VOTE_DISPUTED,
+} from '../../../types/disputable-statuses'
 import DisputableActions from './DisputableActions'
 import DisputablePeriod from './DisputablePeriod'
-import { durationToHours, toMs } from '../../../utils/date-utils'
+import { durationToHours } from '../../../utils/date-utils'
 import { networkEnvironment } from '../../../current-environment'
 
 function DisputableActionStatus({ vote, onChallenge, onSettle, onRaise }) {
   const theme = useTheme()
-  const disputableStatus = DISPUTABLE_VOTE_STATUSES.get(vote.status)
-  const challenged = disputableStatus === VOTE_STATUS_CHALLENGED
-  const scheduled = disputableStatus === VOTE_STATUS_SCHEDULED
-  const challengeEndDate = toMs(vote.challengeEndDate)
-  const pausedAt = toMs(vote.pausedAt)
-  const settledAt = toMs(vote.settledAt)
-  const voteEndDate = toMs(vote.endDate)
-  const extendedPeriod = toMs(vote.currentQuietEndingExtensionDuration)
+
+  const {
+    challengeEndDate,
+    creator,
+    disputableStatus,
+    voterInfo,
+    pausedAt,
+    settledAt,
+    endDate,
+    extendedPeriod,
+    quietEndingPeriod,
+    disputeId,
+  } = vote
+
+  const challenged = disputableStatus === VOTE_CHALLENGED
+  const scheduled = disputableStatus === VOTE_SCHEDULED
+  const disputed = disputableStatus === VOTE_DISPUTED
 
   return (
     <Box heading="Disputable Action Status">
       <ul>
         <Item heading="Challenge period">
           <DisputablePeriod
-            endDate={voteEndDate}
+            endDate={endDate}
             paused={pausedAt !== 0 && pausedAt}
             label={pausedAt !== 0 && 'Paused'}
           />
@@ -42,11 +50,9 @@ function DisputableActionStatus({ vote, onChallenge, onSettle, onRaise }) {
             />
           </Item>
         )}
-        {scheduled && vote.settings.quietEndingPeriod && (
+        {scheduled && quietEndingPeriod && (
           <Item heading="Quiet ending period">
-            <span>
-              Last {durationToHours(toMs(vote.settings.quietEndingPeriod))}{' '}
-            </span>
+            <span>Last {durationToHours(quietEndingPeriod)} </span>
             <span
               css={`
                 color: ${theme.surfaceContentSecondary};
@@ -68,32 +74,28 @@ function DisputableActionStatus({ vote, onChallenge, onSettle, onRaise }) {
             </span>
           </Item>
         )}
-        {vote.disputeId && (
+        {disputeId && (
           <Item heading="Dispute">
             <Link
-              href={`${networkEnvironment.courtUrl}/#/disputes/${vote.disputeId}`}
+              href={`${networkEnvironment.courtUrl}/#/disputes/${disputeId}`}
               css={`
                 text-decoration: none;
               `}
             >
-              Dispute #{vote.disputeId}{' '}
+              Dispute #{disputeId}{' '}
               <span
                 css={`
                   color: ${theme.surfaceContentSecondary};
                 `}
               >
-                (
-                {disputableStatus === VOTE_STATUS_DISPUTED
-                  ? 'Drafting jury'
-                  : 'Ruling executed'}
-                )
+                ({disputed ? 'Drafting jury' : 'Ruling executed'})
               </span>
             </Link>
           </Item>
         )}
         {scheduled && (
           <Item>
-            {parseInt(vote.pausedAt, 10) === 0 ? (
+            {pausedAt === 0 ? (
               <Info>
                 The proposed action will be automatically executed if nobody
                 challenges it during the challenge period and the result of the
@@ -107,9 +109,9 @@ function DisputableActionStatus({ vote, onChallenge, onSettle, onRaise }) {
 
         <Item>
           <DisputableActions
-            voterAccount={vote.voterInfo.account}
+            voterAccount={voterInfo.account}
             status={disputableStatus}
-            submitter={vote.creator}
+            submitter={creator}
             onChallenge={onChallenge}
             onSettle={onSettle}
             onRaise={onRaise}

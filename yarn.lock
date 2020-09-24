@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@aragon/connect-agreement@^0.0.0-beta.10":
-  version "0.0.0-beta.10"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-agreement/-/connect-agreement-0.0.0-beta.10.tgz#44fb4652be3949d26335c399828a31c2052625e7"
-  integrity sha512-XIjnekm30XMFcXShcIjt8sra5kEC9UJQ394nWJr2x6hxgk7boB7NTjjjt3FAbsDCqGQ53IXl3Iu3IADJD7EBbQ==
+"@aragon/connect-agreement@^0.0.0-beta.14":
+  version "0.0.0-beta.14"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-agreement/-/connect-agreement-0.0.0-beta.14.tgz#df14ed06f16edff23f5e724d16d3a56ba49fcae1"
+  integrity sha512-8iQxMsf/10KRwYrW1w4hi+bQUCIDScxywxY3IIDE5bN0KJiRh1TyrHz+eD4GRJmdJITdEj7MsBxADOzgtPbhlQ==
   dependencies:
     "@aragon/connect-core" "^0.8.0-alpha.5"
     "@aragon/connect-thegraph" "^0.8.0-alpha.5"
@@ -19,10 +19,10 @@
     ethers "^5.0.7"
     radspec "^2.0.0-rc.2"
 
-"@aragon/connect-disputable-voting@^0.0.0-beta.10":
-  version "0.0.0-beta.10"
-  resolved "https://registry.yarnpkg.com/@aragon/connect-disputable-voting/-/connect-disputable-voting-0.0.0-beta.10.tgz#43100e35e5df3f4cdd89e71825062995bfdad998"
-  integrity sha512-xg0VOpN4ehzm3zFgf+yA4GI53kHQB+UxNNZC3JySEcZ8UhY58hZEwL1p6+DuiabHuWhFAqSI45qeooeYpkQfkw==
+"@aragon/connect-disputable-voting@^0.0.0-beta.12":
+  version "0.0.0-beta.12"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-disputable-voting/-/connect-disputable-voting-0.0.0-beta.12.tgz#9d465e5d7467b5aff029a24313115c3da988214b"
+  integrity sha512-pp5MbhGUCdG+nCMd2uphtqLw2YFVtjappO+HB7gTXXtwgHxF1mZsJVd5i12sYBImHKIL8uuucbcjaWhCrxq3iw==
   dependencies:
     "@aragon/connect-core" "^0.8.0-alpha.5"
     "@aragon/connect-thegraph" "^0.8.0-alpha.5"
