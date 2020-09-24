@@ -64,7 +64,7 @@ function ModalFlowBase({
             }
           })
         : null,
-    [signer, transactions]
+    [transactions, signer]
   )
 
   const extendedScreens = useMemo(() => {

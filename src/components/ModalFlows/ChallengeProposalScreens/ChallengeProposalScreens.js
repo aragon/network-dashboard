@@ -1,44 +1,36 @@
-import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState, useMemo, useCallback } from 'react'
 import ModalFlowBase from '../ModalFlowBase'
-import { useActions } from '../../../hooks/useActions'
+import ChallengeRequirements from './ChallengeRequirements'
 
-function ChallengeProposalScreens({ actionId }) {
-  const { challengeProposal } = useActions()
+function ChallengeProposalScreens() {
   const [transactions, setTransactions] = useState([])
-  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    async function getTransactions() {
-      // TODO: Replace happy path defaults
-      await challengeProposal(
-        {
-          actionId: actionId,
-          settlementOffer: '0',
-          finishedEvidence: true,
-          context: '',
-        },
-        (intent) => {
-          setTransactions(intent.transactions)
-          setLoading(false)
-        }
-      )
-    }
+  const handleSetTransactions = useCallback((transactions) => {
+    setTransactions(transactions)
+  }, [])
 
-    getTransactions()
-  }, [actionId, challengeProposal])
+  const screens = useMemo(
+    () => [
+      {
+        title: 'Challenge action requirements',
+        content: (
+          <ChallengeRequirements
+            handleSetTransactions={handleSetTransactions}
+          />
+        ),
+      },
+    ],
+    [handleSetTransactions]
+  )
 
   return (
     <ModalFlowBase
-      loading={loading}
+      frontLoad={false}
       transactions={transactions}
       transactionTitle="Challenge proposal"
+      screens={screens}
     />
   )
-}
-
-ChallengeProposalScreens.propTypes = {
-  actionId: PropTypes.string,
 }
 
 export default ChallengeProposalScreens

@@ -19,7 +19,6 @@ function SignOverview({ getTransactions }) {
 
     // Proceed to the next screen after transactions have been received
     getTransactions(() => {
-      setLoading(false)
       next()
     })
   }, [getTransactions, next])

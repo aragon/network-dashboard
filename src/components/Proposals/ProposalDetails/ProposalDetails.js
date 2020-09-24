@@ -197,9 +197,7 @@ function ProposalDetails({ vote }) {
           />
         )}
 
-        {modalMode === 'challenge' && (
-          <ChallengeProposalScreens actionId={actionId} />
-        )}
+        {modalMode === 'challenge' && <ChallengeProposalScreens />}
 
         {modalMode === 'settle' && (
           <SettleProposalScreens actionId={actionId} />
