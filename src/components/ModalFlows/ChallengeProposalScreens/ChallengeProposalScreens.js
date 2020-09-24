@@ -1,39 +1,26 @@
 import React, { useState, useMemo, useCallback } from 'react'
-import PropTypes from 'prop-types'
 import ModalFlowBase from '../ModalFlowBase'
-import { useActions } from '../../../hooks/useActions'
 import ChallengeRequirements from './ChallengeRequirements'
 
-function ChallengeProposalScreens({ actionId }) {
-  const { challengeProposal } = useActions()
+function ChallengeProposalScreens() {
   const [transactions, setTransactions] = useState([])
 
-  const getTransactions = useCallback(
-    async (onComplete) => {
-      await challengeProposal(
-        {
-          actionId: actionId,
-          settlementOffer: '0',
-          finishedEvidence: true,
-          context: '',
-        },
-        (intent) => {
-          setTransactions(intent.transactions)
-          onComplete()
-        }
-      )
-    },
-    [actionId, challengeProposal]
-  )
+  const handleSetTransactions = useCallback((transactions) => {
+    setTransactions(transactions)
+  }, [])
 
   const screens = useMemo(
     () => [
       {
         title: 'Challenge action requirements',
-        content: <ChallengeRequirements getTransactions={getTransactions} />,
+        content: (
+          <ChallengeRequirements
+            handleSetTransactions={handleSetTransactions}
+          />
+        ),
       },
     ],
-    [getTransactions]
+    [handleSetTransactions]
   )
 
   return (
@@ -44,10 +31,6 @@ function ChallengeProposalScreens({ actionId }) {
       screens={screens}
     />
   )
-}
-
-ChallengeProposalScreens.propTypes = {
-  actionId: PropTypes.string,
 }
 
 export default ChallengeProposalScreens

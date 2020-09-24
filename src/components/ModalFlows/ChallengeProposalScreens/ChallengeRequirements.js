@@ -11,12 +11,14 @@ import {
 } from '@aragon/ui'
 import InfoField from '../../InfoField'
 import ModalButton from '../ModalButton'
+import { useActions } from '../../../hooks/useActions'
 import { useMultiModal } from '../../MultiModal/MultiModalProvider'
 import { useSingleVote } from '../../../hooks/useSingleVote'
 
-function ChallengeRequirements({ getTransactions }) {
+function ChallengeRequirements({ handleSetTransactions }) {
   const theme = useTheme()
-  const [{ collateral }] = useSingleVote()
+  const { challengeProposal } = useActions()
+  const [{ collateral, actionId }] = useSingleVote()
   const { settlementPeriodHours, token, challengeAmount } = collateral
 
   const [argument, setArgument] = useState('')
@@ -30,7 +32,24 @@ function ChallengeRequirements({ getTransactions }) {
 
   const [settlementAmount, setSettlementAmount] = useState(maxChallengeAmount)
 
-  console.log(collateral)
+  const handleChallengeAction = useCallback(
+    async (onComplete) => {
+      await challengeProposal(
+        {
+          actionId: actionId,
+          settlementOffer: settlementAmount,
+          finishedEvidence: true,
+          context: '',
+        },
+        (intent) => {
+          // Pass transactions array back to parent component
+          handleSetTransactions(intent.transactions)
+          onComplete()
+        }
+      )
+    },
+    [handleSetTransactions, actionId, challengeProposal, settlementAmount]
+  )
 
   const handleSubmit = useCallback(
     (event) => {
@@ -39,11 +58,9 @@ function ChallengeRequirements({ getTransactions }) {
       setLoading(true)
 
       // Proceed to the next screen after transactions have been received
-      getTransactions(() => {
-        next()
-      })
+      handleChallengeAction(next)
     },
-    [getTransactions, next]
+    [handleChallengeAction, next]
   )
 
   const handleArgumentChange = useCallback(({ target }) => {
@@ -85,8 +102,9 @@ function ChallengeRequirements({ getTransactions }) {
           value={settlementAmount}
           min="1"
           max={maxChallengeAmount}
-          wide
           type="number"
+          wide
+          onChange={handleSettlementChange}
           adornment={
             <TokenAmount
               address={token.id}
@@ -98,7 +116,6 @@ function ChallengeRequirements({ getTransactions }) {
               `}
             />
           }
-          onChange={handleSettlementChange}
           adornmentPosition="end"
           adornmentSettings={{ padding: 0.5 * GU }}
           required
@@ -139,26 +156,8 @@ function ChallengeRequirements({ getTransactions }) {
   )
 }
 
-// async function pinContent() {
-//   const content = new Blob(['Hello world'], { type: 'text/markdown' })
-
-//   console.log(content)
-
-//   try {
-//     const fileMeta = await client.upload(
-//       '0xF9fc8d5e9d10B98cc40f7BE6BA603363b10FA292',
-//       content,
-//       'test.md'
-//     )
-
-//     console.log(fileMeta)
-//   } catch (err) {
-//     console.error(err)
-//   }
-// }
-
 ChallengeRequirements.propTypes = {
-  getTransactions: PropTypes.func,
+  handleSetTransactions: PropTypes.func.isRequired,
 }
 
 export default ChallengeRequirements
