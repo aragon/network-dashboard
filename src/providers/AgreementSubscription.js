@@ -133,11 +133,11 @@ function useAppsWithRequirements(disputableApps) {
             const token = allTokens.find(({ id }) => id === tokenId)
 
             return {
-              address: address,
-              challengeAmount: challengeAmount,
-              actionAmount: actionAmount,
-              token: token,
-              challengeDuration: challengeDuration,
+              address,
+              challengeAmount,
+              actionAmount,
+              token,
+              challengeDuration,
             }
           }
         )

@@ -1,9 +1,20 @@
 import React from 'react'
-import { Button, Card, GU, textStyle, useTheme } from '@aragon/ui'
+import PropTypes from 'prop-types'
+import {
+  Button,
+  Card,
+  GU,
+  formatTokenAmount,
+  textStyle,
+  useTheme,
+} from '@aragon/ui'
 import tokenIcon from './assets/tokenIcon.svg'
+import { useConvertRate } from '../../hooks/useConvertRate'
 
-function BalanceCard() {
+function BalanceCard({ total, tokenDecimals, tokenSymbol }) {
   const theme = useTheme()
+  const tokenRate = useConvertRate([tokenSymbol])
+  // TODO: Replace token icon
 
   return (
     <Card
@@ -28,21 +39,21 @@ function BalanceCard() {
           ${textStyle('title4')};
         `}
       >
-        17,746.21
+        {formatTokenAmount(total, tokenDecimals)}
       </h2>
       <h1
         css={`
           margin: ${0.5 * GU}px 0;
         `}
       >
-        Total ANT
+        Total {tokenSymbol}
       </h1>
       <p
         css={`
           color: ${theme.positive};
         `}
       >
-        $ 113,070.85
+        $ {formatTokenAmount(total * tokenRate, tokenDecimals)}
       </p>
       <Button
         mode="normal"
@@ -56,6 +67,12 @@ function BalanceCard() {
       <Button mode="strong" wide label="Deposit" />
     </Card>
   )
+}
+
+BalanceCard.propTypes = {
+  total: PropTypes.string,
+  tokenSymbol: PropTypes.string,
+  tokenDecimals: PropTypes.number,
 }
 
 export default BalanceCard
