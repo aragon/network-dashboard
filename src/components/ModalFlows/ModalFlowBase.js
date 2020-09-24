@@ -23,8 +23,8 @@ function ModalFlowBase({
   transactions,
   transactionTitle,
 }) {
-  // const { ethers } = useWallet()
-  // const signer = useMemo(() => ethers.getSigner(), [ethers])
+  const { ethers } = useWallet()
+  const signer = useMemo(() => ethers.getSigner(), [ethers])
 
   const transactionSteps = useMemo(
     () =>
@@ -45,15 +45,15 @@ function ModalFlowBase({
                 setHash,
               }) => {
                 try {
-                  // const tx = await signer.sendTransaction(transaction)
+                  const tx = await signer.sendTransaction(transaction)
 
-                  // setHash(tx.hash)
+                  setHash(tx.hash)
 
                   setWorking()
 
                   // We need to wait for pre-transactions to mine before asking for the next signature
                   // TODO: Provide a better user experience than waiting on all transactions
-                  // await tx.wait()
+                  await tx.wait()
 
                   setSuccess()
                 } catch (err) {
@@ -64,7 +64,7 @@ function ModalFlowBase({
             }
           })
         : null,
-    [transactions]
+    [transactions, signer]
   )
 
   const extendedScreens = useMemo(() => {

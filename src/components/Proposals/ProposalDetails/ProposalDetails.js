@@ -69,8 +69,8 @@ function getPresentation(disputableStatus) {
 }
 
 function ProposalDetails({ vote }) {
-  const [modalVisible, setModalVisible] = useState(true)
-  const [modalMode, setModalMode] = useState('challenge')
+  const [modalVisible, setModalVisible] = useState(false)
+  const [modalMode, setModalMode] = useState(null)
   const [voteSupported, setVoteSupported] = useState(false)
   const {
     actionId,
@@ -80,7 +80,6 @@ function ProposalDetails({ vote }) {
     voterInfo,
     votingToken,
     disputableStatus,
-    challengeEndDate,
   } = vote
 
   const { description, targetApp, status } = useDescribeScript(script, id)
@@ -198,12 +197,7 @@ function ProposalDetails({ vote }) {
           />
         )}
 
-        {modalMode === 'challenge' && (
-          <ChallengeProposalScreens
-            settlementPeriod={challengeEndDate}
-            actionId={actionId}
-          />
-        )}
+        {modalMode === 'challenge' && <ChallengeProposalScreens />}
 
         {modalMode === 'settle' && (
           <SettleProposalScreens actionId={actionId} />
