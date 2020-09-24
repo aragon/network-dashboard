@@ -4,17 +4,16 @@ import { PropTypes } from 'prop-types'
 import { Accordion, AppBadge, Box, TokenAmount, useTheme, GU } from '@aragon/ui'
 import HelpTip from '../HelpTip'
 import InfoField from './../InfoField'
-import { durationToHours } from '../../utils/date-utils'
 
-function AgreementBindingActions({ disputableApps }) {
-  const items = disputableApps.map(
+function AgreementBindingActions({ apps }) {
+  const items = apps.map(
     ({
       appName,
       appAddress,
       iconSrc,
       actionAmount,
       challengeAmount,
-      challengeDuration,
+      settlementPeriodHours,
       token,
     }) => [
       <div
@@ -68,7 +67,7 @@ function AgreementBindingActions({ disputableApps }) {
             </>
           }
         >
-          {durationToHours(challengeDuration)} <SubtleLabel>Hours</SubtleLabel>
+          {settlementPeriodHours} <SubtleLabel>Hours</SubtleLabel>
         </InfoField>
       </div>,
     ]
@@ -137,7 +136,7 @@ const StyledAccordion = styled.div`
 `
 
 AgreementBindingActions.propTypes = {
-  disputableApps: PropTypes.array.isRequired,
+  apps: PropTypes.array.isRequired,
 }
 
 export default AgreementBindingActions

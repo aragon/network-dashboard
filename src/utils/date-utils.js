@@ -5,6 +5,8 @@ import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import utc from 'dayjs/plugin/utc'
 
+import { round } from '../lib/math-utils'
+
 export const toMs = (seconds) => seconds * 1000
 
 const KNOWN_FORMATS = {
@@ -23,5 +25,5 @@ export function dateFormat(date, format = 'onlyDate') {
 }
 
 export function durationToHours(duration) {
-  return dayjs.duration(duration).asHours()
+  return round(dayjs.duration(duration).asHours())
 }

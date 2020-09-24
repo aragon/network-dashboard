@@ -57,9 +57,9 @@ function AgreementLayout({ agreement, signedAgreement }) {
     title,
     contractAddress,
     contentIpfsUri,
+    disputableAppsWithRequirements,
     effectiveFrom,
     stakingAddress,
-    disputableApps,
   } = agreement
 
   return (
@@ -79,7 +79,9 @@ function AgreementLayout({ agreement, signedAgreement }) {
           <AgreementDocument ipfsUri={contentIpfsUri} />
         </>
       }
-      secondary={<AgreementBindingActions disputableApps={disputableApps} />}
+      secondary={
+        <AgreementBindingActions apps={disputableAppsWithRequirements} />
+      }
     />
   )
 }
